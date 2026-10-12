@@ -1,6 +1,6 @@
 # 城院帮首批后端
 
-2026-10-12，Java 21 / Spring Boot 4.1.1 / Maven / Spring JDBC / Flyway / MySQL 8。当前仅后端基础与游客文章读取，默认监听本机 `127.0.0.1:8080`。不含前端、认证、发布或互动写接口。
+2026-10-12，Java 21 / Spring Boot 4.1.1 / Maven / Spring JDBC / Flyway / MySQL 8。当前包含游客文章读取，以及第二阶段统一账号、校园邮箱注册认证、密码登录、Bearer会话、退出与密码找回。默认监听本机 `127.0.0.1:8080`。不含前端、文章发布或互动写接口。
 
 ## 本机启动
 
@@ -26,7 +26,15 @@
 ./scripts/Initialize-Database.ps1
 ```
 
-3. 构建并启动。
+3. 配置真实邮件与本机摘要密钥。SMTP客户端授权密码放在Git忽略的 `server/.env.smtp.txt`，不放在源码或命令参数中。本机脚本读取这个文件到子进程环境，退出脚本后恢复原环境。JSON本机配置可追加MAIL_HOST、MAIL_PORT、MAIL_FROM、MAIL_USERNAME、MAIL_TLS_MODE（SSL或强制STARTTLS）和MAIL_TIMEOUT_MS等 `.env.example`列出的键。发送地址需与授权用户名相同，不支持明文SMTP。
+
+```powershell
+./scripts/Initialize-AuthKey.ps1
+```
+
+此命令仅在不存在时生成32字节随机密钥并保存到Git忽略的 `.env.auth-key.txt`，不要在重启时删除或重新生成，否则现存验证码摘要将不能核验。现有本机数据库配置保持原内容；加载器已支持新增邮件键。已验证用户本人的SMTP候选为smtp.qiye.163.com:465、SSL；其他账户不能据此声称可用。
+
+4. 构建并启动。
 
 ```powershell
 mvn -B -ntp '-Dmaven.repo.local=.m2-cache' package
@@ -35,11 +43,11 @@ mvn -B -ntp '-Dmaven.repo.local=.m2-cache' package
 
 使用当前电脑已有Maven设置下载正式版依赖。`.m2-cache` / `target` / 本机配置均被Git忽略。运行窗口按Ctrl+C停止本项目应用。
 
-4. 请求 `http://127.0.0.1:8080/actuator/health`，得到HTTP 200且 `code=OK` / `data.status=UP` 才表示应用及数据库检查通过。接口和Postman集合见 [API.md](API.md) / [postman集合](postman/CampusHub.postman_collection.json)。
+5. 请求 `http://127.0.0.1:8080/actuator/health`，得到HTTP 200且 `code=OK` / `data.status=UP` 才表示应用及数据库检查通过。文章和身份接口分别见 [API.md](API.md) / [AUTH_API.md](AUTH_API.md)，共用[Postman集合](postman/CampusHub.postman_collection.json)。健康UP不代表邮件已送达；SMTP发送失败返回503，但公开文章读取继续可用。
 
 ## 数据与演示边界
 
-默认 `demo` 配置加载V1结构和V2演示数据。六篇公开文章、四篇非公开文章、一个未发布修订版本；所有内容和计数均为明确标注的演示数据。没有真实用户、作者账号、奖励钱包、点赞记录、投币事件或审核材料。数据库不放身份和联系方式字段；正文中作者自愿公开的文字保持原文。
+默认 `demo` 配置加载V1文章结构、V2演示数据及V3身份结构。六篇公开文章、四篇非公开文章、一个未发布修订版本；所有文章内容和计数均为明确标注的演示数据。演示迁移不插入真实用户或作者，也没有奖励钱包、点赞记录、投币事件或审核材料。V3独立保存已验证注册用户的私有身份数据，原游客文章响应不返回这些字段；正文中作者自愿公开的文字保持原文。
 
 V1创建文章、正文版本、分类、正文版本分类关联、资料链接，均使用InnoDB。公开版本引用通过复合外键限定为该文章自己的版本；后续草稿可以有独立版本。V2是有版本号的迁移，只执行一次，不在启动逻辑重复插入。Flyway启动时验证已应用迁移的校验值；迁移错误会阻止启动，禁止自动baseline和clean。不要修改已经执行的迁移，需要变化时新增版本。
 
@@ -53,7 +61,11 @@ V1创建文章、正文版本、分类、正文版本分类关联、资料链接
 
 脚本执行 `mvn -Pmysql-it verify`，单元测试与独立MySQL集成测试分别写入 `target/surefire-reports` 和 `target/failsafe-reports`。集成测试强制库名campushub_test，通过本应用专属TCP转发器模拟真实连接故障，关闭本应用测试连接后检查503和恢复；不停止MySQL服务。迁移校验与重启保留检查都在测试库进行。没有凭据时显式失败，不跳过后宣称通过。测试库必须仅供本轮演示测试使用，测试预期为固定演示数据；不自动清空或修复已有不匹配数据。
 
-普通 `mvn package` 只执行单元测试，不代表MySQL验证。真实执行状态见 [验证记录](verification/2026-10-12.md)。本轮是提前开展的基础验证，不是整个课程项目的功能、性能、压力或稳定性验收。
+普通 `mvn package` 只执行单元测试，不代表MySQL验证。第一阶段历史执行记录保留在 [文章验证记录](verification/2026-10-12.md)，第二阶段执行与真实SMTP证据见 [身份验证记录](verification/2026-10-12-auth.md)。本轮是提前开展的基础验证，不是整个课程项目的功能、性能、压力或稳定性验收。
+
+身份集成测试注入受控邮件发送器与可调Clock，只在campushub_test创建随机前缀的测试邮箱。完成后删除本次测试创建的身份记录，保留已有文章、迁移及非测试账号。不向任何学生真实发信；自动化通过不等于SMTP或用户收件通过。缺少测试库凭据显式失败，不使用H2。
+
+真实邮件验证工具 `./scripts/Verify-RealEmail.ps1 -Step Request` 只支持用户自己的固定收件邮箱，启动18081端口的本项目验证进程并发送一次真实注册邮件。首次注册验证需将用户选择的应用密码置于Git忽略 `.env.account-test.json`、实际收到的验证码置于 `.env.received-code.txt`，运行 `-Step Complete` 完成注册、登录、本人状态和退出核验，运行 `-Step Stop` 结束该工具创建的进程。已有账号不重复使用首次注册流程；找回密码按AUTH_API.md使用独立重置接口。不得把验证码、密码或返回令牌导出到Postman集合或Git。
 
 打包后可以运行 `./scripts/Smoke-Local.ps1`，在18080端口两次启动本项目JAR，验证开发库健康及读取数据保留，然后停止脚本创建的进程。它不停止MySQL或其他项目，结果保存在 `target/smoke-result.json`。
 

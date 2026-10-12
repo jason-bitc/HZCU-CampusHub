@@ -1,0 +1,93 @@
+2026-10-12 21:41:42 INFO  [a2c666ca-1c53-4720-9e9d-fa71f332cd06] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=57
+2026-10-12 21:41:43 INFO  [3bc38a22-aa3d-4c4c-b241-5f8fd31c43e6] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=327
+2026-10-12 21:41:43 INFO  [50f50b20-b2d9-45d5-98a5-6a9d52abc0bf] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=318
+2026-10-12 21:41:43 INFO  [12a396e5-89e9-4a1e-ab03-f056926a9849] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=329
+2026-10-12 21:41:43 INFO  [4fe602ca-7e57-43d2-a4af-8d69d039cf51] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=200 durationMs=2
+2026-10-12 21:41:43 INFO  [55ce6e62-e18a-49cc-87d3-fa73e45f359f] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=19
+2026-10-12 21:41:43 INFO  [7496e7cf-e8e0-4bf7-801a-dfc3a241f22d] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=2
+2026-10-12 21:41:43 INFO  [8559fa2f-8a55-474f-808c-8a31c6ec62ba] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=200 durationMs=2
+2026-10-12 21:41:43 INFO  [32b0c3f8-db19-4cc8-b0de-418ca681dd81] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=6
+
+2026-10-12 21:41:43 INFO  [2f3fd52c-37e3-414b-9950-7179a5c4d087] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=2
+2026-10-12 21:41:43 INFO  [2caca718-ce65-45b8-87f6-aa9709193a2b] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=1
+2026-10-12 21:41:43 INFO  [477bba49-0b37-47bf-86ad-5b3258a79823] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=1
+2026-10-12 21:41:43 INFO  [0af89166-983d-48ed-ad2e-fc9fc7173c2e] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=18
+2026-10-12 21:41:43 INFO  [71faf25c-e127-45c5-b848-37a7f1271cde] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=2
+2026-10-12 21:41:43 INFO  [517a0744-680f-4a0f-99f3-8597c3808b7d] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=1
+2026-10-12 21:41:44 INFO  [90b4ffae-74ab-4afd-80af-957311732aa1] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=313
+2026-10-12 21:41:44 INFO  [13034f5c-1363-411d-86f4-fd138a540cd2] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=0
+2026-10-12 21:41:44 INFO  [ff5ec515-a999-44f3-9ea6-27507191f983] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=0
+2026-10-12 21:41:44 INFO  [c819c06d-3586-4acf-9a5e-1a00929ffb13] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=2
+2026-10-12 21:41:44 INFO  [72a0f2ef-8bee-485b-9261-6d8267fa0a03] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=413 durationMs=0
+
+2026-10-12 21:41:44 INFO  [6e77b97e-4216-48e1-8356-ab0d65112981] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:44 INFO  [1816a301-586a-4d54-bdb2-217b337b6bc9] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=13
+2026-10-12 21:41:44 INFO  [cd70241a-3e34-4d5b-9a0c-24321be13aba] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=10
+2026-10-12 21:41:44 INFO  [4b98bda3-f519-4eb9-8287-905c869860c6] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=10
+2026-10-12 21:41:44 INFO  [1aeeb171-40a7-40e7-ac49-9326c528d40e] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=10
+2026-10-12 21:41:44 INFO  [847c82e2-a756-465d-8cc8-9ba11cb9525b] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=12
+2026-10-12 21:41:44 INFO  [b9c59f6a-4849-4655-8102-78bfd6b53721] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=5
+2026-10-12 21:41:44 INFO  [40e58e8e-40d4-4521-8b09-ccf12d027449] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=15
+2026-10-12 21:41:44 INFO  [26259f8c-1956-467b-bbb6-76277fe2c1d2] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=12
+2026-10-12 21:41:44 INFO  [109ef01a-1ca4-4536-910a-d96f08827dbb] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=16
+2026-10-12 21:41:44 INFO  [da01901f-b22f-44d4-82c5-8af7affebde3] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=4
+2026-10-12 21:41:44 INFO  [159ea9c3-4fcc-424c-8db5-9dd75369d0d0] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=5
+2026-10-12 21:41:44 INFO  [abdf40c0-1952-4bdf-a4ec-2308e47c6d30] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=322
+
+2026-10-12 21:41:44 WARN  [211abb25-cd60-42df-81a7-d9168c53a2d5] cn.edu.hzcu.campushub.auth.AuthService - verification mail failed category=CONTROLLED_TEST_FAILURE
+2026-10-12 21:41:44 INFO  [211abb25-cd60-42df-81a7-d9168c53a2d5] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=503 durationMs=17
+2026-10-12 21:41:44 INFO  [71a7f7f2-08df-4591-812d-a663eef016c8] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=5
+2026-10-12 21:41:44 INFO  [bf5d0457-d29d-4dc8-aba0-a7e125b70de0] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=16
+2026-10-12 21:41:44 INFO  [cac36da1-a817-4052-a8ad-203598fa6fd8] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=429 durationMs=4
+2026-10-12 21:41:44 WARN  [a1c40153-b266-4040-957d-b823b6e71dec] cn.edu.hzcu.campushub.auth.AuthService - verification mail failed category=CONTROLLED_TEST_FAILURE
+2026-10-12 21:41:44 INFO  [a1c40153-b266-4040-957d-b823b6e71dec] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=503 durationMs=15
+2026-10-12 21:41:44 INFO  [41aa3e87-665f-4b65-b104-d824b577e344] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=16
+2026-10-12 21:41:44 INFO  [9eaa445d-86bb-40ae-bc04-2361e7f3aa68] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=5
+2026-10-12 21:41:45 INFO  [49f41a41-46ac-46ee-8f75-c6ccfa728724] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=318
+2026-10-12 21:41:45 INFO  [edb4d705-5e45-4315-acc8-605c81599001] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=11
+2026-10-12 21:41:45 INFO  [0d591a3e-a7ac-4c33-8d0d-55b165f456b0] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=13
+2026-10-12 21:41:45 INFO  [f4054a72-e779-4b73-96ff-147da1426376] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=12
+2026-10-12 21:41:45 INFO  [2b00a6c2-314c-4712-a712-78f1bceacf88] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=13
+2026-10-12 21:41:45 INFO  [cf9fc6d5-d499-4912-8c4d-63fa708a8c35] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:45 INFO  [54672a66-c5f3-4730-b8e3-9df310ada8fe] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=429 durationMs=5
+2026-10-12 21:41:45 INFO  [a72dc98c-3d99-4958-b2b2-e13576a29a8a] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:45 INFO  [8092083e-5181-4159-91f6-7703af27109e] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=200 durationMs=13
+
+2026-10-12 21:41:45 INFO  [1fe45aba-e405-4c6a-9efe-f4976774b24e] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:45 INFO  [24ba1e46-7619-4c30-85f4-1d8a51f7fef7] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=429 durationMs=16
+2026-10-12 21:41:45 INFO  [ec593f8f-be55-4202-a383-716f14fac1c1] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=321
+2026-10-12 21:41:45 INFO  [db1668af-5052-4254-a083-498cc02451ce] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=320
+2026-10-12 21:41:45 INFO  [9c651ab7-f77d-4607-a953-d5ca395991b9] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=13
+2026-10-12 21:41:45 INFO  [afae3681-7989-494d-9b02-ac11e4778944] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=409 durationMs=5
+
+2026-10-12 21:41:45 INFO  [6ff03dab-f292-4922-af39-18ee7c6606c0] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:45 INFO  [f05d86f0-77ae-4382-b262-9d87e463af24] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=320
+2026-10-12 21:41:46 INFO  [4fcc13a3-8fda-4bc6-a17c-cc5f9349a82c] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=324
+2026-10-12 21:41:46 INFO  [c1bc90a5-5cd8-4303-b4ab-f464530e1c1f] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=401 durationMs=312
+2026-10-12 21:41:46 INFO  [f8965e5b-06cd-415f-bd18-c03c02dba1d2] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=401 durationMs=323
+2026-10-12 21:41:46 INFO  [55fd4639-6b1f-49da-a47b-a1ef209b17c7] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=403 durationMs=2
+2026-10-12 21:41:47 INFO  [7d8a85b5-9e53-455d-8883-8bc234cb5efc] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=401 durationMs=307
+2026-10-12 21:41:47 INFO  [542fcefa-fcc9-436e-b27a-4fafe90b7614] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=403 durationMs=2
+2026-10-12 21:41:47 INFO  [a36e7909-fad7-435b-817f-49fe17c5883e] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=7
+2026-10-12 21:41:47 INFO  [2fa2b700-cb6c-43c5-b722-ebca0d13076f] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=200 durationMs=7
+
+2026-10-12 21:41:47 INFO  [b35dac27-5dcf-4027-91ff-660d1446556d] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=12
+2026-10-12 21:41:47 INFO  [ed292c85-3725-4ec5-b7fe-7bcfcb68b1c8] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=320
+2026-10-12 21:41:47 INFO  [503154a3-958a-467c-b68d-a1026fad1df9] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=333
+2026-10-12 21:41:48 INFO  [7cdaf8b4-e7f3-4ebf-84df-9fcf0ad24d72] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=328
+2026-10-12 21:41:48 INFO  [a3a267ae-cfd4-49db-b333-21cc17e07bde] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:48 INFO  [36ad0174-f44d-46ed-8e02-dfc76d52d51c] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=4
+2026-10-12 21:41:48 INFO  [2df06d82-5467-4d40-918e-65003a2ae09a] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=324
+2026-10-12 21:41:48 INFO  [f66ef67e-7959-4417-83ff-4afb3f638fd9] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=1
+2026-10-12 21:41:48 INFO  [0fa59792-c10f-41b8-948f-13e5ac244bb2] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=1
+2026-10-12 21:41:48 INFO  [d7f5d10e-eb5e-47bb-b088-9230de2e739d] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=401 durationMs=326
+2026-10-12 21:41:49 INFO  [171a764b-180b-40f5-babd-3fc8d5884578] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=353
+2026-10-12 21:41:49 INFO  [1d969cd5-8233-4fe1-a8b7-7b459535b53d] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=3
+2026-10-12 21:41:49 INFO  [7456fc16-c309-4c74-8525-1df66805698f] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=14
+2026-10-12 21:41:49 INFO  [013cada8-bc5a-4d2b-b292-94605c8dc821] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=400 durationMs=4
+
+2026-10-12 21:41:49 INFO  [3460ee9a-3333-4ae7-ae01-7817a390c7a2] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=202 durationMs=15
+2026-10-12 21:41:49 INFO  [50787432-c8ea-4490-b084-3ef7761165f4] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=201 durationMs=323
+2026-10-12 21:41:49 INFO  [c4332fce-91e2-476e-be0b-5322fc558c15] c.edu.hzcu.campushub.common.RequestTrace - request completed method=POST status=200 durationMs=316
+2026-10-12 21:41:50 INFO  [38849318-6fc6-4dba-b620-fbcf154eb916] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=200 durationMs=3
+2026-10-12 21:41:50 INFO  [791d7978-4f75-4218-9f05-24aeffef8ad5] c.edu.hzcu.campushub.common.RequestTrace - request completed method=GET status=401 durationMs=2

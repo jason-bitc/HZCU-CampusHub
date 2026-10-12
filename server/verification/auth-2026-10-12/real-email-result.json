@@ -1,0 +1,9 @@
+{
+  "campusCertification": "VALID",
+  "checkedAt": "2026-10-12T21:51:02.2947365+08:00",
+  "recipientConfirmed": true,
+  "stage": "REGISTER_LOGIN_LOGOUT_VERIFIED",
+  "normalRole": true,
+  "codeVerified": true,
+  "logoutRejected": true
+}

@@ -1,0 +1,9 @@
+{
+  "publicArticles": 6,
+  "port": 18080,
+  "status": "PASS",
+  "checkedAt": "2026-10-12T21:59:56.2468168+08:00",
+  "startups": 2,
+  "database": "campushub_dev",
+  "snapshotPreserved": true
+}

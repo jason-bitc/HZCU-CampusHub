@@ -1,13 +1,43 @@
 {
   "info": {
-    "name": "CampusHub 首批后端：游客文章读取",
-    "description": "本地演示数据；不含凭据。数据库故障与重启验证由MySQL集成测试执行。",
+    "name": "CampusHub 文章读取与账号校园认证",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
       "value": "http://127.0.0.1:8080",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "receivedCode",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "registrationChallengeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "resetChallengeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
       "type": "string"
     }
   ],
@@ -576,6 +606,276 @@
               "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
             ]
           }
+        }
+      ]
+    },
+    {
+      "name": "第二阶段身份流程（仅本人，逐步输入验证码）",
+      "item": [
+        {
+          "name": "申请本人注册码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/registration-codes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 202) pm.variables.set(\"registrationChallengeId\", body.data.challengeId); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "验证码注册普通账号",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"challengeId\": \"{{registrationChallengeId}}\",\n  \"code\": \"{{receivedCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "密码登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 200) pm.variables.set(\"accessToken\", body.data.accessToken); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "退出当前会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/logout"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "申请本人重置码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/password-reset-codes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 202) pm.variables.set(\"resetChallengeId\", body.data.challengeId); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "验证码重置密码并撤销旧会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/password-resets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"challengeId\": \"{{resetChallengeId}}\",\n  \"code\": \"{{receivedCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
         }
       ]
     }

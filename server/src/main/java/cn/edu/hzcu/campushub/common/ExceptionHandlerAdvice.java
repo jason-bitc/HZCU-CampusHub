@@ -23,7 +23,8 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(e.status()).body(ApiResponse.failure(e.code(), e.getMessage()));
     }
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, MissingServletRequestParameterException.class,
-            ConstraintViolationException.class, HandlerMethodValidationException.class})
+            ConstraintViolationException.class, HandlerMethodValidationException.class,
+            org.springframework.http.converter.HttpMessageNotReadableException.class})
     ResponseEntity<ApiResponse<Void>> invalid(Exception e) { return domain(ApiException.invalid()); }
     @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
     ResponseEntity<ApiResponse<Void>> missing(Exception e) { return domain(ApiException.notFound()); }
@@ -31,6 +32,11 @@ public class ExceptionHandlerAdvice {
     ResponseEntity<ApiResponse<Void>> method(Exception e) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(ApiResponse.failure("METHOD_NOT_ALLOWED", "该接口不支持此请求方法"));
+    }
+    @ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+    ResponseEntity<ApiResponse<Void>> media(Exception e) {
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                .body(ApiResponse.failure("UNSUPPORTED_MEDIA_TYPE", "请使用application/json请求内容"));
     }
     @ExceptionHandler({DataAccessException.class, org.springframework.transaction.CannotCreateTransactionException.class})
     ResponseEntity<ApiResponse<Void>> unavailable(Exception e) {

@@ -1,0 +1,2 @@
+# Preserve immutable Flyway migration bytes across Windows/WSL checkouts.
+server/src/main/resources/db/**/*.sql text eol=lf

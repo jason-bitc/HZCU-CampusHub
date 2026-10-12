@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
+@org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE+10)
 public class RequestTrace extends OncePerRequestFilter {
     private static final Logger LOG = LoggerFactory.getLogger(RequestTrace.class);
     public static String current() { return MDC.get("traceId"); }

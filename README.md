@@ -10,6 +10,7 @@
 - [文章读取接口文档](server/API.md)与[Postman集合](server/postman/CampusHub.postman_collection.json)
 - [本轮开发决策与需求追踪](docs/BACKEND_BATCH1.md)
 - [提前开展的基础验证](server/verification/2026-10-12.md)
+- [第二阶段账号与校园邮箱认证](docs/BACKEND_BATCH2.md)、[身份接口](server/AUTH_API.md)和[实际验证](server/verification/2026-10-12-auth.md)
 
 - [教师邮件提交包](deliverables/SE2026-G04-项目计划交付包.zip)（67页PPT、项目计划、可行性报告及排期图表）
 

@@ -1,0 +1,11 @@
+需求编号,原基线场景或待确认项,本轮实现与决策,实现证据,自动验证证据,范围及评审边界,学生复核
+FR-A01,TC-A01与OP01,网页小程序共用邮箱密码账号和独立Bearer会话,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthService.java,registrationPasswordStorageSessionsAndLogout;sessionAbsoluteExpiryPersistenceAndOldArticleMigrationsPreserved,微信绑定与前端后续实现;用户决策未代替教师评审,待实际复核
+FR-A02,TC-A02与OP02,校园注册时验证码认证;5分钟60秒小时5次错误5次,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthService.java,wrongAttemptsExpiryAndPurposeCannotBeBypassed;resendLimitsAndSuccessfulReplacementOnly,真实SMTP及人工收件核验单列验证记录,待实际复核
+FR-A04,TC-A04,账号受限认证撤销及会话失效作用于新请求,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthRequestFilter.java,loginFailureIsUniformAndStatesCheckedOnNewRequests,本批只有本人状态和退出;治理操作后续实现,待实际复核
+FR-A06,TC-A06,注册固定USER且认证不提升权限,server/src/main/resources/db/migration/V3__account_email_auth.sql,invalidDomainPasswordPayloadAndNoPrivilegeEscalation,没有管理账号创建或管理页面,待实际复核
+FR-R01与FR-R06,TC-R01与TC-R06,新增账号不改变游客免费公开读取及字段,server/src/test/java/cn/edu/hzcu/campushub/article/ArticleMySqlIT.java,首批11场景真实MySQL回归,前端及认证作者字段仍未实现,待实际复核
+NFR01,TC-NFR01,本人会话摘要与独立账号权限,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthRepository.java,registrationPasswordStorageSessionsAndLogout;loginFailureIsUniformAndStatesCheckedOnNewRequests,仅本批后端身份边界;整体安全验收待开展,待实际复核
+NFR02,TC-NFR02,唯一邮箱并发注册与验证码消费事务及重置撤销会话,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthService.java,concurrentRequestsAndRegistrationCreateOneAccount;resetIsPurposeBoundSingleUseAndRevokesEverySession,互动账本与文章写操作尚未开发,待实际复核
+NFR03,TC-NFR03,密码哈希验证码HMAC秘密配置及受限请求体,server/src/main/java/cn/edu/hzcu/campushub/auth/AuthCrypto.java,AuthInputTest;invalidDomainPasswordPayloadAndNoPrivilegeEscalation,邮件授权码和收到的验证码不入Git日志,待实际复核
+NFR07,TC-NFR07,运行邮件故障503且游客文章仍可读,server/src/main/java/cn/edu/hzcu/campushub/auth/SmtpConfiguration.java,resendLimitsAndSuccessfulReplacementOnly,自动邮件故障由受控发送器模拟;真实SMTP单列,待实际复核
+OP01与OP03,待确认事项OP01与OP03,用户确认第一版仅校园邮箱注册并认证普通账号,docs/BACKEND_BATCH2.md,用户交接指令和实际实现记录,校友其他认证与材料审核仍待设计;教师评审未确认,待实际复核

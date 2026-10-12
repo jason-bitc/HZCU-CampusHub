@@ -22,6 +22,16 @@ server:
     include-stacktrace: never
     include-binding-errors: never
 campushub:
+  auth:
+    pepper: ${CAMPUSHUB_AUTH_PEPPER:}
+  mail:
+    host: ${CAMPUSHUB_MAIL_HOST:smtp.qiye.163.com}
+    port: ${CAMPUSHUB_MAIL_PORT:465}
+    from: ${CAMPUSHUB_MAIL_FROM:32401211@stu.hzcu.edu.cn}
+    username: ${CAMPUSHUB_MAIL_USERNAME:32401211@stu.hzcu.edu.cn}
+    password: ${CAMPUSHUB_MAIL_PASSWORD:}
+    tls-mode: ${CAMPUSHUB_MAIL_TLS_MODE:SSL}
+    timeout-ms: ${CAMPUSHUB_MAIL_TIMEOUT_MS:10000}
   db:
     host: ${CAMPUSHUB_DB_HOST:127.0.0.1}
     port: ${CAMPUSHUB_DB_PORT:3306}
@@ -49,5 +59,7 @@ logging:
     org.springframework.boot.web.server.servlet.context: OFF
     org.springframework.boot.jdbc.health.DataSourceHealthIndicator: OFF
     org.springframework.web.servlet.PageNotFound: OFF
+    org.springframework.mail: OFF
+    org.eclipse.angus.mail: OFF
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%X{traceId}] %logger{40} - %msg%n'

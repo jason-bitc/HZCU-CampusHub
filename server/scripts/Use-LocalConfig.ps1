@@ -4,13 +4,25 @@ function Invoke-CampusHubEnvironment {
     $saved = @{}
     try {
         if (Test-Path -LiteralPath $localFile) {
-            $config = Get-Content -LiteralPath $localFile -Raw | ConvertFrom-Json
+            try { $config = Get-Content -LiteralPath $localFile -Raw | ConvertFrom-Json }
+            catch { throw 'Local configuration JSON is invalid; values are omitted.' }
             foreach ($entry in $config.PSObject.Properties) {
-                if ($entry.Name -notmatch '^CAMPUSHUB_(DB_(HOST|PORT|NAME|USERNAME|PASSWORD)|TEST_DB_(USERNAME|PASSWORD))$') {
+                if ($entry.Name -notmatch '^CAMPUSHUB_(DB_(HOST|PORT|NAME|USERNAME|PASSWORD)|TEST_DB_(USERNAME|PASSWORD)|MAIL_(HOST|PORT|FROM|USERNAME|PASSWORD|TLS_MODE|TIMEOUT_MS)|AUTH_PEPPER)$') {
                     throw 'Unknown local configuration key.'
                 }
                 $saved[$entry.Name] = [Environment]::GetEnvironmentVariable($entry.Name, 'Process')
                 [Environment]::SetEnvironmentVariable($entry.Name, [string]$entry.Value, 'Process')
+            }
+        }
+        $secretFiles = @{ CAMPUSHUB_MAIL_PASSWORD = '../.env.smtp.txt'; CAMPUSHUB_AUTH_PEPPER = '../.env.auth-key.txt' }
+        foreach ($name in $secretFiles.Keys) {
+            $secretPath = Join-Path $PSScriptRoot $secretFiles[$name]
+            if (Test-Path -LiteralPath $secretPath) {
+                $secret = [System.IO.File]::ReadAllText((Resolve-Path -LiteralPath $secretPath)).Trim()
+                if (!$secret -or $secret -match '\s') { throw 'Local secret file must contain one nonempty value without whitespace.' }
+                if (!$saved.ContainsKey($name)) { $saved[$name] = [Environment]::GetEnvironmentVariable($name, 'Process') }
+                [Environment]::SetEnvironmentVariable($name, $secret, 'Process')
+                $secret = $null
             }
         }
         & $Action

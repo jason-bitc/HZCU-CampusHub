@@ -1,0 +1,9 @@
+{
+  "schemaV1": "1D2FA83D40D1EC19B282EF175581F882BA0398175C79F717B9FF875A8D26D8B1",
+  "scriptSyntax": "PASS",
+  "secretCandidateScan": "PASS",
+  "postmanArticleRequests": 21,
+  "postmanIdentityRequests": 7,
+  "changedOldMigrations": false,
+  "demoV2": "8C37951D759435A95B52327CD851C4D2D991C2E83F8A42318EBF13ED7A3EC014"
+}

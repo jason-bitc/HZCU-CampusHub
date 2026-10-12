@@ -1,0 +1,116 @@
+[
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "registrationPasswordStorageSessionsAndLogout",
+    "seconds": "1.107",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "invalidDomainPasswordPayloadAndNoPrivilegeEscalation",
+    "seconds": "0.383",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "wrongAttemptsExpiryAndPurposeCannotBeBypassed",
+    "seconds": "0.498",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "resendLimitsAndSuccessfulReplacementOnly",
+    "seconds": "0.543",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "concurrentRequestsAndRegistrationCreateOneAccount",
+    "seconds": "0.371",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "loginFailureIsUniformAndStatesCheckedOnNewRequests",
+    "seconds": "1.669",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "resetIsPurposeBoundSingleUseAndRevokesEverySession",
+    "seconds": "2.078",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+    "name": "sessionAbsoluteExpiryPersistenceAndOldArticleMigrationsPreserved",
+    "seconds": "1.654",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "healthCatalogAndEnvelope",
+    "seconds": "0.364",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "sortingExercisesCoinsLikesTimeAndStableId",
+    "seconds": "0.081",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "keywordAndAllFiltersIntersect",
+    "seconds": "0.152",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "paginationHasNoDuplicatesOrOmissionsForStableData",
+    "seconds": "0.159",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "currentPublicVersionOnlyAndNoRestrictedFields",
+    "seconds": "0.035",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "everyNonPublicStateAndMissingArticleReturnIdentical404",
+    "seconds": "0.07",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "invalidInputsUnknownPathsAndWriteMethods",
+    "seconds": "0.081",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "sqlSpecialCharactersAreLiteralAndCannotChangeQueryStructure",
+    "seconds": "0.117",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "migrationValidationRepeatAndRestartPreserveData",
+    "seconds": "1.489",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "invalidConfigurationAndChangedMigrationPreventStartup(Path)",
+    "seconds": "1.418",
+    "result": "PASS"
+  },
+  {
+    "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+    "name": "actualConnectionFailureIs503AndRecoveryRestoresReading",
+    "seconds": "15.306",
+    "result": "PASS"
+  }
+]
