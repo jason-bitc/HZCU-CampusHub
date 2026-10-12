@@ -1,0 +1,57 @@
+[
+  {
+    "name": "healthCatalogAndEnvelope",
+    "seconds": "0.371",
+    "result": "PASS"
+  },
+  {
+    "name": "sortingExercisesCoinsLikesTimeAndStableId",
+    "seconds": "0.078",
+    "result": "PASS"
+  },
+  {
+    "name": "keywordAndAllFiltersIntersect",
+    "seconds": "0.147",
+    "result": "PASS"
+  },
+  {
+    "name": "paginationHasNoDuplicatesOrOmissionsForStableData",
+    "seconds": "0.177",
+    "result": "PASS"
+  },
+  {
+    "name": "currentPublicVersionOnlyAndNoRestrictedFields",
+    "seconds": "0.038",
+    "result": "PASS"
+  },
+  {
+    "name": "everyNonPublicStateAndMissingArticleReturnIdentical404",
+    "seconds": "0.075",
+    "result": "PASS"
+  },
+  {
+    "name": "invalidInputsUnknownPathsAndWriteMethods",
+    "seconds": "0.096",
+    "result": "PASS"
+  },
+  {
+    "name": "sqlSpecialCharactersAreLiteralAndCannotChangeQueryStructure",
+    "seconds": "0.124",
+    "result": "PASS"
+  },
+  {
+    "name": "migrationValidationRepeatAndRestartPreserveData",
+    "seconds": "1.145",
+    "result": "PASS"
+  },
+  {
+    "name": "invalidConfigurationAndChangedMigrationPreventStartup(Path)",
+    "seconds": "1.478",
+    "result": "PASS"
+  },
+  {
+    "name": "actualConnectionFailureIs503AndRecoveryRestoresReading",
+    "seconds": "15.294",
+    "result": "PASS"
+  }
+]

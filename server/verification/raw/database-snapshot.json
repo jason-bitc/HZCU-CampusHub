@@ -1,0 +1,33 @@
+{
+  "mysqlVersion" : "8.0.45",
+  "campushub_dev" : {
+    "article" : 10,
+    "article_version" : 11,
+    "category" : 9,
+    "article_version_category" : 35,
+    "article_source_link" : 1,
+    "states" : {
+      "ADMIN_HIDDEN" : 1,
+      "AUTHOR_OFFLINE" : 1,
+      "DELETED" : 1,
+      "DRAFT" : 1,
+      "PUBLISHED" : 6
+    },
+    "migrationVersions" : [ "1", "2" ]
+  },
+  "campushub_test" : {
+    "article" : 10,
+    "article_version" : 11,
+    "category" : 9,
+    "article_version_category" : 35,
+    "article_source_link" : 1,
+    "states" : {
+      "ADMIN_HIDDEN" : 1,
+      "AUTHOR_OFFLINE" : 1,
+      "DELETED" : 1,
+      "DRAFT" : 1,
+      "PUBLISHED" : 6
+    },
+    "migrationVersions" : [ "1", "2" ]
+  }
+}

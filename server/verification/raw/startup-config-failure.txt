@@ -1,0 +1,13 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12 19:26:06 INFO  [] c.e.hzcu.campushub.CampusHubApplication - Starting CampusHubApplication v0.1.0 using Java 21.0.12.1 with PID 82776 (C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\campushub-server-0.1.0.jar started by wangc in C:\Users\wangc\Desktop\ZUCC-CampusHub\server)
+2026-10-12 19:26:06 INFO  [] c.e.hzcu.campushub.CampusHubApplication - No active profile set, falling back to 1 default profile: "demo"
+CampusHub startup failed [CONFIG_INVALID]. Check CAMPUSHUB_DB_* configuration, database permissions and Flyway migrations. No application is ready; see server/README.md troubleshooting.

@@ -1,0 +1,15 @@
+需求编号,关联基线场景,本轮范围,实现证据,自动化验证场景,当前状态,本轮未覆盖,学生复核状态
+FR-R01,TC-R01,游客免费列表全文及非公开404,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleRepository.java,currentPublicVersionOnlyAndNoRestrictedFields;everyNonPublicStateAndMissingArticleReturnIdentical404,后端基础验证已执行见验证记录,双端页面和正文图片加载,待实际复核
+FR-R02,TC-R02,标题摘要关键词及稳定分页,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleQuery.java,keywordAndAllFiltersIntersect;paginationHasNoDuplicatesOrOmissionsForStableData;sqlSpecialCharactersAreLiteralAndCannotChangeQueryStructure,后端基础验证已执行见验证记录,页面条件保持及连续加载体验,待实际复核
+FR-R03,TC-R03,岗位专业公司主题同时筛选,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleRepository.java,keywordAndAllFiltersIntersect,后端基础验证已执行见验证记录,认证同专业快捷条件,待实际复核
+FR-R04,TC-R04,演示计数认可排序及最新排序,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleRepository.java,sortingExercisesCoinsLikesTimeAndStableId,后端基础验证已执行见验证记录,真实互动计数及贡献失效修正,待实际复核
+FR-R05,TC-R05,当前公开Markdown来源说明及资料链接,server/src/main/resources/db/demo/V2__explicit_demo_articles.sql,currentPublicVersionOnlyAndNoRestrictedFields,后端基础验证已执行见验证记录,前端外链打开及失效反馈,待实际复核
+FR-R06,TC-R06,游客响应无受限作者资料并保留公开正文文字,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleModels.java,currentPublicVersionOnlyAndNoRestrictedFields;everyNonPublicStateAndMissingArticleReturnIdentical404,游客后端基础验证已执行见验证记录,认证后授权及文件访问,待实际复核
+FR-C07,TC-C07,仅预留独立修订与公开版本基础,server/src/main/resources/db/migration/V1__article_reading_schema.sql,currentPublicVersionOnlyAndNoRestrictedFields,读取边界已验证写入未实现,编辑保存冲突检测与发布写接口,待实际复核
+FR-M06,TC-M06,仅可用分类读取,server/src/main/java/cn/edu/hzcu/campushub/article/ArticleRepository.java,healthCatalogAndEnvelope,读取已验证管理未实现,分类维护与同义管理,待实际复核
+NFR01,TC-NFR01,游客直接请求公开边界,server/src/test/java/cn/edu/hzcu/campushub/article/ArticleMySqlIT.java,everyNonPublicStateAndMissingArticleReturnIdentical404,局部基础验证已执行见验证记录,其他角色和文件权限,待实际复核
+NFR03,TC-NFR03,SQL参数绑定及日志不输出秘密,server/src/main/java/cn/edu/hzcu/campushub/common/ExceptionHandlerAdvice.java,sqlSpecialCharactersAreLiteralAndCannotChangeQueryStructure;invalidInputsUnknownPathsAndWriteMethods,局部基础验证已执行见验证记录,前端危险Markdown和文件安全,待实际复核
+NFR07,TC-NFR07,运行时数据库故障503及恢复,server/src/test/java/cn/edu/hzcu/campushub/article/ArticleMySqlIT.java,actualConnectionFailureIs503AndRecoveryRestoresReading,局部基础验证已执行见验证记录,编辑及上传失败恢复,待实际复核
+NFR10,TC-NFR10,追踪日志及迁移校验,server/src/main/java/cn/edu/hzcu/campushub/common/RequestTrace.java,migrationValidationRepeatAndRestartPreserveData;invalidConfigurationAndChangedMigrationPreventStartup,局部基础验证已执行见验证记录,完整系统配置审计与运维追踪,待实际复核
+NFR12,TC-NFR12,本机Java后端构建启动MySQL迁移及保留,server/README.md,migrationValidationRepeatAndRestartPreserveData,局部基础验证已执行见验证记录,另一成员冷启动及微信真机云验证,待实际复核
+OP12,待确认事项OP12,用户确认本轮采用Java及不融合C++,docs/BACKEND_BATCH1.md,用户直接开发指令,用户技术选择已记录正式设计评审待确认,双方设计评审及教师反馈,待实际复核

@@ -1,0 +1,583 @@
+{
+  "info": {
+    "name": "CampusHub 首批后端：游客文章读取",
+    "description": "本地演示数据；不含凭据。数据库故障与重启验证由MySQL集成测试执行。",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "健康检查",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/actuator/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "分类目录",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/catalog"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "默认认可排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "最新排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?sort=latest"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "关键词",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=Java"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "组合筛选",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?jobId=1&majorId=11&companyId=21&topicId=31"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "空结果",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?companyId=999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "第二页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=2&size=2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "超过末页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=4&size=2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "公开详情",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/1001"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "草稿不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2001"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "作者下架不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2002"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "管理员隐藏不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2003"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "删除不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2004"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "不存在",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "无效分页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=0"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "无效大小",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?size=101"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "未知排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?sort=wrong"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQL特殊字符字面检索",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=100%25"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQL注入字符串",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=%27%20OR%201%3D1%20--"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "未知接口",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/missing"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

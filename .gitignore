@@ -1,0 +1,55 @@
+# Dependencies and build output
+node_modules/
+dist/
+server/target/
+server/.m2-cache/
+coverage/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+project.private.config.json
+server/src/main/resources/application-local.yml
+server/src/main/resources/application-local.yaml
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Caches, tools and temporary output
+.cache/
+.tools/
+.codex-build/
+.impeccable/
+.playwright-mcp/
+/tmp/
+/output/playwright/
+__pycache__/
+*.py[cod]
+*.log
+*.tmp
+*.jtl
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+~$*
+
+# Generated previews
+/scripts/h5shots/
+/scripts/_icons_preview.png
+/deck6/
+
+# Local deliverables (contain an independent Git repository), duplicate packages and archives
+/deliverables/
+/archive/
+
+# Separate reading assignment and source book
+/人月神话读书作业/
+/《人月神话》读书报告.docx
+/人月神话.pdf
+
+# Local assistant session state
+.workbuddy/

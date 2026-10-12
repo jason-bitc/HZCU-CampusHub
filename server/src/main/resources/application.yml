@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: campushub-server
+  profiles:
+    default: demo
+  flyway:
+    locations: classpath:db/migration
+    clean-disabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: false
+  mvc:
+    problemdetails:
+      enabled: false
+  web:
+    resources:
+      add-mappings: false
+server:
+  address: ${CAMPUSHUB_BIND_ADDRESS:127.0.0.1}
+  port: ${CAMPUSHUB_PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+campushub:
+  db:
+    host: ${CAMPUSHUB_DB_HOST:127.0.0.1}
+    port: ${CAMPUSHUB_DB_PORT:3306}
+    name: ${CAMPUSHUB_DB_NAME:campushub_dev}
+    username: ${CAMPUSHUB_DB_USERNAME:}
+    password: ${CAMPUSHUB_DB_PASSWORD:}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: false
+logging:
+  level:
+    root: WARN
+    cn.edu.hzcu.campushub: INFO
+    org.springframework.boot.SpringApplication: OFF
+    org.springframework.boot.diagnostics: OFF
+    com.zaxxer.hikari: OFF
+    org.springframework.boot.web.server.servlet.context: OFF
+    org.springframework.boot.jdbc.health.DataSourceHealthIndicator: OFF
+    org.springframework.web.servlet.PageNotFound: OFF
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%X{traceId}] %logger{40} - %msg%n'
