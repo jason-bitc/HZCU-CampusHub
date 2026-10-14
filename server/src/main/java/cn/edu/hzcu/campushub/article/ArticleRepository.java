@@ -17,7 +17,7 @@ public class ArticleRepository {
     private final NamedParameterJdbcTemplate jdbc;
     private static final String FROM = " FROM article a JOIN article_version v ON v.id=a.public_version_id AND v.article_id=a.id ";
     private static final String PUBLIC = " a.state='PUBLISHED' AND v.published_at IS NOT NULL ";
-    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,a.effective_coins,a.effective_likes,a.count_origin";
+    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,v.updated_at,a.effective_coins,a.effective_likes,a.count_origin";
     public ArticleRepository(NamedParameterJdbcTemplate jdbc) { this.jdbc = jdbc; }
 
     public Catalog catalog() {
@@ -58,7 +58,7 @@ public class ArticleRepository {
             var links = jdbc.query("SELECT label,url FROM article_source_link WHERE version_id=:version ORDER BY display_order,id",
                     new MapSqlParameterSource("version", r.versionId()), (link, x) -> new SourceLink(link.getString("label"), link.getString("url")));
             return new Detail(r.id(), r.title(), r.textSummary(), categories(List.of(r.versionId())).get(r.versionId()),
-                    r.stage(), r.sourceType(), r.publishedAt(), r.counts(), rs.getString("body"), rs.getString("body_format"), rs.getString("source_note"), links);
+                    r.stage(), r.sourceType(), r.publishedAt(), r.updatedAt(), r.counts(), rs.getString("body"), rs.getString("body_format"), rs.getString("source_note"), links);
         }).stream().findFirst();
     }
 
@@ -88,10 +88,10 @@ public class ArticleRepository {
     private static Row row(ResultSet rs) throws SQLException {
         return new Row(rs.getLong("id"), rs.getLong("version_id"), rs.getString("title"), rs.getString("summary"),
                 rs.getString("experience_stage"), rs.getString("source_type"), rs.getTimestamp("published_at").toInstant(),
-                new Counts(rs.getLong("effective_coins"), rs.getLong("effective_likes"), rs.getString("count_origin")));
+                rs.getTimestamp("updated_at").toInstant(),new Counts(rs.getLong("effective_coins"), rs.getLong("effective_likes"), rs.getString("count_origin")));
     }
     private record Row(long id, long versionId, String title, String textSummary, String stage, String sourceType,
-            java.time.Instant publishedAt, Counts counts) {
-        Summary summary(Categories categories) { return new Summary(id, title, textSummary, categories, stage, sourceType, publishedAt, counts); }
+            java.time.Instant publishedAt, java.time.Instant updatedAt, Counts counts) {
+        Summary summary(Categories categories) { return new Summary(id, title, textSummary, categories, stage, sourceType, publishedAt, updatedAt, counts); }
     }
 }

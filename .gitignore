@@ -3,6 +3,7 @@ node_modules/
 dist/
 server/target/
 server/.m2-cache/
+.local-data/
 coverage/
 
 # Local configuration and secrets

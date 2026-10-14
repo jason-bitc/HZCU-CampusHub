@@ -26,6 +26,10 @@ public class ExceptionHandlerAdvice {
             ConstraintViolationException.class, HandlerMethodValidationException.class,
             org.springframework.http.converter.HttpMessageNotReadableException.class})
     ResponseEntity<ApiResponse<Void>> invalid(Exception e) { return domain(ApiException.invalid()); }
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    ResponseEntity<ApiResponse<Void>> uploadSize(Exception e){return ResponseEntity.status(413).body(ApiResponse.failure("REQUEST_TOO_LARGE","图片或multipart请求超过允许大小"));}
+    @ExceptionHandler({org.springframework.web.multipart.MultipartException.class,org.springframework.web.multipart.support.MissingServletRequestPartException.class})
+    ResponseEntity<ApiResponse<Void>> multipart(Exception e){return domain(ApiException.invalid());}
     @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
     ResponseEntity<ApiResponse<Void>> missing(Exception e) { return domain(ApiException.notFound()); }
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

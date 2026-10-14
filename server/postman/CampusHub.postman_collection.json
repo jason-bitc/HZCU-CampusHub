@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章读取与账号校园认证",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。",
+    "name": "CampusHub 文章读取、账号与图文创作",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -37,6 +37,41 @@
     },
     {
       "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "articleId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "imageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "uploadRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "publishRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "expectedRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "profileRevision",
       "value": "",
       "type": "string"
     }
@@ -872,6 +907,494 @@
                   "const body = pm.response.json();",
                   "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
                   "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第三阶段图文创作（已有账号，逐步手工操作）",
+      "item": [
+        {
+          "name": "读取本人资料",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/profile",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整保存本人资料",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/profile",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{profileRevision}},\n  \"nickname\": \"城院同学\",\n  \"majorId\": 11,\n  \"currentStage\": \"ENROLLED\",\n  \"bio\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "创建独立草稿（同创建标识重试）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{createRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人文章分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles?page=1&size=20",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取草稿及图片元数据",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/draft",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整保存Markdown草稿",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/draft",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}},\n  \"title\": \"【DEMO】图文创作接口示例\",\n  \"summary\": \"\",\n  \"body\": \"示例正文。\\n\\n![测试图](/api/v1/media/images/{{imageId}})\",\n  \"jobIds\": [\n    1\n  ],\n  \"majorIds\": [\n    11\n  ],\n  \"companyIds\": [],\n  \"topicIds\": [\n    31\n  ],\n  \"experienceStage\": \"DEMO演示阶段\",\n  \"sourceType\": \"DEMO\",\n  \"sourceNote\": \"接口示例，不是真实求职经历\",\n  \"sourceLinks\": [\n    {\n      \"label\": \"Java官方资料\",\n      \"url\": \"https://dev.java/learn/\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "上传单张本人文章图片",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/images",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{uploadRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人私有图片预览",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"图片不缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "确认发布（同标识同修订重试）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/publish",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}},\n  \"requestId\": \"{{publishRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "游客读取当前公开版本",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "游客读取当前公开引用图",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"图片不缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人自主下架",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/unpublish",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "下架后游客旧图404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "恢复本人自主下架文章",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/restore",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人软删除（终态）",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}?expectedRevision={{expectedRevision}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
                 ]
               }
             }

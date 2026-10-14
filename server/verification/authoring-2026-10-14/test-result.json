@@ -1,0 +1,11 @@
+{
+  "unit": 29,
+  "mysql": 31,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "finishedAt": "2026-10-14T14:55:09.8025203+08:00",
+  "java": "21",
+  "database": "campushub_test"
+}

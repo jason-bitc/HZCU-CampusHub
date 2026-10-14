@@ -30,7 +30,8 @@ public final class AuthTestSupport {
         var app=new SpringApplication(CampusHubApplication.class);app.setDefaultProperties(Map.of("spring.main.banner-mode","off"));
         app.addInitializers(ctx->{
             ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("controlled-auth-test",Map.of(
-                    "campushub.db.name","campushub_test","campushub.db.username",username,"campushub.db.password",password,"campushub.auth.pepper",TEST_KEY)));
+                    "campushub.db.name","campushub_test","campushub.db.username",username,"campushub.db.password",password,"campushub.auth.pepper",TEST_KEY,
+                    "campushub.media.root",java.nio.file.Path.of("target","auth-test-media").toAbsolutePath().toString())));
             ctx.getBeanFactory().registerSingleton("controlledCodeMailer",mailer);
             ctx.getBeanFactory().registerSingleton("controlledClock",clock);
         });return app;

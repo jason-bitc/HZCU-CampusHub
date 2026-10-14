@@ -1,0 +1,16 @@
+{
+  "articleId": 2005,
+  "status": "PASS",
+  "draftEditDidNotChangePublicVersion": true,
+  "countOrigin": "NONE",
+  "publishRetrySameVersion": true,
+  "publishedImageStatus": 200,
+  "guestPrivateImageStatus": 404,
+  "database": "campushub_dev",
+  "originalDemoDetailPreserved": true,
+  "createRetrySameId": true,
+  "checkedAt": "2026-10-14T14:43:37.5504716+08:00",
+  "sourceType": "DEMO",
+  "originalProfilePreserved": true,
+  "independentDrafts": true
+}

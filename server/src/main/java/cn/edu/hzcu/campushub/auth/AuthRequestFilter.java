@@ -17,20 +17,28 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 public class AuthRequestFilter extends OncePerRequestFilter {
     private final AuthService auth;
     private final HandlerExceptionResolver exceptions;
-    public AuthRequestFilter(AuthService auth,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptions){this.auth=auth;this.exceptions=exceptions;}
+    private final int writingJsonLimit;
+    private final long multipartLimit;
+    public AuthRequestFilter(AuthService auth,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptions,@org.springframework.beans.factory.annotation.Value("${campushub.authoring.json-max-bytes}") int writingJsonLimit,@org.springframework.beans.factory.annotation.Value("${spring.servlet.multipart.max-request-size}") org.springframework.util.unit.DataSize multipartLimit){this.auth=auth;this.exceptions=exceptions;if(writingJsonLimit<1||writingJsonLimit>32*1024*1024||multipartLimit.toBytes()<1)throw new IllegalArgumentException("Invalid request limit");this.writingJsonLimit=writingJsonLimit;this.multipartLimit=multipartLimit.toBytes();}
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException {
         String path=request.getServletPath();
-        boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me");
-        if(authPath){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
+        boolean writingPath=path.startsWith("/api/v1/me/");
+        boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath;
+        if(authPath||path.startsWith("/api/v1/media/images/")){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
         try{
-            if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")){
+            if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath){
                 var headers=Collections.list(request.getHeaders("Authorization"));
                 if(headers.size()!=1||!headers.getFirst().startsWith("Bearer "))throw AuthService.unauthorized();
-                request.setAttribute("campushub.identity",auth.authenticate(headers.getFirst().substring(7)));
+                var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
-            if(authPath&&request.getMethod().equals("POST")){
-                byte[] body=request.getInputStream().readNBytes(16_385);
-                if(body.length>16_384)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");
+            if(writingPath&&request.getContentType()!=null&&request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/")&&request.getContentLengthLong()>multipartLimit){
+                throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","图片或multipart请求超过允许大小");
+            }
+            if(authPath&&java.util.Set.of("POST","PUT","DELETE").contains(request.getMethod())
+                    &&(request.getContentType()==null||!request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/"))){
+                int limit=writingPath?writingJsonLimit:16_384;
+                byte[] body=request.getInputStream().readNBytes(limit+1);
+                if(body.length>limit)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");
                 request=new HttpServletRequestWrapper(request){
                     @Override public ServletInputStream getInputStream(){
                         ByteArrayInputStream stream=new ByteArrayInputStream(body);
