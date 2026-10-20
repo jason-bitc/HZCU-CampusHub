@@ -1,0 +1,17 @@
+{
+  "unit": 49,
+  "mysql": 63,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "finishedAt": "2026-10-20T15:59:33.6390271+08:00",
+  "database": "campushub_test",
+  "controlledMailer": true,
+  "isolatedFiles": true,
+  "newModeMySqlCases": 7,
+  "actualRouteActions": 35,
+  "scriptChecks": 10,
+  "buildVersion": "0.1.0",
+  "buildCommit": "unknown"
+}

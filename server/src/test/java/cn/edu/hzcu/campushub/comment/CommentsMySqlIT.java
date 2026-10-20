@@ -43,7 +43,7 @@ class CommentsMySqlIT {
     static long commentBaseline,imageBaseline,auditBaseline;
     record Reply(int status,JsonNode data,String trace,String raw){}
     static void boot(){
-        var app=AuthTestSupport.application(MAIL,CLOCK);app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("comments-test",Map.of("campushub.media.root",root.resolve("media").toString(),"campushub.logs.enabled","true","campushub.logs.root",root.resolve("logs").toString(),"campushub.logs.diagnostics-enabled",diagnostics))));
+        var app=AuthTestSupport.application(MAIL,CLOCK);app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("comments-test",Map.of("campushub.media.root",root.resolve("media").toString(),"campushub.logs.enabled","true","campushub.logs.root",root.resolve("logs").toString(),"campushub.run-mode",diagnostics?"debug":"release"))));
         context=app.run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");db=context.getBean(JdbcTemplate.class);
     }
     @BeforeAll static void start()throws Exception{

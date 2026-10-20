@@ -50,7 +50,7 @@ public class CommentService {
         }
         return result;
     }
-    public Receipt create(long user,long article,Input input){String digest=CommentInput.fingerprint(article,input);return write.execute(tx->{
+    public Receipt create(long user,long article,Input input){String digest=CommentInput.fingerprint(article,input);return cn.edu.hzcu.campushub.common.RequestTrace.write(write,tx->{
         // All comment writes lock the article first, then the per-user receipt gate.
         comments.publicArticle(article,true);writing.lockUser(user);
         RequestTrace.stage(RequestTrace.Stage.RECEIPT);
@@ -69,14 +69,14 @@ public class CommentService {
         RequestTrace.stage(RequestTrace.Stage.PERSIST);long id=writing.allocate("comment");comments.create(id,article,user,root,input,digest,clock.instant());RequestTrace.comment(id);comments.attach(article,user,id,input.imageIds());
         audit.changed(user,Action.COMMENT_CREATE,ObjectType.COMMENT,id,0,1,null,State.VISIBLE);return comments.row(id).receipt();
     });}
-    public Deleted delete(long user,long id){return write.execute(tx->{
+    public Deleted delete(long user,long id){return cn.edu.hzcu.campushub.common.RequestTrace.write(write,tx->{
         Row initial=comments.row(id);comments.article(initial.article(),true);Row row=comments.row(id);if(row.owner()!=user)throw ApiException.notFound();
         if(row.state().equals("DELETED")){audit.unchanged(Action.COMMENT_DELETE,ObjectType.COMMENT);return new Deleted(id,"DELETED");}
         RequestTrace.stage(RequestTrace.Stage.PERSIST);comments.delete(id);audit.changed(user,Action.COMMENT_DELETE,ObjectType.COMMENT,id,row.revision(),row.revision()+1,State.valueOf(row.state()),State.DELETED);return new Deleted(id,"DELETED");
     });}
     public WritingModels.Image upload(long user,long article,String request,MultipartFile file){
         read.execute(tx->{comments.publicArticle(article,false);return true;});var validated=files.validate(file);
-        return write.execute(tx->{
+        return cn.edu.hzcu.campushub.common.RequestTrace.write(write,tx->{
             comments.publicArticle(article,true);writing.lockUser(user);RequestTrace.stage(RequestTrace.Stage.RECEIPT);var previous=comments.upload(user,request);
             if(previous.isPresent()){
                 Picture image=previous.get();if(image.article()!=article||!image.digest().equals(validated.digest()))throw WritingService.conflict("REQUEST_KEY_REUSED");

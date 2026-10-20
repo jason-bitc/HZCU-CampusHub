@@ -32,7 +32,7 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
     private final AtomicLong failures=new AtomicLong();
     private volatile boolean healthy=true;
     private volatile boolean diagnosticHealthy=true;
-    public static final Set<String> ACTIONS=Set.of("ARTICLE_AUTHOR","AUTHOR_CONTACT","AUTHOR_ARTICLES","AUTHOR_HOME","CONTACT_SETTINGS","OWN_PROFILE","OWN_ARTICLES","IMAGE","AUTH","OWN_IDENTITY","PUBLIC_ARTICLES","CATALOG","HEALTH","OTHER","COMMENT_LIST","COMMENT_CREATE","COMMENT_DELETE","COMMENT_REPLIES","COMMENT_IMAGE_UPLOAD","COMMENT_IMAGE_READ");
+    public static final Set<String> ACTIONS=Set.of("ARTICLE_AUTHOR","AUTHOR_CONTACT","AUTHOR_ARTICLES","AUTHOR_HOME","CONTACT_SETTINGS","OWN_PROFILE","OWN_ARTICLES","IMAGE","AUTH","OWN_IDENTITY","PUBLIC_ARTICLES","CATALOG","HEALTH","OTHER","COMMENT_LIST","COMMENT_CREATE","COMMENT_DELETE","COMMENT_REPLIES","COMMENT_IMAGE_UPLOAD","COMMENT_IMAGE_READ","AUTH_REGISTER_CODE","AUTH_REGISTER","AUTH_LOGIN","AUTH_LOGOUT","AUTH_RESET_CODE","AUTH_PASSWORD_RESET","IDENTITY_READ","PROFILE_READ","PROFILE_UPDATE","DRAFT_CREATE","DRAFT_LIST","DRAFT_READ","DRAFT_SAVE","ARTICLE_IMAGE_UPLOAD","WRITING_PUBLISH","WRITING_UNPUBLISH","WRITING_RESTORE","WRITING_DELETE","CONTACT_READ","CONTACT_UPDATE","ARTICLE_LIST","ARTICLE_DETAIL");
     public SafeFileLogs(@Value("${campushub.logs.enabled}") boolean enabled,@Value("${campushub.logs.root}") String directory,
             @Value("${campushub.logs.max-bytes}") long maxBytes,@Value("${campushub.logs.archives}") int archives){
         if(maxBytes<1024||maxBytes>100L*1024*1024||archives<1||archives>30)throw new IllegalArgumentException("Invalid runtime-log limits");
@@ -57,6 +57,13 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
         }
     }
     private Path checked(int index)throws IOException{return checked("runtime",index);}
+    public synchronized void prepareDiagnostics(){
+        if(!enabled||!isStarted())throw new StorageUnavailable();
+        try{
+            for(int i=0;i<=archives;i++)checked("diagnostic",i);
+            try(var writable=FileChannel.open(checked("diagnostic",0),StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS)) { }
+        }catch(IOException|RuntimeException failure){throw new StorageUnavailable();}
+    }
     private Path checked(String channel,int index)throws IOException{
         Path path=root.resolve(index==0?"campushub-"+channel+".log":"campushub-"+channel+"."+index+".log");
         if(!path.startsWith(root)||!root.toRealPath().equals(root)||Files.isSymbolicLink(path)
@@ -82,13 +89,18 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
             if(channel.equals("diagnostic"))diagnosticHealthy=false;else healthy=false;if(failures.incrementAndGet()==1)System.err.println("RUNTIME_LOG_UNAVAILABLE channel="+channel+" traceId="+trace+"; business audit remains in database");
         }
     }
-    public void startup(String version,String commit,String environment,boolean diagnostics){LoggerFactory.getLogger(SafeFileLogs.class).info("application ready version={} commit={} environment={} fileLogs={} diagnostics={}",version,commit,environment,enabled,diagnostics&&enabled);}
+    public void startup(String version,String commit,String environment,boolean diagnostics){startup(version,commit,environment,new RunMode(diagnostics?"debug":"release",enabled,false));}
+    public void startup(String version,String commit,String environment,RunMode mode){LoggerFactory.getLogger(SafeFileLogs.class).info("application ready version={} commit={} environment={} mode={} fileLogs={} diagnostics={} legacyDiagnosticsIgnored={}",version,commit,environment,mode.value(),enabled,mode.debug(),mode.legacyIgnored());}
     public void diagnostic(LocalDiagnostics.Diagnosis data){String trace=RequestTrace.current();if(trace==null||!trace.matches("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}"))trace="NONE";write("diagnostic",Instant.now(),trace,data.fields());}
     static String fields(ILoggingEvent event){
         if(event.getLoggerName()==null||!event.getLoggerName().startsWith("cn.edu.hzcu.campushub."))return null;
         Object[] a=event.getArgumentArray();if(a==null)a=new Object[0];
         String message=event.getMessage();
         if(message==null||Arrays.stream(a).anyMatch(Objects::isNull))return null;
+        if("request stage action={} module={} context={}".equals(message)&&event.getLevel()==Level.DEBUG&&a.length==3&&ACTIONS.contains(a[0])&&RequestTrace.module(a[0].toString()).equals(a[1])&&a[2] instanceof RequestTrace.Context context)
+            return "event=DEBUG_STAGE action="+a[0]+" module="+a[1]+" "+context.fields();
+        if("application ready version={} commit={} environment={} mode={} fileLogs={} diagnostics={} legacyDiagnosticsIgnored={}".equals(message)&&a.length==7&&a[0] instanceof String version&&version.matches("[A-Za-z0-9._+\\-]{1,64}")&&a[1] instanceof String commit&&(commit.equals("unknown")||commit.matches("[0-9a-f]{40}"))&&Set.of("local","test").contains(a[2])&&Set.of("debug","release").contains(a[3])&&a[4] instanceof Boolean&&a[5] instanceof Boolean&&a[6] instanceof Boolean)
+            return "event=STARTUP version="+version+" commit="+commit+" environment="+a[2]+" mode="+a[3]+" fileLogs="+a[4]+" diagnostics="+a[5]+" legacyDiagnosticsIgnored="+a[6];
         if("application ready version={} commit={} environment={} fileLogs={} diagnostics={}".equals(message)&&a.length==5&&a[0] instanceof String version&&version.matches("[A-Za-z0-9._+\\-]{1,64}")&&a[1] instanceof String commit&&(commit.equals("unknown")||commit.matches("[0-9a-f]{40}"))&&Set.of("local","test").contains(a[2])&&a[3] instanceof Boolean&&a[4] instanceof Boolean)
             return "event=STARTUP version="+version+" commit="+commit+" environment="+a[2]+" fileLogs="+a[3]+" diagnostics="+a[4];
         if("request completed action={} method={} status={} result={} durationMs={}".equals(message)&&a.length==5

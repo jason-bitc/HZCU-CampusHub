@@ -84,5 +84,5 @@ public class MediaStore {
         }catch(IOException e){throw unavailable(e);}
     }
     public static ApiException tooLarge(){return new ApiException(HttpStatus.valueOf(413),"IMAGE_TOO_LARGE","图片超过允许大小");}
-    private static ApiException unavailable(IOException e){LOG.warn("media storage failed type={}",e.getClass().getSimpleName());return new ApiException(HttpStatus.SERVICE_UNAVAILABLE,"STORAGE_UNAVAILABLE","图片存储暂时不可用，请稍后重试");}
+    private static ApiException unavailable(IOException e){cn.edu.hzcu.campushub.common.RequestTrace.cause(e);LOG.warn("media storage failed type={}",e.getClass().getSimpleName());return new ApiException(HttpStatus.SERVICE_UNAVAILABLE,"STORAGE_UNAVAILABLE","图片存储暂时不可用，请稍后重试");}
 }

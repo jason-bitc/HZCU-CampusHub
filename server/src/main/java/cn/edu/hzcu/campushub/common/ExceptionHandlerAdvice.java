@@ -20,7 +20,7 @@ public class ExceptionHandlerAdvice {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
     private cn.edu.hzcu.campushub.audit.LocalDiagnostics diagnostics;
     @org.springframework.beans.factory.annotation.Autowired void diagnostics(cn.edu.hzcu.campushub.audit.LocalDiagnostics value){diagnostics=value;}
-    private void diagnose(Throwable error,int status,String code){RequestTrace.errorCode(code);if(diagnostics!=null)diagnostics.failure(error,status,code);}
+    private void diagnose(Throwable error,int status,String code){RequestTrace.errorCode(code);if(diagnostics!=null)diagnostics.failure(RequestTrace.causeOr(error),status,code);}
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ApiResponse<Void>> domain(ApiException e) {
         diagnose(e,e.status().value(),e.code());

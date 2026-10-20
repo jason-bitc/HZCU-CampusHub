@@ -1,5 +1,7 @@
 # 城院帮首批后端
 
+2026-10-20第六阶段：同一JAR以 `./scripts/Start-Server.ps1 -Mode Debug` 或 `-Mode Release` 切换日志，默认Release。原Port与数据Profile参数继续使用；模式不选择数据库。各旧模块的动作、阶段与安全代码位置诊断已扩展，见[日志说明](LOGGING.md)、[覆盖表](LOGGING_COVERAGE.md)及[第六阶段验证](verification/2026-10-20-logging-modes.md)。第五阶段旧诊断布尔键仅兼容读取，不再控制诊断。
+
 2026-10-20第五阶段增量：认证评论、平铺回复、本人删除、独立评论图片与安全本地诊断已实现。协议见[评论API](COMMENTS_API.md)、[日志排查](LOGGING.md)、[第五阶段实施](../docs/BACKEND_BATCH5.md)及[实际验证](verification/2026-10-20-comments.md)。V6只扩展评论结构和审计约束，不修改V1—V5；页面、治理及性能验收仍待后续。以下日期对应各历史阶段，不代表当前互动接口尚未实现。
 
 2026-10-20第四阶段增量：认证作者入口、作者主页/公开文章分页、独立联系设置、事务审计和脱敏轮转文件日志已加入当前分支。协议见[作者联系API](AUTHOR_CONTACT_API.md)、[日志配置](LOGGING.md)、[实施记录](../docs/BACKEND_BATCH4.md)，实际执行证据另列[本批验证](verification/2026-10-20-author-contact.md)。以下原阶段启动说明保留，其日期代表当时范围。
@@ -74,6 +76,8 @@ V1创建文章、正文版本、分类、正文版本分类关联、资料链接
 打包后可以运行 `./scripts/Smoke-Local.ps1`，在18080端口两次启动本项目JAR，验证开发库健康及读取数据保留，然后停止脚本创建的进程。它不停止MySQL或其他项目，结果保存在 `target/smoke-result.json`。
 
 ## 故障定位与日志
+
+日常运行使用 `./scripts/Start-Server.ps1 -Mode Release -Port 8080 -Profile demo`；需要排障时停止本项目进程，再以 `-Mode Debug` 重启。Debug要求文件日志可用，启动摘要须显示mode=debug、diagnostics=true。切回Release重启保留旧诊断文件，但不再新增诊断/DEBUG_STAGE；必要INFO/WARN/ERROR及数据库审计继续。模式、优先级、直接JAR等价命令及旧模块排查示例见[LOGGING.md](LOGGING.md)。
 
 缺配置 `CONFIG_INVALID`、连接认证失败 `DB_AUTH_FAILED`、连接故障 `DB_CONNECTION_FAILED`、迁移错误 `MIGRATION_FAILED` 会以非零退出码阻止应用就绪。先检查本机变量、授权账号、端口、库及Flyway结构，不重置MySQL密码或他人数据库。失败日志只打印分类与异常类型，不打印密码、SQL参数、请求正文或配置值；请求日志以追踪编号、方法、状态和耗时定位。不要使用Maven调试输出或将本机配置贴入公共问题报告。
 

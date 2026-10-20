@@ -3,6 +3,10 @@ package cn.edu.hzcu.campushub.authoring;
 import static cn.edu.hzcu.campushub.authoring.WritingModels.*;
 import cn.edu.hzcu.campushub.article.ArticleModels.SourceLink;
 import cn.edu.hzcu.campushub.common.ApiException;
+import cn.edu.hzcu.campushub.common.RequestTrace;
+import static cn.edu.hzcu.campushub.common.RequestTrace.stage;
+import static cn.edu.hzcu.campushub.common.RequestTrace.Stage.*;
+
 import java.sql.*;
 import java.time.Instant;
 import java.util.*;
@@ -32,7 +36,7 @@ public class WritingRepository {
         jdbc.update("INSERT INTO article_draft(article_id,body) VALUES(:id,'')",params);
         jdbc.update("INSERT INTO author_create_request(user_id,request_id,article_id) VALUES(:user,:request,:id)",params);
     }
-    public Article owned(long user,long id,boolean lock){return jdbc.query("SELECT a.id,a.state,d.revision,a.first_published_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.id=:id AND a.owner_user_id=:user"+(lock?" FOR UPDATE":""),p("id",id).addValue("user",user),(r,n)->new Article(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getTimestamp("first_published_at")==null?null:r.getTimestamp("first_published_at").toInstant())).stream().findFirst().orElseThrow(ApiException::notFound);}
+    public Article owned(long user,long id,boolean lock){stage(TARGET);var article=jdbc.query("SELECT a.id,a.state,d.revision,a.first_published_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.id=:id AND a.owner_user_id=:user"+(lock?" FOR UPDATE":""),p("id",id).addValue("user",user),(r,n)->new Article(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getTimestamp("first_published_at")==null?null:r.getTimestamp("first_published_at").toInstant())).stream().findFirst().orElseThrow(ApiException::notFound);RequestTrace.article(article.id());return article;}
     public OwnedPage list(long user,int page,int size){
         var params=p("user",user).addValue("size",size).addValue("offset",((long)page-1)*size);
         long total=jdbc.queryForObject("SELECT COUNT(*) FROM article WHERE owner_user_id=:user",params,Long.class);

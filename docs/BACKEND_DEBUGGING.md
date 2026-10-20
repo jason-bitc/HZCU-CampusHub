@@ -1,5 +1,7 @@
 # 后端日志与调试交接要求
 
+第六阶段按用户最新要求统一为Debug/Release启动模式，默认Release；旧CAMPUSHUB_LOG_DIAGNOSTICS布尔键仅兼容读取，不再控制有效诊断。使用 `server/scripts/Start-Server.ps1 -Mode Debug` / `-Mode Release`，同一JAR重启切换。现行使用方式与覆盖表见[日志说明](../server/LOGGING.md)、[全模块覆盖](../server/LOGGING_COVERAGE.md)；本批实施和实际验证另见[第六阶段实施](BACKEND_BATCH6.md)及[实际记录](../server/verification/2026-10-20-logging-modes.md)。下文保留前一阶段的要求背景，不把旧布尔入口作为当前操作步骤。
+
 第五阶段实施与实际证明现另见[实施记录](BACKEND_BATCH5.md)、[排查说明](../server/LOGGING.md)和[本批验证](../server/verification/2026-10-20-comments.md)。下列内容保留为实施前的要求及边界，不把旧阶段已有能力追记为当时完成。
 
 G04，2026年10月20日。用户要求开发时考虑后期调试便捷性。本文件区分已有日志与需要在第五阶段补齐的诊断能力，不作为后者已经完成的证明。

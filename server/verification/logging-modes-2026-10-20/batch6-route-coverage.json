@@ -1,0 +1,826 @@
+[
+  {
+    "route": "/actuator/health",
+    "status": 200,
+    "mode": "debug",
+    "action": "HEALTH",
+    "traceId": "409bcc1d-2f2a-4d93-a42b-ae2115c74633",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "4e3ddb7d-3fde-49a0-b5b9-2acc9c77946c",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles",
+    "status": 200,
+    "mode": "debug",
+    "action": "ARTICLE_LIST",
+    "traceId": "8110dbff-2d1a-4a9b-8848-5db53d8c4227",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}",
+    "status": 200,
+    "mode": "debug",
+    "action": "ARTICLE_DETAIL",
+    "traceId": "1e3c8306-6fab-403b-aee5-fc7287a02804",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/auth/registration-codes",
+    "status": 202,
+    "mode": "debug",
+    "action": "AUTH_REGISTER_CODE",
+    "traceId": "5cdbe4ca-dee5-4027-bbc4-0d7990b674b9",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/register",
+    "status": 201,
+    "mode": "debug",
+    "action": "AUTH_REGISTER",
+    "traceId": "17d40065-c8a4-46dd-a667-5498744dcc5d",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "4f417419-5b96-4fd4-bada-8f5a9830c171",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me",
+    "status": 200,
+    "mode": "debug",
+    "action": "IDENTITY_READ",
+    "traceId": "46e39fcc-dcfe-4967-9fcf-bd47b708ac57",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 200,
+    "mode": "debug",
+    "action": "PROFILE_READ",
+    "traceId": "e6d506e9-6d8d-4488-83ee-827ca45b93c1",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 200,
+    "mode": "debug",
+    "action": "PROFILE_UPDATE",
+    "traceId": "2c59a203-e7b1-49cc-b148-73cd09625894",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/articles",
+    "status": 201,
+    "mode": "debug",
+    "action": "DRAFT_CREATE",
+    "traceId": "6178df1c-571c-4d66-80c5-f3641d620a8f",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_LIST",
+    "traceId": "8c4458bc-c5da-45f1-a97b-409eb1235bfd",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "eb0bafb6-f55c-4bf6-bdcc-18aa0b70acd8",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/images",
+    "status": 200,
+    "mode": "debug",
+    "action": "ARTICLE_IMAGE_UPLOAD",
+    "traceId": "b9615ee1-6f49-42b2-8e3b-4fd41110fc81",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_SAVE",
+    "traceId": "720156ce-2796-408f-8166-6ffec1afba28",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/publish",
+    "status": 200,
+    "mode": "debug",
+    "action": "WRITING_PUBLISH",
+    "traceId": "7ea4995f-67eb-486a-9cca-2c47aa495531",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/publish",
+    "status": 200,
+    "mode": "debug",
+    "action": "WRITING_PUBLISH",
+    "traceId": "731c70a1-6c36-452a-b75d-d03f02037808",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/media/images/{imageId}",
+    "status": 200,
+    "mode": "debug",
+    "action": "IMAGE",
+    "traceId": "7ab89c37-fdc2-45c6-a3fb-f7018c8d0fc8",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}/author",
+    "status": 200,
+    "mode": "debug",
+    "action": "ARTICLE_AUTHOR",
+    "traceId": "56397b1a-a816-47f7-ad8f-3b2f01dc3efd",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/authors/{id}",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTHOR_HOME",
+    "traceId": "2b444b1c-7345-4ac0-b528-d95cf05051a2",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/authors/{id}/articles",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTHOR_ARTICLES",
+    "traceId": "6ad3da2d-35cf-4f00-b1ff-b051cc9e4563",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/contact-settings",
+    "status": 200,
+    "mode": "debug",
+    "action": "CONTACT_READ",
+    "traceId": "e4904a86-c57f-480e-a71f-741ab5db8cd0",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/contact-settings",
+    "status": 200,
+    "mode": "debug",
+    "action": "CONTACT_UPDATE",
+    "traceId": "037b7c26-71d4-420f-a072-e20282ef28eb",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/authors/{id}/contact",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTHOR_CONTACT",
+    "traceId": "0c8aaa41-3da8-4d0e-9353-31f0d9d4e266",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comment-images",
+    "status": 200,
+    "mode": "debug",
+    "action": "COMMENT_IMAGE_UPLOAD",
+    "traceId": "afe7729b-07fc-4c90-a039-d3f99f1f4929",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 201,
+    "mode": "debug",
+    "action": "COMMENT_CREATE",
+    "traceId": "3ad95098-fc2b-4165-b311-2abcb2e36ef0",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 200,
+    "mode": "debug",
+    "action": "COMMENT_LIST",
+    "traceId": "22dcfff7-5a42-49b2-b450-aa78e6bd9ee9",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/media/comment-images/{imageId}",
+    "status": 200,
+    "mode": "debug",
+    "action": "COMMENT_IMAGE_READ",
+    "traceId": "6f833fb0-fbff-494d-a333-3249e49a7c0a",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 201,
+    "mode": "debug",
+    "action": "COMMENT_CREATE",
+    "traceId": "b42d8b77-dd1c-43f3-b38b-5a41d4034d1b",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/comments/{id}/replies",
+    "status": 200,
+    "mode": "debug",
+    "action": "COMMENT_REPLIES",
+    "traceId": "21ee2d7b-1347-4c6e-882b-eb6cd10ec5be",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/comments/{id}",
+    "status": 200,
+    "mode": "debug",
+    "action": "COMMENT_DELETE",
+    "traceId": "a4a21ba0-d7ce-4f21-a086-d49bd246c1a5",
+    "method": "DELETE"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/unpublish",
+    "status": 200,
+    "mode": "debug",
+    "action": "WRITING_UNPUBLISH",
+    "traceId": "428eaa1d-68a6-4531-939f-4fea148a0ebd",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/restore",
+    "status": 200,
+    "mode": "debug",
+    "action": "WRITING_RESTORE",
+    "traceId": "3a0218a9-7ea6-41ef-a56f-6c11921f7e30",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles",
+    "status": 201,
+    "mode": "debug",
+    "action": "DRAFT_CREATE",
+    "traceId": "1ac63de5-cd22-4d51-b845-6d74e82fb28f",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}",
+    "status": 200,
+    "mode": "debug",
+    "action": "WRITING_DELETE",
+    "traceId": "97eba0c7-4e49-4c40-aed0-35ac3a2067cc",
+    "method": "DELETE"
+  },
+  {
+    "route": "/api/v1/auth/logout",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTH_LOGOUT",
+    "traceId": "aed3f32b-b8c9-4ae2-a23a-cdfe721c9c51",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "82cf4fa0-f326-4f52-aa83-090fb610ff06",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/password-reset-codes",
+    "status": 202,
+    "mode": "debug",
+    "action": "AUTH_RESET_CODE",
+    "traceId": "9734aac6-2a02-4f97-a005-85e408971ec1",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/password-resets",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTH_PASSWORD_RESET",
+    "traceId": "644299b4-f6e9-4a7a-aabe-b86837689820",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 200,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "4658e01c-1d12-412f-b3c1-b4de8f8e4bf2",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 401,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "1f0b32a6-9f2f-4486-ae19-26de253a64a0",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles",
+    "status": 400,
+    "mode": "debug",
+    "action": "ARTICLE_LIST",
+    "traceId": "2eab39b0-cb4f-4efb-84dc-2c939c319062",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}",
+    "status": 404,
+    "mode": "debug",
+    "action": "ARTICLE_DETAIL",
+    "traceId": "3a9ac3a2-101c-45aa-b837-5a8df92eb139",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 409,
+    "mode": "debug",
+    "action": "PROFILE_UPDATE",
+    "traceId": "4b1a4612-b586-4b25-a854-35a1257625d5",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/contact-settings",
+    "status": 409,
+    "mode": "debug",
+    "action": "CONTACT_UPDATE",
+    "traceId": "d82d8629-df97-4e9c-b898-32ca7468cd3e",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 409,
+    "mode": "debug",
+    "action": "DRAFT_SAVE",
+    "traceId": "c2bdbc7c-7f7c-4380-b00a-8b073e1308c1",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/authors/{id}",
+    "status": 404,
+    "mode": "debug",
+    "action": "AUTHOR_HOME",
+    "traceId": "44f1fe22-5fcb-46fa-b8ae-3de005364b9b",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/comments/{id}/replies",
+    "status": 404,
+    "mode": "debug",
+    "action": "COMMENT_REPLIES",
+    "traceId": "1b1725b5-0386-4f0a-9555-7296bcba3198",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/media/images/{imageId}",
+    "status": 404,
+    "mode": "debug",
+    "action": "IMAGE",
+    "traceId": "43aa7d18-fce9-456f-aab1-1fc0849df872",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/auth/registration-codes",
+    "status": 429,
+    "mode": "debug",
+    "action": "AUTH_REGISTER_CODE",
+    "traceId": "b9fa2dca-1886-4010-b3ac-15b8a6104565",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/registration-codes",
+    "status": 503,
+    "mode": "debug",
+    "action": "AUTH_REGISTER_CODE",
+    "traceId": "e1082600-f34c-4bad-9229-55afa166528d",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 503,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "0fbcb260-b70d-4caa-8d9e-03d688298905",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles",
+    "status": 503,
+    "mode": "debug",
+    "action": "ARTICLE_LIST",
+    "traceId": "1bd16b07-87cb-42af-a357-e2d0e951f52e",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "9f9fcdd1-917b-4a41-8461-9a9f9828a818",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 503,
+    "mode": "debug",
+    "action": "PROFILE_UPDATE",
+    "traceId": "186aac87-0023-4251-b851-c9ae5601ad89",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 200,
+    "mode": "debug",
+    "action": "PROFILE_READ",
+    "traceId": "bf10bda3-9b99-4bac-a16d-e8dc90b34af8",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 503,
+    "mode": "debug",
+    "action": "DRAFT_SAVE",
+    "traceId": "120f6f09-6088-4e70-ab30-adfc60db240e",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "ebefad1a-41f1-4b01-9813-84d627a51a26",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/contact-settings",
+    "status": 503,
+    "mode": "debug",
+    "action": "CONTACT_UPDATE",
+    "traceId": "500b2f59-f31c-42b2-a75e-6fb0dd4ca90c",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/media/images/{imageId}",
+    "status": 503,
+    "mode": "debug",
+    "action": "IMAGE",
+    "traceId": "ae2b03fd-385e-4cfd-9ea3-e2cc07930e99",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 503,
+    "mode": "debug",
+    "action": "COMMENT_CREATE",
+    "traceId": "dc0b520a-7804-4b90-89ed-4aae7e3d0575",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/registration-codes",
+    "status": 503,
+    "mode": "release",
+    "action": "AUTH_REGISTER_CODE",
+    "traceId": "d3d26ee4-e519-43a7-ab1a-5b60ae1af297",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 503,
+    "mode": "release",
+    "action": "AUTH_LOGIN",
+    "traceId": "b13ece28-ab72-49e1-bb09-3870fbf964f0",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles",
+    "status": 503,
+    "mode": "release",
+    "action": "ARTICLE_LIST",
+    "traceId": "199ffdf4-97d1-457e-8d88-bd4e8beb61ed",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "release",
+    "action": "CATALOG",
+    "traceId": "56bc054e-02b6-428c-b922-9adceb8cae86",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 503,
+    "mode": "release",
+    "action": "PROFILE_UPDATE",
+    "traceId": "6f1ddfcf-5f6e-4a67-84d7-f897045fef5a",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/profile",
+    "status": 200,
+    "mode": "release",
+    "action": "PROFILE_READ",
+    "traceId": "c31e7e89-9563-41ca-9a6e-019d69855971",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 503,
+    "mode": "release",
+    "action": "DRAFT_SAVE",
+    "traceId": "ed4335e5-b81c-4d3b-86cc-7aecc5d8a5f3",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "release",
+    "action": "DRAFT_READ",
+    "traceId": "f2435bb1-60c7-4ff1-af89-66f06fbee783",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/contact-settings",
+    "status": 503,
+    "mode": "release",
+    "action": "CONTACT_UPDATE",
+    "traceId": "bf2cc9f7-9352-4f47-a203-a28e8f0faa2d",
+    "method": "PUT"
+  },
+  {
+    "route": "/api/v1/media/images/{imageId}",
+    "status": 503,
+    "mode": "release",
+    "action": "IMAGE",
+    "traceId": "d41d2393-37e2-4c60-92ba-6422b6b7c2be",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 503,
+    "mode": "release",
+    "action": "COMMENT_CREATE",
+    "traceId": "a63efa95-ab08-42be-8f81-391d536638a7",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 201,
+    "mode": "debug",
+    "action": "COMMENT_CREATE",
+    "traceId": "9ef63e12-d8fe-4ef8-9a69-76459dc03f09",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles/{id}/comments",
+    "status": 201,
+    "mode": "debug",
+    "action": "COMMENT_CREATE",
+    "traceId": "37b488a6-c192-4160-b0eb-edcdadd5bd36",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "f9128dd8-662d-4a34-b2e5-9794bf38141a",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "5a7fc694-1044-4daa-b792-cc9d365eb3e2",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "97950e48-e054-436e-b345-c7a65c7cd7d6",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "45446690-415a-4c4b-8421-7f355bd68cd9",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "483e2f8b-25a7-47a8-812d-d4b686b5a003",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "aa81b338-4f9b-4051-b23c-3abe94be37be",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "7797a25a-aaf4-460c-ac43-d4684862831e",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "f924be27-8174-439b-a166-2eb1eebe76d8",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "c2677277-957a-46d3-a936-c276ba2562d0",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "87cbe313-1472-45a2-a32d-5512a6b9ccdf",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "ab891d02-216e-462a-a749-ad8c55fce75c",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "a8ea5df3-ddb9-45c7-ac55-b1f167b252ad",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "c87c87ef-71b9-4855-ac6e-87b2d074b0e6",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "14b9e73f-7d46-48c5-ba40-208d3ad68ab5",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "fe5ddb6e-6ef2-44fa-a7c9-97d01023c220",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "85dda5a2-657d-4cce-a633-686c12990203",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "a60a652c-52e3-462e-86ab-67ce3e0a9b7a",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "8a45cad1-d851-4f97-b8b9-4ec78b6ba832",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "425876cd-b709-4039-b442-658948b17448",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "c3b38e15-4e82-4764-9de4-54a355bc9d1c",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "d77a5aa2-d1d7-4cfc-b966-e80e220b576a",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "bdba8369-f42b-423d-b999-a673f5ec3b4e",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me/articles/{id}/draft",
+    "status": 200,
+    "mode": "debug",
+    "action": "DRAFT_READ",
+    "traceId": "b7ab0e29-a468-4cec-8b3e-096dba4b647f",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "2bec20e4-e820-46b7-a056-e8633329238e",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/catalog",
+    "status": 200,
+    "mode": "debug",
+    "action": "CATALOG",
+    "traceId": "f5c517c9-f029-4950-9c88-d2bcb726198d",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 503,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "7f321f84-b42b-4b67-adfb-3a7af046ce50",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/auth/login",
+    "status": 503,
+    "mode": "debug",
+    "action": "AUTH_LOGIN",
+    "traceId": "d465131b-868c-4436-af3b-6e3b04421a0b",
+    "method": "POST"
+  },
+  {
+    "route": "/api/v1/articles/{id}",
+    "status": 200,
+    "mode": "release",
+    "action": "ARTICLE_DETAIL",
+    "traceId": "42730ed1-7b8c-48cf-b342-b378479423bd",
+    "method": "GET"
+  },
+  {
+    "route": "/api/v1/me",
+    "status": 200,
+    "mode": "release",
+    "action": "IDENTITY_READ",
+    "traceId": "a6eef0c9-f147-4d92-89c6-4e1ff4675374",
+    "method": "GET"
+  }
+]

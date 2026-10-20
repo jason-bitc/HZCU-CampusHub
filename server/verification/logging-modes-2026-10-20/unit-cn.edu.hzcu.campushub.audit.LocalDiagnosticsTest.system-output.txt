@@ -1,0 +1,4 @@
+15:57:08.155 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=unknown commit=unknown environment=test mode=release fileLogs=true diagnostics=false legacyDiagnosticsIgnored=false
+15:57:08.187 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=unknown commit=unknown environment=test mode=debug fileLogs=true diagnostics=true legacyDiagnosticsIgnored=false
+15:57:08.703 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=0.1.0 commit=unknown environment=test mode=debug fileLogs=true diagnostics=true legacyDiagnosticsIgnored=false
+RUNTIME_LOG_UNAVAILABLE channel=diagnostic traceId=NONE; business audit remains in database

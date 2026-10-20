@@ -26,8 +26,9 @@ public class BusinessAudit {
         jdbc.update("INSERT INTO business_audit(event_id,occurred_at,trace_id,actor_id,action,object_type,object_id,before_revision,after_revision,before_state,after_state,result) VALUES(?,?,?,?,?,?,?,?,?,?,?,'SUCCESS')",
             UUID.randomUUID().toString(),java.sql.Timestamp.from(clock.instant()),trace,actor,action.name(),type.name(),object,before,after,oldState==null?null:oldState.name(),newState==null?null:newState.name());
         // A rolled-back mutation must not produce a successful runtime change event.
+        var captured=new RequestTrace.Snapshot(trace,org.slf4j.MDC.get("action"),RequestTrace.context());
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
-            @Override public void afterCommit(){LOG.info("business changed action={} objectType={} beforeRevision={} afterRevision={}",action,type,before,after);}
+            @Override public void afterCommit(){RequestTrace.with(captured,()->LOG.info("business changed action={} objectType={} beforeRevision={} afterRevision={}",action,type,before,after));}
         });
     }
     public void unchanged(Action action,ObjectType type){LOG.info("business unchanged action={} objectType={}",action,type);}

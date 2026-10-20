@@ -1,0 +1,7 @@
+需求来源,本批范围,原WBS,验收场景,当前状态,实现及实际证据,边界
+用户2026-10-20明确要求,统一debug与release运行模式及启动入口,"5.1,6.1","B6-01,B6-02,B6-03,B6-04,B6-10",后端已实现及实际验证,RunMode/Start-Server/Use-LocalConfig；RunModeTest及LoggingModesMySqlIT脚本/JAR场景；server/verification/2026-10-20-logging-modes.md,同一Java业务代码两种配置；默认release；旧布尔不控制诊断
+LOG01,账号读取创作作者联系评论的全模块安全运行日志,"5.1,5.8,6.1","B6-04,B6-05,B6-06",现有35类动作已实际落盘,RequestTrace及各模块安全阶段；server/LOGGING_COVERAGE.md与route-matrix.csv,按现有已实现接口补齐；不新增社区业务；代表性失败不等于每路由全部错误穷举
+LOG02,模式切换中保持事务审计与变更结果一致,"5.1,5.8,6.1","B6-06,B6-09",本批事务与审计语义已实际验证,BusinessAudit安全快照；RequestTrace.write；LoggingModesMySqlIT并发及回滚；原五批回归,不将每次读请求写为数据库审计；不代替运维治理模块；未知提交未伪造真实故障
+LOG04与NFR03,debug与release均不泄漏秘密和用户载荷,"4.2,6.4","B6-02,B6-04,B6-07",所列场景已扫描及实际验证,LocalDiagnostics及有限事件白名单；跨模式8类失败；受控嵌套消息与样本扫描,对外错误不返回诊断或隐藏数据；非完整安全验收
+LOG05相关已有文件基础,文件轮转追加与故障及关闭行为,"5.1,6.1","B6-03,B6-04,B6-08",既有保护回归及新模式实际验证,SafeFileLogsTest/LocalDiagnosticsTest/RunModeTest；真实JAR诊断目标拒绝与HTTP文件故障恢复,不含运维网页日志查询或完整监控告警；文件崩溃非事务性
+NFR10,构建模式标识排查说明与完整回归,"5.1,6.1","B6-05,B6-09,B6-10",112项完整回归通过,49单元及63真实MySQL；35类路由；10脚本细项；server/LOGGING.md及本批报告,实际运行证据与计划分开记录；学生复核人时待实际开展

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cn.edu.hzcu.campushub.article.ArticleMySqlIT
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.21 s -- in cn.edu.hzcu.campushub.article.ArticleMySqlIT

@@ -32,7 +32,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
             if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath||readerPath){
                 var headers=Collections.list(request.getHeaders("Authorization"));
                 if(headers.size()!=1||!headers.getFirst().startsWith("Bearer "))throw AuthService.unauthorized();
-                var identity=auth.authenticate(headers.getFirst().substring(7));cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.AUTHORIZATION);if(writingPath||readerPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
+                var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath||readerPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
             cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.VALIDATION);
             if((writingPath||commentPath)&&request.getContentType()!=null&&request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/")&&request.getContentLengthLong()>multipartLimit){

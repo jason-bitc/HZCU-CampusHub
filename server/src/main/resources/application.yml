@@ -26,6 +26,7 @@ server:
     include-stacktrace: never
     include-binding-errors: never
 campushub:
+  run-mode: ${CAMPUSHUB_RUN_MODE:release}
   runtime-environment: ${CAMPUSHUB_RUNTIME_ENV:local}
   comments:
     body-max-code-points: ${CAMPUSHUB_COMMENT_MAX_CODE_POINTS:10000}

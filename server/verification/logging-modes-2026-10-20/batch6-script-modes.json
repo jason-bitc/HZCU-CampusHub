@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "database": "campushub_test",
+  "checks": [
+    {
+      "mode": "debug",
+      "healthUp": true,
+      "environmentRestored": true,
+      "kind": "actual-jar-script",
+      "portPreserved": true,
+      "dataProfile": "demo",
+      "oldDiagnosticTrueIgnored": true
+    },
+    {
+      "mode": "release",
+      "healthUp": true,
+      "environmentRestored": true,
+      "kind": "actual-jar-script",
+      "portPreserved": true,
+      "dataProfile": "demo",
+      "oldDiagnosticTrueIgnored": true
+    },
+    {
+      "mode": "release",
+      "healthUp": true,
+      "environmentRestored": true,
+      "kind": "actual-jar-script",
+      "portPreserved": true,
+      "dataProfile": "demo",
+      "oldDiagnosticTrueIgnored": true
+    },
+    {
+      "mode": "debug",
+      "kind": "script-return-boundary",
+      "controlledNativeFailure": false,
+      "environmentRestored": true
+    },
+    {
+      "mode": "release",
+      "kind": "script-return-boundary",
+      "controlledNativeFailure": false,
+      "environmentRestored": true
+    },
+    {
+      "mode": "debug",
+      "kind": "script-return-boundary",
+      "controlledNativeFailure": true,
+      "environmentRestored": true
+    },
+    {
+      "mode": "release",
+      "kind": "script-return-boundary",
+      "controlledNativeFailure": true,
+      "environmentRestored": true
+    },
+    {
+      "nonzeroExit": true,
+      "kind": "actual-jar-rejection",
+      "ready": false,
+      "case": "illegal"
+    },
+    {
+      "nonzeroExit": true,
+      "kind": "actual-jar-rejection",
+      "ready": false,
+      "case": "debug-no-files"
+    },
+    {
+      "nonzeroExit": true,
+      "kind": "actual-jar-rejection",
+      "ready": false,
+      "case": "debug-blocked-diagnostic"
+    }
+  ],
+  "byteIdenticalHashes": {
+    "scripts/Start-Server.ps1": "93db757d3a2e7ae2318649299a8812c9ace4af3568d0dd15290ca03b0c10a517",
+    "scripts/Use-LocalConfig.ps1": "468ab3b59449fa3057b027401857c14edfec4c7ba7007624325212b45ed53c7d",
+    "target/campushub-server-0.1.0.jar": "00dfd7623b2b9b36052471ebfc01cda0aa6a780c73719713d485f1919861dcfd"
+  }
+}

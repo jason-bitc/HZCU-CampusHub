@@ -1,0 +1,2 @@
+15:57:11.701 [main] WARN cn.edu.hzcu.campushub.common.ExceptionHandlerAdvice -- database operation failed type=CannotCreateTransactionException
+15:57:11.715 [main] WARN cn.edu.hzcu.campushub.common.ExceptionHandlerAdvice -- database operation failed type=DataAccessResourceFailureException

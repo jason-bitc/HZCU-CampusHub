@@ -20,13 +20,17 @@ public class LocalDiagnostics {
     private final boolean enabled;
     private final String environment;
     private final ObjectProvider<BuildProperties> build;
-    public LocalDiagnostics(SafeFileLogs logs,@Value("${campushub.logs.diagnostics-enabled}") boolean enabled,@Value("${campushub.runtime-environment}") String environment,ObjectProvider<BuildProperties> build){
-        if(!Set.of("local","test").contains(environment))throw new IllegalArgumentException("Invalid runtime environment");this.logs=logs;this.enabled=enabled;this.environment=environment;this.build=build;
+    private final RunMode mode;
+    public LocalDiagnostics(SafeFileLogs logs,RunMode mode,@Value("${campushub.runtime-environment}") String environment,ObjectProvider<BuildProperties> build){
+        if(!Set.of("local","test").contains(environment))throw new IllegalArgumentException("Invalid runtime environment");this.logs=logs;this.mode=mode;this.enabled=mode.debug();this.environment=environment;this.build=build;
+        if(enabled)logs.prepareDiagnostics();
+        ((ch.qos.logback.classic.Logger)org.slf4j.LoggerFactory.getLogger("cn.edu.hzcu.campushub.audit.SafeDebug")).setLevel(enabled?ch.qos.logback.classic.Level.DEBUG:ch.qos.logback.classic.Level.INFO);
     }
+    @jakarta.annotation.PreDestroy public void close(){((ch.qos.logback.classic.Logger)org.slf4j.LoggerFactory.getLogger("cn.edu.hzcu.campushub.audit.SafeDebug")).setLevel(ch.qos.logback.classic.Level.INFO);}
     @EventListener(ApplicationReadyEvent.class) public void ready(){
         var info=build.getIfAvailable();String version=info==null?"unknown":info.getVersion(),commit=info==null?"unknown":info.get("commit");
         if(version==null||!version.matches("[A-Za-z0-9._+\\-]{1,64}"))version="unknown";if(commit==null||!commit.matches("[0-9a-f]{40}"))commit="unknown";
-        logs.startup(version,commit,environment,enabled);
+        logs.startup(version,commit,environment,mode);
     }
     public boolean enabled(){return enabled;}
     public void failure(Throwable failure,int status,String code){if(enabled&&status>=500)logs.diagnostic(describe(failure,code));}
