@@ -17,6 +17,13 @@ class RequestTraceTest {
         assertThat(RequestTrace.action("/api/v1/me/contact-settings","PUT")).isEqualTo("CONTACT_UPDATE");
         assertThat(RequestTrace.module("AUTH_LOGIN")).isEqualTo("AUTH");
         assertThat(RequestTrace.module("ARTICLE_IMAGE_UPLOAD")).isEqualTo("AUTHORING");
+        assertThat(RequestTrace.action("/api/v1/articles/42/like","PUT")).isEqualTo("LIKE_SET");
+        assertThat(RequestTrace.action("/api/v1/articles/42/like","DELETE")).isEqualTo("LIKE_CANCEL");
+        assertThat(RequestTrace.action("/api/v1/articles/42/favorite","PUT")).isEqualTo("FAVORITE_SET");
+        assertThat(RequestTrace.action("/api/v1/articles/42/favorite","DELETE")).isEqualTo("FAVORITE_CANCEL");
+        assertThat(RequestTrace.action("/api/v1/articles/42/interaction-state","GET")).isEqualTo("INTERACTION_READ");
+        assertThat(RequestTrace.action("/api/v1/me/favorites","GET")).isEqualTo("FAVORITES_LIST");
+        assertThat(RequestTrace.module("FAVORITES_LIST")).isEqualTo("INTERACTION");
     }
     @Test void reusedWorkerClearsIdsErrorsAndCausesOnSuccessAndException()throws Exception{
         try(var worker=Executors.newSingleThreadExecutor()){

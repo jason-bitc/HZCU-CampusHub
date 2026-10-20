@@ -62,7 +62,7 @@ POST `/me/articles/{id}/publish`：`{"expectedRevision":1,"requestId":"小写UUI
 
 发布在事务内建立不可变公开版本、分类、来源链接、图片引用、首发/更新信息及重试回执，然后更新公开指针。同请求标识与原期望修订重试返回原版本回执；该标识配不同期望修订409。并发相同请求仅一个版本，并发不同请求使用旧revision产生409。下架/隐藏/删除后旧发布回执不用于恢复公开状态。再次编辑和发布同文章会创建新版本，旧版本不对游客提供访问入口。
 
-GET `/articles`及`/articles/{id}`保持游客筛选和隐私合同，新增updatedAt。publishedAt是首次发布时间，修改及恢复不改变“最新”排序基础；updatedAt为当前公开版本发布时间。新文章互动计数0、origin=NONE，表示互动尚未实现；原演示计数DEMO保留。sourceType=DEMO标记内容来源，与计数origin独立。
+GET `/articles`及`/articles/{id}`保持游客筛选和隐私合同，新增updatedAt。publishedAt是首次发布时间，修改及恢复不改变“最新”排序基础；updatedAt为当前公开版本发布时间。第三阶段当时新文章NONE/0、旧演示DEMO的读取统计已由第七阶段[真实LIVE聚合](LIVE_COUNTS.md)取代，旧数据库原值保留。sourceType=DEMO仍标记内容来源，与计数origin独立。
 
 POST `/me/articles/{id}/unpublish`或`/restore`正文`{"expectedRevision":2}`，返回`{articleId,state,revision}`。实际变更递增revision；重复目标状态成功返回当前状态和revision，不重新改变内容。下架只从PUBLISHED变为AUTHOR_OFFLINE，恢复只从AUTHOR_OFFLINE恢复原公开版本。编辑下架草稿后恢复仍公开旧版本，要公开修改需再次发布。ADMIN_HIDDEN不能编辑、发布、恢复；非本人404。
 

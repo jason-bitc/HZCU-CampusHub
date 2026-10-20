@@ -1,0 +1,1538 @@
+[
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/like",
+    "method": "PUT",
+    "traceId": "4579a915-424c-4672-b173-bd5d381f2b38"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/favorite",
+    "method": "PUT",
+    "traceId": "3707d0cc-3224-4a00-a9dd-ab140c70d10a"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/interaction-state",
+    "method": "PUT",
+    "traceId": "df01eb51-de45-4864-b5ae-f63ae8f89663"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/like",
+    "method": "DELETE",
+    "traceId": "524695a2-f8ee-47dd-babd-42a2985b2d0b"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/favorite",
+    "method": "DELETE",
+    "traceId": "253625b3-aeb4-4af4-ab47-ac8d02ec3e51"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/interaction-state",
+    "method": "DELETE",
+    "traceId": "d7b241cd-d8ba-47fa-849d-a800ec13aedc"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/like",
+    "method": "GET",
+    "traceId": "dad2b49d-9896-4536-bd31-87ea9a7dc423"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/favorite",
+    "method": "GET",
+    "traceId": "36be0b93-4cfd-46b4-80d4-3f5050794605"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/not-an-id/interaction-state",
+    "method": "GET",
+    "traceId": "6682adb5-6348-48b1-88b9-b24df66b72bd"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "4b0fef7d-6236-4ca2-8068-a6aeb04613aa"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "ca3f56eb-2b5c-4553-9a78-52f0f5e2ae3b"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "172908eb-a8e0-4bb3-9e38-77fbd969421a"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "164e2221-40d5-45ba-b12b-1659e0d00a99"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "2d8551a1-0f0c-4048-8940-fa6b39036bb0"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "f9046368-03f0-4869-89c9-e4868ed3fc97"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "fef8e9dc-3ca8-4f50-b980-e9da9e4ac58a"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "6a0392b8-90db-4af4-9495-0a1486b450db"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "423521c6-9ca6-4082-90ed-a6d814a722a8"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 400,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "6a0440d0-f2f1-4752-b777-a5d20c9893e8"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 405,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "POST",
+    "traceId": "880ccbba-d173-4951-b160-045c48a713a6"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 403,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "aed41cc7-8bf8-41db-a592-d0f12fc82b27"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 403,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "89d9977f-fea1-4b80-978a-63457973071a"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 403,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "2f2ed8ab-e8ed-47bf-a207-f64cf7669353"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "be269276-fa1a-4324-ae2b-8130909aa579"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "b40e4533-3086-4ff5-84c3-ae5dfb14eb90"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "58f16641-430a-4815-9c42-339a27cea5c8"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "fb36dbe9-5a78-4ee0-ab68-9ce16a6b2424"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "b7fda3b9-cdbe-45ee-9e1e-f71fccf75404"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "452fc614-c648-4cbf-aba1-cbff2027bb7a"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "953f8202-afb8-49c3-8b86-77587f2bd924"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "0736cf4c-3081-47bd-8165-584e56fdebe5"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "29f99b0a-1464-4f86-8ea3-b10867258b8f"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "cf41f6cb-cb94-421e-8b64-ff7ab88211eb"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "ec9ff04e-b880-4a3e-92bf-8ca7cbb48182"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "58c1bdb4-2837-48b1-ba58-a066340ae0da"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "982ea88a-4d56-4f0a-ad7f-289b535573a9"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "8d280bfc-2e6d-4b6e-a670-32e3533ab61b"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "f5338ffa-d7e3-41c8-9873-48beeb3b34da"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "db6cd42f-91fc-4ca1-b80e-75dc3c9257be"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "39259868-a14b-4ebe-a07f-1d04d9f250f0"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "e4cada08-c6c0-4851-ad5b-cc6a0a25b516"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "05e92a6a-20fa-4f98-aeee-da0727bfe6e5"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "d81e81e5-016d-4e4e-b1b1-80f096f1c540"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "e602f8d5-89d2-4782-9f92-e24eb52716e6"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "a2fcd996-b9a1-439a-8a7c-7b8b5606b114"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "ceecb8e8-d4c6-4710-b48b-85b014b8fbae"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "d38d7e78-042e-4124-a26c-84f4914ee822"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "ea35a33b-b189-41ed-b5ed-2548a0bbc47b"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "6a00024b-8f7c-4a14-8e64-f1a84474bd3f"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "8dd8a164-1c8c-44b7-a008-84ff5db06b9b"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "5081bc2c-0f5e-45ef-836a-2bc5ce63b3c3"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "f4210e0a-83cc-4068-adbf-ee719e1729c7"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "fe8f5a67-a51e-407b-9874-0214bebb5d93"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "d2ccba25-0fdd-42f1-bfbc-015a056737e0"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "33c7457a-cdd4-486e-9795-0003e99ceb73"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "5b9560ba-6ede-4e26-abd7-66f4a345bf61"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "5292d09c-4b18-4606-93b4-3dee3b84a506"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "3621a9a2-16c9-40dc-865e-955094d7a5da"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "524ecfbf-415c-4efa-8b00-15b6cddbe4ae"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "0f2f08ca-c8e5-4b45-a5c4-16ad46848197"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "67423bfb-7e37-40b1-9969-35e644a3fe5b"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "65646d37-8014-4cb2-99b2-dc35a541cd0f"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "a9ceddd1-5049-42b4-8f36-bfaad0c2d62a"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "55342ad6-75a0-461e-9910-923fc413bc96"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "c9b4d14a-bc52-4fb8-b9d6-087f0355d9af"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "3b99d957-871b-49d3-892b-c6d35a9728c0"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "bcc2f23b-859d-4a33-bd41-0d325d9f46dd"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "24952c88-ff96-4bcf-ba7b-c48964219bd6"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "24809ac4-8d14-4873-8deb-adee6289845a"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "a5917bee-d1e4-4283-8252-9ef7b0e0abf1"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "3242777c-7a5c-4cdd-8553-ced2cf2b2bb9"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "2d91e96f-b690-43c0-a93c-dd9dae05db4b"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "6e8ca4b2-b3de-4692-92d3-634019a461f7"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "9ac7be97-0aa0-4542-976f-c79f0072239a"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "746f27b2-536a-44d5-aff2-b34f330cfe62"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "4ee5a837-2900-408a-a991-539e30a9369a"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "8c9195fa-3ea2-479c-818c-03ccecdabc1e"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "dd13366f-64b9-4c87-a620-6cdb5767992f"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "b173e83f-0aee-40ad-afd8-19498d50329d"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "26b2aa91-c403-4405-8707-af083d5caf96"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "91459f7f-380e-4f2a-a98e-763827577af3"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "67ae418b-7109-405e-bded-05211fa03d90"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "fe8097a1-31ed-4820-83da-9717c886a2b2"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "19aafe46-dfe6-45d9-abb3-1fc866279771"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "8201cfa4-6f3d-4d07-8bac-907f04746f93"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "ed4cf58e-6144-4ae3-a30d-53fa5b577723"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "1c5d6bf8-facb-478f-8041-b4adb51d4a77"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "1da617e9-1f80-46a6-b286-f0fcad9a24fc"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "b0b902aa-82c2-4ed5-94d8-c353274f623e"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "12eb15a7-f1ea-4001-8faa-3407f5b3adfe"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "494422b5-31a9-4a49-ab9b-8401ffd3d0fe"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "026970f2-72fe-498c-8181-a7d6e86e2095"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "18edbde9-7cab-4b2e-b796-91f650320e18"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "e8ac93cf-dac2-4c9e-a89c-7fbb911210a9"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "5acc0ccd-e4dc-4c32-8990-ae4ac3365d75"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "8830b15b-7857-4b0c-aec2-c2a2cc2b8365"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "3089533d-5b1a-4119-b808-07400113f3f2"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "acac44bf-6860-46b8-b148-03c6c4cc7ccd"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "934c806a-8e59-4a2d-bc2a-0c4816c79798"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "3e3ebe05-6978-4710-9594-47636cd4f96b"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "f082b00c-f6d2-4b08-8c34-ce77249fd4b1"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "c7c2b623-57d0-49ee-8952-17faeb92c362"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "694ae896-1a90-4ced-af29-7725c9f247f4"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 403,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "c43dc11a-899f-499d-ab8d-8db31efcf59e"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "424044b8-604a-47d4-aef2-c2fea99d1cf1"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "7dc1b2a8-5ea7-42c3-a95e-d9754b2a0f38"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "d8b6721f-d813-4626-b166-0827ac2f2d67"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "a35b6961-62fa-431b-b388-136813da7b4d"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "618feec6-c4fd-4bfc-8bd5-2c27c0f82447"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "8e56bdce-2c71-4177-b287-e95333efac13"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "d892c31d-9065-4d10-b073-c33c0fd403aa"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "dda650f3-ee27-4eee-83ea-3f0b7b7d596d"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "ca830ec0-95f5-44fc-8f68-548a7302815e"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "96d4eb5a-07b0-4da5-9e5f-9ba81ee285bd"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "8a3ef23e-515c-4e0d-a9b0-bc6f119a6ff5"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "d53f14bf-6a10-4d98-830b-3dbc328d4e0a"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "10c37905-c588-495e-8097-71ce27f71e97"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "b52c25db-74cb-4b36-ae35-b26d8f5746ef"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "8343cb6a-d536-4a92-8676-3b72ccc55ce8"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "88978bd4-5f1c-4411-98d2-54230a45c5bc"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "f08c11ff-665b-4ab3-8eb8-a24fb4716fe2"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "d32029fb-8c34-4bbd-adb5-5499ea298ff1"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "8ae5ca72-040e-4c8b-9091-cf600d1624c8"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "a6d68312-5d4f-41f2-884d-51463d60908e"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "7cdb8dc2-5433-4d8a-8d45-4f2a7d9909c1"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "e52a013a-9252-4a79-be72-494e85874054"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "2bec0926-9298-499d-b34a-9b414d6c616d"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "d126a4dd-b344-4399-a0d6-5f760242cf4b"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "0a53904c-efaf-4014-8624-6a7571358a17"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "0b44027a-b65f-495e-a94e-39463b77fce7"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "2ec9ce6d-936b-40b9-bffa-d252e4d6b713"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "5d92f0db-2ad3-4571-9139-4f082c3928f1"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "ae794fb3-7023-4fb1-99ca-5ff2b7e78ede"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "5b29ee2e-40cf-4563-8bc2-fe2aa77f563f"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "2eaaa88c-7b9f-4374-a9e7-162bf2f557cd"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "2f20c3ae-f929-4317-a927-c4360ff69f85"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "77f2087c-51c9-4b60-b974-0d039dce5c02"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "00149811-75f6-4203-b0cc-f62cba5851f0"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "a9f81e04-6f76-4a02-b7f6-9365a3b21eb9"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "3d2537c4-1d55-4a71-9020-55f29ad0076b"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "92686b8f-41f7-44f8-8458-3e7e5160a2fb"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "1d874219-c2f4-4106-b428-106e8810049f"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "99ab1324-65c5-4fa4-80d1-52608ac0bc35"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "13a1e432-44b4-4ef6-9798-e52443fcd707"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "b2d8e820-6b56-4cb5-91c4-c1859e470928"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "dde5262a-9cd7-403c-907f-a155a58cacb9"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "810a55d2-e59e-4365-abc6-8a548a596377"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "d058ea84-faac-4e0f-b918-f2a717b7cb95"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "b202a1e1-7c3c-4c76-8eeb-2ce4f295a2fe"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "97151a3c-248a-47d8-812b-81d679474efa"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "1da2beab-af2c-4182-9513-b347dd6eb37b"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "96744817-5492-4680-8226-57ef52fe4b29"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "a5ab50aa-d5e8-4a93-9acc-830503ea9fcf"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "4a530797-406b-478d-95ef-4bd7f4d07118"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "f63563e5-faa6-4893-ad14-2c933f5d0917"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "2acb2f2f-aee8-40b9-90f4-43263eebe0a0"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "30a5f38a-ce94-4b8a-a0d9-671fe275e52f"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "f8e88c47-8656-46f0-8d5f-10be41d7678b"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "3fbb9f5f-1334-4760-bf82-10b781013287"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "95dda281-5fa7-4a76-b83e-55e8fd3e6777"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "ec60d1c8-806c-4a69-9ded-0ba4352409f5"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "9b9a47ba-d491-4c7a-b980-95ba77faafb7"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "ccf57571-14a9-400c-adc4-cf5e33ac5679"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "71ae2a10-768c-449d-bec9-a0ea6fea487e"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "b44834fe-5026-426c-9f29-840cb2b337d2"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "7fdf3b05-ef21-4c60-8d72-b172bbd5856e"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "dbd36299-2e99-4b3b-8db3-3d752eefc294"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "b6ed9219-2e1d-41e0-beee-50917c946838"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 404,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "c63fc217-95fc-4148-8122-284b0913d31e"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "298965db-8b47-497c-bd5c-dd065018ea24"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "20164f28-d703-4dac-bc0b-4bc8e2a17b7f"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "5f14361f-c208-4ec7-a968-d2e343b79d5d"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "743f67b1-40a9-4a09-9515-fd879af49e73"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "5df28609-60d8-4d93-b27e-1433d5e3085e"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "f5ebe252-3d9d-413a-bbde-674ab0d3bed1"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "debug",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "2917415e-7f94-4351-bd8b-30a9a631ff02"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "debug",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "7b115001-e8b2-47d5-96b5-0f603edae286"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "618c97c2-7608-4e5b-95f3-1be0d6a9ceae"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "69e4d433-9f19-4cd5-8cd2-71a08da1bad4"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "75be033c-858b-4948-b327-a8e3a36e6ad2"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "d65ec3cd-784c-46aa-b68f-9164e56a9395"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "e6f881ff-e1c1-46c3-ac22-d0f4e1007cfd"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "c37f2440-30c0-4a44-a6cc-07fa7515dd6f"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "release",
+    "status": 503,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "d06c19c2-a876-4cb7-99f3-b1e8b813689d"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "a9278907-4cf5-40ee-a484-f954b6a4b5f7"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "release",
+    "status": 200,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "5aa3a12f-9eac-4e44-ab91-7dbcf7ad160b"
+  },
+  {
+    "action": "LIKE_SET",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "PUT",
+    "traceId": "1c02a5bf-7f08-4f25-b3f8-df68d1cbe00e"
+  },
+  {
+    "action": "FAVORITE_SET",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "PUT",
+    "traceId": "246ea02d-7614-4c1f-a6bd-1dcc4a17629b"
+  },
+  {
+    "action": "LIKE_CANCEL",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/like",
+    "method": "DELETE",
+    "traceId": "cf822dc8-4367-4c32-8888-af6c069b95e6"
+  },
+  {
+    "action": "FAVORITE_CANCEL",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/favorite",
+    "method": "DELETE",
+    "traceId": "86a21836-4485-4ccc-ad72-9ec4693a64ea"
+  },
+  {
+    "action": "INTERACTION_READ",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/articles/{id}/interaction-state",
+    "method": "GET",
+    "traceId": "9c5f2482-9bb3-4af1-b7ac-14896497a61f"
+  },
+  {
+    "action": "FAVORITES_LIST",
+    "mode": "release",
+    "status": 401,
+    "route": "/api/v1/me/favorites",
+    "method": "GET",
+    "traceId": "e02dbff9-c6b1-4800-ae47-01cd2f0ce99d"
+  }
+]

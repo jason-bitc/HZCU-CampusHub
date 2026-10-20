@@ -1,8 +1,10 @@
-# 首批接口合同 v1
+# 公开文章接口合同 v1（第七阶段真实计数增量）
 
 默认本机地址 `http://127.0.0.1:8080`。本文接口无需登录，仅游客可读字段。所有时间为UTC ISO-8601，文章/分类ID为正整数。
 
 本文件继续描述公开读取合同；身份接口见[AUTH_API.md](AUTH_API.md)，第三阶段认证作者写接口见[AUTHORING_API.md](AUTHORING_API.md)。游客列表/详情新增updatedAt，不增加真实作者私有资料。
+
+2026-10-20第七阶段：counts结构保留，当前统计统一LIVE，旧DEMO/NONE存储值保留但不混入真实数量。点赞/收藏为单独认证接口，见[INTERACTIONS_API.md](INTERACTIONS_API.md)及[计数衔接](LIVE_COUNTS.md)。历史验证记录不因此追记为当时已实现LIVE。
 
 ## 响应与追踪
 
@@ -34,7 +36,7 @@
 
 重复参数、未知参数、空数字、不合法数字或排序均400。关键词 `%`、`_`、`!`作为字面字符匹配；单引号等通过SQL参数绑定。采用MySQL utf8mb4_0900_ai_ci的大小写/重音比较规则。所有过滤在排序前生效，不放宽条件。
 
-recognized为有效获币、有效点赞、首次发布时间、文章id依次降序；latest为首次发布时间、文章id降序。计数origin=DEMO表示原固定演示数据，NONE表示新文章尚无互动能力且计数0。publishedAt保持首发；updatedAt记录当前公开版本发布时间。列表项如下，categories内四类均为数组，公司可为空。
+recognized为有效获币（本批固定0）、真实有效点赞、首次发布时间、文章id依次降序；latest为首次发布时间、文章id降序。当前counts.origin统一LIVE，effectiveLikes只统计真实未取消点赞，不加旧DEMO值或收藏数。publishedAt保持首发；updatedAt记录当前公开版本发布时间，不因点赞/收藏更新。列表项如下，数量0仅示例，实际按事实读取；categories内四类均为数组，公司可为空。
 
 ```json
 {
@@ -46,7 +48,7 @@ recognized为有效获币、有效点赞、首次发布时间、文章id依次�
   "sourceType": "DEMO",
   "publishedAt": "2026-10-08T02:00:00Z",
   "updatedAt": "2026-10-08T02:00:00Z",
-  "counts": {"effectiveCoins":20,"effectiveLikes":30,"origin":"DEMO"}
+  "counts": {"effectiveCoins":0,"effectiveLikes":0,"origin":"LIVE"}
 }
 ```
 
@@ -64,6 +66,6 @@ data包含与列表项相同的字段，并增加 `body`（原始Markdown）、`
 
 ## WorkBuddy对接
 
-先请求catalog生成筛选选项，切换筛选或排序时把page重设为1；依次请求列表及详情。没有结果、网络失败和503分别显示；404按内容不可用处理。保留traceId用于报错定位。展示DEMO计数和示例文章时明确“演示”；NONE的0不表示真实获币。发布和认证可对接当前后端接口，点赞、投币、评论仍不能显示成功反馈。
+先请求catalog生成筛选选项，切换筛选或排序时把page重设为1；依次请求列表及详情。没有结果、网络失败和503分别显示；404按内容不可用处理。保留traceId用于报错定位。内容sourceType=DEMO仍明确“演示”，counts.origin=LIVE表示当前真实聚合；获币固定0不表示钱包/奖励已实现。发布、认证、评论及点赞收藏可按各自后端合同接入，须实际成功后更新界面；投币尚未实现。游客响应不含liked/favorited，必须通过本人互动接口读取。
 
 此合同只说明后端已提供的读取能力。Markdown的安全渲染、外链自愿打开、移动设备地址配置与真机验证由后续前端实现和联调记录证明。

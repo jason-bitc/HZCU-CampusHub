@@ -93,15 +93,16 @@ class ArticleMySqlIT {
         assertThat(catalog.json.path("data").path("topics").size()).isEqualTo(3);
         assertThat(get("/actuator/env").status).isEqualTo(404);
     }
-    @Test @Order(2) void sortingExercisesCoinsLikesTimeAndStableId() throws Exception {
+    @Test @Order(2) void zeroLiveLikesUseTimeAndStableIdWithoutHistoricalDemoCounts() throws Exception {
         var recognized = get("/api/v1/articles"); assertThat(recognized.status).isEqualTo(200);
-        assertThat(ids(recognized)).containsExactly(1002L,1001L,1006L,1003L,1004L,1005L);
+        assertThat(ids(recognized)).containsExactly(1005L,1004L,1003L,1002L,1001L,1006L);
         assertThat(ids(get("/api/v1/articles?sort=latest"))).containsExactly(1005L,1004L,1003L,1002L,1001L,1006L);
         assertThat(recognized.json.path("data").path("total").asLong()).isEqualTo(6);
         assertThat(recognized.json.path("data").path("size").asInt()).isEqualTo(20);
+        for(var item:recognized.json.path("data").path("items")){assertThat(item.path("counts").path("origin").asString()).isEqualTo("LIVE");assertThat(item.path("counts").path("effectiveCoins").asLong()).isZero();assertThat(item.path("counts").path("effectiveLikes").asLong()).isZero();}
     }
     @Test @Order(3) void keywordAndAllFiltersIntersect() throws Exception {
-        assertThat(ids(get(keyword("Java")))).containsExactly(1002L,1001L,1003L);
+        assertThat(ids(get(keyword("Java")))).containsExactly(1003L,1002L,1001L);
         assertThat(ids(get(keyword("SQL特殊字符")))).containsExactly(1006L);
         assertThat(ids(get("/api/v1/articles?jobId=1&majorId=11&companyId=21&topicId=31"))).containsExactly(1001L,1006L);
         assertThat(ids(get("/api/v1/articles?jobId=2&majorId=11"))).isEmpty();
@@ -132,14 +133,14 @@ class ArticleMySqlIT {
         assertThat(data.path("body").asString()).contains("虚构教学示例","自愿联系文字");
         assertThat(data.path("sourceLinks").get(0).path("url").asString()).isEqualTo("https://dev.java/learn/");
         assertThat(data.path("sourceType").asString()).isEqualTo("DEMO");
-        assertThat(data.path("counts").path("origin").asString()).isEqualTo("DEMO");
+        assertThat(data.path("counts").path("origin").asString()).isEqualTo("LIVE");
         assertThat(data.path("categories").path("jobs").get(0).path("id").asLong()).isEqualTo(1);
         assertThat(detail.raw).doesNotContain("PRIVATE_","未公开修订");
         for (var node : List.of(data,get("/api/v1/articles").json.path("data"))) assertNoRestrictedKeys(node);
     }
     static void assertNoRestrictedKeys(JsonNode node) {
         if (node.isObject()) for (var entry : node.properties()) {
-            assertThat(entry.getKey()).isNotIn("authorId","nickname","avatar","email","contact","contactInfo","comments","accountId","verificationMaterials");
+            assertThat(entry.getKey()).isNotIn("authorId","nickname","avatar","email","contact","contactInfo","comments","accountId","verificationMaterials","liked","favorited","userId","actorId");
             assertNoRestrictedKeys(entry.getValue());
         } else if (node.isArray()) node.forEach(ArticleMySqlIT::assertNoRestrictedKeys);
     }
@@ -179,7 +180,7 @@ class ArticleMySqlIT {
         jdbc = context.getBean(JdbcTemplate.class);
         assertThat(jdbc.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes FROM article ORDER BY id")).isEqualTo(before);
         assertThat(jdbc.queryForList("SELECT id,title,body FROM article_version ORDER BY id")).isEqualTo(versions);
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7");
         assertThat(get("/api/v1/articles/1001").status).isEqualTo(200);
     }
     @Test @Order(10) void invalidConfigurationAndChangedMigrationPreventStartup(@org.junit.jupiter.api.io.TempDir java.nio.file.Path directory) throws Exception {

@@ -171,6 +171,6 @@ class AuthMySqlIT {
             try(var stream=AuthMySqlIT.class.getClassLoader().getResourceAsStream(entry.getKey())){var hash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(stream.readAllBytes()));assertThat(hash.toUpperCase(Locale.ROOT)).isEqualTo(entry.getValue());}
         }
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article WHERE state='PUBLISHED'",Long.class)).isEqualTo(6);
-        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(6);
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(7);
     }
 }

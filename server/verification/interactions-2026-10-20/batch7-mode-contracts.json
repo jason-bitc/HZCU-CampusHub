@@ -1,0 +1,20 @@
+{
+  "debug": [
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "503:SERVICE_UNAVAILABLE"
+  ],
+  "release": [
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "200:OK",
+    "503:SERVICE_UNAVAILABLE"
+  ]
+}

@@ -1,5 +1,24 @@
 # 全模块日志覆盖表
 
+## 第七阶段新增六类动作
+
+当前共41类动作：第六阶段35类基础继续回归，本批新增下表六类。事件来自真实HTTP与文件输出，两模式各有成功trace；没有将原第六阶段35类证据重写为当时已具备新互动。字段与排查见[LOGGING.md](LOGGING.md)，计数合同见[LIVE_COUNTS.md](LIVE_COUNTS.md)。
+
+实际Debug/Release追踪见[新增矩阵](verification/interactions-2026-10-20/route-matrix.csv)与[本批报告](verification/2026-10-20-interactions.md)。
+
+| 方法与路由 | 动作 / 模块 | Debug成功实见阶段 |
+| --- | --- | --- |
+| PUT /api/v1/articles/{id}/like | LIKE_SET / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / TRANSACTION / TARGET / RECEIPT / PERSIST / AUDIT / COMMIT / COMPLETE |
+| DELETE /api/v1/articles/{id}/like | LIKE_CANCEL / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / TRANSACTION / TARGET / RECEIPT / PERSIST / AUDIT / COMMIT / COMPLETE |
+| PUT /api/v1/articles/{id}/favorite | FAVORITE_SET / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / TRANSACTION / TARGET / RECEIPT / PERSIST / AUDIT / COMMIT / COMPLETE |
+| DELETE /api/v1/articles/{id}/favorite | FAVORITE_CANCEL / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / TRANSACTION / TARGET / RECEIPT / PERSIST / AUDIT / COMMIT / COMPLETE |
+| GET /api/v1/articles/{id}/interaction-state | INTERACTION_READ / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / TARGET / READ / COMPLETE |
+| GET /api/v1/me/favorites | FAVORITES_LIST / INTERACTION | AUTHENTICATION / AUTHORIZATION / VALIDATION / READ / COMPLETE |
+
+LIKE/FAVORITE审计objectId为文章ID，actorId与文章ID构成关系对象；修订上下文来自服务端已确认状态，不是客户端输入。失败与无变化不会新写成功审计。收藏列表只记录有限动作、阶段及actorId，不把收藏摘要/标题打入日志。
+
+## 第六阶段35类基础覆盖（历史实见阶段保留）
+
 2026-10-20，第六阶段。按现有路由枚举，35类动作均有本批真实HTTP成功请求及文件事件。以下阶段来自该成功请求实际DEBUG_STAGE，故不同路径未必经历所有阶段。代表性失败按模块覆盖，空白不表示该路由的全部失败已逐一测试。读取不写业务审计。
 
 原始映射及traceId见[route-matrix.csv](verification/logging-modes-2026-10-20/route-matrix.csv)，全部本批请求见[覆盖记录](verification/logging-modes-2026-10-20/batch6-route-coverage.json)，检索对应[运行样本](verification/logging-modes-2026-10-20/batch6-runtime-sample.txt)；诊断与模式证据见[实际报告](verification/2026-10-20-logging-modes.md)。

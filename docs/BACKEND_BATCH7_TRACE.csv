@@ -1,0 +1,7 @@
+需求编号,本批范围,原WBS,验收场景,当前状态,实现及实际证据,保留边界
+FR-I03,点赞取消及幂等并发状态,"5.8.2,6.1","B7-01,B7-02,B7-03,B7-05,B7-08",后端已实现及真实验证,interaction包及V7；InteractionsMySqlIT第1至5/8/10/11场景；server/verification/2026-10-20-interactions.md,不扣币不自动收藏；无点赞者名单
+FR-I04,本人收藏重访及不可用占位,"5.8.1,6.1,6.4","B7-01,B7-02,B7-03,B7-04,B7-09",后端已实现及真实验证,InteractionService.favorites/favorite；InteractionsMySqlIT第1至8/13场景；server/INTERACTIONS_API.md,收藏只用于本人；不可用项仅ID和统一占位；前端待接入
+FR-R04,真实点赞聚合及认可排序,"5.8.2,6.1","B7-06,B7-07",读取合同已真实化及验证,ArticleRepository聚合与批量摘要；InteractionsMySqlIT第2/5/9/10场景；server/LIVE_COUNTS.md,旧DEMO原值保留不混算；投币未实现计0；未做性能压力验收
+FR-R06,本人互动状态与游客统计分离,"5.8.1,6.4","B7-03,B7-04,B7-06",后端已实现及真实验证,AuthRequestFilter/InteractionController；ArticleMySqlIT隐私断言及新第1/2/7/8/9场景,游客仅得公开聚合不含私有状态；认证失效不自动重写历史点赞
+NFR03与LOG04,权限隐私及安全输入,"5.8,6.4","B7-03,B7-04,B7-05,B7-10",所列边界已实际验证,无正文与未知字段/参数拒绝；真实chunked multipart；权限及不可用占位；日志脱敏扫描,页面真机和完整安全评估待后续
+NFR10与LOG02,变更审计和debug_release日志,"5.8,6.1","B7-01,B7-08,B7-09,B7-10",本批事务日志及125项完整回归通过,BusinessAudit扩展；新第3/4/10至13场景；双模式矩阵与审计/诊断样本；server/LOGGING_COVERAGE.md,读请求不强制写数据库审计；不代替管理运维；学生复核人时待实际开展

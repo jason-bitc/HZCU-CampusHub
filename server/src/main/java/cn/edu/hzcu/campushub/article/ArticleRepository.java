@@ -16,8 +16,9 @@ import org.springframework.stereotype.Repository;
 public class ArticleRepository {
     private final NamedParameterJdbcTemplate jdbc;
     private static final String FROM = " FROM article a JOIN article_version v ON v.id=a.public_version_id AND v.article_id=a.id ";
+    private static final String LIVE_FROM=FROM+" LEFT JOIN (SELECT article_id,COUNT(*) live_likes FROM article_like WHERE active=TRUE GROUP BY article_id) likes ON likes.article_id=a.id ";
     private static final String PUBLIC = " a.state='PUBLISHED' AND v.published_at IS NOT NULL ";
-    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,v.updated_at,a.effective_coins,a.effective_likes,a.count_origin";
+    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,v.updated_at,0 effective_coins,COALESCE(likes.live_likes,0) effective_likes,'LIVE' count_origin";
     public ArticleRepository(NamedParameterJdbcTemplate jdbc) { this.jdbc = jdbc; }
 
     public Catalog catalog() {
@@ -47,9 +48,9 @@ public class ArticleRepository {
         filter(where, params, "TOPIC", "topicId", query.topicId());
         long total = jdbc.queryForObject("SELECT COUNT(*)" + FROM + "WHERE " + where, params, Long.class);
         String order = query.sort().equals("latest") ? "v.published_at DESC,a.id DESC"
-                : "a.effective_coins DESC,a.effective_likes DESC,v.published_at DESC,a.id DESC";
+                : "COALESCE(likes.live_likes,0) DESC,v.published_at DESC,a.id DESC";
         params.addValue("limit", query.size()).addValue("offset", query.offset());
-        List<Row> rows = jdbc.query("SELECT " + COLUMNS + FROM + "WHERE " + where + " ORDER BY " + order
+        List<Row> rows = jdbc.query("SELECT " + COLUMNS + LIVE_FROM + "WHERE " + where + " ORDER BY " + order
                 + " LIMIT :limit OFFSET :offset", params, (rs, n) -> row(rs));
         var categories = categories(rows.stream().map(Row::versionId).toList());
         return new Page(rows.stream().map(r -> r.summary(categories.get(r.versionId()))).toList(), total, query.page(), query.size());
@@ -57,7 +58,7 @@ public class ArticleRepository {
 
     public Optional<Detail> detail(long id) {
         var params = new MapSqlParameterSource("id", id);
-        return jdbc.query("SELECT " + COLUMNS + ",v.body,v.body_format,v.source_note" + FROM
+        return jdbc.query("SELECT " + COLUMNS + ",v.body,v.body_format,v.source_note" + LIVE_FROM
                 + "WHERE " + PUBLIC + " AND a.id=:id", params, (rs, n) -> {
             Row r = row(rs);
             var links = jdbc.query("SELECT label,url FROM article_source_link WHERE version_id=:version ORDER BY display_order,id",
@@ -72,6 +73,14 @@ public class ArticleRepository {
         where.append(" AND EXISTS (SELECT 1 FROM article_version_category vc JOIN category c ON c.id=vc.category_id"
                 + " WHERE vc.version_id=v.id AND c.kind=:").append(key).append("Kind AND c.id=:").append(key).append(")");
         params.addValue(key, value).addValue(key + "Kind", kind);
+    }
+
+    /** One bounded page of favorites: public summaries and categories are loaded in batches. */
+    public Map<Long,Summary> summaries(List<Long> ids){
+        if(ids.isEmpty())return Map.of();if(ids.size()>100)throw new IllegalArgumentException("Summary batch exceeds page limit");
+        var rows=jdbc.query("SELECT "+COLUMNS+LIVE_FROM+"WHERE "+PUBLIC+" AND a.id IN (:ids)",new MapSqlParameterSource("ids",ids),(rs,n)->row(rs));
+        var groups=categories(rows.stream().map(Row::versionId).toList());var result=new HashMap<Long,Summary>();
+        for(var row:rows)result.put(row.id(),row.summary(groups.get(row.versionId())));return result;
     }
 
     private Map<Long, Categories> categories(List<Long> versions) {

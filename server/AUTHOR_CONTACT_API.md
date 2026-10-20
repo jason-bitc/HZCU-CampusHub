@@ -28,7 +28,7 @@ GET `/authors/{authorId}`不接受查询参数，返回：
 
 GET `/authors/{authorId}/articles?page=1&size=20`返回原文章列表结构`{items,total,page,size}`，列表字段与[文章读取API](API.md)一致。只列该作者当前PUBLISHED公开版本，按首次publishedAt、文章id降序；恢复和修改草稿不刷新首发排序。默认20、最大100，page从1至1000000。只接受page/size，每参数一次；未知参数、sort、分类筛选、重复参数或非法值400。末页后items为空但total不变。单次读取在REPEATABLE_READ内保持目标可见性、数量和内容快照一致；跨请求offset分页不承诺固定快照。
 
-游客原`GET /articles`及`/articles/{id}`的结构保持，不随Authorization返回作者资料，游客图片权限沿用第三阶段。旧计数DEMO、新文章NONE/0保留，没有新增阅读奖励或互动计数。
+游客原`GET /articles`及`/articles/{id}`的结构保持，不随Authorization返回作者资料，游客图片权限沿用第三阶段。第七阶段当前统计为[LIVE真实点赞](LIVE_COUNTS.md)，旧DEMO/NONE存储值保留；本批作者文章摘要沿用当前计数合同，没有投币或阅读奖励。
 
 ## 本人独立联系设置
 

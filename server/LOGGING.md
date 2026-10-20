@@ -1,5 +1,7 @@
 # 本批运行日志与业务审计
 
+第七阶段新增INTERACTION模块六类动作，当前覆盖41类操作；第六阶段模式及历史35类证明保留。新增动作与实际双模式trace见[覆盖表](LOGGING_COVERAGE.md)和[第七阶段记录](verification/2026-10-20-interactions.md)，计数语义见[LIVE_COUNTS.md](LIVE_COUNTS.md)。
+
 2026-10-20。审计是数据库内的成功变更记录，运行日志用于关联请求和定位失败；二者有不同故障边界。独立运维查询网页、治理日志、执行器、完整备份和全平台日志验收仍待后续实施。
 
 ## 第六阶段统一运行模式
@@ -108,3 +110,11 @@ Debug的DEBUG_STAGE表明经过的阶段，TRANSACTION与PERSIST不表示已成�
 | 旧文章图片503 | IMAGE与STORAGE阶段，Debug诊断可定位MediaStore；检查专属对象是否完整以及目录可用性。图片响应仍按原公开/本人权限判断，Debug不会开放私有图。 |
 
 模式切换、跨模块对照、脚本真实启动、线程复用、文件故障与本次完整回归证据见[第六阶段记录](verification/2026-10-20-logging-modes.md)。上述内容是有限排障能力；未来异步任务仍需显式传递安全快照，不能默认ThreadLocal会跨线程传播。
+
+## 第七阶段点赞与收藏
+
+LIKE_SET / LIKE_CANCEL / FAVORITE_SET / FAVORITE_CANCEL / INTERACTION_READ / FAVORITES_LIST均接入文件白名单，模块为INTERACTION。仅记录已确认内部actorId/articleId、安全阶段/错误码及关系修订；本人收藏的标题、摘要、来源、状态列表或查询内容不写日志。无请求体接口也拒绝把userId/role作为身份来源。
+
+真实状态变更以LIKE/FAVORITE对象审计，objectId为文章ID，actorId与文章ID共同标识关系。before/after修订递增1，ENABLED/DISABLED表示关系有效/取消。不存在关系取消及重复目标状态只有BUSINESS_NO_CHANGE，不生成成功变更审计，不刷新收藏时间。请求修订上下文为服务端读到的基准与本事务确认值，调用方没有提交expectedRevision。
+
+Audit或状态SQL故障503时，Debug可按traceId找到AUDIT/PERSIST及BusinessAudit/InteractionService/InteractionRepository的有限项目位置，Release保持相同错误合同并停止调试新增。日志中临时的新修订不表示提交，须结合ROLLBACK/COMMIT与数据库审计判断；只读请求不强制写数据库审计。

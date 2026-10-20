@@ -10,8 +10,8 @@ import org.springframework.transaction.support.*;
 
 @Component
 public class BusinessAudit {
-    public enum Action { PROFILE_UPDATE, CONTACT_UPDATE, ARTICLE_PUBLISH, ARTICLE_UNPUBLISH, ARTICLE_RESTORE, ARTICLE_DELETE, COMMENT_CREATE, COMMENT_DELETE }
-    public enum ObjectType { PROFILE, CONTACT, ARTICLE, COMMENT }
+    public enum Action { PROFILE_UPDATE, CONTACT_UPDATE, ARTICLE_PUBLISH, ARTICLE_UNPUBLISH, ARTICLE_RESTORE, ARTICLE_DELETE, COMMENT_CREATE, COMMENT_DELETE, LIKE_SET, LIKE_CANCEL, FAVORITE_SET, FAVORITE_CANCEL }
+    public enum ObjectType { PROFILE, CONTACT, ARTICLE, COMMENT, LIKE, FAVORITE }
     public enum State { ENABLED, DISABLED, DRAFT, PUBLISHED, AUTHOR_OFFLINE, ADMIN_HIDDEN, DELETED, VISIBLE }
     private static final Logger LOG=LoggerFactory.getLogger(BusinessAudit.class);
     private final JdbcTemplate jdbc;

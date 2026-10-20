@@ -24,8 +24,9 @@ public class AuthRequestFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException {
         String path=request.getServletPath();
         boolean writingPath=path.startsWith("/api/v1/me/");
+        boolean interactionPath=path.matches("/api/v1/articles/[^/]+/(like|favorite|interaction-state)(?:/.*)?");
         boolean commentPath=path.equals("/api/v1/comments")||path.startsWith("/api/v1/comments/")||path.equals("/api/v1/media/comment-images")||path.startsWith("/api/v1/media/comment-images/")||path.matches("/api/v1/articles/[^/]+/(comments|comment-images)(?:/.*)?");
-        boolean readerPath=commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
+        boolean readerPath=interactionPath||commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
         boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath||readerPath;
         if(authPath||path.startsWith("/api/v1/media/images/")){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
         try{
@@ -35,6 +36,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
                 var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath||readerPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
             cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.VALIDATION);
+            if((interactionPath||path.equals("/api/v1/me/favorites"))&&(request.getContentLengthLong()>0||request.getInputStream().read()!=-1))throw ApiException.invalid();
             if((writingPath||commentPath)&&request.getContentType()!=null&&request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/")&&request.getContentLengthLong()>multipartLimit){
                 throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","图片或multipart请求超过允许大小");
             }

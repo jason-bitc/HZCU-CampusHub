@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章、账号、创作、作者联系与评论",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。",
+    "name": "CampusHub 文章、账号、创作、评论与点赞收藏",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第七阶段当前counts统一LIVE真实聚合、获币0，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -1841,6 +1841,182 @@
                   "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
                   "pm.test(\"图片类型\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^image\\/(png|jpeg)/));",
                   "pm.test(\"禁止嗅探\", () => pm.expect(pm.response.headers.get(\"X-Content-Type-Options\")).to.equal(\"nosniff\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第七阶段：点赞与本人收藏（逐步手工执行）",
+      "item": [
+        {
+          "name": "设置本人已点赞",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/like",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"真实点赞数非负\", () => pm.expect(result.data.effectiveLikes).to.be.at.least(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "取消本人点赞",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/like",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"真实点赞数非负\", () => pm.expect(result.data.effectiveLikes).to.be.at.least(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "设置本人已收藏",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/favorite",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "取消本人收藏（允许已收藏的不可用目标）",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/favorite",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取本人当前文章互动状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/interaction-state",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人收藏分页与不可用占位",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/favorites?page=1&size=20",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) for(const item of result.data.items) {if(!item.available) pm.test(\"不可用项仅占位\", () => pm.expect(Object.keys(item).sort()).to.eql([\"articleId\",\"available\"])); else pm.test(\"公开摘要LIVE\", () => pm.expect(item.article.counts.origin).to.equal(\"LIVE\"));}"
                 ]
               }
             }

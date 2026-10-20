@@ -130,7 +130,7 @@ class AuthoringMySqlIT {
             var results=pool.invokeAll(List.<Callable<Integer>>of(()->publish(edited,1,request,one).status,()->publish(edited,1,request,one).status));for(var r:results)assertThat(r.get()).isEqualTo(200);
         }
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article_version WHERE article_id=?",Long.class,edited)).isEqualTo(1);
-        var detail=call("GET","/api/v1/articles/"+edited,null,null);assertThat(detail.data.path("body").asString()).isEqualTo(body);assertThat(detail.data.path("counts").path("origin").asString()).isEqualTo("NONE");assertThat(detail.data.path("counts").path("effectiveCoins").asLong()).isZero();assertThat(detail.raw).doesNotContain(emailOne,"owner_user_id","nickname");
+        var detail=call("GET","/api/v1/articles/"+edited,null,null);assertThat(detail.data.path("body").asString()).isEqualTo(body);assertThat(detail.data.path("counts").path("origin").asString()).isEqualTo("LIVE");assertThat(detail.data.path("counts").path("effectiveCoins").asLong()).isZero();assertThat(detail.raw).doesNotContain(emailOne,"owner_user_id","nickname");
         var binary=image(publicImage,null);assertThat(binary.statusCode()).isEqualTo(200);assertThat(binary.body()).isEqualTo(png);assertThat(binary.headers().firstValue("Cache-Control").orElse("")).contains("no-store");assertThat(binary.headers().firstValue("X-Content-Type-Options").orElse("")).isEqualTo("nosniff");
         assertThat(publish(edited,1,key(),one).status).isEqualTo(409);assertThat(publish(edited,2,request,one).status).isEqualTo(409);
         assertThat(call("GET","/api/v1/articles?jobId=1&majorId=11&sort=latest",null,null).raw).contains("【DEMO】初版");
@@ -215,7 +215,7 @@ class AuthoringMySqlIT {
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data).isEqualTo(before);assertThat(call("GET","/api/v1/me/profile",null,one).data.path("nickname").asString()).isEqualTo("G04测试昵称");assertThat(call("GET","/api/v1/articles/"+edited,null,null).status).isEqualTo(200);
         CLOCK.advance(Duration.ofDays(7));assertThat(call("PUT","/api/v1/me/articles/"+id+"/draft",draft(1,"过期","正文"),one).status).isEqualTo(401);
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7");
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article WHERE owner_user_id IS NULL",Long.class)).isEqualTo(10);
     }
 }

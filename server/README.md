@@ -1,5 +1,7 @@
 # 城院帮首批后端
 
+2026-10-20第七阶段：新增点赞/取消、收藏/取消、本人互动状态及收藏分页，公开计数改为LIVE真实聚合，旧DEMO/NONE原值不改。合同见[互动API](INTERACTIONS_API.md)、[计数衔接](LIVE_COUNTS.md)和[本批验证](verification/2026-10-20-interactions.md)。V7仅新增关系及审计兼容扩展；投币奖励、页面与真机未由本批完成。
+
 2026-10-20第六阶段：同一JAR以 `./scripts/Start-Server.ps1 -Mode Debug` 或 `-Mode Release` 切换日志，默认Release。原Port与数据Profile参数继续使用；模式不选择数据库。各旧模块的动作、阶段与安全代码位置诊断已扩展，见[日志说明](LOGGING.md)、[覆盖表](LOGGING_COVERAGE.md)及[第六阶段验证](verification/2026-10-20-logging-modes.md)。第五阶段旧诊断布尔键仅兼容读取，不再控制诊断。
 
 2026-10-20第五阶段增量：认证评论、平铺回复、本人删除、独立评论图片与安全本地诊断已实现。协议见[评论API](COMMENTS_API.md)、[日志排查](LOGGING.md)、[第五阶段实施](../docs/BACKEND_BATCH5.md)及[实际验证](verification/2026-10-20-comments.md)。V6只扩展评论结构和审计约束，不修改V1—V5；页面、治理及性能验收仍待后续。以下日期对应各历史阶段，不代表当前互动接口尚未实现。

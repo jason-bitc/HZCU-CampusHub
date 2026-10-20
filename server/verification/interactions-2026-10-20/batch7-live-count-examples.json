@@ -1,0 +1,34 @@
+[
+  {
+    "articleId": 2324,
+    "sourceType": "DEMO",
+    "effectiveLikes": 1,
+    "effectiveCoins": 0,
+    "origin": "LIVE",
+    "factLikes": 1
+  },
+  {
+    "articleId": 1001,
+    "sourceType": "DEMO",
+    "effectiveLikes": 1,
+    "effectiveCoins": 0,
+    "origin": "LIVE",
+    "factLikes": 1
+  },
+  {
+    "articleId": 1004,
+    "sourceType": "DEMO",
+    "effectiveLikes": 0,
+    "effectiveCoins": 0,
+    "origin": "LIVE",
+    "factLikes": 0
+  },
+  {
+    "articleId": 1006,
+    "sourceType": "DEMO",
+    "effectiveLikes": 2,
+    "effectiveCoins": 0,
+    "origin": "LIVE",
+    "factLikes": 2
+  }
+]

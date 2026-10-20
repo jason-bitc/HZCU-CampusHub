@@ -58,6 +58,7 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String safeCode(String code){return code!=null&&code.matches("[A-Z][A-Z0-9_]{1,47}")?code:"INTERNAL_ERROR";}
     public static void errorCode(String code){if(current()!=null)MDC.put("errorCode",safeCode(code));}
     public static String module(String action){
+        if(action.startsWith("LIKE_")||action.startsWith("FAVORITE")||action.equals("INTERACTION_READ"))return "INTERACTION";
         if(action.startsWith("AUTH_")||action.equals("IDENTITY_READ"))return "AUTH";
         if(action.startsWith("PROFILE_")||action.startsWith("DRAFT_")||action.startsWith("WRITING_")||action.equals("ARTICLE_IMAGE_UPLOAD"))return "AUTHORING";
         if(action.startsWith("CONTACT_"))return "AUTHOR";
@@ -68,6 +69,10 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/me/favorites"))return "FAVORITES_LIST";
+        if(path.matches("/api/v1/articles/[^/]+/like"))return method.equals("DELETE")?"LIKE_CANCEL":"LIKE_SET";
+        if(path.matches("/api/v1/articles/[^/]+/favorite"))return method.equals("DELETE")?"FAVORITE_CANCEL":"FAVORITE_SET";
+        if(path.matches("/api/v1/articles/[^/]+/interaction-state"))return "INTERACTION_READ";
         if(path.startsWith("/api/v1/auth/"))return switch(path){
             case "/api/v1/auth/registration-codes"->"AUTH_REGISTER_CODE";case "/api/v1/auth/register"->"AUTH_REGISTER";
             case "/api/v1/auth/login"->"AUTH_LOGIN";case "/api/v1/auth/logout"->"AUTH_LOGOUT";

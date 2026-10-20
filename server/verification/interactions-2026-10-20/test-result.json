@@ -1,0 +1,19 @@
+{
+  "unit": 49,
+  "mysql": 76,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "finishedAt": "2026-10-20T18:38:15.8456212+08:00",
+  "database": "campushub_test",
+  "controlledMailer": true,
+  "isolatedFiles": true,
+  "newInteractionMySqlCases": 13,
+  "newActions": 6,
+  "allActionCategories": 41,
+  "countsOrigin": "LIVE",
+  "effectiveCoins": 0,
+  "buildVersion": "0.1.0",
+  "buildCommit": "unknown"
+}
