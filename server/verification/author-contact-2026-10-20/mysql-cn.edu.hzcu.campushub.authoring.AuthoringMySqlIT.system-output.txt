@@ -1,0 +1,147 @@
+2026-10-20 14:32:29 INFO  [99434303-07a9-4949-98ca-0405556f4673] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=GET status=401 result=DENIED durationMs=1
+2026-10-20 14:32:29 INFO  [c04acf81-c7df-4204-9d85-6dd8edad3715] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:29 INFO  [c92ce194-d6ce-43b2-bb70-b17daf69f787] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=PROFILE_UPDATE objectType=PROFILE beforeRevision=0 afterRevision=1
+2026-10-20 14:32:29 INFO  [c92ce194-d6ce-43b2-bb70-b17daf69f787] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=PUT status=200 result=OK durationMs=15
+2026-10-20 14:32:29 INFO  [94aaf088-24d5-4262-8226-5d08ac81be75] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=PUT status=409 result=CONFLICT durationMs=4
+2026-10-20 14:32:29 INFO  [75043b8b-09a0-452b-8586-843bfb10eca0] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=GET status=200 result=OK durationMs=3
+2026-10-20 14:32:29 INFO  [57bfdb5d-1574-48d1-81fb-89057d9be0e6] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=PUT status=400 result=FAILED durationMs=2
+2026-10-20 14:32:29 INFO  [0e97b138-df59-43c9-a880-fb0db902bbe7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=15
+2026-10-20 14:32:29 INFO  [02b824c8-ef76-473a-8e71-43e1d82bdfe7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=4
+2026-10-20 14:32:29 INFO  [729f081a-8d50-4102-ac9a-f621644b7c5f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20 14:32:29 INFO  [15409833-21f7-4f3c-949c-4eeff0f6da91] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=422 result=FAILED durationMs=8
+2026-10-20 14:32:29 INFO  [ee48b92b-37cd-421a-b772-16c33a0ddc5c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=24
+2026-10-20 14:32:29 INFO  [603f3d6b-24a1-46e9-abfd-e25254aee35e] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=409 result=CONFLICT durationMs=21
+2026-10-20 14:32:29 INFO  [af0b56a7-b536-496d-bbe2-499b9c9fc04e] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=22
+2026-10-20 14:32:29 INFO  [c3f36106-637f-42fa-b6b5-d7835b20a0a4] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20 14:32:29 INFO  [f1213dfd-8432-456e-aac1-015888564960] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20 14:32:29 INFO  [cca1b02f-e7db-4bbb-960b-fe8251a68e3c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:32:29 INFO  [e67a89da-25dc-4ef0-b872-3f101cda686b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=14
+2026-10-20 14:32:29 INFO  [b3a9b508-a377-4838-ba35-ef63216aa014] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=94
+2026-10-20 14:32:29 INFO  [bc393d9d-68cf-44ac-8af8-e1d246672137] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=31
+2026-10-20 14:32:29 INFO  [d1d0898b-b91f-4ed0-b6bf-c6fd10b1e7a1] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=409 result=CONFLICT durationMs=23
+2026-10-20 14:32:29 INFO  [3cd634a8-4e3f-4299-83e6-c4dbab55dec3] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=3
+2026-10-20 14:32:29 INFO  [e173b380-59df-4e73-a3ea-31e29d1ea4ae] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=4
+2026-10-20 14:32:29 INFO  [1af83faf-6c0a-4433-af7a-c03e5f46718f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=16
+2026-10-20 14:32:29 INFO  [092767f7-aac5-4956-90d8-7d2dada8b8b9] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:29 INFO  [f7e10f04-43c7-493f-898a-1cf168b9528a] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=404 result=DENIED durationMs=19
+2026-10-20 14:32:29 INFO  [6f68679d-6266-4abd-952a-60d92fab6f56] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:29 INFO  [f1ff9327-37d5-47e4-9d73-5c09aafb7c0c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=404 result=DENIED durationMs=6
+2026-10-20 14:32:29 INFO  [ad5d9245-13e7-4a37-a2a8-acb6710a33fe] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=404 result=DENIED durationMs=3
+2026-10-20 14:32:29 INFO  [d5540f48-15a1-4625-9b5f-b5918934738e] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=404 result=DENIED durationMs=4
+2026-10-20 14:32:29 INFO  [a0def706-e54b-4d45-a640-5e726e5a1ca2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=404 result=DENIED durationMs=3
+2026-10-20 14:32:29 INFO  [e47c4fae-28a3-4055-a02f-d5180541d057] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=404 result=DENIED durationMs=3
+2026-10-20 14:32:29 INFO  [33131468-728f-4621-b11c-7bf305a702a1] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=404 result=DENIED durationMs=19
+2026-10-20 14:32:29 INFO  [29ff61c2-97d7-485f-9a7c-2354cfac130d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=DELETE status=404 result=DENIED durationMs=3
+2026-10-20 14:32:29 INFO  [99f1b5c2-92ea-4d46-b686-03dcf5d795a4] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:29 INFO  [98d6b167-67b7-4cc7-a6da-d6f61e595628] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=46
+2026-10-20 14:32:29 INFO  [eb9c2a63-2705-4bae-acfe-d3cac3aec23c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=25
+2026-10-20 14:32:29 INFO  [100249af-8706-49e6-94b7-06b8a614888f] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20 14:32:29 INFO  [ceb73ea2-8a38-4934-add4-f2aee4e80b61] c.edu.hzcu.campushub.audit.BusinessAudit - business unchanged action=ARTICLE_PUBLISH objectType=ARTICLE
+2026-10-20 14:32:29 INFO  [100249af-8706-49e6-94b7-06b8a614888f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=29
+2026-10-20 14:32:29 INFO  [ceb73ea2-8a38-4934-add4-f2aee4e80b61] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=29
+2026-10-20 14:32:29 INFO  [fff80bf4-0e6e-44cc-90ec-e7eec6f22a23] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=6
+2026-10-20 14:32:29 INFO  [d8ae2137-45c9-4617-b50d-ae3f94283327] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=9
+2026-10-20 14:32:29 INFO  [d9428c83-bf3c-459c-b42b-86cc98957579] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=409 result=CONFLICT durationMs=4
+2026-10-20 14:32:29 INFO  [f71ec98c-8e62-42a2-86f5-9af0415ef5ba] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=409 result=CONFLICT durationMs=4
+2026-10-20 14:32:29 INFO  [dd7bc93a-931c-42a3-9c74-abcbbd2bce69] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=6
+2026-10-20 14:32:29 INFO  [133f8d30-b1f6-4c40-addf-08b0494fde21] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=19
+2026-10-20 14:32:29 INFO  [40e1897c-f230-4d2c-b920-40376f6bfd90] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:29 INFO  [a76b89a9-aa6a-4d12-8422-99d43b2a2ae0] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=11
+2026-10-20 14:32:29 INFO  [57958210-6a4b-468b-a2f7-6b1f9aabc20c] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20 14:32:29 INFO  [57958210-6a4b-468b-a2f7-6b1f9aabc20c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=21
+2026-10-20 14:32:29 INFO  [57a5050f-f56a-4062-8f5d-533fa847fffa] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=3
+2026-10-20 14:32:29 INFO  [f339e973-2fe5-4756-843f-9830bb6e75da] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=2
+2026-10-20 14:32:29 INFO  [d234e3ee-52bb-469c-a0e3-fbccaa06bc71] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=9
+2026-10-20 14:32:29 INFO  [39b2c422-6867-4c74-b456-195f015aaea2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:30 INFO  [17355221-9879-4a0b-a595-4569a1af2b08] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=44
+2026-10-20 14:32:30 INFO  [b8dc5845-4555-4a83-8734-f4bec822b105] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=20
+2026-10-20 14:32:30 INFO  [d2c42e06-d58b-4480-ba9c-df14e9003b8d] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20 14:32:30 INFO  [d2c42e06-d58b-4480-ba9c-df14e9003b8d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=26
+2026-10-20 14:32:30 INFO  [07960089-1ac9-4d0c-910e-98cbfd99078d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20 14:32:30 INFO  [a0b61f42-62dc-432d-b45e-77f96a177916] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20 14:32:30 INFO  [a0b61f42-62dc-432d-b45e-77f96a177916] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=13
+2026-10-20 14:32:30 INFO  [c5b1b5a8-3ba6-4fe3-99e8-331c182a43b1] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=4
+2026-10-20 14:32:30 INFO  [63a325cd-7179-4b46-ae9a-51a18a733237] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=3
+2026-10-20 14:32:30 INFO  [f6222961-04cb-43ca-b9b7-028a8782a734] c.edu.hzcu.campushub.audit.BusinessAudit - business unchanged action=ARTICLE_UNPUBLISH objectType=ARTICLE
+2026-10-20 14:32:30 INFO  [f6222961-04cb-43ca-b9b7-028a8782a734] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=5
+2026-10-20 14:32:30 INFO  [7af06878-a9d4-4aa6-86c7-fae38d0e2a53] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_RESTORE objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20 14:32:30 INFO  [7af06878-a9d4-4aa6-86c7-fae38d0e2a53] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=13
+2026-10-20 14:32:30 INFO  [07cb2278-2e33-4d87-b832-6e5652e9416f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:30 INFO  [932e766c-9510-4d2a-9f30-fbd9535f18a4] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=4
+2026-10-20 14:32:30 INFO  [3bb2f3c1-7ea3-4884-b32a-61785ff091ce] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20 14:32:30 INFO  [e3199a56-af80-4796-9851-fa4eb0bc580b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=409 result=CONFLICT durationMs=5
+2026-10-20 14:32:30 INFO  [4b4f3bc6-6dab-41de-8a18-b8d971956ef0] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=409 result=CONFLICT durationMs=9
+2026-10-20 14:32:30 INFO  [f84cb31c-49eb-4328-97fa-5debd4698fbb] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=409 result=CONFLICT durationMs=5
+2026-10-20 14:32:30 INFO  [1a3c0be1-d1f0-4782-95dd-2b0399927051] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_DELETE objectType=ARTICLE beforeRevision=4 afterRevision=5
+2026-10-20 14:32:30 INFO  [1a3c0be1-d1f0-4782-95dd-2b0399927051] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=DELETE status=200 result=OK durationMs=17
+2026-10-20 14:32:30 INFO  [4e0250f3-d52d-4db2-890c-05af81e16b86] c.edu.hzcu.campushub.audit.BusinessAudit - business unchanged action=ARTICLE_DELETE objectType=ARTICLE
+2026-10-20 14:32:30 INFO  [4e0250f3-d52d-4db2-890c-05af81e16b86] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=DELETE status=200 result=OK durationMs=4
+2026-10-20 14:32:30 INFO  [0c8fb07f-73c8-46b8-8009-a707540fedec] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=3
+2026-10-20 14:32:30 INFO  [3c3582b8-7de9-420a-967e-0426c9954acb] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20 14:32:30 INFO  [d4fa76a5-f313-4ad7-aec3-6b47be4de555] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=14
+2026-10-20 14:32:30 INFO  [430a8624-180e-4b4a-95e8-7b54b63b19bc] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=400 result=FAILED durationMs=21
+2026-10-20 14:32:30 INFO  [8313c426-f9e4-4535-b8f6-43a18415fce1] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=400 result=FAILED durationMs=24
+2026-10-20 14:32:30 INFO  [1db32b9a-e2d3-4c2e-8f74-09dde9a2b8a8] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=400 result=FAILED durationMs=27
+2026-10-20 14:32:30 INFO  [5bb95571-6f8b-4738-95f2-d87f7a2d4342] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=400 result=FAILED durationMs=24
+2026-10-20 14:32:30 INFO  [6fcef0fc-0048-48ac-b485-8db1c051b84d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=413 result=FAILED durationMs=158
+2026-10-20 14:32:30 INFO  [dc5b606b-b798-4296-8087-fe3b49f38c64] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=413 result=FAILED durationMs=1
+2026-10-20 14:32:30 INFO  [c4785b75-61d4-4a1f-aad4-9309a18c1bc8] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=413 result=FAILED durationMs=52
+2026-10-20 14:32:30 INFO  [e09c9daa-74c9-420d-9fa9-0d23dc3bd631] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=413 result=FAILED durationMs=39
+2026-10-20 14:32:30 INFO  [81e3d329-7854-4aad-a7a0-33c8f0c4257c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=400 result=FAILED durationMs=5
+2026-10-20 14:32:30 INFO  [88569be2-4a51-4081-9152-dbfd6eb309f7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=400 result=FAILED durationMs=2
+2026-10-20 14:32:30 INFO  [4d6e80c0-b45c-40cf-b45f-7499626729dd] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=22
+2026-10-20 14:32:30 INFO  [c3cba253-6d9d-4249-9f0f-ba774fbbd024] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20 14:32:30 INFO  [c3cba253-6d9d-4249-9f0f-ba774fbbd024] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=19
+2026-10-20 14:32:30 INFO  [d738bee9-4c16-4d64-ba6e-8b5f24d2d6f7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20 14:32:30 INFO  [59e14d00-14f9-4d3e-a3b9-212d39075769] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=14
+2026-10-20 14:32:30 WARN  [6aee8f63-a4e5-4d65-8837-1296fb1e188c] c.e.hzcu.campushub.authoring.MediaStore - media storage failed type=NoSuchFileException
+2026-10-20 14:32:30 INFO  [6aee8f63-a4e5-4d65-8837-1296fb1e188c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=35
+2026-10-20 14:32:30 WARN  [2e57373f-2fea-46f9-bbcd-38c897502508] c.e.h.c.common.ExceptionHandlerAdvice - database operation failed type=UncategorizedSQLException
+2026-10-20 14:32:30 INFO  [2e57373f-2fea-46f9-bbcd-38c897502508] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=45
+2026-10-20 14:32:30 INFO  [e39d0653-55fd-4a4f-94ec-88786392cce7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=6
+2026-10-20 14:32:30 INFO  [5687382e-4698-494e-9762-6f3268875384] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=45
+2026-10-20 14:32:30 INFO  [b2332542-4580-4363-8e86-4f3da56cee73] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:30 INFO  [e6948b55-70a1-496c-837d-91a521407e61] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=21
+2026-10-20 14:32:31 WARN  [af075f1a-3af0-49df-aa25-4c0f57bfdd97] c.e.h.c.common.ExceptionHandlerAdvice - database operation failed type=UncategorizedSQLException
+2026-10-20 14:32:31 INFO  [af075f1a-3af0-49df-aa25-4c0f57bfdd97] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=18
+2026-10-20 14:32:31 INFO  [f3cf61c6-1dac-4965-a3f2-b304a3c90ccb] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:31 INFO  [5bd9ffc9-3c59-4b7a-adfe-28ff9b9e2dfc] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=2
+2026-10-20 14:32:31 INFO  [f774369d-8f28-479c-aaab-70526228cbc4] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20 14:32:31 INFO  [f774369d-8f28-479c-aaab-70526228cbc4] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=19
+2026-10-20 14:32:31 INFO  [f19fe72b-616c-4c76-b809-dc8867cc6189] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20 14:32:31 INFO  [ce246c92-8061-456a-a88a-956de1be0e04] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20 14:32:31 INFO  [40453bd6-1152-47a0-83d4-e63d9b33970e] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=46
+2026-10-20 14:32:31 INFO  [61982ba9-0393-4e32-a3a4-d16689e86547] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=52
+2026-10-20 14:32:31 INFO  [07fdef60-b1c6-44c9-9dc1-acfe64e49f50] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=12
+2026-10-20 14:32:31 INFO  [9ad51de6-852d-4a50-9076-420d610c8d6d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=43
+2026-10-20 14:32:31 INFO  [48820b91-6f5a-4bab-b2d3-3fa36a3cce73] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=19
+2026-10-20 14:32:31 INFO  [cfadff6c-167c-4274-99f2-30d8f87fb8ad] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20 14:32:31 INFO  [cfadff6c-167c-4274-99f2-30d8f87fb8ad] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=26
+2026-10-20 14:32:31 INFO  [08fa6a87-ab7a-4edc-98b4-19dddca86582] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=45
+2026-10-20 14:32:31 INFO  [89e91afb-362e-428a-8e59-2c5dff84077e] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=20
+2026-10-20 14:32:31 INFO  [e82fac95-09a9-446b-8346-e6c8975d4f62] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=400 result=FAILED durationMs=24
+2026-10-20 14:32:31 WARN  [2a9bf4ec-2d3a-4715-bf68-87d729da9480] c.e.hzcu.campushub.authoring.MediaStore - media storage failed type=IOException
+2026-10-20 14:32:31 INFO  [2a9bf4ec-2d3a-4715-bf68-87d729da9480] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=17
+2026-10-20 14:32:31 WARN  [33b80cc8-5410-4c3d-b0ea-af0b5a0fc15a] c.e.hzcu.campushub.authoring.MediaStore - media storage failed type=IOException
+2026-10-20 14:32:31 INFO  [33b80cc8-5410-4c3d-b0ea-af0b5a0fc15a] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=503 result=FAILED durationMs=10
+2026-10-20 14:32:31 INFO  [04c92e69-5c02-476c-9925-5f51d4bcd6e5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20 14:32:31 INFO  [27e06530-8ad4-4c2d-b868-db99da3dd417] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=8
+2026-10-20 14:32:31 INFO  [575c6dad-30bc-4911-b167-7b3bf90152a5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:31 INFO  [12243cac-fba0-43a5-9acb-adf144653645] c.edu.hzcu.campushub.audit.BusinessAudit - business changed action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20 14:32:31 INFO  [12243cac-fba0-43a5-9acb-adf144653645] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=200 result=OK durationMs=28
+2026-10-20 14:32:31 INFO  [d3942138-da15-4917-a2c0-26244b0cefb7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=404 result=DENIED durationMs=2
+2026-10-20 14:32:31 INFO  [d5141bec-a55e-41a8-8983-17181508b7a6] c.edu.hzcu.campushub.common.RequestTrace - request completed action=IMAGE method=GET status=200 result=OK durationMs=8
+2026-10-20 14:32:31 INFO  [7fc414ff-5c77-487e-9b72-0deeaf513560] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=11
+2026-10-20 14:32:31 INFO  [ba7b9bd8-5df6-4f64-9af2-ec1f500108b2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=403 result=DENIED durationMs=1
+2026-10-20 14:32:31 INFO  [da57a71b-2568-459a-aa6c-a80268816431] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=403 result=DENIED durationMs=1
+2026-10-20 14:32:31 INFO  [18b5217d-8462-4205-b68a-f9319189f9c1] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=403 result=DENIED durationMs=1
+2026-10-20 14:32:31 INFO  [adcddf3e-d93f-4e43-a80b-4aa311a667d5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=AUTH method=POST status=200 result=OK durationMs=7
+2026-10-20 14:32:31 INFO  [c7959681-6c2d-4848-bb94-9c206ce520c8] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=401 result=DENIED durationMs=1
+2026-10-20 14:32:31 INFO  [43b51229-9cd0-4267-adfd-d52e14429382] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20 14:32:31 INFO  [55948b89-51b5-4660-8582-6eada49146a2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=POST status=201 result=OK durationMs=10
+2026-10-20 14:32:31 INFO  [658684a5-1056-4e03-8e5e-c5ce59834664] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=19
+2026-10-20 14:32:31 INFO  [d145f81f-a618-4394-80c6-5e8b096649b3] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20 14:32:32 INFO  [766124bb-a226-4089-9e3d-a9e99e61ed46] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:32:32 INFO  [fa913165-cd02-493c-af36-500785177511] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_PROFILE method=GET status=200 result=OK durationMs=4
+2026-10-20 14:32:32 INFO  [838c8cbb-e0ac-4581-881c-46d3418e20e6] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=7
+2026-10-20 14:32:32 INFO  [9c14425c-d52c-4121-904e-e7497a0da898] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OWN_ARTICLES method=PUT status=401 result=DENIED durationMs=1

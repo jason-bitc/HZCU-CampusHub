@@ -1,0 +1,12 @@
+{
+  "unit": 36,
+  "mysql": 42,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "finishedAt": "2026-10-20T14:32:33.6194082+08:00",
+  "database": "campushub_test",
+  "controlledMailer": true,
+  "isolatedFiles": true
+}

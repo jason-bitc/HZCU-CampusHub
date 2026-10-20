@@ -59,6 +59,7 @@ class AuthoringMySqlIT {
                 jdbc.update("DELETE FROM article_version WHERE article_id IN (:articles)",p);
                 jdbc.update("DELETE FROM article WHERE id IN (:articles)",p);
             }
+            jdbc.update("DELETE FROM business_audit WHERE actor_id IN (:users)",p);
             jdbc.update("DELETE FROM author_profile WHERE user_id IN (:users)",p);
             jdbc.update("DELETE FROM email_challenge WHERE email IN (:emails)",p);jdbc.update("DELETE FROM auth_email_gate WHERE email IN (:emails)",p);
             jdbc.update("DELETE FROM auth_session WHERE user_id IN (:users)",p);jdbc.update("DELETE FROM campus_certification WHERE user_id IN (:users)",p);jdbc.update("DELETE FROM platform_user WHERE id IN (:users)",p);
@@ -214,7 +215,7 @@ class AuthoringMySqlIT {
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data).isEqualTo(before);assertThat(call("GET","/api/v1/me/profile",null,one).data.path("nickname").asString()).isEqualTo("G04测试昵称");assertThat(call("GET","/api/v1/articles/"+edited,null,null).status).isEqualTo(200);
         CLOCK.advance(Duration.ofDays(7));assertThat(call("PUT","/api/v1/me/articles/"+id+"/draft",draft(1,"过期","正文"),one).status).isEqualTo(401);
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5");
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article WHERE owner_user_id IS NULL",Long.class)).isEqualTo(10);
     }
 }

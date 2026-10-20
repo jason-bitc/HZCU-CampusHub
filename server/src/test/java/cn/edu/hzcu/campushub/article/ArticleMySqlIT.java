@@ -48,7 +48,7 @@ class ArticleMySqlIT {
                     "campushub.db.username",require("CAMPUSHUB_TEST_DB_USERNAME"),
                     "campushub.db.password",require("CAMPUSHUB_TEST_DB_PASSWORD"),
                     "campushub.auth.pepper",cn.edu.hzcu.campushub.auth.AuthTestSupport.TEST_KEY,
-                    "campushub.media.root",java.nio.file.Path.of("target","article-test-media").toAbsolutePath().toString()))));
+                    "campushub.media.root",java.nio.file.Path.of("target","article-test-media").toAbsolutePath().toString(),"campushub.logs.enabled","false"))));
         app.addInitializers(ctx -> ctx.getBeanFactory().registerSingleton("controlledCodeMailer",
                 (cn.edu.hzcu.campushub.auth.CodeMailer)(email,purpose,code)->{throw new AssertionError("Article regression must not send email");}));
         // Supply secrets as properties in memory, never command-line arguments.
@@ -179,7 +179,7 @@ class ArticleMySqlIT {
         jdbc = context.getBean(JdbcTemplate.class);
         assertThat(jdbc.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes FROM article ORDER BY id")).isEqualTo(before);
         assertThat(jdbc.queryForList("SELECT id,title,body FROM article_version ORDER BY id")).isEqualTo(versions);
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5");
         assertThat(get("/api/v1/articles/1001").status).isEqualTo(200);
     }
     @Test @Order(10) void invalidConfigurationAndChangedMigrationPreventStartup(@org.junit.jupiter.api.io.TempDir java.nio.file.Path directory) throws Exception {

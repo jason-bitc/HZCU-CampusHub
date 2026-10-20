@@ -15,6 +15,7 @@ public class CampusHubApplication {
             while (cause != null) {
                 if (cause.getClass().getName().startsWith("org.flywaydb.")) category = "MIGRATION_FAILED";
                 if (cause instanceof IllegalArgumentException) category = "CONFIG_INVALID";
+                if (cause instanceof cn.edu.hzcu.campushub.audit.SafeFileLogs.StorageUnavailable) category = "LOG_STORAGE_UNAVAILABLE";
                 if (cause instanceof java.sql.SQLException sql) {
                     if ("28000".equals(sql.getSQLState())) category = "DB_AUTH_FAILED";
                     else if (!"MIGRATION_FAILED".equals(category) || String.valueOf(sql.getSQLState()).startsWith("08"))
@@ -24,7 +25,7 @@ public class CampusHubApplication {
                 cause = cause.getCause();
             }
             System.err.println("CampusHub startup failed [" + category
-                    + "]. Check CAMPUSHUB_DB_* configuration, database permissions and Flyway migrations."
+                    + "]. Check local configuration, database/storage permissions and Flyway migrations."
                     + " No application is ready; see server/README.md troubleshooting.");
             System.exit(1);
         }

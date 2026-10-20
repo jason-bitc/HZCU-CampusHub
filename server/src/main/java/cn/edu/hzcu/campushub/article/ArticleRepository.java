@@ -29,8 +29,13 @@ public class ArticleRepository {
     }
 
     public Page list(ArticleQuery query) {
+        return list(query,null);
+    }
+    public Page byAuthor(long author,int page,int size){return list(new ArticleQuery(null,null,null,null,null,"latest",page,size),author);}
+    private Page list(ArticleQuery query,Long author) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         StringBuilder where = new StringBuilder(PUBLIC);
+        if(author!=null){where.append(" AND a.owner_user_id=:author");params.addValue("author",author);}
         if (query.keyword() != null && !query.keyword().isBlank()) {
             where.append(" AND (v.title LIKE :keyword ESCAPE '!' OR v.summary LIKE :keyword ESCAPE '!')");
             String escaped = query.keyword().replace("!", "!!").replace("%", "!%").replace("_", "!_");

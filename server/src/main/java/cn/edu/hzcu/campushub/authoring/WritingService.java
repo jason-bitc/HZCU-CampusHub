@@ -3,6 +3,8 @@ package cn.edu.hzcu.campushub.authoring;
 import static cn.edu.hzcu.campushub.authoring.WritingModels.*;
 import cn.edu.hzcu.campushub.auth.AuthService;
 import cn.edu.hzcu.campushub.common.ApiException;
+import cn.edu.hzcu.campushub.audit.BusinessAudit;
+import cn.edu.hzcu.campushub.audit.BusinessAudit.*;
 import java.time.*;
 import java.util.*;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,10 @@ public class WritingService {
     private final MediaStore files;
     private final AuthService auth;
     private final Clock clock;
+    private final BusinessAudit audit;
     private final TransactionTemplate write,read;
-    public WritingService(WritingRepository repository,MarkdownReferences markdown,MediaStore files,AuthService auth,Clock clock,PlatformTransactionManager manager){
-        this.repository=repository;this.markdown=markdown;this.files=files;this.auth=auth;this.clock=clock;
+    public WritingService(WritingRepository repository,MarkdownReferences markdown,MediaStore files,AuthService auth,Clock clock,PlatformTransactionManager manager,BusinessAudit audit){
+        this.repository=repository;this.markdown=markdown;this.files=files;this.auth=auth;this.clock=clock;this.audit=audit;
         write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
     }
@@ -32,7 +35,8 @@ public class WritingService {
     public Profile updateProfile(long user,Profile incoming){return write.execute(tx->{
         repository.lockUser(user);Profile previous=repository.profile(user);if(previous.revision()!=incoming.revision())throw conflict("REVISION_CONFLICT");
         if(incoming.majorId()!=null)repository.categories(List.of(incoming.majorId()),"MAJOR");
-        Profile saved=new Profile(previous.revision()+1,incoming.nickname(),incoming.majorId(),incoming.currentStage(),incoming.bio());repository.profile(user,saved);return saved;
+        Profile saved=new Profile(previous.revision()+1,incoming.nickname(),incoming.majorId(),incoming.currentStage(),incoming.bio());repository.profile(user,saved);
+        audit.changed(user,Action.PROFILE_UPDATE,ObjectType.PROFILE,user,previous.revision(),saved.revision(),null,null);return saved;
     });}
     public Created create(long user,String request){return write.execute(tx->{repository.lockUser(user);Long previous=repository.created(user,request);if(previous!=null)return new Created(previous);long id=repository.allocate("article");repository.create(id,user,request,clock.instant());return new Created(id);});}
     public OwnedPage list(long user,int page,int size){if(page<1||page>1_000_000||size<1||size>100)throw ApiException.invalid();return read.execute(tx->repository.list(user,page,size));}
@@ -44,24 +48,27 @@ public class WritingService {
     }
     public Published publish(long user,long id,long expected,String request){return write.execute(tx->{
         Article a=repository.owned(user,id,true);editable(a);
-        Published previous=repository.published(id,request,expected);if(previous!=null){if(!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");return previous;}
+        Published previous=repository.published(id,request,expected);if(previous!=null){if(!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");audit.unchanged(Action.ARTICLE_PUBLISH,ObjectType.ARTICLE);return previous;}
         revision(a,expected);Content c=repository.content(id);var refs=markdown.inspect(c.body());categories(c);repository.imageReferences(id,refs.imageIds());
         var missing=new ArrayList<String>();if(c.title().isBlank())missing.add("title");if(c.tags().jobIds().isEmpty())missing.add("jobIds");if(c.tags().majorIds().isEmpty())missing.add("majorIds");
         if(c.experienceStage().isBlank())missing.add("experienceStage");if(c.sourceType()==null)missing.add("sourceType");
         if(refs.readableText().isBlank()&&refs.imageIds().isEmpty())missing.add("body或有效上传图片");if("CURATED".equals(c.sourceType())&&c.sourceNote().isBlank())missing.add("sourceNote");
         if(!missing.isEmpty())throw new ApiException(HttpStatus.valueOf(422),"PUBLISH_INCOMPLETE","发布前请补充："+String.join("、",missing));
         for(String image:refs.imageIds()){ImageRow row=repository.image(image).orElseThrow(ApiException::notFound);files.read(row.id(),row.size(),row.digest());}
-        return repository.publish(a,c,c.summary().isBlank()?MarkdownReferences.summary(refs.readableText()):c.summary(),request,clock.instant());
+        Published published=repository.publish(a,c,c.summary().isBlank()?MarkdownReferences.summary(refs.readableText()):c.summary(),request,clock.instant());
+        audit.changed(user,Action.ARTICLE_PUBLISH,ObjectType.ARTICLE,id,a.revision(),published.revision(),State.valueOf(a.state()),State.PUBLISHED);return published;
     });}
     public StateResult changeState(long user,long id,long expected,String action){return write.execute(tx->{
         Article a=repository.owned(user,id,true);String target=action.equals("unpublish")?"AUTHOR_OFFLINE":action.equals("restore")?"PUBLISHED":"DELETED";
-        if(a.state().equals(target))return new StateResult(id,target,a.revision());
+        Action operation=action.equals("unpublish")?Action.ARTICLE_UNPUBLISH:action.equals("restore")?Action.ARTICLE_RESTORE:Action.ARTICLE_DELETE;
+        if(a.state().equals(target)){audit.unchanged(operation,ObjectType.ARTICLE);return new StateResult(id,target,a.revision());}
         if(!target.equals("DELETED")){
             editable(a);
             if(action.equals("unpublish")&&!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");
             if(action.equals("restore")&&!a.state().equals("AUTHOR_OFFLINE"))throw conflict("STATE_CONFLICT");
         }
-        revision(a,expected);repository.state(id,target,clock.instant());return new StateResult(id,target,a.revision()+1);
+        revision(a,expected);repository.state(id,target,clock.instant());
+        audit.changed(user,operation,ObjectType.ARTICLE,id,a.revision(),a.revision()+1,State.valueOf(a.state()),State.valueOf(target));return new StateResult(id,target,a.revision()+1);
     });}
     public Image upload(long user,long article,String request,MultipartFile multipart){
         // Reject foreign/noneditable targets before reading or writing their upload body.

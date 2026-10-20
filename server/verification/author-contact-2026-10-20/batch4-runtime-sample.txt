@@ -1,0 +1,205 @@
+2026-10-20T06:32:21.205Z traceId=1c3b93f9-519c-46f8-8b9c-32b678b5aea0 event=REQUEST action=ARTICLE_AUTHOR method=GET status=401 result=DENIED durationMs=2
+2026-10-20T06:32:21.221Z traceId=915cfb3d-170a-4710-9d39-7ac97506da7d event=REQUEST action=ARTICLE_AUTHOR method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.231Z traceId=9b52edda-26f1-4c67-8cd6-096ae5e714e6 event=REQUEST action=ARTICLE_AUTHOR method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.241Z traceId=b51dafdf-1d7b-440c-9b2f-871be847d882 event=REQUEST action=ARTICLE_AUTHOR method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.255Z traceId=10f13631-bed9-46d4-9e54-5e7b1bb1fb94 event=REQUEST action=AUTHOR_HOME method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.267Z traceId=adb1cd8f-8932-400b-8a89-831cd8b423e2 event=REQUEST action=AUTHOR_HOME method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.280Z traceId=8cc28667-d2e5-4920-be49-b18e3f42c58a event=REQUEST action=AUTHOR_ARTICLES method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.292Z traceId=170520c3-6d9b-4c29-a57b-eabaf560ebc2 event=REQUEST action=AUTHOR_ARTICLES method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.304Z traceId=5d8cf0d1-9ff7-42b6-93ec-ea2e9293d871 event=REQUEST action=AUTHOR_CONTACT method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.316Z traceId=8bb8f144-38fb-4152-91ec-150280414db6 event=REQUEST action=AUTHOR_CONTACT method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.328Z traceId=3a692fc9-57f2-4599-83c0-7b702da828af event=REQUEST action=CONTACT_SETTINGS method=GET status=401 result=DENIED durationMs=0
+2026-10-20T06:32:21.340Z traceId=b11a494d-6da6-4564-b6df-83dd43f33df8 event=REQUEST action=CONTACT_SETTINGS method=GET status=401 result=DENIED durationMs=1
+2026-10-20T06:32:21.363Z traceId=62dbeffd-d4ec-40ca-aa47-1d231d9ea2bd event=REQUEST action=ARTICLE_AUTHOR method=GET status=404 result=DENIED durationMs=11
+2026-10-20T06:32:21.379Z traceId=6e026d8d-cd19-424f-8a9c-a028974ab28c event=REQUEST action=ARTICLE_AUTHOR method=GET status=400 result=FAILED durationMs=3
+2026-10-20T06:32:21.404Z traceId=1ffc69c8-67bc-46a2-92a5-a64e0daa3891 event=REQUEST action=AUTHOR_HOME method=GET status=404 result=DENIED durationMs=8
+2026-10-20T06:32:21.424Z traceId=74f731a2-508e-433d-a474-70c9e95087fe event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20T06:32:21.471Z traceId=2323a3a1-2862-42a9-8008-d6cb38e2af81 event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=26
+2026-10-20T06:32:21.573Z traceId=6df13086-d22c-48ac-9db3-94b94f865322 event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=89
+2026-10-20T06:32:21.614Z traceId=028b59c0-a97f-4ca9-b8df-ef54b005e8ae event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:21.625Z traceId=028b59c0-a97f-4ca9-b8df-ef54b005e8ae event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=40
+2026-10-20T06:32:21.652Z traceId=57d319c0-9b5d-4399-ad73-bb969f9491c1 event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=15
+2026-10-20T06:32:21.689Z traceId=5acb203c-ac7e-47e7-ae3b-461f9af60a78 event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=23
+2026-10-20T06:32:21.723Z traceId=f1eb6928-21c9-4600-b578-2ec7f967429d event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:21.732Z traceId=f1eb6928-21c9-4600-b578-2ec7f967429d event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=32
+2026-10-20T06:32:21.756Z traceId=6a8062f3-141b-45ab-ae30-06519fdbea2b event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20T06:32:21.787Z traceId=80775958-3f33-45c5-ac5b-1579503e1d35 event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:21.816Z traceId=2be7b788-fe7b-4ab8-bc7a-f0d15873262f event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:21.826Z traceId=2be7b788-fe7b-4ab8-bc7a-f0d15873262f event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=30
+2026-10-20T06:32:21.849Z traceId=4f6d46d8-6af8-4470-9e73-9853dbee1068 event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20T06:32:21.871Z traceId=72267293-a166-4874-9a6d-025fb919540b event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20T06:32:21.903Z traceId=27f5912e-400f-43a4-aecc-01c5240b4d71 event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=20
+2026-10-20T06:32:21.937Z traceId=db84a946-c812-4d9b-a375-2fb540089bec event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:21.947Z traceId=db84a946-c812-4d9b-a375-2fb540089bec event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=33
+2026-10-20T06:32:21.974Z traceId=392fd4f5-c80f-49b7-88f6-49495f7d72f2 event=BUSINESS_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:21.985Z traceId=392fd4f5-c80f-49b7-88f6-49495f7d72f2 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=25
+2026-10-20T06:32:22.008Z traceId=a7a7d84d-2f79-459f-8ecf-e7554c9f2b0e event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=13
+2026-10-20T06:32:22.042Z traceId=9ab1663c-8036-4774-9465-40db7ea12e95 event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:22.074Z traceId=a1299f4d-b327-4890-aabd-3104c3be2b28 event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:22.085Z traceId=a1299f4d-b327-4890-aabd-3104c3be2b28 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=32
+2026-10-20T06:32:22.119Z traceId=db3f3702-b13b-48e7-a5b7-cab4b710262a event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=16
+2026-10-20T06:32:22.150Z traceId=46457eca-88c9-4c2e-94fe-55afc17f775e event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:22.185Z traceId=32192609-d855-4248-b385-a74d5733e1f7 event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:22.195Z traceId=32192609-d855-4248-b385-a74d5733e1f7 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=32
+2026-10-20T06:32:22.222Z traceId=1f884d6d-d0d4-4ea8-9848-cfa66d5cbb59 event=BUSINESS_CHANGE action=ARTICLE_DELETE objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:22.232Z traceId=1f884d6d-d0d4-4ea8-9848-cfa66d5cbb59 event=REQUEST action=OWN_ARTICLES method=DELETE status=200 result=OK durationMs=25
+2026-10-20T06:32:22.251Z traceId=5d4d81f9-b222-4253-b47a-44c1a1f49a70 event=REQUEST action=ARTICLE_AUTHOR method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.270Z traceId=89986abf-643c-459e-a24e-cd7f9c324098 event=REQUEST action=AUTHOR_HOME method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.294Z traceId=2267a756-0db3-41e3-8318-2b2039372e82 event=REQUEST action=AUTHOR_ARTICLES method=GET status=200 result=OK durationMs=13
+2026-10-20T06:32:22.313Z traceId=70857174-f82b-42a3-8ba9-163a905885e0 event=REQUEST action=AUTHOR_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20T06:32:22.328Z traceId=bc048c32-12be-43e6-b987-247c77c77c80 event=REQUEST action=AUTHOR_ARTICLES method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.344Z traceId=f7f6b3b4-0afb-46f0-a87a-b7f3cf0801ca event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.358Z traceId=3987fe48-0e36-4f6a-8334-e87d9e542be0 event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:22.373Z traceId=95336103-06c7-4bba-aa4e-135bd5d0c39c event=REQUEST action=AUTHOR_HOME method=GET status=404 result=DENIED durationMs=5
+2026-10-20T06:32:22.390Z traceId=b32c4bc7-6d3b-4831-9639-1ae4c955e98e event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.407Z traceId=cf51b033-cf74-4be3-9ede-07c8fa24601e event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=7
+2026-10-20T06:32:22.435Z traceId=dfce6f55-e2bf-4836-b1d1-d4409cd9c696 event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=0 afterRevision=1
+2026-10-20T06:32:22.443Z traceId=dfce6f55-e2bf-4836-b1d1-d4409cd9c696 event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=24
+2026-10-20T06:32:22.459Z traceId=fd9ead7c-e282-4870-8d66-54fc43415816 event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.488Z traceId=ab88e1cf-4966-48bd-b28e-f5574eec3ae0 event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=1 afterRevision=2
+2026-10-20T06:32:22.496Z traceId=ab88e1cf-4966-48bd-b28e-f5574eec3ae0 event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=26
+2026-10-20T06:32:22.513Z traceId=f82bca12-cb98-48ea-9f02-8812a3568326 event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.530Z traceId=65117ebf-d678-4e68-83f1-8e2d92c08f90 event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=7
+2026-10-20T06:32:22.548Z traceId=62945fb9-6daf-4891-85b8-78e1d0e7d146 event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.565Z traceId=f8425713-df9c-4ebe-b98a-639eef3e527e event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.584Z traceId=d90073a8-4739-4120-b5ec-a7f71844919c event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.603Z traceId=60dc3cd1-727f-4fe7-b1b5-c2d69dd07eed event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.625Z traceId=f71d13bb-8096-47e6-88e9-97033275a8ad event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=2 afterRevision=3
+2026-10-20T06:32:22.634Z traceId=f71d13bb-8096-47e6-88e9-97033275a8ad event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:22.648Z traceId=b92133dc-553e-44c4-9e68-d9402474e926 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:22.663Z traceId=69289a2a-ed2a-4b19-8fc0-7388f122e4d0 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.687Z traceId=0a6ae662-8f69-4e87-b213-c278f8cf1f6b event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=3 afterRevision=4
+2026-10-20T06:32:22.695Z traceId=0a6ae662-8f69-4e87-b213-c278f8cf1f6b event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=22
+2026-10-20T06:32:22.700Z traceId=d2e643c7-4a99-4179-aa80-74bc37a833ce event=REQUEST action=CONTACT_SETTINGS method=PUT status=409 result=CONFLICT durationMs=25
+2026-10-20T06:32:22.698Z traceId=9c22744a-8f2a-4ef1-8ca6-d1857af06d1e event=BUSINESS_CHANGE action=PROFILE_UPDATE objectType=PROFILE beforeRevision=0 afterRevision=1
+2026-10-20T06:32:22.723Z traceId=9c22744a-8f2a-4ef1-8ca6-d1857af06d1e event=REQUEST action=OWN_PROFILE method=PUT status=200 result=OK durationMs=47
+2026-10-20T06:32:22.738Z traceId=c51ab281-aa5c-4ee2-82af-899d4330b52a event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.762Z traceId=85437cd7-6f95-41f5-8b26-7fa28d5d8f0c event=BUSINESS_CHANGE action=PROFILE_UPDATE objectType=PROFILE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:22.773Z traceId=85437cd7-6f95-41f5-8b26-7fa28d5d8f0c event=REQUEST action=OWN_PROFILE method=PUT status=200 result=OK durationMs=24
+2026-10-20T06:32:22.790Z traceId=bb8c85d6-7ed0-4f72-9aaf-fcfe57858c3a event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.813Z traceId=f25380f3-395c-4a88-a1a5-4ca9e9daba20 event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=0 afterRevision=1
+2026-10-20T06:32:22.822Z traceId=f25380f3-395c-4a88-a1a5-4ca9e9daba20 event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:22.839Z traceId=eeada9d5-c72c-48a8-b839-46e25fdbf6d0 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.855Z traceId=fe03ff19-78dc-40f5-8a67-a4207fa58a22 event=REQUEST action=AUTHOR_HOME method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:22.875Z traceId=310c52fd-2621-4c14-9235-601a5138928a event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:22.896Z traceId=570586d1-02f8-43ef-800b-d1100ba22e4d event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:22.910Z traceId=302db998-0d8d-4264-9521-489a3d2eaabc event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=3
+2026-10-20T06:32:22.924Z traceId=16707018-5a20-46ea-8695-40e8c61b74e1 event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=3
+2026-10-20T06:32:22.939Z traceId=e8917419-1719-40af-b3d5-765d9fc90bdf event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:22.953Z traceId=660c558d-596f-46aa-ba1a-36e71840c059 event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:22.965Z traceId=c158e262-f686-4513-a797-f1fcc55aea0a event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:22.979Z traceId=5376d481-1f19-40f2-a154-283cc7dfaa79 event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:22.993Z traceId=8f843169-18cc-4106-8b76-e6b1d81df3be event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.007Z traceId=a0aa2914-5b44-4e86-b542-bb98430976b2 event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.018Z traceId=12f14a7a-8cab-47b7-9b7b-a05a8d87417c event=REQUEST action=AUTHOR_CONTACT method=PUT status=405 result=FAILED durationMs=2
+2026-10-20T06:32:23.031Z traceId=d7901b91-a874-46d5-ae6b-343236f437bc event=REQUEST action=AUTHOR_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.044Z traceId=cf50b101-2383-4975-8de9-dcb12e85d30a event=REQUEST action=AUTHOR_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.058Z traceId=61538fff-dacd-4349-a304-ef1c8b0b67d4 event=REQUEST action=AUTHOR_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.071Z traceId=129272fe-8565-463e-bcff-ce43c3e3d58c event=REQUEST action=AUTHOR_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.085Z traceId=4e18a51b-590c-4990-aaee-d31a3cf8ec3d event=REQUEST action=AUTHOR_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20T06:32:23.097Z traceId=18c687ab-a659-46e3-b003-4ae00bec8e94 event=REQUEST action=AUTHOR_HOME method=GET status=400 result=FAILED durationMs=1
+2026-10-20T06:32:23.109Z traceId=fc4f30cf-6901-4a63-9f9e-504c27325ed8 event=REQUEST action=CONTACT_SETTINGS method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:23.122Z traceId=752fc7d7-7910-4ea5-ab7b-ecc9162d8895 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=3
+2026-10-20T06:32:23.143Z traceId=2c54e7ed-a4de-447c-814a-257d3f48621c event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=4 afterRevision=5
+2026-10-20T06:32:23.150Z traceId=2c54e7ed-a4de-447c-814a-257d3f48621c event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=18
+2026-10-20T06:32:23.164Z traceId=44258c56-7594-40e1-a445-89368ec7cc82 event=REQUEST action=AUTHOR_CONTACT method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:23.185Z traceId=5af1a60b-d078-45cc-bf8a-a98e73be2af6 event=REQUEST action=AUTHOR_HOME method=GET status=404 result=DENIED durationMs=5
+2026-10-20T06:32:23.205Z traceId=c6a7798f-d6bf-48d8-827b-f75c1fcc498f event=REQUEST action=AUTHOR_CONTACT method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.219Z traceId=ff6f8294-de4b-4ad1-bf47-81f3ae1d054d event=REQUEST action=AUTHOR_ARTICLES method=GET status=404 result=DENIED durationMs=5
+2026-10-20T06:32:23.232Z traceId=7e077186-ef58-45da-a509-22c83fb3e077 event=REQUEST action=ARTICLE_AUTHOR method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.245Z traceId=36eccb6b-4e17-4de5-850a-8b49114ae5d0 event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:23.273Z traceId=5820a9aa-de8c-4545-ba78-b6f1c8e7b440 event=REQUEST action=AUTHOR_HOME method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.289Z traceId=5b291568-739a-4603-b20d-1bff8acf94cc event=REQUEST action=AUTHOR_CONTACT method=GET status=404 result=DENIED durationMs=5
+2026-10-20T06:32:23.302Z traceId=03166c13-3489-48eb-946e-f49861924924 event=REQUEST action=AUTHOR_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.315Z traceId=3bfd8fa1-e5a0-448d-b2db-4e0584d212d1 event=REQUEST action=ARTICLE_AUTHOR method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.329Z traceId=c9536d4d-9b38-459e-92b2-ac2e3f92334f event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:23.353Z traceId=accc0a08-2e28-41a1-87d8-9db02fad264d event=REQUEST action=AUTHOR_HOME method=GET status=403 result=DENIED durationMs=1
+2026-10-20T06:32:23.364Z traceId=eb6cfb4f-7dca-49a2-bce9-52bb7adf1033 event=REQUEST action=AUTHOR_CONTACT method=GET status=403 result=DENIED durationMs=1
+2026-10-20T06:32:23.376Z traceId=1d8e7b66-fdf8-4150-a269-3a07a980e78f event=REQUEST action=CONTACT_SETTINGS method=PUT status=403 result=DENIED durationMs=2
+2026-10-20T06:32:23.406Z traceId=e15ac5fa-c34c-4e91-ba15-4db42f0927e8 event=REQUEST action=AUTHOR_HOME method=GET status=403 result=DENIED durationMs=1
+2026-10-20T06:32:23.430Z traceId=c4a3c131-0787-44a4-80c6-530a573d29a0 event=REQUEST action=AUTH method=POST status=200 result=OK durationMs=8
+2026-10-20T06:32:23.441Z traceId=cd1fdc7c-d51a-420c-a5ef-3278260e3adf event=REQUEST action=AUTHOR_HOME method=GET status=401 result=DENIED durationMs=1
+2026-10-20T06:32:23.762Z traceId=ce1fbe9b-4203-4f7b-bd90-3fa6e978b54c event=REQUEST action=OTHER method=GET status=404 result=DENIED durationMs=1
+2026-10-20T06:32:23.772Z traceId=52fdb6d3-699a-42c4-beb6-20d018117183 event=REQUEST action=OTHER method=GET status=404 result=DENIED durationMs=1
+2026-10-20T06:32:23.783Z traceId=ee193a53-3886-4e48-b8f4-bd7e25522340 event=REQUEST action=OTHER method=GET status=404 result=DENIED durationMs=0
+2026-10-20T06:32:23.808Z traceId=ba53cfed-2639-410d-bffa-26d5669f3b3f event=BUSINESS_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:23.817Z traceId=ba53cfed-2639-410d-bffa-26d5669f3b3f event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=21
+2026-10-20T06:32:23.831Z traceId=5121d70e-d109-4497-a726-1802814eb145 event=REQUEST action=AUTHOR_HOME method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:23.851Z traceId=261d4c89-c9d2-4678-9f93-0e42282601aa event=BUSINESS_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:23.859Z traceId=261d4c89-c9d2-4678-9f93-0e42282601aa event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=19
+2026-10-20T06:32:23.874Z traceId=d2c86524-59f0-4ce7-a6bd-82bff9ef492f event=REQUEST action=AUTHOR_HOME method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.891Z traceId=2ac7c00b-1fd5-4c0d-9ff8-971b43430d04 event=REQUEST action=AUTHOR_CONTACT method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.905Z traceId=ab5cc49b-e0d3-48dc-bccc-023cf40ae887 event=REQUEST action=AUTHOR_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.923Z traceId=da673258-a0d7-4ada-85ba-9f1b8f5050a4 event=REQUEST action=ARTICLE_AUTHOR method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:23.938Z traceId=b014aad7-6f96-4076-b24c-54d6906ba7c0 event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:23.952Z traceId=443a1998-a7ad-4c1d-937d-16f66b5af9f7 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:23.973Z traceId=073e605b-fd7a-448e-bced-55a7b53e6299 event=BUSINESS_CHANGE action=ARTICLE_RESTORE objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20T06:32:23.982Z traceId=073e605b-fd7a-448e-bced-55a7b53e6299 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=20
+2026-10-20T06:32:24.007Z traceId=6cc5201d-079d-40ce-ab48-71b22aced556 event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=14
+2026-10-20T06:32:24.040Z traceId=4601d854-199e-4949-92d5-a5946d7a6dca event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=22
+2026-10-20T06:32:24.069Z traceId=b47aaf4a-2676-4e1a-b705-4f80a2b06e3b event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:24.078Z traceId=b47aaf4a-2676-4e1a-b705-4f80a2b06e3b event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=28
+2026-10-20T06:32:24.096Z traceId=effc84b2-594a-4d00-8c89-a576abc2638e event=BUSINESS_NO_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE
+2026-10-20T06:32:24.106Z traceId=effc84b2-594a-4d00-8c89-a576abc2638e event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=16
+2026-10-20T06:32:24.131Z traceId=12ea8378-ecf7-41fc-b82f-7b84c752fa97 event=BUSINESS_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:24.141Z traceId=12ea8378-ecf7-41fc-b82f-7b84c752fa97 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=23
+2026-10-20T06:32:24.157Z traceId=5f68ada4-88aa-447b-97b6-3ac42ef977dc event=BUSINESS_NO_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE
+2026-10-20T06:32:24.164Z traceId=5f68ada4-88aa-447b-97b6-3ac42ef977dc event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=11
+2026-10-20T06:32:24.186Z traceId=bba0ab4f-94e3-4195-a831-05e58a19f098 event=BUSINESS_CHANGE action=ARTICLE_RESTORE objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20T06:32:24.194Z traceId=bba0ab4f-94e3-4195-a831-05e58a19f098 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=18
+2026-10-20T06:32:24.210Z traceId=242e3b2c-0a44-49f2-809c-1c21e34b0aea event=BUSINESS_NO_CHANGE action=ARTICLE_RESTORE objectType=ARTICLE
+2026-10-20T06:32:24.221Z traceId=242e3b2c-0a44-49f2-809c-1c21e34b0aea event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=15
+2026-10-20T06:32:24.247Z traceId=9d763fa9-6281-4f69-87d4-928d7bbd5b28 event=BUSINESS_CHANGE action=ARTICLE_DELETE objectType=ARTICLE beforeRevision=4 afterRevision=5
+2026-10-20T06:32:24.254Z traceId=9d763fa9-6281-4f69-87d4-928d7bbd5b28 event=REQUEST action=OWN_ARTICLES method=DELETE status=200 result=OK durationMs=23
+2026-10-20T06:32:24.268Z traceId=280ceb3d-d4ef-4310-94ca-2f77b78913f3 event=BUSINESS_NO_CHANGE action=ARTICLE_DELETE objectType=ARTICLE
+2026-10-20T06:32:24.275Z traceId=280ceb3d-d4ef-4310-94ca-2f77b78913f3 event=REQUEST action=OWN_ARTICLES method=DELETE status=200 result=OK durationMs=10
+2026-10-20T06:32:24.289Z traceId=482d222b-b268-4197-a5d0-8fb68f4f0f2d event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=3
+2026-10-20T06:32:24.314Z traceId=a82afe18-776a-4bc0-a8d7-f7182facae6b event=BUSINESS_CHANGE action=PROFILE_UPDATE objectType=PROFILE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:24.324Z traceId=a82afe18-776a-4bc0-a8d7-f7182facae6b event=REQUEST action=OWN_PROFILE method=PUT status=200 result=OK durationMs=24
+2026-10-20T06:32:24.341Z traceId=ceddc211-9fa5-4ebc-8928-c4a9e46dee15 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:24.369Z traceId=90472c62-3190-4214-a198-e5a2d1e439ef event=BUSINESS_CHANGE action=CONTACT_UPDATE objectType=CONTACT beforeRevision=5 afterRevision=6
+2026-10-20T06:32:24.378Z traceId=90472c62-3190-4214-a198-e5a2d1e439ef event=REQUEST action=CONTACT_SETTINGS method=PUT status=200 result=OK durationMs=23
+2026-10-20T06:32:24.398Z traceId=0d3382bc-1166-4e09-b55e-493d051505ee event=REQUEST action=CONTACT_SETTINGS method=PUT status=409 result=CONFLICT durationMs=6
+2026-10-20T06:32:24.418Z traceId=4f1ee292-b0b9-49be-8497-d8904eed6ecd event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:24.435Z traceId=ff936e7c-5fb0-49c9-abee-2041a4d3b7cb event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:24.465Z traceId=aeed39c9-d044-4ca2-9b69-bbb291772916 event=REQUEST action=OWN_ARTICLES method=POST status=201 result=OK durationMs=16
+2026-10-20T06:32:24.498Z traceId=70ea7962-b09a-4ede-a986-7816c07f2dbf event=REQUEST action=OWN_ARTICLES method=PUT status=200 result=OK durationMs=21
+2026-10-20T06:32:24.647Z traceId=ac92c250-aa26-47ec-a552-e230c9aa4d3d event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:24.662Z traceId=ac92c250-aa26-47ec-a552-e230c9aa4d3d event=REQUEST action=CONTACT_SETTINGS method=PUT status=503 result=FAILED durationMs=136
+2026-10-20T06:32:24.691Z traceId=10cb0efa-8846-4aff-8d62-c9e9aceec4f8 event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:24.706Z traceId=10cb0efa-8846-4aff-8d62-c9e9aceec4f8 event=REQUEST action=OWN_PROFILE method=PUT status=503 result=FAILED durationMs=29
+2026-10-20T06:32:24.748Z traceId=2f693712-e8a5-4476-96f0-9dcb26f35777 event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:24.760Z traceId=2f693712-e8a5-4476-96f0-9dcb26f35777 event=REQUEST action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=39
+2026-10-20T06:32:24.796Z traceId=bbeb4269-d085-456e-8857-22c027b91d0e event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:24.820Z traceId=3bfa6f34-2013-4d75-b9a6-a80020282387 event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:24.845Z traceId=79c26195-e7e3-4f6a-822c-00892427c9a1 event=REQUEST action=OWN_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20T06:32:24.860Z traceId=e6e0272c-0513-46b4-aa8b-43a326c35306 event=REQUEST action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:24.890Z traceId=549b23f3-7bea-44b2-913f-1bf4c1772d44 event=BUSINESS_CHANGE action=ARTICLE_PUBLISH objectType=ARTICLE beforeRevision=1 afterRevision=2
+2026-10-20T06:32:24.898Z traceId=549b23f3-7bea-44b2-913f-1bf4c1772d44 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=28
+2026-10-20T06:32:24.929Z traceId=1d5fc82b-c4c1-451d-b4eb-bc1ba9db706a event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:24.937Z traceId=1d5fc82b-c4c1-451d-b4eb-bc1ba9db706a event=REQUEST action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=17
+2026-10-20T06:32:24.957Z traceId=1ff93237-3aa6-4467-8e82-5c3ea80e9d2c event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:24.965Z traceId=1ff93237-3aa6-4467-8e82-5c3ea80e9d2c event=REQUEST action=OWN_ARTICLES method=DELETE status=503 result=FAILED durationMs=18
+2026-10-20T06:32:24.992Z traceId=39eb9a44-72f1-4cec-81bc-663f9b1e480b event=REQUEST action=OWN_ARTICLES method=GET status=200 result=OK durationMs=5
+2026-10-20T06:32:25.005Z traceId=7debe5c3-fd9f-4353-bd79-7ef3a748d8bf event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=3
+2026-10-20T06:32:25.025Z traceId=3f92369e-2b91-4c90-bbf9-6701decf1ade event=BUSINESS_CHANGE action=ARTICLE_UNPUBLISH objectType=ARTICLE beforeRevision=2 afterRevision=3
+2026-10-20T06:32:25.038Z traceId=3f92369e-2b91-4c90-bbf9-6701decf1ade event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=24
+2026-10-20T06:32:25.073Z traceId=a7da5e7d-3f62-4084-96e2-fbf8b908142f event=FAILURE category=DATABASE type=UncategorizedSQLException
+2026-10-20T06:32:25.081Z traceId=a7da5e7d-3f62-4084-96e2-fbf8b908142f event=REQUEST action=OWN_ARTICLES method=POST status=503 result=FAILED durationMs=19
+2026-10-20T06:32:25.114Z traceId=1b8b725f-6c71-49a1-b4c3-8bd0af1641b5 event=REQUEST action=OWN_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20T06:32:25.131Z traceId=a634da0f-0343-4e0f-9145-8d0bde07ca36 event=REQUEST action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=4
+2026-10-20T06:32:25.169Z traceId=d3337b88-9837-4a8b-9c0a-d00b2dad33e1 event=BUSINESS_CHANGE action=ARTICLE_RESTORE objectType=ARTICLE beforeRevision=3 afterRevision=4
+2026-10-20T06:32:25.184Z traceId=d3337b88-9837-4a8b-9c0a-d00b2dad33e1 event=REQUEST action=OWN_ARTICLES method=POST status=200 result=OK durationMs=32
+2026-10-20T06:32:25.208Z traceId=fd6408d2-8a42-4009-9956-4a568ddc324b event=REQUEST action=AUTHOR_HOME method=GET status=400 result=FAILED durationMs=2
+2026-10-20T06:32:25.226Z traceId=71d7fe45-5e33-4e24-8438-3b4146876710 event=REQUEST action=OTHER method=GET status=404 result=DENIED durationMs=1
+2026-10-20T06:32:25.242Z traceId=998b157a-4f80-42f7-96bb-d73a7210ed81 event=REQUEST action=CONTACT_SETTINGS method=PUT status=400 result=FAILED durationMs=3
+2026-10-20T06:32:25.320Z traceId=574d4854-66b0-48ca-9f5c-988da962f473 event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:25.344Z traceId=ba0f6a60-0dfe-4d48-9134-4dbd1753635b event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:25.357Z traceId=3150b480-5468-4f3d-ac87-4985fe1d85ac event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=3
+2026-10-20T06:32:26.571Z traceId=49e351b3-6619-4ba0-ade3-feed177a1dce event=REQUEST action=CONTACT_SETTINGS method=GET status=200 result=OK durationMs=8
+2026-10-20T06:32:26.586Z traceId=bd8e2595-ecbd-4f58-96f7-1cd4b872bfee event=REQUEST action=OWN_PROFILE method=GET status=200 result=OK durationMs=4
+2026-10-20T06:32:26.612Z traceId=ab903531-fd24-4c57-ab59-aa373ed6eb6f event=REQUEST action=AUTHOR_HOME method=GET status=200 result=OK durationMs=6
+2026-10-20T06:32:26.622Z traceId=c26329e9-4f5f-4220-90b6-d34a4cde6054 event=REQUEST action=AUTHOR_HOME method=GET status=401 result=DENIED durationMs=1
+2026-10-20T06:32:26.633Z traceId=73b2bf47-aa66-4a68-a111-713cef4deca6 event=REQUEST action=AUTHOR_CONTACT method=GET status=401 result=DENIED durationMs=1
+2026-10-20T06:32:26.642Z traceId=52b62fcf-9660-44f6-b5a7-a57210f0697b event=REQUEST action=CONTACT_SETTINGS method=GET status=401 result=DENIED durationMs=1
+2026-10-20T06:32:26.658Z traceId=f77d60e8-cb3d-4a22-b80b-745196e8b975 event=REQUEST action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=7

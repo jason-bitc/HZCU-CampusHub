@@ -23,13 +23,14 @@ public class AuthRequestFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException {
         String path=request.getServletPath();
         boolean writingPath=path.startsWith("/api/v1/me/");
-        boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath;
+        boolean readerPath=path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
+        boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath||readerPath;
         if(authPath||path.startsWith("/api/v1/media/images/")){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
         try{
-            if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath){
+            if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath||readerPath){
                 var headers=Collections.list(request.getHeaders("Authorization"));
                 if(headers.size()!=1||!headers.getFirst().startsWith("Bearer "))throw AuthService.unauthorized();
-                var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
+                var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath||readerPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
             if(writingPath&&request.getContentType()!=null&&request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/")&&request.getContentLengthLong()>multipartLimit){
                 throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","图片或multipart请求超过允许大小");

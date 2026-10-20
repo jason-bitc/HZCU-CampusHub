@@ -1,0 +1,100 @@
+2026-10-20 14:31:48 INFO  [708e4bb6-f5c0-46a3-bea2-31048b0aba72] c.edu.hzcu.campushub.common.RequestTrace - request completed action=HEALTH method=GET status=200 result=OK durationMs=160
+2026-10-20 14:31:49 INFO  [6053978d-2d94-4e12-8ce2-bd16bc03f62c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=CATALOG method=GET status=200 result=OK durationMs=53
+2026-10-20 14:31:49 INFO  [9e654342-3ccc-4d5d-a63f-ddd22189bdd6] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OTHER method=GET status=404 result=DENIED durationMs=7
+2026-10-20 14:31:49 INFO  [4e3d5caf-d3ab-49b0-a69c-443ff6dc54b7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=45
+2026-10-20 14:31:49 INFO  [62251656-f926-41b7-87c2-877c4d969830] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=17
+2026-10-20 14:31:49 INFO  [4451a108-d657-4abf-bda3-b60ca1357a41] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=18
+2026-10-20 14:31:49 INFO  [a5e1aa53-fd11-4e2d-8f43-1dfc27e40a3b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=15
+2026-10-20 14:31:49 INFO  [56529d95-70a8-456f-b8cb-fd915c6190bb] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=19
+2026-10-20 14:31:49 INFO  [15bf7998-c19d-4e5b-9292-a33028aab187] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=12
+2026-10-20 14:31:49 INFO  [d6fedf88-5be6-461e-81ae-ae1774845583] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:49 INFO  [4211f5a5-4850-43f0-bab9-5bf78a569b3b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [0bbdf858-01a3-4b7c-b85d-e984149c4b61] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [aea5ad22-931e-4b94-bc94-58ff96878217] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:49 INFO  [639c6695-8e5c-4b19-bb72-5e0f8eab3134] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=13
+2026-10-20 14:31:49 INFO  [d43adccb-ba64-41f8-8eaa-2705556f670b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [24e96f15-412f-476f-89dc-e6c150f6a58c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=15
+2026-10-20 14:31:49 INFO  [1dc63546-e504-44ea-82a4-bb976fd5eeec] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=13
+2026-10-20 14:31:49 INFO  [7621a01f-0a7f-4927-81c7-516e88539460] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=12
+2026-10-20 14:31:49 INFO  [d6490891-2902-45ce-be2e-39c4faf65c3b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=13
+2026-10-20 14:31:49 INFO  [49b50fd4-65e6-4ea7-8091-366510b3d575] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=13
+2026-10-20 14:31:49 INFO  [2dfb43bb-36a2-4efe-98e8-3aabb3b6497d] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=14
+2026-10-20 14:31:49 INFO  [9a2144ce-c73d-4361-81a8-73184def62ab] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [75c802a4-7154-4713-ba0d-8907b64c76de] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=12
+2026-10-20 14:31:49 INFO  [d8af5da2-f841-446c-9958-2621f497ca9b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20 14:31:49 INFO  [75be1caa-8109-4feb-bf61-bcf2e620527c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20 14:31:49 INFO  [3884eeb6-e531-43ec-9268-783733411488] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [974d2bf0-9916-4b77-99da-3fb13f6b4bf9] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=17
+2026-10-20 14:31:49 INFO  [85ed9bdf-a8e2-4038-87e1-db7c6bab211a] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [23776165-5550-40e1-9f7b-e9ba518e4484] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=12
+2026-10-20 14:31:49 INFO  [8e4b301f-bf9f-4f34-9547-ac8dc6ff289b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=9
+2026-10-20 14:31:49 INFO  [1a65adc0-52ea-4649-afd5-80cdd96b5f36] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=9
+2026-10-20 14:31:49 INFO  [ca093a98-79e1-4d47-86b7-ca05df7df518] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=7
+2026-10-20 14:31:49 INFO  [e78218e7-99a2-4283-a4bf-568838d88be2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=404 result=DENIED durationMs=6
+2026-10-20 14:31:49 INFO  [9176643b-4f48-46dc-acbd-4293bb15c374] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=11
+2026-10-20 14:31:49 INFO  [ed02ca91-5997-4fae-a297-4af65831cf99] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [3b260a9b-4a2d-49fc-9cde-f6e2b7a4730b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [a9d8aab7-8561-4442-8dbb-014889877546] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [56a10054-1024-420a-b9a3-05beead336a8] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [4e33ada5-1c8f-44b4-ac4b-b515a5945042] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [3a5f9953-1025-4d28-8b10-5217b4466ec5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [e42d4fa4-0b63-496c-ac57-33e62726d044] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [56c64921-81ec-4eb5-adb0-bb6231e0d3dc] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [7c6283ee-cd1c-4f31-bb2c-09dae72d3024] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20 14:31:49 INFO  [49652b7d-e264-40c4-9553-8843786add5a] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [2fd78738-7106-4ea1-975f-735eb5d94a9b] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [03d4d07d-13e3-4162-8735-bf15200832f5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20 14:31:49 INFO  [a7a79aea-6079-4300-89f4-ee494ce47447] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [d2e23cc4-34b1-4fcd-ac5d-e4c2fb100cef] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [b89d8c39-85a1-4d3c-8134-b6ebcb466d3c] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=2
+2026-10-20 14:31:49 INFO  [a1464daf-03db-4165-b6b3-9c2cad4c3dbc] c.edu.hzcu.campushub.common.RequestTrace - request completed action=OTHER method=GET status=404 result=DENIED durationMs=1
+2026-10-20 14:31:49 INFO  [d4f3a958-c3ae-46ba-88b4-8f346d00abaf] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=POST status=405 result=FAILED durationMs=2
+2026-10-20 14:31:49 INFO  [7a9f89f8-2860-4195-9d85-f871c0ec5050] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=DELETE status=405 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [8f85e08b-21fc-4091-8314-2cffd1d14cc3] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20 14:31:49 INFO  [cbdc693f-7d26-4ca0-89de-b3413cf04d9a] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:49 INFO  [2b3d0337-07d3-408d-914e-988110e05202] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:49 INFO  [409a7840-93ce-45c8-ac3f-bb1514bfc196] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:49 INFO  [aeea68c2-5f40-4b4e-bf0c-bdac7d7a546f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20 14:31:49 INFO  [b1bc7224-37bd-4dca-b18e-64f4667e4ff3] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20 14:31:49 INFO  [dd9faeed-7f91-4388-b2d6-895d84e5c527] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=9
+2026-10-20 14:31:49 INFO  [37ed433d-d091-4678-a74a-a30c4c5e10d7] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=8
+2026-10-20 14:31:49 INFO  [a748f23b-cbe5-4c7f-9aaf-c11acc2a23ba] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=400 result=FAILED durationMs=1
+2026-10-20 14:31:49 INFO  [bec1c15d-5519-41fc-85b3-5e8dcff59ef5] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=10
+2026-10-20 14:31:51 INFO  [e96bb46e-6f65-47d4-bc62-d75695eee0eb] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=19
+2026-10-20 14:31:52 ERROR [] o.s.b.t.s.DeferredServletContainerInitializers - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'authRequestFilter' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthRequestFilter.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authService' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authRepository' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthRepository.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'namedParameterJdbcTemplate' defined in class path resource [org/springframework/boot/jdbc/autoconfigure/NamedParameterJdbcTemplateConfiguration.class]: Failed to initialize dependency 'flyway' of NamedParameterJdbcTemplate bean 'namedParameterJdbcTemplate': Error creating bean with name 'flyway' defined in class path resource [org/springframework/boot/flyway/autoconfigure/FlywayAutoConfiguration$FlywayConfiguration.class]: Failed to instantiate [org.flywaydb.core.Flyway]: Factory method 'flyway' threw exception with message: Error creating bean with name 'dataSource' defined in class path resource [cn/edu/hzcu/campushub/common/DatabaseConfig.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: Database must be campushub_dev or campushub_test
+2026-10-20 14:31:53 ERROR [] o.s.b.t.s.DeferredServletContainerInitializers - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'authRequestFilter' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthRequestFilter.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authService' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authRepository' defined in file [C:\Users\wangc\Desktop\ZUCC-CampusHub\server\target\classes\cn\edu\hzcu\campushub\auth\AuthRepository.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'namedParameterJdbcTemplate' defined in class path resource [org/springframework/boot/jdbc/autoconfigure/NamedParameterJdbcTemplateConfiguration.class]: Failed to initialize dependency 'flywayInitializer' of NamedParameterJdbcTemplate bean 'namedParameterJdbcTemplate': Error creating bean with name 'flywayInitializer' defined in class path resource [org/springframework/boot/flyway/autoconfigure/FlywayAutoConfiguration$FlywayConfiguration.class]: Validate failed: Migrations have failed validation
+Migration checksum mismatch for migration version 1
+-> Applied to database : 1817477445
+-> Resolved locally    : -377105571
+Either revert the changes to the migration, or run repair to update the schema history.
+Need more flexibility with validation rules? Learn more: https://help.red-gate.com/help/flyway-cli12/help_4.aspx?topic=flyway-blog/older-posts/customize-validation-rules-with-ignoremigrationpatterns
+2026-10-20 14:31:53 WARN  [] o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [campushub:housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1797)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1070)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+ java.base/java.lang.Thread.run(Thread.java:1583)
+2026-10-20 14:31:53 WARN  [] o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [campushub:connection-adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:269)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1797)
+ java.base/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1069)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+ java.base/java.lang.Thread.run(Thread.java:1583)
+2026-10-20 14:31:53 INFO  [75b72230-a1cf-49b2-ad7d-d4f40e07eae4] c.edu.hzcu.campushub.common.RequestTrace - request completed action=HEALTH method=GET status=200 result=OK durationMs=14
+2026-10-20 14:31:53 WARN  [5c438ca7-0cd4-4260-a1a5-d82f8fa4d1a9] c.e.h.c.common.ExceptionHandlerAdvice - database operation failed type=CannotCreateTransactionException
+2026-10-20 14:31:53 INFO  [5c438ca7-0cd4-4260-a1a5-d82f8fa4d1a9] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=503 result=FAILED durationMs=11
+2026-10-20 14:31:57 WARN  [6c78613e-a2bc-4c94-8cf3-94077de59a48] c.e.h.c.common.ExceptionHandlerAdvice - database operation failed type=CannotCreateTransactionException
+2026-10-20 14:31:57 INFO  [6c78613e-a2bc-4c94-8cf3-94077de59a48] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=503 result=FAILED durationMs=4013
+2026-10-20 14:32:01 WARN  [75a8606c-d795-40cc-826b-d01283321bb2] c.e.h.c.common.ExceptionHandlerAdvice - database operation failed type=CannotCreateTransactionException
+2026-10-20 14:32:01 INFO  [75a8606c-d795-40cc-826b-d01283321bb2] c.edu.hzcu.campushub.common.RequestTrace - request completed action=CATALOG method=GET status=503 result=FAILED durationMs=4006
+2026-10-20 14:32:05 WARN  [e086a4d2-02e9-4cbe-b0fb-799c84ca1de9] c.e.h.c.common.HealthEnvelopeAdvice - health check reported service unavailable
+2026-10-20 14:32:05 INFO  [e086a4d2-02e9-4cbe-b0fb-799c84ca1de9] c.edu.hzcu.campushub.common.RequestTrace - request completed action=HEALTH method=GET status=503 result=FAILED durationMs=4029
+2026-10-20 14:32:08 INFO  [302446c4-d8a8-46a8-8d6f-a217bb22190f] c.edu.hzcu.campushub.common.RequestTrace - request completed action=PUBLIC_ARTICLES method=GET status=200 result=OK durationMs=3185
+2026-10-20 14:32:08 INFO  [7c01af31-c86c-4d53-9836-df6e4c679351] c.edu.hzcu.campushub.common.RequestTrace - request completed action=HEALTH method=GET status=200 result=OK durationMs=15

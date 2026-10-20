@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章读取、账号与图文创作",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。",
+    "name": "CampusHub 文章、账号、创作与作者联系",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -72,6 +72,16 @@
     },
     {
       "key": "profileRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "authorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "contactRevision",
       "value": "",
       "type": "string"
     }
@@ -1395,6 +1405,196 @@
                   "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
                   "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
                   "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第四阶段作者联系（认证访问，单独修订）",
+      "item": [
+        {
+          "name": "从当前公开文章取得真实作者",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/author",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"authorId\",result.data.authorId); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认证作者主页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "作者当前公开文章分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}/articles?page=1&size=20",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人独立联系设置",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/contact-settings",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"contactRevision\",result.data.revision); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整修改本人联系设置（示例关闭并清空）",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/contact-settings",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{contactRevision}},\n  \"enabled\": false,\n  \"type\": null,\n  \"value\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"contactRevision\",result.data.revision); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "按实时开关读取作者联系方式",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}/contact",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (result.data && !result.data.enabled) pm.test(\"关闭不返回隐藏字段\", () => pm.expect(Object.keys(result.data)).to.eql([\"enabled\"]));"
                 ]
               }
             }
