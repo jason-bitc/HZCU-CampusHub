@@ -31,7 +31,7 @@ public final class AuthTestSupport {
         app.addInitializers(ctx->{
             ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("controlled-auth-test",Map.of(
                     "campushub.db.name","campushub_test","campushub.db.username",username,"campushub.db.password",password,"campushub.auth.pepper",TEST_KEY,
-                    "campushub.media.root",java.nio.file.Path.of("target","auth-test-media").toAbsolutePath().toString(),"campushub.logs.enabled","false")));
+                    "campushub.media.root",java.nio.file.Path.of("target","auth-test-media").toAbsolutePath().toString(),"campushub.logs.enabled","false","campushub.runtime-environment","test")));
             ctx.getBeanFactory().registerSingleton("controlledCodeMailer",mailer);
             ctx.getBeanFactory().registerSingleton("controlledClock",clock);
         });return app;

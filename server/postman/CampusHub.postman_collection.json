@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章、账号、创作与作者联系",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。",
+    "name": "CampusHub 文章、账号、创作、作者联系与评论",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -82,6 +82,31 @@
     },
     {
       "key": "contactRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rootCommentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentImageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentCreateRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentUploadRequestId",
       "value": "",
       "type": "string"
     }
@@ -1595,6 +1620,227 @@
                   "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
                   "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
                   "if (result.data && !result.data.enabled) pm.test(\"关闭不返回隐藏字段\", () => pm.expect(Object.keys(result.data)).to.eql([\"enabled\"]));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第五阶段：认证评论与图片（逐步手工执行）",
+      "item": [
+        {
+          "name": "主评论分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comments?page=1&size=20",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根线程平铺回复分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/comments/{{rootCommentId}}/replies?page=1&size=20",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "发表主评论或同文回复",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comments",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。 imageIds填本次本人同文评论图ID；replyToCommentId非null表示回复可见目标，勿传rootId。删除后重放只返回旧ID。新操作需清空commentCreateRequestId。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{commentCreateRequestId}}\",\n  \"body\": \"示例评论，请替换为本次授权内容\",\n  \"imageIds\": [],\n  \"replyToCommentId\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.variables.get(\"commentCreateRequestId\")) pm.variables.set(\"commentCreateRequestId\",pm.variables.replaceIn(\"{{$guid}}\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "if(pm.response.code===201) {pm.variables.set(\"commentId\",result.data.commentId);pm.variables.set(\"rootCommentId\",result.data.rootCommentId);}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "软删除本人已知评论",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/comments/{{commentId}}",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "上传本人同文评论图片",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comment-images",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{commentUploadRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.variables.get(\"commentUploadRequestId\")) pm.variables.set(\"commentUploadRequestId\",pm.variables.replaceIn(\"{{$guid}}\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "if(pm.response.code===200) pm.variables.set(\"commentImageId\",result.data.imageId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认证读取评论图片",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/comment-images/{{commentImageId}}",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"图片类型\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^image\\/(png|jpeg)/));",
+                  "pm.test(\"禁止嗅探\", () => pm.expect(pm.response.headers.get(\"X-Content-Type-Options\")).to.equal(\"nosniff\"));"
                 ]
               }
             }

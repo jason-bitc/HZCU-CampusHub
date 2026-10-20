@@ -18,8 +18,12 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
+    private cn.edu.hzcu.campushub.audit.LocalDiagnostics diagnostics;
+    @org.springframework.beans.factory.annotation.Autowired void diagnostics(cn.edu.hzcu.campushub.audit.LocalDiagnostics value){diagnostics=value;}
+    private void diagnose(Throwable error,int status,String code){RequestTrace.errorCode(code);if(diagnostics!=null)diagnostics.failure(error,status,code);}
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ApiResponse<Void>> domain(ApiException e) {
+        diagnose(e,e.status().value(),e.code());
         return ResponseEntity.status(e.status()).body(ApiResponse.failure(e.code(), e.getMessage()));
     }
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, MissingServletRequestParameterException.class,
@@ -44,12 +48,14 @@ public class ExceptionHandlerAdvice {
     }
     @ExceptionHandler({DataAccessException.class, org.springframework.transaction.CannotCreateTransactionException.class})
     ResponseEntity<ApiResponse<Void>> unavailable(Exception e) {
+        diagnose(e,503,"SERVICE_UNAVAILABLE");
         LOG.warn("database operation failed type={}", e.getClass().getSimpleName());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(ApiResponse.failure("SERVICE_UNAVAILABLE", "服务暂时不可用，请稍后重试"));
     }
     @ExceptionHandler(Exception.class)
     ResponseEntity<ApiResponse<Void>> unexpected(Exception e) {
+        diagnose(e,500,"INTERNAL_ERROR");
         LOG.error("request failed type={}", e.getClass().getSimpleName());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.failure("INTERNAL_ERROR", "请求处理失败，请提供追踪编号"));

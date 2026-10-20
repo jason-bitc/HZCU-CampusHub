@@ -1,0 +1,1 @@
+15:22:32.138 [main] WARN cn.edu.hzcu.campushub.authoring.MediaStore -- media storage failed type=IOException

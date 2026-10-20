@@ -30,6 +30,7 @@ public class MediaStore {
     }
     public static String digest(byte[] bytes){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}catch(GeneralSecurityException e){throw new IllegalStateException("Digest unavailable");}}
     public Validated validate(MultipartFile file){
+        cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.STORAGE);
         String name=file.getOriginalFilename();
         if(name==null||name.length()>255||name.contains("/")||name.contains("\\")||name.contains("..")||name.codePoints().anyMatch(Character::isISOControl))throw ApiException.invalid();
         String lower=name.toLowerCase(Locale.ROOT);boolean png=lower.endsWith(".png"),jpeg=lower.endsWith(".jpg")||lower.endsWith(".jpeg");
@@ -60,6 +61,7 @@ public class MediaStore {
         if(!path.startsWith(root)||!root.toRealPath().equals(root)||!parent.toRealPath().equals(parent)||Files.isSymbolicLink(path))throw new IOException("Unsafe media path");return path;
     }
     public void install(String id,byte[] bytes){
+        cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.STORAGE);
         WritingInput.requestId(id);Path temp=null;
         try{
             Path destination=checked("objects",id);
@@ -75,6 +77,7 @@ public class MediaStore {
         catch(IOException e){LOG.warn("own rolled-back upload cleanup failed type={}",e.getClass().getSimpleName());}
     }
     public byte[] read(String id,long size,String digest){
+        cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.STORAGE);
         try{
             Path path=checked("objects",WritingInput.requestId(id));if(Files.size(path)!=size||size>maxBytes)throw new IOException("Stored image mismatch");
             byte[] bytes=Files.readAllBytes(path);if(!MediaStore.digest(bytes).equals(digest))throw new IOException("Stored image mismatch");return bytes;

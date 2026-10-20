@@ -26,7 +26,12 @@ server:
     include-stacktrace: never
     include-binding-errors: never
 campushub:
+  runtime-environment: ${CAMPUSHUB_RUNTIME_ENV:local}
+  comments:
+    body-max-code-points: ${CAMPUSHUB_COMMENT_MAX_CODE_POINTS:10000}
+    json-max-bytes: ${CAMPUSHUB_COMMENT_JSON_MAX_BYTES:131072}
   logs:
+    diagnostics-enabled: ${CAMPUSHUB_LOG_DIAGNOSTICS:false}
     enabled: ${CAMPUSHUB_LOG_ENABLED:true}
     root: ${CAMPUSHUB_LOG_ROOT:.local-data/logs}
     max-bytes: ${CAMPUSHUB_LOG_MAX_BYTES:10485760}

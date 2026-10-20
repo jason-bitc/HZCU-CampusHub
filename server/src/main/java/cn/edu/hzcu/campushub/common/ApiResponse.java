@@ -8,6 +8,7 @@ public record ApiResponse<T>(String code, T data, String message, String traceId
         return new ApiResponse<>("OK", data, null, RequestTrace.current());
     }
     public static ApiResponse<Void> failure(String code, String message) {
+        RequestTrace.errorCode(code);
         return new ApiResponse<>(code, null, message, RequestTrace.current());
     }
 }

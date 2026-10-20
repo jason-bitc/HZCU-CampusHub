@@ -1,0 +1,8 @@
+需求编号,本批范围,原WBS,验收场景,当前状态,实现与证据,保留边界
+FR-I01,认证后的文字图片评论与同文回复,"5.8.1,6.1,6.4","B5-01,B5-02,B5-03,B5-04,B5-10",后端已实现及实际验证,comment包及V6；server/COMMENTS_API.md；server/verification/2026-10-20-comments.md,网页与小程序交流交互待WorkBuddy接入
+FR-I02,本人删除与不可用父评论占位,"5.8.1,6.1,6.4","B5-03,B5-06,B5-07,B5-08",普通用户后端已实现及实际验证,CommentService.delete/views；CommentsMySqlIT第6/7/9/11场景；本批报告,社区管理员处理API与治理通知由后续模块完成
+FR-C04,评论图片归属读取及失败保护,"5.8.1,6.4","B5-02,B5-04,B5-05,B5-07,B5-08,B5-09",评论图片后端已实现及实际验证,CommentService.upload/image及MediaStore；CommentsMySqlIT第2/4/5/7/10/12场景,独立评论图权限不放宽原文章图；无固定业务图片张数上限
+FR-R06,评论回复与图片均遵循认证阅读边界,"5.8.1,6.4","B5-01,B5-05,B5-07",后端已实现及实际验证,AuthRequestFilter及CommentsMySqlIT第1/5/7/8/14场景,原游客文章阅读合同保持
+NFR03,输入权限文件与日志安全,"5.8.1,6.4","B5-01,B5-05,B5-07,B5-09",所列后端边界已实际验证,CommentInputTest/CommentsMySqlIT/LocalDiagnosticsTest及本批脱敏样本,页面文本安全呈现与真机仍待验证；不等于完整安全验收
+NFR10与LOG02,评论创建删除可追溯且审计与业务一致,"5.8.1,6.1","B5-04,B5-06,B5-08,B5-10",评论成功审计已实现及实际验证,BusinessAudit与V6；CommentsMySqlIT第4/6/9/11/14场景；审计样本,无治理运维或普通用户审计查询接口
+LOG01/LOG04及调试补充,安全错误阶段上下文与默认关闭的本地代码位置诊断,"5.8.1,6.4",B5-11,本批有限诊断已实现及实际验证,RequestTrace/LocalDiagnostics/SafeFileLogs；CommentsMySqlIT第13场景；LocalDiagnosticsTest；server/LOGGING.md,无原消息SQL载荷或完整堆栈；完整运维与告警待后续

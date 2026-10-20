@@ -30,6 +30,7 @@ public class AuthorService {
     public Map<String,Object> contact(long author){return contactRead.execute(tx->authors.publicContact(author));}
     public Contact updateContact(long user,Contact incoming){return write.execute(tx->{
         writing.lockUser(user);Contact previous=authors.contact(user);
+        cn.edu.hzcu.campushub.common.RequestTrace.revisions(incoming.revision(),previous.revision());
         if(previous.revision()!=incoming.revision())throw WritingService.conflict("REVISION_CONFLICT");
         Contact next=new Contact(previous.revision()+1,incoming.enabled(),incoming.type(),incoming.value());authors.contact(user,next);
         audit.changed(user,Action.CONTACT_UPDATE,ObjectType.CONTACT,user,previous.revision(),next.revision(),previous.enabled()?State.ENABLED:State.DISABLED,next.enabled()?State.ENABLED:State.DISABLED);

@@ -1,0 +1,4 @@
+15:22:28.641 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=unknown commit=unknown environment=test fileLogs=true diagnostics=false
+15:22:28.664 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=unknown commit=unknown environment=test fileLogs=true diagnostics=true
+15:22:29.244 [main] INFO cn.edu.hzcu.campushub.audit.SafeFileLogs -- application ready version=0.1.0 commit=unknown environment=test fileLogs=true diagnostics=true
+RUNTIME_LOG_UNAVAILABLE channel=diagnostic traceId=NONE; business audit remains in database

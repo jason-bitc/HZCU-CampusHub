@@ -204,7 +204,7 @@ class AuthorContactMySqlIT {
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(get("/api/v1/me/contact-settings",writerToken).data).isEqualTo(settings);assertThat(get("/api/v1/me/profile",writerToken).data).isEqualTo(profile);assertThat(db.queryForList("SELECT * FROM business_audit WHERE actor_id=? ORDER BY occurred_at,event_id",writer)).isEqualTo(audits);assertThat(Files.readString(root.resolve("logs/campushub-runtime.log"))).startsWith(logBefore);assertThat(get("/api/v1/authors/"+writer,readerToken).status).isEqualTo(200);
         CLOCK.advance(Duration.ofDays(7));for(String path:List.of("/api/v1/authors/"+writer,"/api/v1/authors/"+writer+"/contact","/api/v1/me/contact-settings"))assertThat(get(path,readerToken).status).isEqualTo(401);assertThat(get("/api/v1/articles/"+articleB,null).status).isEqualTo(200);
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6");
         String finalLogs=Files.readString(root.resolve("logs/campushub-runtime.log"));
         String auditExport=JSON.writeValueAsString(db.queryForList("SELECT event_id,occurred_at,trace_id,actor_id,action,object_type,object_id,before_revision,after_revision,before_state,after_state,result FROM business_audit WHERE actor_id IN (?,?,?) ORDER BY occurred_at,event_id",writer,reader,other));
         for(String secret:secrets){assertThat(finalLogs.contains(secret)).isFalse();assertThat(auditExport.contains(secret)).isFalse();}

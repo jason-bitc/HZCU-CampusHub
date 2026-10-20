@@ -10,6 +10,8 @@
 | CAMPUSHUB_LOG_ROOT | .local-data/logs | 启动脚本固定server工作目录，默认server/.local-data/logs |
 | CAMPUSHUB_LOG_MAX_BYTES | 10485760 | 每个运行文件10MiB；配置范围1024字节至100MiB |
 | CAMPUSHUB_LOG_ARCHIVES | 7 | 保留7个轮转文件；允许1至30 |
+| CAMPUSHUB_LOG_DIAGNOSTICS | false | 第五阶段显式本地诊断开关，修改后重启；也要求文件日志开启 |
+| CAMPUSHUB_RUNTIME_ENV | local | 本机应用只接受local/test，启动记录标识，不自动选择数据库 |
 
 目录须为本项目专属持久目录，文件及整个.local-data不入Git。运行文件campushub-runtime.log，轮转文件campushub-runtime.1.log至指定上限；下一条事件将超限时同步轮转，旧尾部按保留数量替换。同一目录用runtime.lock独占，多个进程请配置不同目录，不能同时共享写入。重启追加原日志，不在启动时清空。
 
@@ -32,10 +34,35 @@
 
 ## 成功审计
 
-V5仅新增author_contact_setting、business_audit及作者公开查询索引，V1—V4不改。成功事件动作限本人联系/资料修改和文章发布/下架/恢复/删除。业务事务提交前写审计，运行成功事件在提交后记录，失败或回滚没有成功事件。审计保存事件ID、UTC时间、traceId、内部actorId、动作、对象类型/ID、前后revision/状态、SUCCESS；不存在用户内容JSON字段。
+第四阶段V5仅新增author_contact_setting、business_audit及作者公开查询索引，V1—V4不改。当时成功事件动作限本人联系/资料修改和文章发布/下架/恢复/删除。第五阶段V6扩展CHECK保留旧值，新增COMMENT_CREATE、COMMENT_DELETE、COMMENT和VISIBLE；V1—V5原文件不改。业务事务提交前写审计，运行成功事件在提交后记录，失败或回滚没有成功事件。审计保存事件ID、UTC时间、traceId、内部actorId、动作、对象类型/ID、前后revision/状态、SUCCESS；不存在用户内容JSON字段。
 
 HTTP请求traceId可在business_audit与文件请求日志间关联；框架直接调用且没有HTTP上下文时生成内部事件追踪号。账号邮箱不是公开作者标识，也不是审计字段。没有普通账号或角色绕过接口可以读取全部审计；管理及运维权限系统并未由本批创建。
 
 ## 验证边界
 
 测试使用campushub_test、受控邮件和本次临时目录；验证真实文件写入、按大小轮转、重启追加、独立目录阻断、运行文件故障及恢复，并扫描密码、验证码、令牌、联系值、昵称和正文标记。数据库触发器使审计INSERT失败，验证资料、联系、发布与状态操作回滚。记录中应区分这些实际场景与尚未实施的运维查询、安全告警、平台性能/压力和设备验收。
+
+## 第五阶段安全诊断
+
+请求事件扩展module、固定code与有限stage；评论六类动作为COMMENT_LIST / COMMENT_REPLIES / COMMENT_CREATE / COMMENT_DELETE / COMMENT_IMAGE_UPLOAD / COMMENT_IMAGE_READ。阶段包含认证、授权、输入、目标、回执、图片附着、存储、持久化、审计与完成。内部articleId/commentId仅在数据库确认后记录；修订冲突可带经过类型与范围校验的expectedRevision/actualRevision。用户原始URL、任意消息、请求体不作为事件字段。
+
+默认关闭诊断，不创建campushub-diagnostic.log。确需定位服务器5xx时，在被Git忽略的server/.env.local.json加入 `"CAMPUSHUB_LOG_DIAGNOSTICS":"true"` 并重启。仅限维护人员可读的专属日志目录。诊断文件campushub-diagnostic.log及campushub-diagnostic.1.log等沿用相同大小/保留配置，独立轮转；两类日志各默认最多8×10MiB，合计约160MiB，另有锁文件。单条事件超限保留前部并加truncated=true。关闭开关并重启后不再增长旧诊断文件，不自动删除旧文件。
+
+仅记录异常类名、最多4层原因、最多8个本项目代码位置（类/方法/文件基名/行号）；数据库补充校验过的SQLState和数值厂商码。**不记录异常消息、完整堆栈、SQL及参数、绝对配置路径、邮件异常文本、请求正文或秘密**。400/404/409不生成诊断堆栈。诊断文件写入失败与运行文件健康独立；下一条运行日志成功不能掩盖诊断失败。累积失败计数保留，静态标准错误标记含channel和安全traceId；恢复成功可修复健康状态，不影响数据库事务事实。
+
+启动事件包含version、commit、environment、fileLogs、diagnostics。Spring Boot build-info提供应用版本（当前0.1.0）；提交默认unknown。构建时只有明确知道对应源码提交才传入 `-Dcampushub.build.commit=<40位小写提交号>`；缺失或非法值均unknown，不能拿父提交冒充未提交源码版本。未启用文件日志时控制台仍显示安全启动事件，有效diagnostics为false。
+
+## 按traceId排查
+
+1. 保存响应头X-Trace-Id（JSON同名字段traceId）。本机用 `Select-String -LiteralPath .local-data/logs/campushub-runtime.log -SimpleMatch '<实际traceId>'` 检索；轮转后按实际存档文件检索。不要粘贴正文、密码或令牌作为检索词。
+2. 看action、module、status、code、stage及已有内部ID。成功变更可在有数据库维护权限的本机环境以**绑定参数**查询business_audit的trace_id，核对SUCCESS及前后修订；文件事件不代替数据库提交证据，没有面向普通用户的审计接口。
+3. 5xx且需要代码位置时开启本地诊断、重现一次受控问题，按相同traceId查诊断文件，再关闭并重启。无诊断文件先检查有效开关和文件健康，勿直接开启SQL参数或HTTP正文日志。
+
+| 示例 | 定位方式与边界 |
+| --- | --- |
+| 评论401/403 | COMMENT模块，AUTHENTICATION/AUTHORIZATION阶段和固定错误码；检查会话/账号认证，无需诊断堆栈 |
+| 创作或联系修订409 | CONFLICT、REVISION_CONFLICT及已校验的期望/实际修订；重新读取本人当前版本再决定操作，不盲目重试覆盖 |
+| 数据库审计503 | COMMENT_CREATE、SERVICE_UNAVAILABLE、AUDIT阶段；相同traceId的诊断可定位BusinessAudit.java行号，SQLState与vendor辅助分类，不包含原SQL文本 |
+| 图片存储503 | STORAGE_UNAVAILABLE和STORAGE阶段；检查专属目录权限/挂载、文件是否保留，现有MediaStore仅抛安全分类，底层IO原消息不保留；不得为恢复删库或移除他人图片 |
+
+本批实际数据库故障为隔离测试触发器的SQLState45000/vendor1644，并非真实生产事故；实例可定位源码位置，不能从该码推断用户内容。真实HTTP关联、开/关/恢复、六类动作落盘、嵌套消息脱敏及轮转/输出故障见[第五阶段验证](verification/2026-10-20-comments.md)。完整告警、远程日志与运维治理仍待后续。

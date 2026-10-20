@@ -28,12 +28,12 @@ public class WritingService {
         read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
     }
     public static ApiException conflict(String code){return new ApiException(HttpStatus.CONFLICT,code,"修订号或内容状态已变化，请重新读取后确认操作");}
-    private static void revision(Article a,long expected){if(a.revision()!=expected)throw conflict("REVISION_CONFLICT");}
+    private static void revision(Article a,long expected){cn.edu.hzcu.campushub.common.RequestTrace.article(a.id());cn.edu.hzcu.campushub.common.RequestTrace.revisions(expected,a.revision());if(a.revision()!=expected)throw conflict("REVISION_CONFLICT");}
     private static void editable(Article a){if(Set.of("ADMIN_HIDDEN","DELETED").contains(a.state()))throw conflict("STATE_CONFLICT");}
     private void categories(Content c){repository.categories(c.tags().jobIds(),"JOB");repository.categories(c.tags().majorIds(),"MAJOR");repository.categories(c.tags().companyIds(),"COMPANY");repository.categories(c.tags().topicIds(),"TOPIC");}
     public Profile profile(long user){return read.execute(tx->repository.profile(user));}
     public Profile updateProfile(long user,Profile incoming){return write.execute(tx->{
-        repository.lockUser(user);Profile previous=repository.profile(user);if(previous.revision()!=incoming.revision())throw conflict("REVISION_CONFLICT");
+        repository.lockUser(user);Profile previous=repository.profile(user);cn.edu.hzcu.campushub.common.RequestTrace.revisions(incoming.revision(),previous.revision());if(previous.revision()!=incoming.revision())throw conflict("REVISION_CONFLICT");
         if(incoming.majorId()!=null)repository.categories(List.of(incoming.majorId()),"MAJOR");
         Profile saved=new Profile(previous.revision()+1,incoming.nickname(),incoming.majorId(),incoming.currentStage(),incoming.bio());repository.profile(user,saved);
         audit.changed(user,Action.PROFILE_UPDATE,ObjectType.PROFILE,user,previous.revision(),saved.revision(),null,null);return saved;

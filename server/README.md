@@ -1,5 +1,7 @@
 # 城院帮首批后端
 
+2026-10-20第五阶段增量：认证评论、平铺回复、本人删除、独立评论图片与安全本地诊断已实现。协议见[评论API](COMMENTS_API.md)、[日志排查](LOGGING.md)、[第五阶段实施](../docs/BACKEND_BATCH5.md)及[实际验证](verification/2026-10-20-comments.md)。V6只扩展评论结构和审计约束，不修改V1—V5；页面、治理及性能验收仍待后续。以下日期对应各历史阶段，不代表当前互动接口尚未实现。
+
 2026-10-20第四阶段增量：认证作者入口、作者主页/公开文章分页、独立联系设置、事务审计和脱敏轮转文件日志已加入当前分支。协议见[作者联系API](AUTHOR_CONTACT_API.md)、[日志配置](LOGGING.md)、[实施记录](../docs/BACKEND_BATCH4.md)，实际执行证据另列[本批验证](verification/2026-10-20-author-contact.md)。以下原阶段启动说明保留，其日期代表当时范围。
 
 2026-10-14，Java 21 / Spring Boot 4.1.1 / Maven / Spring JDBC / Flyway / MySQL 8。当前包含游客文章读取、统一账号校园认证及第三阶段本人资料、Markdown图文草稿、图片上传、发布和文章管理。默认监听本机 `127.0.0.1:8080`。前端及互动写接口后续实现。
@@ -94,6 +96,8 @@ V1创建文章、正文版本、分类、正文版本分类关联、资料链接
 | CAMPUSHUB_MEDIA_MAX_PIXELS | 25000000 |
 | CAMPUSHUB_BODY_MAX_BYTES | 1048576，正文UTF-8 1MiB |
 | CAMPUSHUB_JSON_MAX_BYTES | 2097152，创作JSON 2MiB |
+| CAMPUSHUB_COMMENT_MAX_CODE_POINTS | 10000，普通文本Unicode码点 |
+| CAMPUSHUB_COMMENT_JSON_MAX_BYTES | 131072，评论JSON 128KiB |
 
 调大配置需评估相互关系和实际资源，不能设置无限请求/文件大小。文章没有固定业务图片张数限制，一次接口只上传一张。二进制图片每次重新验证权限，采用no-store/nosniff，私有预览不能将Bearer写入URL。
 
