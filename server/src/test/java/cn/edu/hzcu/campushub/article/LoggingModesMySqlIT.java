@@ -139,12 +139,12 @@ class LoggingModesMySqlIT {
             try{mail=call("POST","/api/v1/auth/registration-codes",Map.of("email",failedMail),null);}finally{MAIL.fail=false;}
             Reply login=fault("auth_session","INSERT","NEW.user_id="+user,()->call("POST","/api/v1/auth/login",Map.of("email",email,"password",password),null));
             proxy.cut();Reply reading;try{reading=get("/api/v1/articles");}finally{proxy.restore();}assertThat(get("/api/v1/catalog").status).isEqualTo(200);
-            long audits=count("business_audit");Reply profile=fault("business_audit","INSERT","NEW.actor_id="+user,()->call("PUT","/api/v1/me/profile",profile(1),token));assertThat(count("business_audit")).isEqualTo(audits);assertThat(get("/api/v1/me/profile").data().path("revision").asLong()).isEqualTo(1);
+            long audits=count("business_audit");Reply profile=fault("business_audit","INSERT","NEW.actor_domain='USER' AND NEW.actor_id="+user,()->call("PUT","/api/v1/me/profile",profile(1),token));assertThat(count("business_audit")).isEqualTo(audits);assertThat(get("/api/v1/me/profile").data().path("revision").asLong()).isEqualTo(1);
             Reply writing=fault("article_draft","UPDATE","NEW.article_id="+article,()->call("PUT","/api/v1/me/articles/"+article+"/draft",draft(4),token));assertThat(get("/api/v1/me/articles/"+article+"/draft").data().path("revision").asLong()).isEqualTo(4);
             Reply contact=fault("author_contact_setting","INSERT","NEW.user_id="+user,()->call("PUT","/api/v1/me/contact-settings",contact(1),token));
             Path object=root.resolve("media/objects/"+image);Files.writeString(object,privateValue());Reply storage;
             try{var response=binary("/api/v1/media/images/"+image);storage=new Reply(response.statusCode(),JSON.readTree(response.body()),response.headers().firstValue("X-Trace-Id").orElseThrow());}finally{Files.write(object,png);}
-            Reply comment=fault("business_audit","INSERT","NEW.actor_id="+user,()->call("POST","/api/v1/articles/"+article+"/comments",comment(key(),null),token));
+            Reply comment=fault("business_audit","INSERT","NEW.actor_domain='USER' AND NEW.actor_id="+user,()->call("POST","/api/v1/articles/"+article+"/comments",comment(key(),null),token));
             for(Reply reply:List.of(mail,login,reading,profile,writing,contact,storage,comment)){assertThat(reply.status).isEqualTo(503);results.add(reply.status+":"+reply.json.path("code").asString());}
             contracts.put(selected,results);
             if(selected.equals("debug")){diagnosed(mail,"AuthService.java:");diagnosed(login,"AuthRepository.java:");diagnosed(reading,"ArticleController.java:");diagnosed(profile,"BusinessAudit.java:");diagnosed(writing,"WritingRepository.java:");diagnosed(contact,"AuthorRepository.java:");diagnosed(storage,"MediaStore.java:");diagnosed(comment,"CommentService.java:");}
@@ -189,7 +189,7 @@ class LoggingModesMySqlIT {
         try{if(context!=null){
             var named=context.getBean(NamedParameterJdbcTemplate.class);var p=new MapSqlParameterSource("users",users).addValue("emails",emails);
             if(!users.isEmpty()){
-                named.update("DELETE FROM business_audit WHERE actor_id IN (:users)",p);named.update("DELETE FROM comment_create_receipt WHERE user_id IN (:users)",p);named.update("DELETE FROM comment_image WHERE user_id IN (:users)",p);
+                named.update("DELETE FROM business_audit WHERE actor_domain='USER' AND actor_id IN (:users)",p);named.update("DELETE FROM comment_create_receipt WHERE user_id IN (:users)",p);named.update("DELETE FROM comment_image WHERE user_id IN (:users)",p);
                 for(long id:named.queryForList("SELECT id FROM discussion_comment WHERE user_id IN (:users) ORDER BY id DESC",p,Long.class))db.update("DELETE FROM discussion_comment WHERE id=?",id);
                 var articles=named.queryForList("SELECT id FROM article WHERE owner_user_id IN (:users)",p,Long.class);if(!articles.isEmpty()){p.addValue("articles",articles);
                 for(String table:List.of("article_publish_request","article_version_image","article_draft_image","article_draft_category","article_draft_source_link","author_create_request","media_image","article_draft"))named.update("DELETE FROM "+table+" WHERE article_id IN (:articles)",p);

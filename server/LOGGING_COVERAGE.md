@@ -1,5 +1,29 @@
 # 全模块日志覆盖表
 
+## 第九阶段社区案件与管理主体域
+
+新增15类业务动作及ADMIN_OTHER未知管理子路径兜底；旧49类业务动作继续回归。下表每类均需在最终[双模式矩阵](verification/community-2026-10-22/route-matrix.csv)关联实际成功trace，写入选真实提交事件。未知管理路径也先鉴权，日志不回显原路径或用户载荷。
+
+| 路由 | 动作 | 主体域／模块 |
+| --- | --- | --- |
+| POST /me/case-images | CASE_IMAGE_UPLOAD | USER／COMMUNITY |
+| GET /media/case-images/{id} | CASE_IMAGE_READ | USER／COMMUNITY |
+| POST /me/cases | CASE_SUBMIT | USER／COMMUNITY |
+| GET /me/cases | CASE_LIST | USER／COMMUNITY |
+| GET /me/cases/{id} | CASE_DETAIL | USER／COMMUNITY |
+| POST /admin/auth/login | ADMIN_LOGIN | COMMUNITY_ADMIN |
+| POST /admin/auth/logout | ADMIN_LOGOUT | COMMUNITY_ADMIN |
+| GET /admin/me | ADMIN_ME | COMMUNITY_ADMIN |
+| GET /admin/cases | ADMIN_CASE_LIST | COMMUNITY_ADMIN |
+| GET /admin/cases/{id} | ADMIN_CASE_DETAIL | COMMUNITY_ADMIN |
+| GET /admin/cases/{id}/context | ADMIN_CASE_CONTEXT | COMMUNITY_ADMIN |
+| GET /admin/cases/{id}/media/{imageId} | ADMIN_CASE_MEDIA | COMMUNITY_ADMIN |
+| POST /admin/cases/{id}/claim | ADMIN_CASE_CLAIM | COMMUNITY_ADMIN |
+| POST /admin/cases/{id}/release | ADMIN_CASE_RELEASE | COMMUNITY_ADMIN |
+| POST /admin/cases/{id}/decisions | ADMIN_CASE_DECISION | COMMUNITY_ADMIN |
+
+管理改变的数据库action为CASE_CLAIM／CASE_RELEASE／CASE_DECISION，actor_domain=COMMUNITY_ADMIN，object_type=CASE；文件请求action保留ADMIN前缀，traceId关联对应提交后变更。普通提交及上传使用USER域。所有实际上下文阶段、afterCommit变更和afterCompletion事务结果均保留域与案件标识；相同数字actorId不会跨域混淆。敏感读取摘要仅含域、actorId、caseId、CONTEXT／MEDIA类别及trace，不含内容。历史各批原始证明保持。
+
 ## 第八阶段新增八类动作
 
 2026-10-22，当前共49类动作。以下COIN模块动作均有真实HTTP、文件摘要和两模式成功trace，逐条实见阶段见[本次矩阵](verification/coins-2026-10-22/route-matrix.csv)。历史第六、七阶段的原始证据保持。

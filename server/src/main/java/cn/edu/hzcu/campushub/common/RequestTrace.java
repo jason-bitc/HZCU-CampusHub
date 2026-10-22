@@ -18,10 +18,12 @@ public class RequestTrace extends OncePerRequestFilter {
     private static final Logger LOG = LoggerFactory.getLogger(RequestTrace.class);
     private static final Logger DEBUG=LoggerFactory.getLogger("cn.edu.hzcu.campushub.audit.SafeDebug");
     public enum Stage { AUTHENTICATION,AUTHORIZATION,VALIDATION,TARGET,RECEIPT,ATTACHMENT,STORAGE,PERSIST,AUDIT,READ,MAIL_SEND,CODE_VERIFICATION,TRANSACTION,COMMIT,ROLLBACK,TRANSACTION_UNKNOWN,COMPLETE,GENERAL }
-    public record Context(Stage stage,Long articleId,Long commentId,Long expectedRevision,Long actualRevision,Long actorId,Long authorId){
+    public enum Domain { USER,COMMUNITY_ADMIN }
+    public record Context(Stage stage,Long articleId,Long commentId,Long expectedRevision,Long actualRevision,Long actorId,Long authorId,Domain actorDomain,Long caseId){
+        public Context(Stage stage,Long articleId,Long commentId,Long expectedRevision,Long actualRevision,Long actorId,Long authorId){this(stage,articleId,commentId,expectedRevision,actualRevision,actorId,authorId,Domain.USER,null);}
         public Context(Stage stage,Long articleId,Long commentId,Long expectedRevision,Long actualRevision){this(stage,articleId,commentId,expectedRevision,actualRevision,null,null);}
-        public Context at(Stage next){return new Context(next,articleId,commentId,expectedRevision,actualRevision,actorId,authorId);}
-        public String fields(){return "stage="+stage+(articleId==null?"":" articleId="+articleId)+(commentId==null?"":" commentId="+commentId)+(expectedRevision==null?"":" expectedRevision="+expectedRevision)+(actualRevision==null?"":" actualRevision="+actualRevision)+(actorId==null?"":" actorId="+actorId)+(authorId==null?"":" authorId="+authorId);}
+        public Context at(Stage next){return new Context(next,articleId,commentId,expectedRevision,actualRevision,actorId,authorId,actorDomain,caseId);}
+        public String fields(){return "stage="+stage+" actorDomain="+actorDomain+(caseId==null?"":" caseId="+caseId)+(articleId==null?"":" articleId="+articleId)+(commentId==null?"":" commentId="+commentId)+(expectedRevision==null?"":" expectedRevision="+expectedRevision)+(actualRevision==null?"":" actualRevision="+actualRevision)+(actorId==null?"":" actorId="+actorId)+(authorId==null?"":" authorId="+authorId);}
     }
     private static final ThreadLocal<Context> CONTEXT=new ThreadLocal<>();
     private static final ThreadLocal<Throwable> CAUSE=new ThreadLocal<>();
@@ -41,11 +43,13 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String current() { return MDC.get("traceId"); }
     public static Context context(){var c=CONTEXT.get();return c==null?new Context(Stage.GENERAL,null,null,null,null):c;}
     public static void stage(Stage stage){if(current()!=null){CONTEXT.set(context().at(stage));debug();}}
-    public static void article(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),id,c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId()));debug();}}
-    public static void comment(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),id,c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId()));debug();}}
-    public static void actor(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),id,c.authorId()));debug();}}
-    public static void author(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),id));debug();}}
-    public static void revisions(long expected,long actual){if(current()!=null&&expected>=0&&actual>=0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),expected,actual,c.actorId(),c.authorId()));debug();}}
+    public static void article(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),id,c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId(),c.actorDomain(),c.caseId()));debug();}}
+    public static void comment(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),id,c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId(),c.actorDomain(),c.caseId()));debug();}}
+    public static void actor(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),id,c.authorId(),c.actorDomain(),c.caseId()));debug();}}
+    public static void author(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),id,c.actorDomain(),c.caseId()));debug();}}
+    public static void domain(Domain domain){if(current()!=null){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId(),domain,c.caseId()));debug();}}
+    public static void caseId(long id){if(current()!=null&&id>0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),c.expectedRevision(),c.actualRevision(),c.actorId(),c.authorId(),c.actorDomain(),id));debug();}}
+    public static void revisions(long expected,long actual){if(current()!=null&&expected>=0&&actual>=0){var c=context();CONTEXT.set(new Context(c.stage(),c.articleId(),c.commentId(),expected,actual,c.actorId(),c.authorId(),c.actorDomain(),c.caseId()));debug();}}
     public static <T> T write(org.springframework.transaction.support.TransactionTemplate template,org.springframework.transaction.support.TransactionCallback<T> action){
         return template.execute(status->{
             stage(Stage.TRANSACTION);final Snapshot[] captured={snapshot()};
@@ -58,6 +62,8 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String safeCode(String code){return code!=null&&code.matches("[A-Z][A-Z0-9_]{1,47}")?code:"INTERNAL_ERROR";}
     public static void errorCode(String code){if(current()!=null)MDC.put("errorCode",safeCode(code));}
     public static String module(String action){
+        if(action.startsWith("ADMIN_"))return "COMMUNITY_ADMIN";
+        if(action.startsWith("CASE_"))return "COMMUNITY";
         if(java.util.Set.of("COIN_BALANCE","COIN_LEDGER","REWARDS_READ","LOGIN_REWARD","READING_START","READING_REWARD","COIN_STATE","ARTICLE_COIN").contains(action))return "COIN";
         if(action.startsWith("LIKE_")||action.startsWith("FAVORITE")||action.equals("INTERACTION_READ"))return "INTERACTION";
         if(action.startsWith("AUTH_")||action.equals("IDENTITY_READ"))return "AUTH";
@@ -70,6 +76,21 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/me/cases"))return method.equals("POST")?"CASE_SUBMIT":"CASE_LIST";
+        if(path.startsWith("/api/v1/me/cases/"))return "CASE_DETAIL";
+        if(path.equals("/api/v1/me/case-images"))return "CASE_IMAGE_UPLOAD";
+        if(path.startsWith("/api/v1/media/case-images"))return "CASE_IMAGE_READ";
+        if(path.equals("/api/v1/admin/auth/login"))return "ADMIN_LOGIN";
+        if(path.equals("/api/v1/admin/auth/logout"))return "ADMIN_LOGOUT";
+        if(path.equals("/api/v1/admin/me"))return "ADMIN_ME";
+        if(path.equals("/api/v1/admin/cases"))return "ADMIN_CASE_LIST";
+        if(path.matches("/api/v1/admin/cases/[^/]+/context"))return "ADMIN_CASE_CONTEXT";
+        if(path.matches("/api/v1/admin/cases/[^/]+/media/[^/]+"))return "ADMIN_CASE_MEDIA";
+        if(path.matches("/api/v1/admin/cases/[^/]+/claim"))return "ADMIN_CASE_CLAIM";
+        if(path.matches("/api/v1/admin/cases/[^/]+/release"))return "ADMIN_CASE_RELEASE";
+        if(path.matches("/api/v1/admin/cases/[^/]+/decisions"))return "ADMIN_CASE_DECISION";
+        if(path.matches("/api/v1/admin/cases/[^/]+"))return "ADMIN_CASE_DETAIL";
+        if(path.equals("/api/v1/admin")||path.startsWith("/api/v1/admin/"))return "ADMIN_OTHER";
         if(path.equals("/api/v1/me/coins"))return "COIN_BALANCE";
         if(path.equals("/api/v1/me/coin-ledger"))return "COIN_LEDGER";
         if(path.equals("/api/v1/me/rewards"))return "REWARDS_READ";

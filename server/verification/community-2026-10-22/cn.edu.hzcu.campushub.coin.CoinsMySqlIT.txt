@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cn.edu.hzcu.campushub.coin.CoinsMySqlIT
+-------------------------------------------------------------------------------
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 47.43 s -- in cn.edu.hzcu.campushub.coin.CoinsMySqlIT

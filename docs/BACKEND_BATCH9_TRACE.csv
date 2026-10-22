@@ -1,0 +1,7 @@
+需求编号,本批范围,原WBS,验收场景,当前状态,计划交付与证据,保留边界
+FR-M01,本人文字图片反馈与文章评论举报,"5.9.1,6.1","B9-02,B9-03,B9-04,B9-05,B9-09",已实现并通过本批真实验证,server/COMMUNITY_API.md；COMMUNITY_RULES.md；COMMUNITY_ADMIN_SETUP.md；verification/2026-10-22-community.md及逐案CSV,不自动隐藏或判定违规；无固定业务图片张数
+FR-M02,管理案件定位上下文及受理,"5.9.1,6.1,6.4","B9-06,B9-07,B9-08",已实现并通过本批真实验证,server/COMMUNITY_API.md；COMMUNITY_RULES.md；COMMUNITY_ADMIN_SETUP.md；verification/2026-10-22-community.md及逐案CSV,不开放任意草稿版本或媒体库；真实内容治理后续
+FR-M07,本人状态与管理处理审计,"5.9.1,6.1,6.4","B9-03,B9-05,B9-06,B9-07,B9-09",已实现并通过本批真实验证,server/COMMUNITY_API.md；COMMUNITY_RULES.md；COMMUNITY_ADMIN_SETUP.md；verification/2026-10-22-community.md及逐案CSV,主动通知和完整申诉后续；不删除历史
+NFR03与BR17,普通社区管理和运维身份隔离,"5.2.2,5.9.1,6.4","B9-01,B9-04,B9-08,B9-11",已实现并通过本批真实验证,server/COMMUNITY_API.md；COMMUNITY_RULES.md；COMMUNITY_ADMIN_SETUP.md；verification/2026-10-22-community.md及逐案CSV,不改旧USER约束；无默认管理员；无自动运维权限
+NFR10与LOG02,案件事务及Debug_Release日志,"5.9.1,6.1,6.4","B9-03,B9-09,B9-10,B9-12",已实现并通过本批真实验证,server/COMMUNITY_API.md；COMMUNITY_RULES.md；COMMUNITY_ADMIN_SETUP.md；verification/2026-10-22-community.md及逐案CSV,不代替页面真机平台性能压力或学生贡献验收
+FR-M03至M06与FR-G05至G06,后续内容治理申诉人工认证分类荣誉和贡献修正,"5.8,5.9",后续阶段,未纳入本批实施,案件NEEDS_ACTION保留后续治理交接；荣誉完整表待补,不把案件基础标为完整社区治理已完成

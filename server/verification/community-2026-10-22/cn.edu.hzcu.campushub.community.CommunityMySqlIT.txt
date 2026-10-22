@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cn.edu.hzcu.campushub.community.CommunityMySqlIT
+-------------------------------------------------------------------------------
+Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 47.53 s -- in cn.edu.hzcu.campushub.community.CommunityMySqlIT

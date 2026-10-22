@@ -1,5 +1,7 @@
 # 本批运行日志与业务审计
 
+2026-10-22第九阶段：新增15类社区业务动作及ADMIN_OTHER有限兜底，原49类动作继续回归。actorDomain明确USER／COMMUNITY_ADMIN，caseId关联案件；数据库审计的actor_domain默认保留旧USER语义，管理变更显式使用COMMUNITY_ADMIN。管理上下文／媒体成功访问有CASE_ACCESS最小摘要。正文、答复、内部备注、理由、截图、邮箱、密码和令牌均不记入运行文件。默认Release与Debug规则保持，最新矩阵见[日志覆盖](LOGGING_COVERAGE.md)。
+
 2026-10-22第八阶段新增COIN模块8类动作，当前共49类。钱包、账本、奖励状态、登录奖、阅读开始／领取、本人投币状态和投币均接入请求trace及安全字段白名单。阅读开始、奖励与支出的成功审计和业务写入同事务，运行成功变更在提交后记录。Debug有COMMIT／ROLLBACK及安全代码位置，Release合同相同且不增长调试／诊断。最新证据见[第八阶段验证](verification/2026-10-22-coins.md)。下文各批说明保留其历史范围。
 
 第七阶段新增INTERACTION模块六类动作，当前覆盖41类操作；第六阶段模式及历史35类证明保留。新增动作与实际双模式trace见[覆盖表](LOGGING_COVERAGE.md)和[第七阶段记录](verification/2026-10-20-interactions.md)，计数语义见[LIVE_COUNTS.md](LIVE_COUNTS.md)。

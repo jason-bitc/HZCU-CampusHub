@@ -1,0 +1,14 @@
+{
+  "filesScannedBeforeThisReport": 83,
+  "localSecretValuesChecked": 4,
+  "localSecretMatches": 0,
+  "privateKeys": 0,
+  "runtimeDirectoriesExcluded": true,
+  "testedInputsUnchanged": true,
+  "postmanRequestCount": 87,
+  "privatePostmanVariablesEmpty": true,
+  "deliveryLinksExist": true,
+  "adminSetupPowerShellSyntaxValid": true,
+  "adminSetupUsesHiddenPrompt": true,
+  "adminSetupPackagedCliActualTest": "CommunityMySqlIT.localCliResetsOnlyRandomAdminAndNeverPrintsOrStoresPlainPassword"
+}

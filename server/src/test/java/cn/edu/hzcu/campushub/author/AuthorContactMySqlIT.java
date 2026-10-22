@@ -82,7 +82,7 @@ class AuthorContactMySqlIT {
         try{
             var jdbc=context.getBean(NamedParameterJdbcTemplate.class);var p=new MapSqlParameterSource("users",users).addValue("emails",emails);
             if(!users.isEmpty()){
-                jdbc.update("DELETE FROM business_audit WHERE actor_id IN (:users)",p);jdbc.update("DELETE FROM author_contact_setting WHERE user_id IN (:users)",p);
+                jdbc.update("DELETE FROM business_audit WHERE actor_domain='USER' AND actor_id IN (:users)",p);jdbc.update("DELETE FROM author_contact_setting WHERE user_id IN (:users)",p);
                 List<Long> ids=jdbc.queryForList("SELECT id FROM article WHERE owner_user_id IN (:users)",p,Long.class);
                 if(!ids.isEmpty()){
                     p.addValue("articles",ids);
@@ -157,7 +157,9 @@ class AuthorContactMySqlIT {
         try{assertThat(get(home,readerToken).status).isEqualTo(403);assertThat(get("/api/v1/authors/999999/contact",readerToken).status).isEqualTo(403);assertThat(set(1,false,null,null,readerToken).status).isEqualTo(403);}finally{db.update("UPDATE campus_certification SET state='VALID' WHERE user_id=?",reader);}
         db.update("UPDATE platform_user SET account_state='RESTRICTED' WHERE id=?",reader);try{assertThat(get(home,readerToken).status).isEqualTo(403);}finally{db.update("UPDATE platform_user SET account_state='ACTIVE' WHERE id=?",reader);}
         assertThat(call("POST","/api/v1/auth/logout",null,readerToken).status).isEqualTo(200);assertThat(get(home,readerToken).status).isEqualTo(401);readerToken=login(readerEmail);
-        for(String path:List.of("/api/v1/admin/audits","/api/v1/ops/logs","/api/v1/business-audit"))assertThat(get(path,readerToken).status).isEqualTo(404);
+        // The new independent admin namespace authenticates even unknown paths before routing.
+        assertThat(get("/api/v1/admin/audits",readerToken).status).isEqualTo(401);
+        for(String path:List.of("/api/v1/ops/logs","/api/v1/business-audit"))assertThat(get(path,readerToken).status).isEqualTo(404);
     }
     @Test @Order(7) void LastPublicArticleControlsHomeAndContactWithoutHidingOwnSettings()throws Exception{
         assertThat(state(articleA,2,"unpublish").status).isEqualTo(200);assertThat(get("/api/v1/authors/"+writer,readerToken).data.path("publicArticleCount").asLong()).isEqualTo(1);
@@ -192,7 +194,7 @@ class AuthorContactMySqlIT {
     }
     @Test @Order(10) void runtimeFilesRejectPayloadLeaksAndFileFaultDoesNotForgeAuditFailure()throws Exception{
         String marker="url-secret-"+key();secrets.add(marker);assertThat(get("/api/v1/authors/"+writer+"?unknown="+marker,readerToken).status).isEqualTo(400);assertThat(get("/"+marker,readerToken).status).isEqualTo(404);assertThat(call("PUT","/api/v1/me/contact-settings","{\"value\":\""+marker,writerToken).status).isEqualTo(400);
-        Path current=root.resolve("logs/campushub-runtime.log"),backup=root.resolve("logs/original-preserved");String original=Files.readString(current);for(String secret:secrets)assertThat(original.contains(secret)).isFalse();String audits=JSON.writeValueAsString(db.queryForList("SELECT * FROM business_audit WHERE actor_id IN (?,?,?)",writer,reader,other));for(String secret:secrets)assertThat(audits.contains(secret)).isFalse();
+        Path current=root.resolve("logs/campushub-runtime.log"),backup=root.resolve("logs/original-preserved");String original=Files.readString(current);for(String secret:secrets)assertThat(original.contains(secret)).isFalse();String audits=JSON.writeValueAsString(db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id IN (?,?,?)",writer,reader,other));for(String secret:secrets)assertThat(audits.contains(secret)).isFalse();
         assertThat(original).contains("event=REQUEST action=AUTHOR_HOME","result=DENIED","result=CONFLICT","event=BUSINESS_CHANGE","event=BUSINESS_NO_CHANGE","event=FAILURE category=DATABASE");
         var logs=context.getBean(SafeFileLogs.class);Files.move(current,backup);Files.createDirectory(current);long before=auditCount();
         try{var changed=set(contactRevision(),false,null,null,writerToken);assertThat(changed.status).isEqualTo(200);assertThat(auditCount()).isEqualTo(before+1);assertThat(logs.failedWrites()).isGreaterThan(0);assertThat(logs.healthy()).isFalse();}
@@ -200,13 +202,13 @@ class AuthorContactMySqlIT {
         get("/api/v1/me/contact-settings",writerToken);assertThat(logs.healthy()).isTrue();assertThat(Files.readString(current)).startsWith(original);
     }
     @Test @Order(11) void restartRetainsProfilesContactAuditsAndExpiredSessionsRemainRejected()throws Exception{
-        var settings=get("/api/v1/me/contact-settings",writerToken).data;var profile=get("/api/v1/me/profile",writerToken).data;var audits=db.queryForList("SELECT * FROM business_audit WHERE actor_id=? ORDER BY occurred_at,event_id",writer);String logBefore=Files.readString(root.resolve("logs/campushub-runtime.log"));
+        var settings=get("/api/v1/me/contact-settings",writerToken).data;var profile=get("/api/v1/me/profile",writerToken).data;var audits=db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id=? ORDER BY occurred_at,event_id",writer);String logBefore=Files.readString(root.resolve("logs/campushub-runtime.log"));
         context.close();boot();db=context.getBean(JdbcTemplate.class);
-        assertThat(get("/api/v1/me/contact-settings",writerToken).data).isEqualTo(settings);assertThat(get("/api/v1/me/profile",writerToken).data).isEqualTo(profile);assertThat(db.queryForList("SELECT * FROM business_audit WHERE actor_id=? ORDER BY occurred_at,event_id",writer)).isEqualTo(audits);assertThat(Files.readString(root.resolve("logs/campushub-runtime.log"))).startsWith(logBefore);assertThat(get("/api/v1/authors/"+writer,readerToken).status).isEqualTo(200);
+        assertThat(get("/api/v1/me/contact-settings",writerToken).data).isEqualTo(settings);assertThat(get("/api/v1/me/profile",writerToken).data).isEqualTo(profile);assertThat(db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id=? ORDER BY occurred_at,event_id",writer)).isEqualTo(audits);assertThat(Files.readString(root.resolve("logs/campushub-runtime.log"))).startsWith(logBefore);assertThat(get("/api/v1/authors/"+writer,readerToken).status).isEqualTo(200);
         CLOCK.advance(Duration.ofDays(7));for(String path:List.of("/api/v1/authors/"+writer,"/api/v1/authors/"+writer+"/contact","/api/v1/me/contact-settings"))assertThat(get(path,readerToken).status).isEqualTo(401);assertThat(get("/api/v1/articles/"+articleB,null).status).isEqualTo(200);
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9");
         String finalLogs=Files.readString(root.resolve("logs/campushub-runtime.log"));
-        String auditExport=JSON.writeValueAsString(db.queryForList("SELECT event_id,occurred_at,trace_id,actor_id,action,object_type,object_id,before_revision,after_revision,before_state,after_state,result FROM business_audit WHERE actor_id IN (?,?,?) ORDER BY occurred_at,event_id",writer,reader,other));
+        String auditExport=JSON.writeValueAsString(db.queryForList("SELECT event_id,occurred_at,trace_id,actor_id,action,object_type,object_id,before_revision,after_revision,before_state,after_state,result FROM business_audit WHERE actor_domain='USER' AND actor_id IN (?,?,?) ORDER BY occurred_at,event_id",writer,reader,other));
         for(String secret:secrets){assertThat(finalLogs.contains(secret)).isFalse();assertThat(auditExport.contains(secret)).isFalse();}
         Files.writeString(Path.of("target","batch4-runtime-sample.txt"),finalLogs);Files.writeString(Path.of("target","batch4-audit-sample.json"),auditExport+"\n");
     }

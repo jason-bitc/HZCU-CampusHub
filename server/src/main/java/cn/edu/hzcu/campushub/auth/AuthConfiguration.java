@@ -10,5 +10,5 @@ import org.springframework.security.crypto.password.*;
 @Configuration
 public class AuthConfiguration {
     @Bean @ConditionalOnMissingBean(Clock.class) Clock clock() { return Clock.systemUTC(); }
-    @Bean PasswordEncoder passwordEncoder() { return new DelegatingPasswordEncoder("bcrypt",Map.of("bcrypt",new BCryptPasswordEncoder(12))); }
+    @Bean public static PasswordEncoder passwordEncoder() { return new DelegatingPasswordEncoder("bcrypt",Map.of("bcrypt",new BCryptPasswordEncoder(12))); }
 }

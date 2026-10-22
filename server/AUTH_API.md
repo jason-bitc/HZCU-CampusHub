@@ -65,3 +65,6 @@
 | 503 | MAIL_UNAVAILABLE / SERVICE_UNAVAILABLE | 邮件或数据库暂时不可用 |
 
 前端收到令牌后放在适当的受保护存储，不写日志或URL；退出清理端侧本人资料，401重新登录，403说明状态不可用。验证码使用notice与expiresAt、resendAt显示必要反馈；失败不能显示发送成功。WorkBuddy后续完成页面、端侧安全及真机验证，本批未实现这些页面。
+## 独立社区管理入口
+
+2026-10-22第九阶段新增管理命名空间，见[COMMUNITY_API.md](COMMUNITY_API.md)及[本机初始化](COMMUNITY_ADMIN_SETUP.md)。上述普通校园账号合同及USER约束保持；普通注册不能授管理权，管理令牌不能替代校园用户令牌。

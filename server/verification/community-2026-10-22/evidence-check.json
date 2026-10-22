@@ -1,0 +1,11 @@
+{
+  "totalCases": 174,
+  "uniqueCases": true,
+  "freshFinalReports": true,
+  "matrixRows": 30,
+  "scriptAndJarHashesMatch": true,
+  "historicalMigrationsMatch": true,
+  "existingDirtyFilesMatch": true,
+  "buildCommit": "unknown",
+  "finalFinishedAt": "2026-10-22T22:27:34.0702657+08:00"
+}

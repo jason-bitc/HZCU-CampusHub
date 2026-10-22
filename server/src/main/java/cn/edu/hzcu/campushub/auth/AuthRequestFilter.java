@@ -19,15 +19,17 @@ public class AuthRequestFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver exceptions;
     private final int writingJsonLimit;
     private final int commentJsonLimit;
+    private final int caseJsonLimit;
     private final long multipartLimit;
-    public AuthRequestFilter(AuthService auth,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptions,@org.springframework.beans.factory.annotation.Value("${campushub.authoring.json-max-bytes}") int writingJsonLimit,@org.springframework.beans.factory.annotation.Value("${spring.servlet.multipart.max-request-size}") org.springframework.util.unit.DataSize multipartLimit,@org.springframework.beans.factory.annotation.Value("${campushub.comments.json-max-bytes}") int commentJsonLimit){this.auth=auth;this.exceptions=exceptions;if(writingJsonLimit<1||writingJsonLimit>32*1024*1024||multipartLimit.toBytes()<1||commentJsonLimit<1||commentJsonLimit>4*1024*1024)throw new IllegalArgumentException("Invalid request limit");this.writingJsonLimit=writingJsonLimit;this.multipartLimit=multipartLimit.toBytes();this.commentJsonLimit=commentJsonLimit;}
+    public AuthRequestFilter(AuthService auth,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptions,@org.springframework.beans.factory.annotation.Value("${campushub.authoring.json-max-bytes}") int writingJsonLimit,@org.springframework.beans.factory.annotation.Value("${spring.servlet.multipart.max-request-size}") org.springframework.util.unit.DataSize multipartLimit,@org.springframework.beans.factory.annotation.Value("${campushub.comments.json-max-bytes}") int commentJsonLimit,@org.springframework.beans.factory.annotation.Value("${campushub.community.json-max-bytes:2097152}") int caseJsonLimit){this.caseJsonLimit=caseJsonLimit;this.auth=auth;this.exceptions=exceptions;if(caseJsonLimit<1024||caseJsonLimit>32*1024*1024||writingJsonLimit<1||writingJsonLimit>32*1024*1024||multipartLimit.toBytes()<1||commentJsonLimit<1||commentJsonLimit>4*1024*1024)throw new IllegalArgumentException("Invalid request limit");this.writingJsonLimit=writingJsonLimit;this.multipartLimit=multipartLimit.toBytes();this.commentJsonLimit=commentJsonLimit;}
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException {
         String path=request.getServletPath();
+        boolean casePath=path.equals("/api/v1/me/cases")||path.startsWith("/api/v1/me/cases/")||path.equals("/api/v1/me/case-images")||path.startsWith("/api/v1/media/case-images");
         boolean writingPath=path.startsWith("/api/v1/me/");
         boolean coinPath=path.matches("/api/v1/me/(coins|coin-ledger|rewards)(?:/.*)?")||path.matches("/api/v1/articles/[^/]+/(coins|coin-state|reading-session)(?:/.*)?");
         boolean interactionPath=path.matches("/api/v1/articles/[^/]+/(like|favorite|interaction-state)(?:/.*)?");
         boolean commentPath=path.equals("/api/v1/comments")||path.startsWith("/api/v1/comments/")||path.equals("/api/v1/media/comment-images")||path.startsWith("/api/v1/media/comment-images/")||path.matches("/api/v1/articles/[^/]+/(comments|comment-images)(?:/.*)?");
-        boolean readerPath=coinPath||interactionPath||commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
+        boolean readerPath=casePath||coinPath||interactionPath||commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
         boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath||readerPath;
         if(authPath||path.startsWith("/api/v1/media/images/")){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
         try{
@@ -43,7 +45,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
             }
             if(authPath&&java.util.Set.of("POST","PUT","DELETE").contains(request.getMethod())
                     &&(request.getContentType()==null||!request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/"))){
-                int limit=coinPath?4096:commentPath?commentJsonLimit:writingPath?writingJsonLimit:16_384;
+                int limit=casePath?caseJsonLimit:coinPath?4096:commentPath?commentJsonLimit:writingPath?writingJsonLimit:16_384;
                 if(request.getContentLengthLong()>limit)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");
                 byte[] body=request.getInputStream().readNBytes(limit+1);
                 if(body.length>limit)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");

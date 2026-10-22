@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章账号创作评论互动与非现金币",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第八阶段counts统一LIVE真实点赞与有效投币聚合，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。 第八阶段每日登录2币、180秒阅读1币、每账号每日共3币、每人每篇累计投2币；不自行撤回。参见COINS_API.md。",
+    "name": "CampusHub 文章账号创作互动币与社区案件",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第八阶段counts统一LIVE真实点赞与有效投币聚合，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。 第八阶段每日登录2币、180秒阅读1币、每账号每日共3币、每人每篇累计投2币；不自行撤回。参见COINS_API.md。 第九阶段独立社区管理和私人举报反馈，普通/管理令牌分开，仅手工选择已授权目标执行。真实管理账号由本机工具初始化；不在此集合保存管理密码、令牌、举报文字或截图。参见COMMUNITY_API.md。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -122,6 +122,51 @@
     },
     {
       "key": "ledgerSnapshot",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "adminLogin",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseRevision",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "caseRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseImageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseSnapshot",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "adminCaseSnapshot",
       "value": "0",
       "type": "string"
     }
@@ -2330,6 +2375,568 @@
                   "const result=pm.response.json();",
                   "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
                   "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第九阶段 举报反馈与独立社区管理",
+      "item": [
+        {
+          "name": "上传私人证据",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/case-images",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{caseRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"caseImageId\",result.data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取本人证据",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/case-images/{{caseImageId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "提交一般反馈",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{caseRequestId}}\",\n  \"kind\": \"FEEDBACK\",\n  \"category\": \"BUG\",\n  \"targetType\": null,\n  \"targetId\": null,\n  \"description\": \"本机输入本人反馈说明\",\n  \"imageIds\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件快照首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases?page=1&size=20",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"caseSnapshot\",String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases/{{caseId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理独立登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/auth/login",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{adminLogin}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"adminAccessToken\",result.data.accessToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理当前能力",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/me",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件快照首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases?page=1&size=20",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"adminCaseSnapshot\",String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理原公开上下文",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/context",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理本案图片",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/media/{{caseImageId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认领案件",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/claim",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "释放本人认领",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/release",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\",\n  \"reason\": \"本机输入释放理由\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "答复反馈并关闭",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/decisions",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\",\n  \"outcome\": \"ANSWERED\",\n  \"reply\": \"本机输入公开答复\",\n  \"internalNote\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理退出当前会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/auth/logout",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases?page=2&size=20&snapshot={{caseSnapshot}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases?page=2&size=20&snapshot={{adminCaseSnapshot}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
                 ]
               }
             }

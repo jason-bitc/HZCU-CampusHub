@@ -1,0 +1,19 @@
+{
+  "sameNumericIdsInSeparateDomains": [
+    333,
+    334
+  ],
+  "userActions": [
+    "ARTICLE_PUBLISH",
+    "CASE_IMAGE_UPLOAD",
+    "CASE_SUBMIT",
+    "COMMENT_CREATE",
+    "COMMENT_DELETE"
+  ],
+  "adminActions": [
+    "CASE_CLAIM",
+    "CASE_DECISION",
+    "CASE_RELEASE"
+  ],
+  "separateDomainsConfirmed": true
+}

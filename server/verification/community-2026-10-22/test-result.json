@@ -1,0 +1,203 @@
+{
+  "startedAt": "2026-10-22T22:22:40.5382236+08:00",
+  "baseline": "1e436c287b5a91170facc6237139f1fc726fe769",
+  "branch": "feat/wc-community-foundation",
+  "database": "campushub_test",
+  "buildCommit": "unknown",
+  "finishedAt": "2026-10-22T22:27:34.0702657+08:00",
+  "exitCode": 0,
+  "unit": 61,
+  "mysql": 113,
+  "total": 174,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.article.ArticleQueryTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.audit.LocalDiagnosticsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.audit.RunModeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.audit.SafeFileLogsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.auth.AuthInputTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.author.ContactInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.authoring.MarkdownReferencesTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.authoring.MediaStoreTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.coin.CoinInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.comment.CommentInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.common.DatabaseConfigTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.common.ExceptionHandlerAdviceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.common.RequestTraceTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "cn.edu.hzcu.campushub.community.CommunityInputTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.article.LoggingModesMySqlIT",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.author.AuthorContactMySqlIT",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.authoring.AuthoringMySqlIT",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.coin.CoinsMySqlIT",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.comment.CommentsMySqlIT",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.community.CommunityMySqlIT",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "mysql",
+      "suite": "cn.edu.hzcu.campushub.interaction.InteractionsMySqlIT",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "version": "0.1.0",
+  "scope": "actual complete mysql-it verify; controlled mail and clock; no student review attribution"
+}
