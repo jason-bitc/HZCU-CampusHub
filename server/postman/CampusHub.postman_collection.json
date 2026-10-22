@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CampusHub 文章、账号、创作、评论与点赞收藏",
-    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第七阶段当前counts统一LIVE真实聚合、获币0，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。",
+    "name": "CampusHub 文章账号创作评论互动与非现金币",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第八阶段counts统一LIVE真实点赞与有效投币聚合，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。 第八阶段每日登录2币、180秒阅读1币、每账号每日共3币、每人每篇累计投2币；不自行撤回。参见COINS_API.md。",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -108,6 +108,21 @@
     {
       "key": "commentUploadRequestId",
       "value": "",
+      "type": "string"
+    },
+    {
+      "key": "coinRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "readingSessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ledgerSnapshot",
+      "value": "0",
       "type": "string"
     }
   ],
@@ -2017,6 +2032,304 @@
                   "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
                   "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
                   "if(pm.response.code===200) for(const item of result.data.items) {if(!item.available) pm.test(\"不可用项仅占位\", () => pm.expect(Object.keys(item).sort()).to.eql([\"articleId\",\"available\"])); else pm.test(\"公开摘要LIVE\", () => pm.expect(item.article.counts.origin).to.equal(\"LIVE\"));}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第八阶段 非现金币与奖励",
+      "item": [
+        {
+          "name": "本人余额与贡献",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coins",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人账本首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coin-ledger?page=1&size=20",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"ledgerSnapshot\", String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "奖励规则与今日任务",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "领取今日登录奖",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards/login",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "开始或恢复今日阅读",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/reading-session",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"readingSessionId\", result.data.sessionId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "领取阅读奖励",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards/reading",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{readingSessionId}}\",\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人投币状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/coin-state",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "向文章投1币",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/coins",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1,\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人账本快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coin-ledger?page=2&size=20&snapshot={{ledgerSnapshot}}",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
                 ]
               }
             }

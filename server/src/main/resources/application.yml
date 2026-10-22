@@ -28,6 +28,11 @@ server:
 campushub:
   run-mode: ${CAMPUSHUB_RUN_MODE:release}
   runtime-environment: ${CAMPUSHUB_RUNTIME_ENV:local}
+  coins:
+    login-reward: ${CAMPUSHUB_COIN_LOGIN_REWARD:2}
+    reading-reward: ${CAMPUSHUB_COIN_READING_REWARD:1}
+    reading-seconds: ${CAMPUSHUB_COIN_READING_SECONDS:180}
+    article-limit: ${CAMPUSHUB_COIN_ARTICLE_LIMIT:2}
   comments:
     body-max-code-points: ${CAMPUSHUB_COMMENT_MAX_CODE_POINTS:10000}
     json-max-bytes: ${CAMPUSHUB_COMMENT_JSON_MAX_BYTES:131072}

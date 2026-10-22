@@ -1,0 +1,9 @@
+需求编号,本批范围,原WBS,验收场景,当前状态,计划交付与证据,保留边界
+FR-G01,登录及简单阅读奖励规则与当日状态,"5.8.2,6.1","B8-01,B8-02,B8-03",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,不做滚动轨迹答题设备指纹等复杂核验
+FR-G02,领取幂等每日额度和原子发币,"5.8.2,6.1","B8-02,B8-03,B8-06,B8-10,B8-11",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,登录2币阅读1币合计每日3币；Asia/Shanghai
+FR-G03,非本人公开文章投币与累计额度,"5.8.2,6.1","B8-05,B8-06,B8-07,B8-10",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,每人每篇累计2币；不自行撤回；无真实作者文章不可投
+FR-G04,本人余额账本与有效贡献分离,"5.8.2,6.1,6.4","B8-04,B8-08,B8-11",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,收到贡献不铸成可消费币；无现金兑换和他人私人账本
+FR-R04,真实有效投币及认可排序,"5.8.2,6.1","B8-09,B8-11",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,旧DEMO值保留不混算；最新筛选合同保持
+NFR03与LOG04,受限访问输入及私人数据保护,"5.8.2,6.4","B8-04,B8-07,B8-08,B8-12",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,前端真机与完整安全评估另行开展
+NFR10与LOG02,交易一致性审计与日志模式,"5.8.2,6.1,6.4","B8-06,B8-10,B8-11,B8-12",已实现并通过本批真实验证,server/COINS_API.md；server/COIN_RULES.md；server/verification/2026-10-22-coins.md；coins-2026-10-22/test-cases.csv,不等同平台性能压力或整体项目验收
+FR-G05与FR-G06,荣誉与治理失效保留后续范围,"5.8,5.9",后续阶段,未纳入本批实施,保留贡献事实及扩展关系；后续确认等级和治理返还,不猜测门槛；无读者撤回或管理任意改数入口

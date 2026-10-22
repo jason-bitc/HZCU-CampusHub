@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cn.edu.hzcu.campushub.audit.LocalDiagnosticsTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.523 s -- in cn.edu.hzcu.campushub.audit.LocalDiagnosticsTest

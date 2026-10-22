@@ -1,0 +1,10 @@
+{
+  "reviewedCandidateFiles": 75,
+  "localSecretValuesChecked": 4,
+  "localSecretMatches": 0,
+  "privateKeys": 0,
+  "runtimeDirectoriesExcluded": true,
+  "testedInputsUnchanged": true,
+  "postmanRequestCount": 70,
+  "privatePostmanVariablesEmpty": true
+}

@@ -1,0 +1,247 @@
+[
+  {
+    "path": "PRODUCT.md",
+    "sha256": "f1e16f18425ecfa59c7878bb675810b7db17e3acf7086b49a28a0f0828ac99d4",
+    "matched": true
+  },
+  {
+    "path": "README.md",
+    "sha256": "b79213149b40dce8628a77619db0892dab0a6c302e07f745f892e0f2a280695f",
+    "matched": true
+  },
+  {
+    "path": "docs/GIT_COLLABORATION.md",
+    "sha256": "397906515f1ce67b91a140d1a65d62909102bb66e862e9344ecb50d3549471b1",
+    "matched": true
+  },
+  {
+    "path": "docs/PROJECT_PLAN.md",
+    "sha256": "6b79340ebd1d0ba62eb5c297a17126e738b103f24d91cc14b37509d746413330",
+    "matched": true
+  },
+  {
+    "path": "docs/REQUIREMENTS.md",
+    "sha256": "5be64c8435b059b46ecdbc6a2012e8429436f23a9c21025d5238dab6d941210b",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/README.md",
+    "sha256": "d88e30bcb632ec0c13ca3061abf9711f2f76a827f9297d83d92aed7512b91b4b",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/feasibility_content.md",
+    "sha256": "b6bdf696338fb464db7003dfa9e75d0dc91760cc023502241c93542cd41862cf",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/fuse_g04_documents.py",
+    "sha256": "048ede1234d668f753296b8751437be20ea81ace9ebb862630f8c6520494b82c",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/revise_review_documents.py",
+    "sha256": "24990acc12a75fd581bfddbaa5d1ec65bc2141306e775effc87c9976286990d0",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/sync_project_report.py",
+    "sha256": "b5a72ef4b7e6fa93201aa1795d1ce1cfb2c0d0734406feeca95bfa375106f47e",
+    "matched": true
+  },
+  {
+    "path": "_pptx_text.txt",
+    "sha256": "d49ebccf3d134bd9d2205e158e64b4595fa5c42201cb07a6e53e50b430a65efe",
+    "matched": true
+  },
+  {
+    "path": "docs/BACKEND_BATCH7_ACCEPTANCE.md",
+    "sha256": "7ab13a1433270c04873d28d2a908c740e38d2394d7f119cfef40caa96a6b992a",
+    "matched": true
+  },
+  {
+    "path": "docs/BACKEND_BATCH8_PLAN.md",
+    "sha256": "f6afbce7be493aa44c23e3fc59ac77fc68eddaa63a82df68705d8aa0594ee16a",
+    "matched": true
+  },
+  {
+    "path": "docs/design/logo-bubble-guide.png",
+    "sha256": "16517f411f19dec75fd1bda511261a4457bebb157cc2f360bfaea7b113fc3f2e",
+    "matched": true
+  },
+  {
+    "path": "docs/design/logo-hub-emblem.png",
+    "sha256": "2d874ca45a74f77654bbfb3222fa12374b1c6dc2f99a6cf2f2f04daf15c81659",
+    "matched": true
+  },
+  {
+    "path": "planning-tools/G04/export_wbs_tree.py",
+    "sha256": "a5631c29ebaf9eb49336705a914ab11971667a07499142616a9ff14dd18f2990",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/GB-T 8566-2007 信息技术 软件生存周期过程（已废止·第三方扫描版）.pdf",
+    "sha256": "a155dec7b04a815aac39384f397b5b1d2c8d7e8f566cce5da05d0fec8c3964bf",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/GB-T 8566-2022 系统与软件工程 软件生存周期过程（现行版）.pdf",
+    "sha256": "f0df694632a199800d786b3eda6eb91af5978a2c09c17113b442612db7f0f877",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/GB-T 8567-2006 计算机软件文档编制规范.pdf",
+    "sha256": "3a3a0b84792367cde403fcc181c8b1395dd125cf7363ffb38b08f2b9ad7fdbee",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/GB-T 9385-2008 计算机软件需求规格说明规范.pdf",
+    "sha256": "e26955e83817109a3eccc8204b959bc7c18140f4bca7604c57cde9f7f0f03b92",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/GB-T 9386-2008 计算机软件测试文档编制规范.pdf",
+    "sha256": "fe4c0a170242c31f1f498bbd2e01bec2c50dab03d13f0cf68c1023ac3bc7b4a3",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/_scrape_std.py",
+    "sha256": "9c45f83222a1a51e35ca88fc779ee815a6e66bbafafedad8389e5a4f0188fd2d",
+    "matched": true
+  },
+  {
+    "path": "参考文档/00_国标原文/来源与核查记录.md",
+    "sha256": "37aef34451057c09e4248bb00aec1744526ec7503e957005e2d68149bd436317",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/PRD2017-G2-可行性分析(研究)报告(FAR)-阅读副本.pdf",
+    "sha256": "efb151d6134477add91eb313bfa2d42e2f57784142720f388622caadb3e16ffa",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/PRD2017-G2-可行性分析(研究)报告(FAR).doc",
+    "sha256": "46d8a6c11d0c361cde4e606d0ffe1236680f145e76f2046b482db5b5150f0376",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/PRD2017-G2-软件开发计划(SDP)-阅读副本.pdf",
+    "sha256": "4b74d3faf2759d27ee3abc47227d3ad8dd9c5824085a842745bd87d0455ac33b",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/PRD2017-G2-软件开发计划(SDP).doc",
+    "sha256": "f7845e185823802e6613539ead57ba3dac4d54501a86eff3b68f2db271e72f2b",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/来源登记.csv",
+    "sha256": "c970733d21331c762d9ea96e159da7c4daaa4d2c8de6173eb84d324f278efd9d",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/来源登记.json",
+    "sha256": "c12de5a9f645f5974d791bb7f69344cd9a1c77017ba52ab3c9811fd2f36aeea2",
+    "matched": true
+  },
+  {
+    "path": "参考文档/01_本校往届项目/请先阅读.md",
+    "sha256": "e121fff7df1f4d4479f3956d9ac67bc55a617c737836720c719b7e8e9ea7673c",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标原文/GBT 8567-2006 计算机软件文档编制规范.pdf",
+    "sha256": "ddc98bc697709e4cc12b00bd4522f8c1bcdcb71391cc143795c2cab287566445",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/可行性研究报告（GB8567——88）.doc",
+    "sha256": "9f0da52faddaf5a9df818eead924a68e077bc12b7ea92f5f6547e845d0e46110",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/图1.doc",
+    "sha256": "72e7d250faeb206550b9e8656e3b81737b34885d512910fc6920045b3dc29eb7",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/开发进度月报（GB8567——88）.doc",
+    "sha256": "dd0ee88c848b4d603217237c8a9c4a5c7c4c2be9f5e63402cff9739670466f70",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/操作手册（GB8567——88）.doc",
+    "sha256": "cc6ea4a987ec177532a62f9beba004ccf484a3be1f7375f139dd299ec2398aee",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/数据库设计说明书（GB8567——88）.doc",
+    "sha256": "d16b263b62be59b79a6e6f0c23ae787970b2a362d83aa2f571bf34291ae64e72",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/数据要求说明书（GB856T——88）.doc",
+    "sha256": "db2efdaf0ba20a2b7132e743437562a62bbf120b9fb99fa3294edb9c6d2f100e",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/文件给制实施规定的实例（GB8567-88）.doc",
+    "sha256": "5cbb66a15f91b92c0d5ca57947c4bfbce494a92e5f392ea66dfe626d2fbf0c08",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/概要设计说明书（GB8567——88）.doc",
+    "sha256": "2f88456b9a8d51d06cb2ce47f280ef77f761316be103a756bb5bab15fdba2203",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/模块开发卷宗（GB8567——88）.doc",
+    "sha256": "545d96e0eb74bf035d693bce2bb7daa45d408072386f887e433fe9e48608f6ee",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/测试分析报告（GB8567——88）.doc",
+    "sha256": "f8f53a9d5e04ae437ffe76387fa554a558b0dcfa1d759bd6359e4155c2243915",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/测试计划（GB8567——88）.doc",
+    "sha256": "edbe29cf16e9b34521184639e61fde31e46f45504993b5f842aa59244fdc9188",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/用户手册（GB8567——88）.doc",
+    "sha256": "bfd308958da5ec11c03450f4fa7e73014584f636df2484795604d8d516ee1304",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/详细设计说明书（GB8567——88）.doc",
+    "sha256": "e02b989356a2198156ebaa2017f1274fa0b3d17427409426004aef2bdefba24a",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/软件需求说明书（GB856T——88）.doc",
+    "sha256": "4faf20615820e7d2de40b119a63275d0fae3f1dc1c01a72e9ddbd02ae206c3f5",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/项目开发总结报告（GB8567——88）.doc",
+    "sha256": "5e557153a2a4cd5a9237b1cac8ba4ad87c9f8e508e9a43d02ab3c8044ef31fc8",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/项目开发计划（GB856T——88）-含封面.docx",
+    "sha256": "f9927f802bab4b42d927e002bd89dea067ad8fe417da5c66ba0083b13a8a2654",
+    "matched": true
+  },
+  {
+    "path": "参考文档/02_国标模板补充/国标模板Word(GB8567)/项目开发计划（GB856T——88）.doc",
+    "sha256": "9b908ef56c1b73ec06b36226d01838211c29cee2ce0a6456e62c3160483a15b2",
+    "matched": true
+  },
+  {
+    "path": "参考文档/参考文档清单.md",
+    "sha256": "437208aae22e1348f1bb25ea0c277f61f68af06c4f2593aba8f7314850c51ea2",
+    "matched": true
+  }
+]

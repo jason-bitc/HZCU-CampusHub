@@ -16,9 +16,9 @@ import org.springframework.stereotype.Repository;
 public class ArticleRepository {
     private final NamedParameterJdbcTemplate jdbc;
     private static final String FROM = " FROM article a JOIN article_version v ON v.id=a.public_version_id AND v.article_id=a.id ";
-    private static final String LIVE_FROM=FROM+" LEFT JOIN (SELECT article_id,COUNT(*) live_likes FROM article_like WHERE active=TRUE GROUP BY article_id) likes ON likes.article_id=a.id ";
+    private static final String LIVE_FROM=FROM+" LEFT JOIN (SELECT article_id,COUNT(*) live_likes FROM article_like WHERE active=TRUE GROUP BY article_id) likes ON likes.article_id=a.id LEFT JOIN (SELECT article_id,SUM(-delta) live_coins FROM coin_event WHERE action='ARTICLE_COIN' AND effective=TRUE GROUP BY article_id) coins ON coins.article_id=a.id ";
     private static final String PUBLIC = " a.state='PUBLISHED' AND v.published_at IS NOT NULL ";
-    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,v.updated_at,0 effective_coins,COALESCE(likes.live_likes,0) effective_likes,'LIVE' count_origin";
+    private static final String COLUMNS = "a.id,v.id version_id,v.title,v.summary,v.experience_stage,v.source_type,v.published_at,v.updated_at,COALESCE(coins.live_coins,0) effective_coins,COALESCE(likes.live_likes,0) effective_likes,'LIVE' count_origin";
     public ArticleRepository(NamedParameterJdbcTemplate jdbc) { this.jdbc = jdbc; }
 
     public Catalog catalog() {
@@ -48,7 +48,7 @@ public class ArticleRepository {
         filter(where, params, "TOPIC", "topicId", query.topicId());
         long total = jdbc.queryForObject("SELECT COUNT(*)" + FROM + "WHERE " + where, params, Long.class);
         String order = query.sort().equals("latest") ? "v.published_at DESC,a.id DESC"
-                : "COALESCE(likes.live_likes,0) DESC,v.published_at DESC,a.id DESC";
+                : "COALESCE(coins.live_coins,0) DESC,COALESCE(likes.live_likes,0) DESC,a.first_published_at DESC,a.id DESC";
         params.addValue("limit", query.size()).addValue("offset", query.offset());
         List<Row> rows = jdbc.query("SELECT " + COLUMNS + LIVE_FROM + "WHERE " + where + " ORDER BY " + order
                 + " LIMIT :limit OFFSET :offset", params, (rs, n) -> row(rs));

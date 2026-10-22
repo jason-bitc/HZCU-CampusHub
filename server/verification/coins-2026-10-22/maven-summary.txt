@@ -1,0 +1,26 @@
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.284 s -- in cn.edu.hzcu.campushub.article.ArticleQueryTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.523 s -- in cn.edu.hzcu.campushub.audit.LocalDiagnosticsTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.091 s -- in cn.edu.hzcu.campushub.audit.RunModeTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.606 s -- in cn.edu.hzcu.campushub.audit.SafeFileLogsTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.204 s -- in cn.edu.hzcu.campushub.auth.AuthInputTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.674 s -- in cn.edu.hzcu.campushub.author.ContactInputTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.141 s -- in cn.edu.hzcu.campushub.authoring.MarkdownReferencesTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.212 s -- in cn.edu.hzcu.campushub.authoring.MediaStoreTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.815 s -- in cn.edu.hzcu.campushub.coin.CoinInputTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 s -- in cn.edu.hzcu.campushub.comment.CommentInputTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in cn.edu.hzcu.campushub.common.DatabaseConfigTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 s -- in cn.edu.hzcu.campushub.common.ExceptionHandlerAdviceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in cn.edu.hzcu.campushub.common.RequestTraceTest
+[INFO] Tests run: 53, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.68 s -- in cn.edu.hzcu.campushub.article.ArticleMySqlIT
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 73.71 s -- in cn.edu.hzcu.campushub.article.LoggingModesMySqlIT
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.386 s -- in cn.edu.hzcu.campushub.auth.AuthMySqlIT
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.990 s -- in cn.edu.hzcu.campushub.author.AuthorContactMySqlIT
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.895 s -- in cn.edu.hzcu.campushub.authoring.AuthoringMySqlIT
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 48.41 s -- in cn.edu.hzcu.campushub.coin.CoinsMySqlIT
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.62 s -- in cn.edu.hzcu.campushub.comment.CommentsMySqlIT
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 25.33 s -- in cn.edu.hzcu.campushub.interaction.InteractionsMySqlIT
+[INFO] Tests run: 94, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  04:02 min
+[INFO] Finished at: 2026-10-22T20:15:34+08:00

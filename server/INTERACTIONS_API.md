@@ -45,7 +45,7 @@ effectiveLikes是该文章本次事务内的真实总数，其他用户后续操
 
 ## 真实数量与审计
 
-公开列表、详情、作者文章及可用收藏摘要的counts结构保留，当前统一 `origin:"LIVE"`、`effectiveCoins:0`，effectiveLikes从article_like中active行聚合；不叠加旧DEMO值，不按收藏数排序。[计数衔接说明](LIVE_COUNTS.md)解释旧存储与新读取合同。
+公开列表、详情、作者文章及可用收藏摘要的counts结构保留，当前统一 `origin:"LIVE"`，effectiveLikes从article_like中active行聚合，effectiveCoins自2026-10-22第八阶段起为有效投币事实SUM；不叠加旧DEMO值，不按收藏数排序。[计数衔接说明](LIVE_COUNTS.md)解释旧存储与当前读取合同。
 
 V7新增article_like、article_favorite及审计动作/对象兼容扩展，不改V1—V6。状态变化和成功审计同事务，LIKE_SET / LIKE_CANCEL / FAVORITE_SET / FAVORITE_CANCEL使用objectType LIKE/FAVORITE、objectId文章ID，actorId与文章ID共同标识关系；revision仅内部使用。重复状态只有BUSINESS_NO_CHANGE，无新成功审计。审计/状态SQL失败503并回滚关系和真实数量，解除本次故障后可重试。
 
@@ -53,4 +53,4 @@ V7新增article_like、article_favorite及审计动作/对象兼容扩展，不�
 
 日志模块INTERACTION，六类动作LIKE_SET / LIKE_CANCEL / FAVORITE_SET / FAVORITE_CANCEL / INTERACTION_READ / FAVORITES_LIST。模式沿用[LOGGING.md](LOGGING.md)；修订上下文的expectedRevision是服务端读到的基准，actualRevision是本事务确认值，不是客户端提交参数。Debug有安全阶段/代码诊断，Release保留必要摘要而不追加调试细节。所有模式都不记录载荷、邮箱、令牌、联系值或收藏内容快照。
 
-手工请求：[Postman](postman/CampusHub.postman_collection.json)；实际证明：[第七阶段验证](verification/2026-10-20-interactions.md)。页面按钮状态、移动端交互、安全渲染、真机、投币奖励/钱包/荣誉、通知、治理及运维均待后续，不由本批后端测试代替。
+手工请求：[Postman](postman/CampusHub.postman_collection.json)；互动原始证明：[第七阶段验证](verification/2026-10-20-interactions.md)，当前投币与钱包见[第八阶段API](COINS_API.md)及[完整回归](verification/2026-10-22-coins.md)。页面、真机、完整荣誉、通知、治理及运维继续按后续阶段推进。

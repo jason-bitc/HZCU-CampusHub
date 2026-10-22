@@ -144,7 +144,7 @@ class InteractionsMySqlIT {
         for(var summary:get("/api/v1/authors/"+users.getFirst()+"/articles",1).data.path("items"))assertLive(summary,summary.path("id").asLong());assertLive(item(favorites(2),1001).path("article"),1001);
         assertThat(db.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes,count_origin FROM article WHERE id IN (1001,1002,1003,1004,1005,1006,2001,2002,2003,2004) ORDER BY id")).isEqualTo(originalArticles);
     }
-    static void assertLive(JsonNode article,long id){assertThat(article.path("counts").path("origin").asString()).isEqualTo("LIVE");assertThat(article.path("counts").path("effectiveCoins").asLong()).isZero();assertThat(article.path("counts").path("effectiveLikes").asLong()).isEqualTo(likes(id));}
+    static void assertLive(JsonNode article,long id){assertThat(article.path("counts").path("origin").asString()).isEqualTo("LIVE");assertThat(article.path("counts").path("effectiveCoins").asLong()).isEqualTo(db.queryForObject("SELECT COALESCE(SUM(-delta),0) FROM coin_event WHERE article_id=? AND action='ARTICLE_COIN' AND effective=TRUE",Long.class,id));assertThat(article.path("counts").path("effectiveLikes").asLong()).isEqualTo(likes(id));}
     interface Checked {Reply run()throws Exception;}
     static Reply fault(String table,String operation,String condition,Checked request)throws Exception{
         String marker=secret();db.execute("CREATE TRIGGER b07_interaction_failure BEFORE "+operation+" ON "+table+" FOR EACH ROW BEGIN IF "+condition+" THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='"+marker+"'; END IF; END");try{return request.run();}finally{db.execute("DROP TRIGGER b07_interaction_failure");}
@@ -184,7 +184,7 @@ class InteractionsMySqlIT {
         CLOCK.advance(Duration.ofDays(7));for(String method:List.of("PUT","DELETE"))for(String kind:List.of("like","favorite"))assertThat(call(method,"/api/v1/articles/"+a+"/"+kind,null,tokens.getFirst()).status).isEqualTo(401);assertThat(state(a,0).status).isEqualTo(401);assertThat(favorites(0).status).isEqualTo(401);assertLive(get("/api/v1/articles/1001",-1).data,1001);
         String runtime=Files.readString(runtime()),diagnostic=Files.readString(diagnostic());String audit=JSON.writeValueAsString(db.queryForList("SELECT * FROM business_audit WHERE actor_id IN (?,?,?) ORDER BY occurred_at,event_id",users.get(0),users.get(1),users.get(2)));for(String secret:secrets){assertThat(runtime).doesNotContain(secret);assertThat(diagnostic).doesNotContain(secret);assertThat(audit).doesNotContain(secret);}
         Files.writeString(Path.of("target/batch7-runtime-sample.txt"),runtime);Files.writeString(Path.of("target/batch7-diagnostic-sample.txt"),diagnostic);Files.writeString(Path.of("target/batch7-audit-sample.json"),audit);Files.writeString(Path.of("target/batch7-route-coverage.json"),JSON.writeValueAsString(coverage));
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8");
     }
     @AfterAll static void cleanup()throws Exception{
         if(context==null)return;

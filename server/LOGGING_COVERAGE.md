@@ -1,5 +1,22 @@
 # 全模块日志覆盖表
 
+## 第八阶段新增八类动作
+
+2026-10-22，当前共49类动作。以下COIN模块动作均有真实HTTP、文件摘要和两模式成功trace，逐条实见阶段见[本次矩阵](verification/coins-2026-10-22/route-matrix.csv)。历史第六、七阶段的原始证据保持。
+
+| 路由 | 动作 |
+| --- | --- |
+| GET /api/v1/me/coins | COIN_BALANCE |
+| GET /api/v1/me/coin-ledger | COIN_LEDGER |
+| GET /api/v1/me/rewards | REWARDS_READ |
+| POST /api/v1/me/rewards/login | LOGIN_REWARD |
+| POST /api/v1/articles/{id}/reading-session | READING_START |
+| POST /api/v1/me/rewards/reading | READING_REWARD |
+| GET /api/v1/articles/{id}/coin-state | COIN_STATE |
+| POST /api/v1/articles/{id}/coins | ARTICLE_COIN |
+
+写入通过RequestTrace.write实际记录事务结果；奖励／投币用钱包修订关联最小审计，阅读开始以文章ID关联。失败无成功审计，无变化重放仅BUSINESS_NO_CHANGE。私人账本和回执正文不写日志。代表审计故障在Debug关联COIN、ARTICLE_COIN、AUDIT、BusinessAudit和CoinService，Release同码失败无新增诊断。
+
 ## 第七阶段新增六类动作
 
 当前共41类动作：第六阶段35类基础继续回归，本批新增下表六类。事件来自真实HTTP与文件输出，两模式各有成功trace；没有将原第六阶段35类证据重写为当时已具备新互动。字段与排查见[LOGGING.md](LOGGING.md)，计数合同见[LIVE_COUNTS.md](LIVE_COUNTS.md)。

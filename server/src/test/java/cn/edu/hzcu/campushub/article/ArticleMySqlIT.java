@@ -180,7 +180,7 @@ class ArticleMySqlIT {
         jdbc = context.getBean(JdbcTemplate.class);
         assertThat(jdbc.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes FROM article ORDER BY id")).isEqualTo(before);
         assertThat(jdbc.queryForList("SELECT id,title,body FROM article_version ORDER BY id")).isEqualTo(versions);
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8");
         assertThat(get("/api/v1/articles/1001").status).isEqualTo(200);
     }
     @Test @Order(10) void invalidConfigurationAndChangedMigrationPreventStartup(@org.junit.jupiter.api.io.TempDir java.nio.file.Path directory) throws Exception {

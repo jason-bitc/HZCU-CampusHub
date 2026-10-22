@@ -1,5 +1,7 @@
 # 城院帮首批后端
 
+2026-10-22第八阶段：每日登录2币、服务端阅读计时180秒领取1币、全账号每天合计最多3币；每人每篇累计最多投2币，不自行撤回。本人钱包、稳定分页账本、任务状态和成功幂等回执形成闭环，作者贡献独立于可消费余额。公开LIVE获币改为有效投币事实SUM。对接见[币与奖励API](COINS_API.md)、[规则与事务](COIN_RULES.md)，验证见[第八阶段记录](verification/2026-10-22-coins.md)。以下按日期保留各批历史范围。
+
 2026-10-20第七阶段：新增点赞/取消、收藏/取消、本人互动状态及收藏分页，公开计数改为LIVE真实聚合，旧DEMO/NONE原值不改。合同见[互动API](INTERACTIONS_API.md)、[计数衔接](LIVE_COUNTS.md)和[本批验证](verification/2026-10-20-interactions.md)。V7仅新增关系及审计兼容扩展；投币奖励、页面与真机未由本批完成。
 
 2026-10-20第六阶段：同一JAR以 `./scripts/Start-Server.ps1 -Mode Debug` 或 `-Mode Release` 切换日志，默认Release。原Port与数据Profile参数继续使用；模式不选择数据库。各旧模块的动作、阶段与安全代码位置诊断已扩展，见[日志说明](LOGGING.md)、[覆盖表](LOGGING_COVERAGE.md)及[第六阶段验证](verification/2026-10-20-logging-modes.md)。第五阶段旧诊断布尔键仅兼容读取，不再控制诊断。
