@@ -1,6 +1,6 @@
 """Check shared document integrity using Python's standard library only."""
 from pathlib import Path
-import argparse,csv,hashlib,re,sys,zipfile,xml.etree.ElementTree as ET
+import argparse,csv,hashlib,json,re,sys,zipfile,xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
 DOCS=ROOT/'docs/project'
@@ -8,6 +8,35 @@ MANIFEST=DOCS/'MANIFEST.sha256.csv'
 SUFFIXES={'.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg'}
 def files():return sorted(p for p in DOCS.rglob('*') if p.is_file() and p!=MANIFEST)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def check_er_model(model):
+    """Keep relationship ratios separate from minimum-participation constraints."""
+    errors=[]
+    relations=model.get('relations',[]);constraints=model.get('relationConstraints',[])
+    if len(constraints)!=len(relations) or not constraints:
+        return ['ER relationships require one explicit participation constraint each']
+    for i,(relation,rule) in enumerate(zip(relations,constraints)):
+        if len(relation)!=5:errors.append('Invalid ER relationship '+str(i));continue
+        a,b,verb,ca,cb=relation
+        if ca+':'+cb not in {'1:1','1:N','M:N'}:
+            errors.append('Unsupported ER relationship ratio at '+str(i))
+        if (rule.get('a'),rule.get('b'),rule.get('verb'),rule.get('ratio'))!=(a,b,verb,ca+':'+cb):
+            errors.append('ER relationship/constraint mismatch at '+str(i))
+        if any(rule.get(k) not in {0,1} for k in ['minA','minB']) or not rule.get('constraint'):
+            errors.append('Missing ER minimum-participation explanation at '+str(i))
+        if (rule.get('minA')==0 or rule.get('minB')==0) and '允许没有' not in rule.get('constraint',''):
+            errors.append('Optional ER participation needs a text explanation at '+str(i))
+    for graph in model.get('graphs',[]):
+        if not graph.get('id','').startswith('ER'):continue
+        for edge in graph['edges']:
+            relation_id=edge['b'] if edge['b'].startswith('rel') else edge['a'] if edge['a'].startswith('rel') else None
+            if not relation_id:continue
+            try:
+                relation=relations[int(relation_id[3:])]
+                expected=relation[3] if edge['b']==relation_id else relation[4]
+            except (ValueError,IndexError):errors.append('Unknown ER relation in '+graph['id']);continue
+            if edge.get('label')!=expected:errors.append('ER endpoint notation differs from ratio in '+graph['id'])
+    return errors
 
 def check_srs(document,styles,name):
     """Protect the consolidated review structure without testing application code."""
@@ -92,6 +121,10 @@ def check():
             except Exception:errors.append('Invalid Office package: '+name)
             if not p.with_suffix('.pdf').exists():errors.append('Missing PDF companion: '+name)
             if p.suffix.lower()=='.docx' and not p.with_suffix('.md').exists():errors.append('Missing Markdown companion: '+name)
+    model_path=DOCS/'models/图表与模型/模型数据源G04.json'
+    if model_path.exists():
+        try:errors.extend(check_er_model(json.loads(model_path.read_text(encoding='utf-8-sig'))))
+        except (ValueError,TypeError,KeyError):errors.append('Invalid ER relationship model')
     return errors
 if __name__=='__main__':
     a=argparse.ArgumentParser();a.add_argument('--refresh',action='store_true');args=a.parse_args()
