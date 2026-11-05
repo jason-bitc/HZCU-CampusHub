@@ -1,123 +1,94 @@
-# 城院帮微信小程序 · 第一批前端
+# 城院帮原生小程序：公开发现与阅读
 
-本目录是微信原生小程序工程源码根。已接入公开只读接口合同：
+范围：M01 游客发现、M03 组合筛选、M04 空结果恢复、M05 游客详情、S02 本批适用状态。沿用既有 WXML / WXSS / JavaScript 工程及 Java / Spring Boot / MySQL 后端，不接入 CloudBase。
 
-- `GET /api/v1/catalog`
-- `GET /api/v1/articles`
-- `GET /api/v1/articles/{id}`
+账号、认证、互动、创作、个人工作区和管理端属于后续批次。对应入口为真正禁用态，标明尚未开放。
 
-本批实现游客的发现、组合筛选、排序、刷新分页、文章详情、完整长文阅读、固定目录跳转、Markdown 安全展示及加载/空/失败/不可用状态。未实现认证、评论、作者联系、创作和个人工作区；对应底部入口仅以禁用状态提示“后续批次开放”，不伪装成可用功能。
+## 在微信开发者工具运行
 
-## 目录
+1. 导入本目录 `miniprogram`，不是仓库根目录；`project.config.json` 中 `miniprogramRoot` 为 `./`。
+2. 在项目详情核对实际使用的 AppID 和本人权限。共享配置保留 `touristappid` 占位；本机已有 Git 忽略的 `project.private.config.json`，其中包含本机 AppID 及设置。不要只依据文件存在就认为手机预览权限已验证，也不要将本人配置提交。
+3. 保留已有本机设置，不修改系统安全策略。本轮在既有 Stable 2.02.2608060、基础库 3.8.12 中原生编译并运行了两个页面。GUI验证与手机真机验证分别记录。
+4. 工具菜单“工具 → 编译”（Ctrl+R）执行原生编译。改配置后应完整编译；热更新后的旧模块状态不能作为模式切换成功的依据。
+5. 当前工作区原有 `config/local.js` 明确启用演示模式，本轮临时切换真实接口验证后已恢复原内容。该文件不上库。
 
-```text
-miniprogram/
-  app.json / app.js / app.wxss
-  project.config.json
-  pages/
-    discover/          发现与组合筛选（M01、M03、M04）
-    article-detail/    游客经验详情（M05）
-  components/
-    article-card/      公开经验列表项
-    filter-panel/      组合筛选与同专业说明
-    markdown-view/     安全 Markdown 阅读
-    page-state/        加载、空、失败、权限/不可用状态
-    prototype-nav/     原型底部导航框架（未开放入口禁用提示）
-    app-icon/          统一本地 SVG 图标
-  services/
-    request.js         wx.request 封装、超时、HTTP/业务错误、traceId
-    articles.js        catalog/articles 公开接口入口
-    article-mapper.js  只保留公开字段，不映射作者私有资料
-    demo-service.js    显式演示模式（默认关闭）
-  config/
-    defaults.js        默认服务地址和请求参数
-    env.js             合并本地配置
-    local.example.js   本机配置示例
-    local.js           本机演示配置；已忽略，不入库
-  utils/               查询、筛选、Markdown、格式化、请求失效保护
-  assets/icons/        统一图标
-  styles/              颜色、字号、间距、圆角等变量
-  tests/run.js         源码结构、合同与安全行为检查
-```
+## 连接现有真实后端
 
-## 导入微信开发者工具
-
-1. 打开微信开发者工具，选择“导入项目”。
-2. 项目目录选择本文件所在目录：
-   `C:\Users\wangc\Desktop\HZCU-CampusHub-Frontend\miniprogram`
-   不要选择仓库根目录。
-3. `project.private.config.json` 已在忽略规则中。首次导入时把其中的 `appid` 从 `touristappid` 改成本人真实小程序 AppID；不要提交该文件或任何账号凭据。
-4. 开发阶段保留私密配置中的 `urlCheck: false`，用于访问本地开发后端。
-
-## 运行真实后端
-
-1. 在 `config/local.js` 中设置：
+在 `config/local.js` 设置以下前端配置，不放数据库账号、密码或令牌：
 
 ```js
 module.exports = {
   demoMode: false,
   apiBaseUrl: 'http://127.0.0.1:8080',
   requestTimeout: 10000,
+  pageSize: 10,
   debug: false
 };
 ```
 
-2. 启动既有 Java 后端，并确认以下接口返回统一 JSON：
+按既有后端 `server/README.md` 和本机配置启动 Java 服务及 MySQL，不重建库、不改迁移、不重置密码。健康接口须返回 `HTTP 200 / code=OK / data.status=UP`。
 
-- `GET /api/v1/catalog`
-- `GET /api/v1/articles?keyword=&jobId=&majorId=&companyId=&topicId=&sort=recognized|latest&page=1&size=10`
-- `GET /api/v1/articles/{id}`
+公开合同只使用：
 
-3. 切换筛选或排序时，前端会把 `page` 重置为 1；认可排序由服务端完成，前端不对单页重新排序。
-
-## 开发者工具与手机真机地址
-
-- 微信开发者工具模拟器访问本机后端：`http://127.0.0.1:8080`。
-- 手机真机不能访问电脑上的 `localhost`。把 `config/local.js` 的 `apiBaseUrl` 改为电脑在局域网中的 IP，例如 `http://192.168.1.20:8080`，同时确认后端监听 `0.0.0.0`、防火墙允许该端口。
-- 真机联调后应把真实结果写入验证记录；开发工具截图不等于真机验证通过。
-
-## 演示模式
-
-默认仓库配置 `demoMode: false`，只连接真实接口。当前工作区存在被忽略的 `config/local.js`，其中显式设置了 `demoMode: true`，用于本机 WorkBuddy 预览；页面顶部会显示醒目的“演示模式”条，不会被静默当成真实联调。
-
-演示状态只用于走查：
-
-- 发现页演示条可切换：正常数据、空结果、网络失败、服务异常。
-- 详情页演示条可切换：正常文章、网络失败、服务异常、文章不可用。
-- 演示数据位于 `services/demo-data.js`，只包含公开字段，不包含作者昵称、头像、联系方式或评论。
-
-要恢复真实接口，将 `demoMode` 改为 `false` 或删除本机 `config/local.js`。
-
-## 阅读体验与完整正文
-
-- 正文不做前端截断：Markdown 解析器把标题、段落、列表、引用、代码和图片全部转成节点渲染。
-- 演示长文 `1001` 包含 8 个完整章节，测试会校验目录数量、最后一章和正文末尾内容，防止只渲染开头。
-- 文章开头保留“文章目录”；阅读过程中右侧固定显示“目录”悬浮按钮，点击打开章节抽屉并定位到对应章节。
-- 外部资料在正文内以资料卡呈现，点击复制链接；小程序不直接跳转任意外链。
-- 真实接口如果暂未返回 `jobNature` 或 `baseLevel`，详情页显示“岗位性质未标注/未填写”，不伪造经历信息。
-
-## 调试日志
-
-在 `config/local.js` 设置 `debug: true` 后，控制台记录：
-
-- 请求路径
-- HTTP 状态
-- 请求耗时
-- traceId
-
-日志不记录密码、令牌或完整敏感响应。界面错误使用用户可理解的文案；列表服务失败显示“加载失败/重试”，不会显示成空列表；文章 404 清除正文缓存并显示不可用状态。
-
-## 本批检查
-
-在仓库任意位置执行：
-
-```bash
-node miniprogram/tests/run.js
+```text
+GET /api/v1/catalog
+GET /api/v1/articles?sort=recognized&page=1&size=10
+GET /api/v1/articles?keyword=Java&jobId=1&majorId=11&companyId=21&topicId=31&sort=latest&page=1&size=10
+GET /api/v1/articles/1001
 ```
 
-当前结果：`10/10 checks passed`。该检查覆盖严格 JSON、页面文件、WXML 约束、查询合同、分页去重、请求失效保护、Markdown 安全处理、公开数据字段裁剪、演示排序/筛选、完整长文章节保留及 503/traceId 错误分类。
+数字筛选参数是可选正整数，不使用 `jobId=` / `companyId=` 等空数字。公司必须选择 catalog 中的有效标签，不发送任意公司文本。关键词只检索标题和摘要；岗位、专业、公司、主题分别使用分类 ID。排序、筛选在服务端执行，不在前端对单页重排。
 
-更完整的原型、需求与验证映射见：
+真实模式失败不会回退演示数据。空结果、连接失败、服务异常、内容不可用分别展示；重试保留条件，分页失败保留已加载列表。快速切换时旧响应失效。返回详情前的页面实例保留查询、分页和滚动位置。
 
-- `docs/TRACEABILITY.md`
-- `docs/VERIFICATION.md`
+## 阅读、目录与游客边界
+
+- 正文完整渲染，不按章节数截断。支持1–6级标题、重复标题的独立锚点、混合嵌套列表、原始列表序号、引用、代码空白及图片。
+- 按本轮用户明确要求，删除正文开头目录。右上角为44×44px小方框；点击后打开可检索的目录抽屉。章节定位使用实际节点位置，图片加载后更新锚点。
+- 图片可查看大图；单张失败可重试，不阻断其余正文。外链提供真实的复制操作，不伪装任意网页直接跳转。
+- 文末始终提供来源说明，有0/1/多个资料链接时均不丢失；正文资料卡定位到完整来源区。
+- 游客响应再次裁剪作者、头像、昵称、联系方式和评论；不可用/失败时清空旧正文。后端没有返回的“当时基础/岗位性质”显示未填写/未标注，不补造经历。
+
+## 演示状态与开发辅助
+
+演示模式必须显式开启，页面有非交互标识，数据统一标记为演示。正式阅读区没有故障切换按钮。
+
+可在微信工具的自定义编译模式中使用：
+
+| 页面 | 参数 | 场景 |
+|---|---|---|
+| `pages/discover/discover` | `scenario=normal` | 普通列表 |
+| `pages/discover/discover` | `scenario=empty` | 空结果 |
+| `pages/discover/discover` | `scenario=network` | 连接失败 |
+| `pages/discover/discover` | `scenario=service` | 503服务异常 |
+| `pages/article-detail/article-detail` | `id=1001&scenario=normal` | 八节完整长文 |
+| `pages/article-detail/article-detail` | `id=2001&scenario=unavailable` | 内容不可用 |
+
+这些参数只在 `demoMode:true` 生效。状态在演示服务内共享，切回普通场景时显式使用 `scenario=normal`。非固定章数、重复标题和嵌套列表另由行为检查覆盖。
+
+## 本轮检查及证据
+
+```powershell
+node miniprogram/tests/run.js
+node miniprogram/tests/behavior.js
+# 需要真实 Java / MySQL 后端；只发 GET，不创建测试数据：
+node miniprogram/tests/real-api.js http://127.0.0.1:8080
+```
+
+本轮：原有10项源码检查通过，新增10项行为检查通过；真实接口检查20次请求通过。原生编译器检查8份WXML、11份WXSS通过；GUI实际运行了发现、筛选、空结果、详情及真实连接失败恢复。两种模式、正文图片、目录及禁用边界有原生截图。
+
+这不等于手机真机通过。目录末节可视定位、遮罩背景滚动、全部公司输入边界及小屏/横屏尚有待复测项，具体已执行范围见验证记录。
+
+- [本轮差距及处理表](docs/TAKEOVER-20261105.md)
+- [需求对应和接口缺口](docs/TRACEABILITY.md)
+- [分层验证及历史记录](docs/VERIFICATION.md)
+- [真实接口验证摘要](docs/REAL-API-20261105.json)
+- [原生截图一览](docs/screenshots/20261105/index.html)
+
+`debug:true` 仅记录路径、状态、耗时、traceId，不记录凭据或完整响应。控制台的本地HTTP图片/域名提示属于开发地址限制；正式发布须使用合规HTTPS资源，不能凭本机模拟器成功声称真机已通过。
+
+## 手机真机下一步
+
+手机不能通过电脑的 `127.0.0.1` 访问后端。真实联调需使用可达的HTTPS服务，或经本人确认的局域网开发地址和微信允许的调试方式；本轮没有修改防火墙、系统策略或后端监听范围。
+
+在有权限的 AppID 下由本人扫码预览，实际检查小方框目录、目录搜索/遮罩、末节定位、图片重试、返回滚动恢复、网络失败恢复及安全区后，再补记真机结果。本轮未把扫码、手机运行或真机接口连通记为已完成。

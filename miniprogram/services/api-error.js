@@ -12,6 +12,9 @@ class ApiError extends Error {
 function fromHttp(status, payload, traceId) {
   const body = payload && typeof payload === 'object' ? payload : {};
   const tracking = traceId || body.traceId || '';
+  if (status === 401 || status === 403) {
+    return new ApiError({ kind: 'PERMISSION', status, code: body.code, traceId: tracking, message: '当前内容无法公开访问，请返回发现页查看其他经验' });
+  }
   if (status === 404) {
     return new ApiError({ kind: 'UNAVAILABLE', status, code: body.code, traceId: tracking, message: '这篇经验不存在或当前不可用' });
   }

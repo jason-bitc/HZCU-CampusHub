@@ -5,17 +5,17 @@ page {
   --color-bg: #f5f7f6;
   --color-surface: #ffffff;
   --color-text: #202723;
-  --color-text-secondary: #69736d;
-  --color-text-tertiary: #8a938e;
+  --color-text-secondary: #58645d;
+  --color-text-tertiary: #626e67;
   --color-border: #e3e8e5;
   --color-danger: #a94c50;
   --color-danger-soft: #f9eded;
   --color-warning: #85691f;
   --color-warning-soft: #faf5e7;
-  --font-xs: 22rpx;
-  --font-sm: 26rpx;
-  --font-md: 29rpx;
-  --font-lg: 32rpx;
+  --font-xs: 24rpx;
+  --font-sm: 28rpx;
+  --font-md: 32rpx;
+  --font-lg: 34rpx;
   --font-xl: 38rpx;
   --space-1: 8rpx;
   --space-2: 16rpx;
@@ -26,5 +26,6 @@ page {
   --radius-sm: 12rpx;
   --radius-md: 20rpx;
   --radius-lg: 28rpx;
-  --shadow-card: 0 8rpx 28rpx rgba(26, 48, 38, 0.045);
+  --shadow-card: none;
+  --touch-target: max(88rpx, 44px);
 }

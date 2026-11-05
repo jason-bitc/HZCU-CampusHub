@@ -3,16 +3,31 @@
     <button class="nav-back pressable" bindtap="close" aria-label="返回发现页">
       <app-icon name="chevron-left" size="42" />
     </button>
-    <text class="nav-title">筛选经验</text>
-    <view class="nav-placeholder"></view>
+    <text class="nav-title">选择岗位与背景</text>
+    <button class="filter-cancel pressable" bindtap="close">取消</button>
   </view>
 
   <scroll-view scroll-y class="filter-body" enhanced show-scrollbar="{{false}}">
     <view class="filter-card">
+      <view class="draft-note">以下为待应用条件，点击底部按钮后生效。</view>
+      <view wx:if="{{draft.keyword}}" class="search-note">当前搜索：{{draft.keyword}}（返回发现页修改）</view>
+      <view wx:if="{{catalogLoading}}" class="catalog-status">正在加载筛选选项…</view>
+      <view wx:elif="{{catalogError}}" class="catalog-status">
+        <text>筛选选项加载失败，已保留当前条件。</text>
+        <button class="button-secondary catalog-retry" bindtap="retry">重试加载选项</button>
+      </view>
       <view wx:if="{{selectedChips.length}}" class="selected-section">
-        <text class="section-label">已选择</text>
+        <text class="section-label">待应用</text>
         <view class="selected-list">
           <button wx:for="{{selectedChips}}" wx:key="key" class="selected-chip pressable" data-key="{{item.key}}" bindtap="clearSelected">{{item.label}} ×</button>
+        </view>
+      </view>
+
+      <view class="job-section">
+        <text class="section-label">目标岗位</text>
+        <view class="topic-list">
+          <button class="topic-chip {{!draft.jobId ? 'topic-active' : ''}}" data-value="0" bindtap="selectJob">全部</button>
+          <button wx:for="{{catalog.jobs}}" wx:key="id" class="topic-chip {{draft.jobId === item.id ? 'topic-active' : ''}}" data-value="{{item.id}}" bindtap="selectJob" aria-pressed="{{draft.jobId === item.id}}">{{item.name}}</button>
         </view>
       </view>
 
@@ -28,12 +43,12 @@
         </button>
       </view>
 
-      <view class="same-major-note">“同专业”使用本人资料。未填写时可完善资料，或在此手动选择。</view>
+      <view class="same-major-note">游客可手动选择文章适用专业。“同专业”快捷筛选需校园认证及本人专业资料，本版本尚未开放。</view>
 
       <view class="company-section">
         <text class="section-label">公司（可选）</text>
         <view class="company-input-row">
-          <input class="company-input" value="{{companyInput}}" placeholder="输入公司名，或保持不限" bindinput="handleCompanyInput" />
+          <input class="company-input" value="{{companyInput}}" maxlength="100" placeholder="输入公司名，或保持不限" placeholder-class="input-placeholder" aria-label="公司名称" bindinput="handleCompanyInput" />
           <button wx:if="{{companyInput}}" class="company-clear pressable" bindtap="clearCompany" aria-label="清空公司">
             <app-icon name="close" size="28" />
           </button>
@@ -42,7 +57,7 @@
           <button wx:for="{{companySuggestions}}" wx:key="id" class="company-suggestion pressable" data-id="{{item.id}}" bindtap="selectCompanySuggestion">匹配：{{item.name}}</button>
         </view>
         <text wx:if="{{companyError}}" class="field-error">{{companyError}}</text>
-        <text class="company-contract-note">当前接口按已启用的公司标签筛选；未启用标签不会静默放宽条件。</text>
+        <text class="company-contract-note">仅支持选择已有公司标签；公司不限时，也会展示未标注公司的经验。</text>
       </view>
 
       <view class="topic-section">
@@ -57,6 +72,6 @@
 
   <view class="filter-footer">
     <button class="button-secondary reset-button" bindtap="reset">重置条件</button>
-    <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogError || companyError}}">查看匹配经验</button>
+    <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogLoading || catalogError || companyError}}">查看匹配经验</button>
   </view>
 </view>

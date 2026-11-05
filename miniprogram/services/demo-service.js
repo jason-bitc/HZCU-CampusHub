@@ -18,24 +18,27 @@ function getScenario() {
 
 function delayed(callback) {
   let timer;
+  let cancel;
+  const requestScenario = scenario;
   const promise = new Promise((resolve, reject) => {
+    cancel = reject;
     timer = setTimeout(() => {
       try {
-        if (scenario === 'network') {
+        if (requestScenario === 'network') {
           reject(new ApiError({ kind: 'NETWORK', message: '演示：无法连接服务，请检查网络后重试' }));
           return;
         }
-        if (scenario === 'service') {
+        if (requestScenario === 'service') {
           reject(new ApiError({ kind: 'SERVICE', status: 503, traceId: 'DEMO-503', message: '演示：服务暂时不可用，请稍后重试' }));
           return;
         }
-        resolve(callback());
+        resolve(callback(requestScenario));
       } catch (error) {
         reject(error);
       }
     }, 180);
   });
-  return { promise, abort() { if (timer) clearTimeout(timer); } };
+  return { promise, abort() { if (timer) clearTimeout(timer); cancel(new ApiError({ kind: 'ABORTED', message: '请求已取消' })); } };
 }
 
 function getCatalog() {
@@ -43,10 +46,10 @@ function getCatalog() {
 }
 
 function listArticles(query) {
-  return delayed(() => {
+  return delayed((requestScenario) => {
     let items = articles.slice();
     const keyword = String(query.keyword || '').toLowerCase();
-    if (scenario === 'empty' || keyword === '无结果演示') items = [];
+    if (requestScenario === 'empty' || keyword === '无结果演示') items = [];
     ['jobId', 'majorId', 'companyId', 'topicId'].forEach((idKey) => {
       if (!query[idKey]) return;
       const categoryKey = { jobId: 'jobs', majorId: 'majors', companyId: 'companies', topicId: 'topics' }[idKey];
@@ -66,8 +69,8 @@ function listArticles(query) {
 }
 
 function getArticle(id) {
-  return delayed(() => {
-    if (scenario === 'unavailable' || [2001, 2002, 2003, 2004].includes(Number(id))) {
+  return delayed((requestScenario) => {
+    if (requestScenario === 'unavailable' || [2001, 2002, 2003, 2004].includes(Number(id))) {
       throw new ApiError({ kind: 'UNAVAILABLE', status: 404, traceId: 'DEMO-404', message: '演示：这篇经验不存在或当前不可用' });
     }
     const article = articles.find((item) => item.id === Number(id));

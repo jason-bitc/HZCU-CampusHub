@@ -3,16 +3,16 @@
     <app-icon name="home" size="42" />
     <text>发现</text>
   </view>
-  <button class="nav-item nav-disabled" data-name="收藏" bindtap="showFuture" aria-disabled="true">
+  <button class="nav-item nav-disabled" disabled aria-label="收藏，尚未开放">
     <app-icon name="favorite" size="42" />
-    <text>收藏</text>
+    <text>收藏</text><text class="nav-status">未开放</text>
   </button>
-  <button class="nav-item nav-disabled" data-name="创作" bindtap="showFuture" aria-disabled="true">
+  <button class="nav-item nav-disabled" disabled aria-label="创作，尚未开放">
     <app-icon name="create" size="42" />
-    <text>创作</text>
+    <text>创作</text><text class="nav-status">未开放</text>
   </button>
-  <button class="nav-item nav-disabled" data-name="我的" bindtap="showFuture" aria-disabled="true">
+  <button class="nav-item nav-disabled" disabled aria-label="我的，尚未开放">
     <app-icon name="user" size="42" />
-    <text>我的</text>
+    <text>我的</text><text class="nav-status">未开放</text>
   </button>
 </view>

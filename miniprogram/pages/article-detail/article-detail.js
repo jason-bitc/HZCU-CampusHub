@@ -10,6 +10,8 @@ Page({
     status: 'loading',
     errorMessage: '',
     traceId: '',
+    tocDrawerVisible: false,
+    errorTitle: '文章加载失败',
     assetBaseUrl: config.apiBaseUrl,
     demoMode: config.demoMode,
     demoScenario: 'normal'
@@ -37,13 +39,35 @@ Page({
   },
 
   onPullDownRefresh() {
+    if (!Number.isSafeInteger(this.data.articleId) || this.data.articleId <= 0) {
+      wx.stopPullDownRefresh();
+      return;
+    }
     this.loadArticle().catch(() => {}).then(() => wx.stopPullDownRefresh());
+  },
+
+  onPageScroll(event) {
+    const reader = this.selectComponent('#article-reader');
+    if (reader) reader.updateReadingPosition(event.scrollTop);
+  },
+
+  handleDrawerChange(event) {
+    if (event.detail.visible !== this.data.tocDrawerVisible) this.setData({ tocDrawerVisible: event.detail.visible });
+  },
+
+  goToSources() {
+    wx.createSelectorQuery().select('#article-sources').boundingClientRect((rect) => {
+      if (!rect) return;
+      wx.createSelectorQuery().selectViewport().scrollOffset((viewport) => {
+        if (viewport) wx.pageScrollTo({ scrollTop: Math.max(0, viewport.scrollTop + rect.top - 20), duration: 250 });
+      }).exec();
+    }).exec();
   },
 
   loadArticle() {
     if (this.activeRequest) this.activeRequest.abort();
     const token = this.gate.next();
-    this.setData({ article: null, status: 'loading', errorMessage: '', traceId: '' });
+    this.setData({ article: null, status: 'loading', errorMessage: '', traceId: '', tocDrawerVisible: false });
     const operation = articlesApi.getArticle(this.data.articleId);
     this.activeRequest = operation;
     return operation.promise.then((article) => {
@@ -55,7 +79,8 @@ Page({
       this.activeRequest = null;
       this.setData({
         article: null,
-        status: error.kind === 'UNAVAILABLE' ? 'unavailable' : 'error',
+        status: error.kind === 'UNAVAILABLE' ? 'unavailable' : error.kind === 'PERMISSION' ? 'permission' : 'error',
+        errorTitle: error.kind === 'SERVICE' ? '服务暂时不可用' : '文章加载失败',
         errorMessage: error.message || '文章加载失败，请重试',
         traceId: error.traceId || ''
       });
@@ -81,25 +106,8 @@ Page({
         content: '外部资料由作者提供，请自行核验内容与访问权限。小程序不直接跳转任意外链，可粘贴到浏览器打开。',
         showCancel: false,
         confirmText: '知道了'
-      })
-    });
-  },
-
-  showFutureInteraction() {
-    wx.showToast({ title: '认证与互动功能后续批次开放', icon: 'none' });
-  },
-
-  chooseDemoScenario() {
-    if (!config.demoMode) return;
-    const scenarios = ['normal', 'network', 'service', 'unavailable'];
-    wx.showActionSheet({
-      itemList: ['正常文章', '网络失败状态', '服务异常状态', '文章不可用状态'],
-      success: (result) => {
-        const scenario = scenarios[result.tapIndex];
-        articlesApi.setDemoScenario(scenario);
-        this.setData({ demoScenario: scenario });
-        this.loadArticle();
-      }
+      }),
+      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' })
     });
   }
 });

@@ -1,9 +1,10 @@
+<page-meta page-style="{{tocDrawerVisible ? 'overflow: hidden;' : ''}}" />
 <view class="detail-page">
-  <button wx:if="{{demoMode}}" class="demo-banner pressable" bindtap="chooseDemoScenario">演示模式 · 本地示例正文，未连接真实后端 · 点击切换状态</button>
+  <view wx:if="{{demoMode}}" class="demo-banner">演示模式 · 本地示例，未连接真实后端</view>
 
   <page-state wx:if="{{status === 'loading'}}" status="loading" title="正在加载经验" description="正在获取当前公开版本，请稍候。" />
-  <page-state wx:elif="{{status === 'error'}}" status="error" title="文章加载失败" description="{{errorMessage}}。可以手动重试，不会把服务异常显示成没有正文。" trace-id="{{traceId}}" action-text="重试当前请求" secondary-text="返回发现页" bindaction="loadArticle" bindsecondary="goBack" />
-  <page-state wx:elif="{{status === 'unavailable'}}" status="unavailable" title="内容不可用" description="{{errorMessage}}。不会展示缓存中的旧正文、作者资料或评论。" trace-id="{{traceId}}" action-text="返回发现页" bindaction="goBack" />
+  <page-state wx:elif="{{status === 'error'}}" status="error" title="{{errorTitle}}" description="{{errorMessage}}。可以重试或返回发现页。" trace-id="{{traceId}}" action-text="重试当前请求" secondary-text="返回发现页" bindaction="loadArticle" bindsecondary="goBack" />
+  <page-state wx:elif="{{status === 'unavailable' || status === 'permission'}}" status="{{status}}" title="内容不可用" description="{{errorMessage}}" trace-id="{{traceId}}" action-text="返回发现页" bindaction="goBack" />
 
   <view wx:else class="detail-content">
     <view class="article-container">
@@ -26,13 +27,14 @@
             <text class="stage-secondary-value">{{article.baseLevelText}}</text>
           </view>
         </view>
-        <view class="guest-note">作者身份与主页：校园认证后可见</view>
+        <view class="guest-note">游客可阅读全文。作者身份、主页与交流需校园认证，本版本尚未开放。</view>
       </view>
 
-      <markdown-view body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" source-links="{{article.sourceLinks}}" source-note="{{article.sourceNote}}" />
+      <markdown-view id="article-reader" demo-mode="{{demoMode}}" body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" source-links="{{article.sourceLinks}}" source-note="{{article.sourceNote}}" binddrawerchange="handleDrawerChange" bindsources="goToSources" />
 
-      <view wx:if="{{article.sourceLinks.length > 1}}" class="source-section">
+      <view id="article-sources" class="source-section">
         <text class="source-heading">来源与外部资料</text>
+        <text class="source-note">{{article.sourceNote || '作者未补充来源说明。'}}</text>
         <view class="source-links">
           <button wx:for="{{article.sourceLinks}}" wx:key="url" class="source-link pressable" data-url="{{item.url}}" bindtap="copySourceLink">
             <view class="source-link-text">
@@ -49,19 +51,19 @@
   </view>
 
   <view wx:if="{{status === 'ready'}}" class="visitor-action-bar" role="toolbar" aria-label="认证后开放的互动操作">
-    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+    <button class="visitor-action" disabled aria-label="点赞，尚未开放">
       <app-icon name="like" size="38" />
       <text>点赞</text>
     </button>
-    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+    <button class="visitor-action" disabled aria-label="投币，尚未开放">
       <app-icon name="coin" size="38" />
       <text>投币</text>
     </button>
-    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+    <button class="visitor-action" disabled aria-label="收藏，尚未开放">
       <app-icon name="star" size="38" />
       <text>收藏</text>
     </button>
-    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+    <button class="visitor-action" disabled aria-label="评论，尚未开放">
       <app-icon name="comment" size="38" />
       <text>评论</text>
     </button>

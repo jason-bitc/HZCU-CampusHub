@@ -1,2 +1,2 @@
-@import "./styles/tokens.wxss";
-@import "./styles/common.wxss";
+@import "styles/tokens.wxss";
+@import "styles/common.wxss";

@@ -12,7 +12,10 @@ view, text, image, button, input, scroll-view {
 }
 
 button {
-  margin: 0;
+  /* WeChat v2 gives normal buttons a fixed width. Local button classes own width. */
+  width: auto !important;
+  max-width: none;
+  margin: 0 !important;
   padding: 0;
   border-radius: 0;
   background: transparent;
@@ -31,7 +34,7 @@ button::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 88rpx;
+  min-height: var(--touch-target);
   padding: 0 32rpx;
   border-radius: var(--radius-sm);
   font-size: var(--font-md);
@@ -67,7 +70,7 @@ button::after {
 
 .button-disabled,
 button[disabled] {
-  opacity: 0.5;
+  opacity: 0.65;
 }
 
 .pressable {
@@ -77,6 +80,14 @@ button[disabled] {
 .pressable-hover,
 .pressable:active {
   opacity: 0.72;
+}
+
+button.button-hover {
+  opacity: 0.72;
+}
+
+.input-placeholder {
+  color: var(--color-text-tertiary);
 }
 
 .notice {

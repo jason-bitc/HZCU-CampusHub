@@ -21,8 +21,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72rpx;
-  height: 72rpx;
+  width: var(--touch-target) !important;
+  height: var(--touch-target);
 }
 
 .nav-title {
@@ -65,11 +65,14 @@
 }
 
 .selected-chip {
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-target);
   padding: 8rpx 16rpx;
   border-radius: 8rpx;
   background: var(--color-primary-soft);
   color: var(--color-primary);
-  font-size: 24rpx;
+  font-size: var(--font-xs);
   line-height: 1.5;
 }
 
@@ -81,7 +84,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 100% !important;
   min-height: 100rpx;
   border-bottom: 1rpx solid var(--color-border);
   text-align: left;
@@ -143,8 +146,8 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 48rpx;
-  height: 60rpx;
+  width: var(--touch-target) !important;
+  height: var(--touch-target);
 }
 
 .company-suggestions {
@@ -172,7 +175,7 @@
   display: block;
   margin-top: 12rpx;
   color: var(--color-danger);
-  font-size: 23rpx;
+  font-size: var(--font-xs);
   line-height: 1.5;
 }
 
@@ -180,7 +183,7 @@
   display: block;
   margin-top: 12rpx;
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  font-size: var(--font-xs);
   line-height: 1.5;
 }
 
@@ -191,6 +194,9 @@
 }
 
 .topic-chip {
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-target);
   padding: 11rpx 18rpx;
   border-radius: 8rpx;
   background: var(--color-primary-soft);
@@ -217,3 +223,10 @@
 
 .reset-button { width: 34%; }
 .apply-button { flex: 1; }
+
+.filter-cancel { min-width: var(--touch-target); min-height: var(--touch-target); color: var(--color-primary); font-size: var(--font-sm); }
+.draft-note, .search-note { margin-bottom: 24rpx; color: var(--color-text-secondary); font-size: var(--font-xs); line-height: 1.7; }
+.search-note { color: var(--color-primary-dark); overflow-wrap: anywhere; }
+.job-section { margin: 32rpx 0; }
+.catalog-status { margin: 24rpx 0; color: var(--color-danger); font-size: var(--font-sm); }
+.catalog-retry { margin-top: 16rpx; }

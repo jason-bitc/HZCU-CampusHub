@@ -1,0 +1,140 @@
+{
+  "checkedAt": "2026-11-05T14:24:05.486Z",
+  "base": "http://127.0.0.1:8080",
+  "publicTotal": 7,
+  "pagedIds": [
+    2005,
+    1005,
+    1004,
+    1003,
+    1002,
+    1001,
+    1006
+  ],
+  "allCurrentCountsZero": true,
+  "detailId": 2005,
+  "bodyLength": 145,
+  "status": "PASS",
+  "evidence": [
+    {
+      "endpoint": "/actuator/health",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fef99424-79ab-467f-9083-5d8e4b9415db"
+    },
+    {
+      "endpoint": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1609281d-3a0f-4093-ae39-2c2efa237ef1"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=recognized&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "75724b4b-c860-4714-8c0d-6fa36a1314df"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "aa1a4876-528f-4b67-92fa-117baaeee3ba"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=1&size=2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fc19dde4-6f23-4bf7-8ac9-8df16571efd3"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=2&size=2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "97c74b1b-75ac-4b7f-9004-2e8141c9a1bb"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=3&size=2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "32f0f7ae-a67e-4135-a099-e02a4889c700"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=4&size=2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a8f27747-8936-4d43-b9b6-b2b519b95756"
+    },
+    {
+      "endpoint": "/api/v1/articles?jobId=1&sort=latest&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5127a44f-deec-44d5-a44a-825701bbaade"
+    },
+    {
+      "endpoint": "/api/v1/articles?majorId=11&sort=latest&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "53c85110-2629-42cd-a53f-1028d8a96770"
+    },
+    {
+      "endpoint": "/api/v1/articles?companyId=21&sort=latest&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3197c398-5f6e-4efc-b920-7657d093bd51"
+    },
+    {
+      "endpoint": "/api/v1/articles?topicId=31&sort=latest&page=1&size=100",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d7f8353c-ef0f-4b8d-8f2c-9de5cbd488af"
+    },
+    {
+      "endpoint": "/api/v1/articles?sort=latest&page=1&size=100&jobId=1&majorId=11&companyId=21&topicId=31",
+      "status": 200,
+      "code": "OK",
+      "traceId": "052b1ffc-2bdd-4e7c-abfb-c768b69224d8"
+    },
+    {
+      "endpoint": "/api/v1/articles?keyword=%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%85%B3%E9%94%AE%E8%AF%8D-20261105&sort=latest&page=1&size=2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b2b0874e-0bad-43ba-aed7-7d5589e38e06"
+    },
+    {
+      "endpoint": "/api/v1/articles/2005",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0da9cdfe-c082-4fd3-a380-d3299ba5c767"
+    },
+    {
+      "endpoint": "/api/v1/articles/2001",
+      "status": 404,
+      "code": "NOT_FOUND",
+      "traceId": "04770b23-6a94-48ad-b782-822753bdba8a"
+    },
+    {
+      "endpoint": "/api/v1/articles/2002",
+      "status": 404,
+      "code": "NOT_FOUND",
+      "traceId": "005242a5-e1ab-4a2d-b9fb-c9ddb0f77c63"
+    },
+    {
+      "endpoint": "/api/v1/articles/2003",
+      "status": 404,
+      "code": "NOT_FOUND",
+      "traceId": "dd349990-9802-4939-a5ab-19863470f4bb"
+    },
+    {
+      "endpoint": "/api/v1/articles/2004",
+      "status": 404,
+      "code": "NOT_FOUND",
+      "traceId": "aed3a09b-b2da-4fa0-a491-3e49ec49b7ce"
+    },
+    {
+      "endpoint": "/api/v1/articles?jobId=&page=1&size=2",
+      "status": 400,
+      "code": "INVALID_PARAMETER",
+      "traceId": "c631ad46-92a7-4ef8-9775-ffdc76b2e26a"
+    }
+  ]
+}
