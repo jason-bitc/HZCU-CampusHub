@@ -1,4 +1,4 @@
-实体,中文名,逻辑存储,字段,含义,约束,逻辑类型,长度或范围,可空条件,取值依据
+﻿实体,中文名,逻辑存储,字段,含义,约束,逻辑类型,长度或范围,可空条件,取值依据
 Account,账号,D1,accountId,唯一标识,不可变主标识,逻辑标识,符合标识类型定义；引用必须指向相应实体,否,不可变主标识
 Account,账号,D1,email,校园邮箱,唯一且私有,Unicode文本,非空字符序列；不在分析模型中指定物理列宽,否,唯一且私有
 Account,账号,D1,credentialDigest,凭证摘要,不得保存明文密码,不可逆摘要,非空摘要值；不保存明文秘密；算法与编码由设计定义,否,不得保存明文密码
@@ -80,7 +80,7 @@ Case,举报反馈,D5,kind,类别,REPORT或FEEDBACK,枚举,REPORT或FEEDBACK,否,
 Case,举报反馈,D5,targetType,目标类型,ARTICLE或COMMENT或PLATFORM,枚举,ARTICLE或COMMENT或PLATFORM,否,ARTICLE或COMMENT或PLATFORM
 Case,举报反馈,D5,targetId,目标标识,平台反馈可空,逻辑标识,符合标识类型定义；引用必须指向相应实体,条件允许；PLATFORM反馈可空，其余有明确目标,平台反馈可空
 Case,举报反馈,D5,reason,理由,文字及证据图片,Unicode文本,非空字符序列；不在分析模型中指定物理列宽,否,文字及证据图片
-Case,举报反馈,D5,state,处理状态,OPEN或PROCESSING或RESOLVED或CLOSED,枚举,OPEN或PROCESSING或RESOLVED或CLOSED,否,OPEN或PROCESSING或RESOLVED或CLOSED
+Case,举报反馈,D5,state,处理状态,OPEN或PROCESSING或NEEDS_ACTION或CLOSED,枚举,OPEN或PROCESSING或NEEDS_ACTION或CLOSED,否,OPEN或PROCESSING或NEEDS_ACTION或CLOSED
 ModerationAction,处理动作,D5,actionId,动作标识,主标识,逻辑标识,符合标识类型定义；引用必须指向相应实体,否,主标识
 ModerationAction,处理动作,D5,caseId,案件标识,关联案件,逻辑标识,符合标识类型定义；引用必须指向相应实体,否,关联案件
 ModerationAction,处理动作,D5,adminId,管理员,关联管理身份,逻辑标识,符合标识类型定义；引用必须指向相应实体,否,关联管理身份

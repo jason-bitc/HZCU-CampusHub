@@ -1,5 +1,7 @@
-# 需求文档入口
+# 需求阶段唯一主文档
 
-当前[软件需求规格说明书SRS](project/reports/城院帮软件需求规格说明书G04.pdf)为V1.4。配套[分析报告](project/reports/城院帮需求分析报告G04.pdf)、[模型与字典](project/models)、[原型](project/prototypes)及[会议和调研](project/meetings-research)共同维护。
+当前为[统一SRS V1.5 PDF](project/reports/城院帮软件需求规格说明书G04.pdf)、[Word](project/reports/城院帮软件需求规格说明书G04.docx)和[Markdown](project/reports/城院帮软件需求规格说明书G04.md)。分析过程、ER图、DFD、数据字典、数据规范化、IPO、状态图、原型及验证已经合并进同一文件。
 
-技术方案为原生微信小程序与独立Vue3／TypeScript／Vite网页，共享Java／Spring Boot与MySQL；[技术变更记录](FRONTEND_TECH_STACK.md)说明边界和工作量影响。
+目录显示真实页码并提供跳转；评审第9项见第3、13章，第10项见第6、8章。[11项材料定位](project/models/统一SRS评审条目定位G04.csv)。
+
+[可编辑模型和字典附件](project/models)、[原型](project/prototypes)、[阶段会议与评价](project/meetings-research)继续独立保存可编辑源。原三报告输入从Git提交7ffe55a追溯，不作为并行当前主件。

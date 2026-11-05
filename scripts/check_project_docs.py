@@ -1,6 +1,6 @@
 """Check shared document integrity using Python's standard library only."""
 from pathlib import Path
-import argparse,csv,hashlib,sys,zipfile,xml.etree.ElementTree as ET
+import argparse,csv,hashlib,re,sys,zipfile,xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
 DOCS=ROOT/'docs/project'
@@ -8,6 +8,39 @@ MANIFEST=DOCS/'MANIFEST.sha256.csv'
 SUFFIXES={'.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg'}
 def files():return sorted(p for p in DOCS.rglob('*') if p.is_file() and p!=MANIFEST)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def check_srs(document,styles,name):
+    """Protect the consolidated review structure without testing application code."""
+    problems=[]
+    ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+    key='{'+ns['w']+'}'
+    levels={}
+    for style in styles.findall('w:style',ns):
+        label=style.find('w:name',ns)
+        if label is None:continue
+        match=re.fullmatch(r'(?:heading|标题)([123])',label.get(key+'val','').lower().replace(' ',''))
+        if match:levels[style.get(key+'styleId')]=int(match.group(1))
+    headings=[]
+    for paragraph in document.findall('w:body/w:p',ns):
+        style=paragraph.find('w:pPr/w:pStyle',ns)
+        level=levels.get(style.get(key+'val')) if style is not None else None
+        if level in {1,2}:
+            headings.append(''.join(t.text or '' for t in paragraph.findall('.//w:t',ns)))
+    required={'3 功能要求','5 用户用例与界面原型','6 数据模型与ER图','7 功能模型与数据流图',
+              '8 数据字典','11 行为模型与状态转换图','13 非功能需求与质量验收',
+              '14 需求验证与用户确认','附录B 需求阶段11项评审对应与证据状态'}
+    for title in sorted(required-set(headings)):problems.append('Missing SRS review chapter '+title+': '+name)
+    if len(headings)!=len(set(headings)):problems.append('Duplicate SRS navigation heading: '+name)
+    if any(len(title)>85 for title in headings):problems.append('Body text entered SRS heading navigation: '+name)
+    text='\n'.join(t.text or '' for t in document.findall('.//w:t',ns))
+    if len(set(re.findall(r'FR-[A-Z]\d{2}',text)))!=52:problems.append('SRS must retain 52 unique FR identifiers: '+name)
+    if len(set(re.findall(r'NFR\d{2}',text)))!=12:problems.append('SRS must retain 12 unique NFR identifiers: '+name)
+    fields=' '.join(t.text or '' for t in document.findall('.//w:instrText',ns))
+    fields+=' '+' '.join(t.get(key+'instr','') for t in document.findall('.//w:fldSimple',ns))
+    if not re.search(r'\bTOC\b',fields):problems.append('SRS requires an updateable Word contents field: '+name)
+    links=document.findall('.//w:hyperlink',ns)
+    if sum(bool(t.get(key+'anchor')) for t in links)<10:problems.append('SRS requires cached internal contents links: '+name)
+    return problems
 def refresh():
     with MANIFEST.open('w',encoding='utf-8-sig',newline='') as f:
         w=csv.writer(f);w.writerow(['path','bytes','sha256'])
@@ -39,6 +72,8 @@ def check():
                 with zipfile.ZipFile(p) as z:
                     if z.testzip():errors.append('Corrupt Office ZIP: '+name)
                     ET.fromstring(z.read('[Content_Types].xml'))
+                    if p.name=='城院帮软件需求规格说明书G04.docx':
+                        errors.extend(check_srs(ET.fromstring(z.read('word/document.xml')),ET.fromstring(z.read('word/styles.xml')),name))
                     if p.suffix.lower()=='.docx' and '周会议纪要' in p.stem:
                         document=ET.fromstring(z.read('word/document.xml'))
                         ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}

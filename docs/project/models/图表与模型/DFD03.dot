@@ -1,18 +1,18 @@
 digraph G {
-graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
-node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
-edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
-"P5" [shape=circle,label="P5\n独立运维",style="filled",fillcolor="white"];
-"E3" [shape=box,label="E3\n运维管理员"];
-"E5" [shape=box,label="E5\n受控运行环境"];
-"D5" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D5 举报反馈与处置</TD></TR></TABLE>>];
-"D6" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D6 任务备份与审计</TD></TR></TABLE>>];
-"E3" -> "P5" [label="F05"];
-"P5" -> "E3" [label="F06"];
-"P5" -> "E5" [label="F09"];
-"E5" -> "P5" [label="F10"];
-"P5" -> "D6" [label="I23"];
-"D6" -> "P5" [label="I24"];
-"P5" -> "D5" [label="I25"];
-"D5" -> "P5" [label="I26"];
+graph [rankdir=LR,nodesep=0.45,ranksep=0.65,bgcolor="white",splines=polyline,pad=0.35];
+node [fontname="Microsoft YaHei",fontsize=14,color="#223846",penwidth=1.2,margin="0.12,0.10",fillcolor="white",style="filled"];
+edge [fontname="Microsoft YaHei",fontsize=11,color="#526775",arrowsize=0.7];
+"P5" [shape=circle,label="P5\n独立运维",width=1.354,height=1.354];
+"E3" [shape=box,label="E3\n运维管理员",width=1.278,height=0.861];
+"E5" [shape=box,label="E5\n受控运行环境",width=1.472,height=0.861];
+"D5" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="7" WIDTH="145"><TR><TD BORDER="1" SIDES="TB"><FONT FACE="Microsoft YaHei" POINT-SIZE="14">D5 举报反馈与处置</FONT></TD></TR></TABLE>>];
+"D6" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="7" WIDTH="145"><TR><TD BORDER="1" SIDES="TB"><FONT FACE="Microsoft YaHei" POINT-SIZE="14">D6 任务备份与审计</FONT></TD></TR></TABLE>>];
+"E3" -> "P5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="37"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">F05</FONT></TD></TR></TABLE>>];
+"P5" -> "E3" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="37"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">F06</FONT></TD></TR></TABLE>>];
+"P5" -> "E5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="37"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">F09</FONT></TD></TR></TABLE>>];
+"E5" -> "P5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="37"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">F10</FONT></TD></TR></TABLE>>];
+"P5" -> "D6" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="34"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">I23</FONT></TD></TR></TABLE>>];
+"D6" -> "P5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="34"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">I24</FONT></TD></TR></TABLE>>];
+"P5" -> "D5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="34"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">I25</FONT></TD></TR></TABLE>>];
+"D5" -> "P5" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="34"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">I26</FONT></TD></TR></TABLE>>];
 }

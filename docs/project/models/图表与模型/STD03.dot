@@ -1,16 +1,19 @@
 digraph G {
-graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
-node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
-edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
-"start" [shape=point,label="",style="filled",fillcolor="white",fillcolor="black",width=0.14];
-"O" [shape=box,label="待处理"];
-"P" [shape=box,label="处理中"];
-"R" [shape=box,label="已处理"];
-"C" [shape=doublecircle,label="已关闭",style="filled",fillcolor="white"];
-"start" -> "O" [label=""];
+graph [rankdir=LR,bgcolor="white",pad=0.3];
+node [fontname="Microsoft YaHei",fontsize=14,shape=box];
+edge [fontname="Microsoft YaHei",fontsize=11];
+start [shape=point];
+start -> O;
+"O" [label="待处理 OPEN",shape=box];
+"P" [label="处理中 PROCESSING",shape=box];
+"N" [label="待进一步治理 NEEDS_ACTION",shape=box];
+"C" [label="已关闭 CLOSED",shape=doublecircle];
 "O" -> "P" [label="T01"];
-"P" -> "R" [label="T02"];
-"R" -> "P" [label="T03"];
-"R" -> "C" [label="T04"];
-"O" -> "C" [label="T05"];
+"P" -> "O" [label="T02"];
+"P" -> "C" [label="T03"];
+"P" -> "N" [label="T04"];
+"N" -> "O" [label="T05"];
+"N" -> "C" [label="T06"];
+"N" -> "N" [label="T07"];
+"P" -> "P" [label="T08"];
 }
