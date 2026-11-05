@@ -1,10 +1,10 @@
 digraph G {
-graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
-node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
-edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
-"I" [shape=box,label="输入\n认证身份 草稿版本号\n正文 图片引用 分类"];
-"P" [shape=box,label="处理\n核对权限与版本\n检查资料与文件状态\n保存并切换公开版本"];
-"O" [shape=box,label="输出\n文章标识 公开版本\n成功回执或具体失败原因"];
-"I" -> "P" [label="数据"];
-"P" -> "O" [label="结果"];
+graph [rankdir=LR,nodesep=0.45,ranksep=0.65,bgcolor="white",splines=polyline,pad=0.35];
+node [fontname="Microsoft YaHei",fontsize=14,color="#223846",penwidth=1.2,margin="0.12,0.10",fillcolor="white",style="filled"];
+edge [fontname="Microsoft YaHei",fontsize=11,color="#526775",arrowsize=0.7];
+"I" [shape=box,label="输入\n认证身份 草稿版本号\n正文 图片引用 分类",width=2.112,height=1.167,style="rounded,filled"];
+"P" [shape=box,label="处理\n核对权限与版本\n检查资料与文件状态\n保存并切换公开版本",width=2.056,height=1.472,style="rounded,filled"];
+"O" [shape=box,label="输出\n文章标识 公开版本\n成功回执或具体失败原因",width=2.444,height=1.167,style="rounded,filled"];
+"I" -> "P" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="40"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">数据</FONT></TD></TR></TABLE>>];
+"P" -> "O" [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="2" WIDTH="40"><TR><TD><FONT FACE="Microsoft YaHei" POINT-SIZE="11">结果</FONT></TD></TR></TABLE>>];
 }

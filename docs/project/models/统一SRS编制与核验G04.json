@@ -1,0 +1,116 @@
+{
+  "version": "1.5",
+  "id": "G04-SRS-20261105-02",
+  "date": "2026-11-05",
+  "sourceCommit": "7ffe55a210f895ba8a2478f98054087c570e1a8e",
+  "sourceFiles": [
+    {
+      "name": "城院帮软件需求规格说明书G04.docx",
+      "sha256": "4e2becd8e96ee18e6f19d426e5f13ec0a9ae3e42f6baf4da4b4f65d9ca9c67ed",
+      "bytes": 1782913
+    },
+    {
+      "name": "城院帮软件需求规格说明书G04.pdf",
+      "sha256": "6c606a6a319393e8b29e603d5f15935c3d462ba9dc321511dd2957d129ac26a2",
+      "bytes": 1254561
+    },
+    {
+      "name": "城院帮软件需求规格说明书G04.md",
+      "sha256": "6db9f93f6fafee4135104e388b64f7cab0206bbd8784b557ec703927e27193bb",
+      "bytes": 73190
+    },
+    {
+      "name": "城院帮需求分析报告G04.docx",
+      "sha256": "3dcfca34f9cc8aa1bec5ac2668f8f6e7ead01e7c14433dc8cbd5c16266ce9b9e",
+      "bytes": 3478603
+    },
+    {
+      "name": "城院帮需求分析报告G04.pdf",
+      "sha256": "36482b50bd0e8561d2a23c666896e1b3465ad03059e4f8ac82f095e0bf342bc8",
+      "bytes": 1746624
+    },
+    {
+      "name": "城院帮需求分析报告G04.md",
+      "sha256": "bd6c441161e9b7eff72e3877c38705d5a8df361496eec11c15552dec59d4b48f",
+      "bytes": 27151
+    },
+    {
+      "name": "城院帮需求分析模型说明G04.docx",
+      "sha256": "1cb98328a164c852d2d48a39cfe198c1549ded862aefb56be87461189248e3f4",
+      "bytes": 7691115
+    },
+    {
+      "name": "城院帮需求分析模型说明G04.pdf",
+      "sha256": "562d933b51a8c6e73cf7f737954fe0aca6a6748c4816c0bb88dc60d36b718e40",
+      "bytes": 4543426
+    },
+    {
+      "name": "城院帮需求分析模型说明G04.md",
+      "sha256": "d75745a6104fef917b36f8f6caa4a68e561c9db2b3213162b4c4a5c93093a848",
+      "bytes": 40938
+    }
+  ],
+  "pages": 109,
+  "FR": 52,
+  "NFR": 12,
+  "entities": 27,
+  "fields": 134,
+  "dataFlows": 46,
+  "linkedTOC": true,
+  "wordHeadingBookmarks": 192,
+  "removedParallelReports": [
+    "docs/project/reports/城院帮需求分析报告G04.docx",
+    "docs/project/reports/城院帮需求分析报告G04.pdf",
+    "docs/project/reports/城院帮需求分析报告G04.md",
+    "docs/project/reports/城院帮需求分析模型说明G04.docx",
+    "docs/project/reports/城院帮需求分析模型说明G04.pdf",
+    "docs/project/reports/城院帮需求分析模型说明G04.md"
+  ],
+  "chapterPages": {
+    "文档控制": 5,
+    "评审查阅导航": 6,
+    "1 引言": 7,
+    "2 综合描述与需求获取": 9,
+    "3 功能要求": 14,
+    "4 业务规则": 30,
+    "5 用户用例与界面原型": 32,
+    "6 数据模型与ER图": 40,
+    "7 功能模型与数据流图": 51,
+    "8 数据字典": 60,
+    "9 数据规范化": 78,
+    "10 功能层次与辅助分析图": 80,
+    "11 行为模型与状态转换图": 85,
+    "12 界面与外部接口要求": 91,
+    "13 非功能需求与质量验收": 92,
+    "14 需求验证与用户确认": 95,
+    "15 需求追踪与开发计划修订": 97,
+    "16 需求参数与变更管理": 103,
+    "参考资料": 105,
+    "附录A 国标条目与章节对应": 106,
+    "附录B 需求阶段11项评审对应与证据状态": 107,
+    "附录C 需求基线与接口实现边界": 108,
+    "附录D 可编辑模型与阶段附件索引": 109
+  },
+  "reviewMatrix": "统一SRS评审条目定位G04.csv",
+  "productScopeChanged": false,
+  "currentCaseModel": "OPEN/PROCESSING/NEEDS_ACTION/CLOSED",
+  "userResearchStatus": "尚无真实用户访谈/任务走查；组内讨论和公开网络资料调研已形成",
+  "visualVerification": "按本次最终Word PDF渲染记录逐页核验，证据保存在任务工作目录",
+  "applicationTestsRun": false,
+  "linkedContentsEntries": 112,
+  "wordHeadingBookmarksChecked": 192,
+  "visualPagesReviewed": 109,
+  "figureReadabilityRepairs": [
+    "DFD00",
+    "DFD01",
+    "DFD02",
+    "DFD03",
+    "DFD21",
+    "DFD31",
+    "DFD41",
+    "DFD51",
+    "HIER01",
+    "IPO01"
+  ],
+  "presentationSync": "讲稿、PDF查阅导航和豆包提示词已按统一SRS页码更新；原PPT/PDF未改动"
+}

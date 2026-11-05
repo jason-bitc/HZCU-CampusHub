@@ -4,7 +4,7 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.7、可行性V1.6、SRS V1.4、分析V1.6、模型V1.3，含Word、Markdown和PDF|
+|[reports](reports)|项目计划V1.7、可行性V1.6、统一SRS V1.5，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
 |[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
@@ -27,3 +27,10 @@
 ## 周会模板
 
 11月5日修正会议纪要封面与结构；[可填写模板及结构说明](templates/模板结构与使用说明.md)已入库。当前10月31日纪要为V1.3，空白模板为V1.1。
+
+
+## 统一需求主文档
+
+需求阶段主件为[城院帮软件需求规格说明书G04.pdf](reports/城院帮软件需求规格说明书G04.pdf)，[Word](reports/城院帮软件需求规格说明书G04.docx)可编辑。第6章ER、第7章DFD、第8章完整数据字典、第11章状态图、第13章非功能需求及附录B评审对应均可通过目录跳转。原两份独立过程/模型报告已合并，旧原件从Git提交7ffe55a追溯；CSV和可编辑图保留为附件。
+
+[11项评审与PDF页码定位](models/统一SRS评审条目定位G04.csv)。
