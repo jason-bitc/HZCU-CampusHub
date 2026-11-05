@@ -1,0 +1,65 @@
+<view class="discover-page">
+  <button wx:if="{{demoMode}}" class="demo-banner pressable" bindtap="chooseDemoScenario">
+    演示模式 · 本地示例数据，未连接真实后端 · 点击切换状态
+  </button>
+
+  <view class="page-content">
+    <view class="discover-header">
+      <text class="page-title">找到适合自己起点的经验</text>
+    </view>
+
+    <view class="search-box">
+      <app-icon name="search" size="34" />
+      <input class="search-input" value="{{keywordInput}}" maxlength="100" confirm-type="search" placeholder="搜索岗位、公司或经验" bindinput="handleKeywordInput" bindconfirm="submitSearch" />
+      <button wx:if="{{keywordInput}}" class="search-clear pressable" bindtap="clearSearch" aria-label="清空关键词">
+        <app-icon name="close" size="30" />
+      </button>
+    </view>
+
+    <scroll-view scroll-x class="job-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="job-row">
+        <button class="job-chip {{!filters.jobId ? 'job-active' : ''}}" data-id="0" bindtap="selectJob">全部</button>
+        <button wx:for="{{catalog.jobs}}" wx:key="id" class="job-chip {{filters.jobId === item.id ? 'job-active' : ''}}" data-id="{{item.id}}" bindtap="selectJob">{{item.name}}</button>
+      </view>
+    </scroll-view>
+
+    <view class="condition-summary">
+      <view class="summary-major">
+        <text class="summary-label">专业：</text>
+        <button wx:if="{{filters.majorId}}" class="summary-value pressable" bindtap="clearMajorSummary">{{filterSummary.majorText}} ×</button>
+        <text wx:else class="summary-placeholder">{{filterSummary.majorText}}</text>
+      </view>
+      <button class="summary-company pressable" bindtap="openFilter">
+        <text>公司{{filterSummary.companyText}}</text>
+        <app-icon name="chevron-right" size="26" />
+      </button>
+    </view>
+    <view wx:if="{{chips.length}}" class="extra-conditions">
+      <button wx:for="{{chips}}" wx:key="key" class="extra-chip pressable" data-key="{{item.key}}" bindtap="clearChip">{{item.label}} ×</button>
+    </view>
+    <button wx:if="{{catalogError}}" class="catalog-warning" bindtap="loadCatalog">分类加载失败，筛选选项可能不完整。点击重试。</button>
+
+    <view class="sort-row" role="tablist">
+      <button class="sort-tab {{sort === 'recognized' ? 'sort-active' : ''}}" data-sort="recognized" bindtap="selectSort" role="tab">认可优先</button>
+      <button class="sort-tab {{sort === 'latest' ? 'sort-active' : ''}}" data-sort="latest" bindtap="selectSort" role="tab">最新发布</button>
+    </view>
+
+    <page-state wx:if="{{listStatus === 'loading'}}" status="loading" title="正在加载公开经验" description="正在按当前条件查询，请稍候。" />
+    <page-state wx:elif="{{listStatus === 'error'}}" status="error" title="加载失败" description="{{errorMessage}}。当前关键词与筛选条件已保留，不会显示成空列表。" trace-id="{{traceId}}" action-text="重试当前请求" secondary-text="调整筛选" bindaction="handleStateAction" bindsecondary="handleStateSecondary" />
+    <page-state wx:elif="{{listStatus === 'empty'}}" status="empty" title="暂时没有同时满足条件的经验" description="筛选条件已保留，可以调整或清除。" action-text="{{filters.companyId ? '清除公司条件' : '清除全部条件'}}" secondary-text="重新选择筛选" bindaction="handleStateAction" bindsecondary="handleStateSecondary" />
+    <view wx:if="{{listStatus === 'empty'}}" class="empty-note">网络失败会显示“加载失败，点此重试”，不显示成没有内容。</view>
+
+    <view wx:else class="article-list">
+      <article-card wx:for="{{articles}}" wx:key="id" article="{{item}}" bindopen="openArticle" />
+      <view class="load-more-area">
+        <button wx:if="{{hasMore}}" class="load-more pressable" loading="{{loadingMore}}" disabled="{{loadingMore}}" bindtap="loadMore">{{loadingMore ? '正在加载' : '继续加载更多经验'}}</button>
+        <button wx:if="{{loadMoreError}}" class="load-more-error" bindtap="loadMore">{{loadMoreError}}。保留已加载内容，点击重试。</button>
+      </view>
+    </view>
+
+    <view class="reader-rule">公开经验免费阅读；认证后可查看作者并参与交流。</view>
+  </view>
+
+  <prototype-nav />
+  <filter-panel visible="{{filterVisible}}" filters="{{filters}}" catalog="{{catalog}}" catalog-error="{{catalogError}}" bindclose="closeFilter" bindapply="applyFilter" />
+</view>

@@ -1,0 +1,73 @@
+<view class="markdown-view">
+  <view wx:if="{{headings.length > 1}}" class="toc">
+    <button class="toc-toggle pressable" bindtap="toggleToc">
+      <text>文章目录</text>
+      <text>{{tocExpanded ? '收起' : '展开'}}</text>
+    </button>
+    <view wx:if="{{tocExpanded}}" class="toc-list">
+      <button wx:for="{{headings}}" wx:key="id" class="toc-item toc-level-{{item.level}}" data-id="{{item.id}}" bindtap="scrollToHeading">{{item.text}}</button>
+    </view>
+  </view>
+
+  <view wx:if="{{!nodes.length}}" class="markdown-empty">正文暂无内容</view>
+  <view wx:for="{{nodes}}" wx:key="id" id="md-block-{{item.id}}" class="md-block">
+    <view wx:if="{{item.type === 'heading'}}" class="md-heading md-h{{item.level}}">{{item.text}}</view>
+
+    <view wx:elif="{{item.type === 'paragraph'}}" class="md-paragraph">
+      <block wx:for="{{item.segments}}" wx:for-item="segment" wx:key="index">
+        <text wx:if="{{segment.type !== 'link'}}" class="inline-{{segment.type}}" selectable>{{segment.text}}</text>
+        <text wx:else class="inline-link" data-url="{{segment.url}}" bindtap="copyLink">{{segment.text}}</text>
+      </block>
+    </view>
+
+    <view wx:elif="{{item.type === 'quote'}}" class="md-quote">
+      <text wx:for="{{item.segments}}" wx:for-item="segment" wx:key="index" class="inline-{{segment.type}}" selectable>{{segment.text}}</text>
+    </view>
+
+    <view wx:elif="{{item.type === 'list'}}" class="md-list">
+      <view wx:for="{{item.items}}" wx:for-item="listItem" wx:key="index" class="md-list-item">
+        <text class="list-marker">{{listItem.marker}}</text>
+        <view class="list-content">
+          <text wx:for="{{listItem.segments}}" wx:for-item="segment" wx:key="index" class="inline-{{segment.type}}" selectable>{{segment.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view wx:elif="{{item.type === 'code'}}" scroll-x class="md-code" enhanced show-scrollbar="{{false}}">
+      <text selectable>{{item.text}}</text>
+    </scroll-view>
+
+    <view wx:elif="{{item.type === 'image'}}" class="md-image-block">
+      <image wx:if="{{!item.failed}}" class="md-image" src="{{item.src}}" mode="widthFix" lazy-load show-menu-by-longpress data-index="{{index}}" binderror="handleImageError" bindtap="previewImage" aria-label="{{item.alt}}" />
+      <view wx:else class="image-error">
+        <app-icon name="image" size="48" />
+        <text>图片加载失败：{{item.alt}}</text>
+        <button wx:if="{{item.originalSrc}}" class="button-secondary image-retry" data-index="{{index}}" bindtap="retryImage">重试图片</button>
+      </view>
+      <text class="image-caption">{{item.alt}} · 点击图片可查看</text>
+    </view>
+
+    <view wx:elif="{{item.type === 'resource'}}" class="resource-card pressable" data-url="{{firstSourceLink.url}}" bindtap="copyLink">
+      <text class="resource-title">资料：{{resourceTitle}}</text>
+      <text class="resource-subtitle">附 {{sourceLinks.length}} 个外部链接与来源说明 ></text>
+    </view>
+  </view>
+
+  <button wx:if="{{headings.length > 1}}" class="toc-float pressable" bindtap="openToc" aria-label="打开文章目录">
+    <app-icon name="list" size="30" />
+    <text>目录</text>
+  </button>
+
+  <view wx:if="{{tocDrawerVisible}}" class="toc-drawer-layer">
+    <view class="toc-drawer-mask" bindtap="closeToc"></view>
+    <view class="toc-drawer" role="dialog" aria-label="文章目录">
+      <view class="toc-drawer-header">
+        <text>文章目录</text>
+        <button class="toc-drawer-close pressable" bindtap="closeToc">关闭</button>
+      </view>
+      <scroll-view scroll-y class="toc-drawer-body" enhanced show-scrollbar="{{false}}">
+        <button wx:for="{{headings}}" wx:key="id" class="toc-drawer-item toc-level-{{item.level}}" data-id="{{item.id}}" bindtap="scrollToHeading">{{item.text}}</button>
+      </scroll-view>
+    </view>
+  </view>
+</view>

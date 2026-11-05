@@ -1,0 +1,13 @@
+{
+  "desc": "公开阅读页面允许索引；不包含个人或认证资料。",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/discover/discover"
+    },
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

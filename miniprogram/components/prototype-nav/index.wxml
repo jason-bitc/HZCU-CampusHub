@@ -1,0 +1,18 @@
+<view class="prototype-nav" role="navigation" aria-label="小程序主导航">
+  <view class="nav-item nav-active" aria-current="page">
+    <app-icon name="home" size="42" />
+    <text>发现</text>
+  </view>
+  <button class="nav-item nav-disabled" data-name="收藏" bindtap="showFuture" aria-disabled="true">
+    <app-icon name="favorite" size="42" />
+    <text>收藏</text>
+  </button>
+  <button class="nav-item nav-disabled" data-name="创作" bindtap="showFuture" aria-disabled="true">
+    <app-icon name="create" size="42" />
+    <text>创作</text>
+  </button>
+  <button class="nav-item nav-disabled" data-name="我的" bindtap="showFuture" aria-disabled="true">
+    <app-icon name="user" size="42" />
+    <text>我的</text>
+  </button>
+</view>

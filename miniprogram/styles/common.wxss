@@ -1,0 +1,97 @@
+page {
+  min-height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: var(--font-md);
+  line-height: 1.65;
+}
+
+view, text, image, button, input, scroll-view {
+  box-sizing: border-box;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
+button::after {
+  border: 0;
+}
+
+.button-primary,
+.button-secondary,
+.button-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88rpx;
+  padding: 0 32rpx;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-md);
+  font-weight: 600;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+
+.button-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.button-primary.button-hover,
+.button-primary:active {
+  background: var(--color-primary-dark);
+}
+
+.button-secondary {
+  border: 1rpx solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.button-secondary.button-hover,
+.button-secondary:active {
+  background: var(--color-bg);
+}
+
+.button-text {
+  min-height: 64rpx;
+  color: var(--color-primary);
+}
+
+.button-disabled,
+button[disabled] {
+  opacity: 0.5;
+}
+
+.pressable {
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.pressable-hover,
+.pressable:active {
+  opacity: 0.72;
+}
+
+.notice {
+  padding: 20rpx 24rpx;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-size: var(--font-sm);
+  line-height: 1.65;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1rpx;
+  height: 1rpx;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

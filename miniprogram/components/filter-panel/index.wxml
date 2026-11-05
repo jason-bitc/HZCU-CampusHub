@@ -1,0 +1,62 @@
+<view wx:if="{{visible}}" class="filter-page">
+  <view class="filter-navbar">
+    <button class="nav-back pressable" bindtap="close" aria-label="返回发现页">
+      <app-icon name="chevron-left" size="42" />
+    </button>
+    <text class="nav-title">筛选经验</text>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <scroll-view scroll-y class="filter-body" enhanced show-scrollbar="{{false}}">
+    <view class="filter-card">
+      <view wx:if="{{selectedChips.length}}" class="selected-section">
+        <text class="section-label">已选择</text>
+        <view class="selected-list">
+          <button wx:for="{{selectedChips}}" wx:key="key" class="selected-chip pressable" data-key="{{item.key}}" bindtap="clearSelected">{{item.label}} ×</button>
+        </view>
+      </view>
+
+      <view class="major-section">
+        <text class="section-label">文章适用专业</text>
+        <button wx:for="{{catalog.majors}}" wx:key="id" class="major-row pressable" data-value="{{item.id}}" bindtap="selectMajor">
+          <text class="major-name {{draft.majorId === item.id ? 'major-active' : ''}}">{{item.name}}</text>
+          <text class="row-status {{draft.majorId === item.id ? 'status-active' : ''}}">{{draft.majorId === item.id ? '已选' : '选择'}}</text>
+        </button>
+        <button class="major-row pressable" data-value="0" bindtap="selectMajor">
+          <text class="major-name {{!draft.majorId ? 'major-active' : ''}}">全部专业</text>
+          <text class="row-status {{!draft.majorId ? 'status-active' : ''}}">{{!draft.majorId ? '已选' : '选择'}}</text>
+        </button>
+      </view>
+
+      <view class="same-major-note">“同专业”使用本人资料。未填写时可完善资料，或在此手动选择。</view>
+
+      <view class="company-section">
+        <text class="section-label">公司（可选）</text>
+        <view class="company-input-row">
+          <input class="company-input" value="{{companyInput}}" placeholder="输入公司名，或保持不限" bindinput="handleCompanyInput" />
+          <button wx:if="{{companyInput}}" class="company-clear pressable" bindtap="clearCompany" aria-label="清空公司">
+            <app-icon name="close" size="28" />
+          </button>
+        </view>
+        <view wx:if="{{companySuggestions.length}}" class="company-suggestions">
+          <button wx:for="{{companySuggestions}}" wx:key="id" class="company-suggestion pressable" data-id="{{item.id}}" bindtap="selectCompanySuggestion">匹配：{{item.name}}</button>
+        </view>
+        <text wx:if="{{companyError}}" class="field-error">{{companyError}}</text>
+        <text class="company-contract-note">当前接口按已启用的公司标签筛选；未启用标签不会静默放宽条件。</text>
+      </view>
+
+      <view class="topic-section">
+        <text class="section-label">主题</text>
+        <view class="topic-list">
+          <button class="topic-chip {{!draft.topicId ? 'topic-active' : ''}}" data-value="0" bindtap="selectTopic">全部</button>
+          <button wx:for="{{catalog.topics}}" wx:key="id" class="topic-chip {{draft.topicId === item.id ? 'topic-active' : ''}}" data-value="{{item.id}}" bindtap="selectTopic">{{item.name}}</button>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="filter-footer">
+    <button class="button-secondary reset-button" bindtap="reset">重置条件</button>
+    <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogError || companyError}}">查看匹配经验</button>
+  </view>
+</view>

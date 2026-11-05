@@ -1,0 +1,14 @@
+<view class="article-card pressable" hover-class="pressable-hover" bindtap="handleTap" role="button" aria-label="阅读 {{article.title}}">
+  <text class="article-title">{{article.title}}</text>
+  <text class="article-summary">{{article.summary}}</text>
+  <view class="tag-row">
+    <text class="tag">{{article.jobText}}</text>
+    <text class="tag">{{article.majorText}}</text>
+    <text class="tag">{{article.experienceStage}}</text>
+    <text wx:if="{{article.companyText}}" class="tag tag-muted">{{article.companyText}}</text>
+  </view>
+  <view class="article-meta">
+    <text class="meta-text">{{article.sourceText}} · 作者信息认证后可见</text>
+    <text class="coin-text">投币 {{article.effectiveCoins}}</text>
+  </view>
+</view>
