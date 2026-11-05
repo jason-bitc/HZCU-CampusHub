@@ -1,0 +1,34 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Account" [shape=box,label="账号",style="filled",fillcolor="white"];
+"Article" [shape=box,label="经验文章",style="filled",fillcolor="white"];
+"Notification" [shape=box,label="业务通知",style="filled",fillcolor="white"];
+"ReadProgress" [shape=box,label="阅读奖励进度",style="filled",fillcolor="white"];
+"Account_a0" [shape=ellipse,label=<<U>ID 主标识</U>>,style="filled",fillcolor="white"];
+"Account_a1" [shape=ellipse,label="校园邮箱",style="filled",fillcolor="white"];
+"Article_a0" [shape=ellipse,label=<<U>文章ID 主标识</U>>,style="filled",fillcolor="white"];
+"Article_a1" [shape=ellipse,label="作者标识",style="filled",fillcolor="white"];
+"Notification_a0" [shape=ellipse,label=<<U>通知ID 主标识</U>>,style="filled",fillcolor="white"];
+"Notification_a1" [shape=ellipse,label="接收账号",style="filled",fillcolor="white"];
+"ReadProgress_a0" [shape=ellipse,label=<<U>进度ID 主标识</U>>,style="filled",fillcolor="white"];
+"ReadProgress_a1" [shape=ellipse,label="账号标识",style="filled",fillcolor="white"];
+"rel25" [shape=diamond,label="接收通知",style="filled",fillcolor="white"];
+"rel26" [shape=diamond,label="累计阅读",style="filled",fillcolor="white"];
+"rel27" [shape=diamond,label="阅读对象",style="filled",fillcolor="white"];
+"Account" -> "Account_a0" [label="",dir=none];
+"Account" -> "Account_a1" [label="",dir=none];
+"Article" -> "Article_a0" [label="",dir=none];
+"Article" -> "Article_a1" [label="",dir=none];
+"Notification" -> "Notification_a0" [label="",dir=none];
+"Notification" -> "Notification_a1" [label="",dir=none];
+"ReadProgress" -> "ReadProgress_a0" [label="",dir=none];
+"ReadProgress" -> "ReadProgress_a1" [label="",dir=none];
+"Account" -> "rel25" [label="1",dir=none];
+"rel25" -> "Notification" [label="0..N",dir=none];
+"Account" -> "rel26" [label="1",dir=none];
+"rel26" -> "ReadProgress" [label="0..N",dir=none];
+"Article" -> "rel27" [label="1",dir=none];
+"rel27" -> "ReadProgress" [label="0..N",dir=none];
+}

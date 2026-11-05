@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-04",
+  "entries": 322,
+  "coreLeaves": 167,
+  "dateAndWorkMismatches": [],
+  "nativeHours": {
+    "王晨": 120.35000000000004,
+    "刘景浩": 106.2000000000001
+  },
+  "teamHours": 226.55,
+  "laborBudget": 10366.93,
+  "nativeResourceOverload": "原生资源表标记两人过载；日常容量与集中投入仍需实际排期确认",
+  "status": "任务、日期、人时已核对；不代表实际完成或容量冲突消除"
+}

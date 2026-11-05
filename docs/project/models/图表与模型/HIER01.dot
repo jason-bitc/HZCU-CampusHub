@@ -1,0 +1,22 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"root" [shape=box,label="经验文章数据包"];
+"base" [shape=box,label="标识与经历背景"];
+"body" [shape=box,label="正文版本"];
+"public" [shape=box,label="公开与互动摘要"];
+"id" [shape=box,label="文章标识 作者 岗位\n可选公司 专业 经历阶段"];
+"seq" [shape=box,label="有序内容块\n文字 图片引用 来源链接"];
+"vs" [shape=box,label="草稿版本 公开版本指针"];
+"state" [shape=box,label="可见状态 时间"];
+"counts" [shape=box,label="认可 收藏 获币汇总"];
+"root" -> "base" [label="",dir=none];
+"root" -> "body" [label="",dir=none];
+"root" -> "public" [label="",dir=none];
+"base" -> "id" [label="",dir=none];
+"body" -> "seq" [label="",dir=none];
+"body" -> "vs" [label="",dir=none];
+"public" -> "state" [label="",dir=none];
+"public" -> "counts" [label="",dir=none];
+}

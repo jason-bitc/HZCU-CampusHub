@@ -1,0 +1,26 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Article" [shape=box,label="经验文章",style="filled",fillcolor="white"];
+"ArticleVersion" [shape=box,label="正文版本",style="filled",fillcolor="white"];
+"Media" [shape=box,label="图片资料",style="filled",fillcolor="white"];
+"Article_a0" [shape=ellipse,label=<<U>文章ID 主标识</U>>,style="filled",fillcolor="white"];
+"Article_a1" [shape=ellipse,label="作者标识",style="filled",fillcolor="white"];
+"ArticleVersion_a0" [shape=ellipse,label=<<U>版本ID 主标识</U>>,style="filled",fillcolor="white"];
+"ArticleVersion_a1" [shape=ellipse,label="文章标识",style="filled",fillcolor="white"];
+"Media_a0" [shape=ellipse,label=<<U>文件ID 主标识</U>>,style="filled",fillcolor="white"];
+"Media_a1" [shape=ellipse,label="所有者",style="filled",fillcolor="white"];
+"rel4" [shape=diamond,label="形成",style="filled",fillcolor="white"];
+"rel8" [shape=diamond,label="引用",style="filled",fillcolor="white"];
+"Article" -> "Article_a0" [label="",dir=none];
+"Article" -> "Article_a1" [label="",dir=none];
+"ArticleVersion" -> "ArticleVersion_a0" [label="",dir=none];
+"ArticleVersion" -> "ArticleVersion_a1" [label="",dir=none];
+"Media" -> "Media_a0" [label="",dir=none];
+"Media" -> "Media_a1" [label="",dir=none];
+"Article" -> "rel4" [label="1",dir=none];
+"rel4" -> "ArticleVersion" [label="1..N",dir=none];
+"ArticleVersion" -> "rel8" [label="0..N",dir=none];
+"rel8" -> "Media" [label="0..N",dir=none];
+}

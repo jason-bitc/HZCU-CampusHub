@@ -1,0 +1,26 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"AdminIdentity" [shape=box,label="管理身份",style="filled",fillcolor="white"];
+"OpsJob" [shape=box,label="运维任务",style="filled",fillcolor="white"];
+"Backup" [shape=box,label="备份清单",style="filled",fillcolor="white"];
+"AdminIdentity_a0" [shape=ellipse,label=<<U>管理ID 主标识</U>>,style="filled",fillcolor="white"];
+"AdminIdentity_a1" [shape=ellipse,label="登录名",style="filled",fillcolor="white"];
+"OpsJob_a0" [shape=ellipse,label=<<U>任务ID 主标识</U>>,style="filled",fillcolor="white"];
+"OpsJob_a1" [shape=ellipse,label="运维身份",style="filled",fillcolor="white"];
+"Backup_a0" [shape=ellipse,label=<<U>备份ID 主标识</U>>,style="filled",fillcolor="white"];
+"Backup_a1" [shape=ellipse,label="产生任务",style="filled",fillcolor="white"];
+"rel19" [shape=diamond,label="发起",style="filled",fillcolor="white"];
+"rel20" [shape=diamond,label="产出",style="filled",fillcolor="white"];
+"AdminIdentity" -> "AdminIdentity_a0" [label="",dir=none];
+"AdminIdentity" -> "AdminIdentity_a1" [label="",dir=none];
+"OpsJob" -> "OpsJob_a0" [label="",dir=none];
+"OpsJob" -> "OpsJob_a1" [label="",dir=none];
+"Backup" -> "Backup_a0" [label="",dir=none];
+"Backup" -> "Backup_a1" [label="",dir=none];
+"AdminIdentity" -> "rel19" [label="1",dir=none];
+"rel19" -> "OpsJob" [label="0..N",dir=none];
+"OpsJob" -> "rel20" [label="1",dir=none];
+"rel20" -> "Backup" [label="0..1",dir=none];
+}

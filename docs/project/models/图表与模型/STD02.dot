@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"start" [shape=point,label="",style="filled",fillcolor="white",fillcolor="black",width=0.14];
+"D" [shape=box,label="草稿"];
+"P" [shape=box,label="公开"];
+"W" [shape=box,label="作者下架"];
+"H" [shape=box,label="管理隐藏"];
+"start" -> "D" [label=""];
+"D" -> "D" [label="T01"];
+"D" -> "P" [label="T02"];
+"P" -> "P" [label="T03"];
+"P" -> "W" [label="T04"];
+"W" -> "P" [label="T05"];
+"P" -> "H" [label="T06"];
+"W" -> "H" [label="T07"];
+"H" -> "P" [label="T08"];
+"H" -> "W" [label="T09"];
+}

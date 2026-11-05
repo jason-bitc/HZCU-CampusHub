@@ -1,0 +1,16 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"start" [shape=point,label="",style="filled",fillcolor="white",fillcolor="black",width=0.14];
+"N" [shape=box,label="请求已接收"];
+"V" [shape=box,label="已校验"];
+"S" [shape=box,label="已提交"];
+"R" [shape=doublecircle,label="已拒绝",style="filled",fillcolor="white"];
+"start" -> "N" [label=""];
+"N" -> "V" [label="T01"];
+"N" -> "R" [label="T02"];
+"V" -> "S" [label="T03"];
+"V" -> "R" [label="T04"];
+"S" -> "S" [label="T05"];
+}

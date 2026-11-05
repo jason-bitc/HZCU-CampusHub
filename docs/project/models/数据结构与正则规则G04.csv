@@ -1,0 +1,21 @@
+﻿类别,名称,定义或规则
+结构,ArticleInput,title + jobId + (companyId) + (majorId) + experienceStage + startingPoint + 1{ContentBlock} + expectedRevision
+结构,ContentBlock,[TextBlock|ImageRef|SourceLink]
+结构,TextBlock,text
+结构,ImageRef,mediaId + position + (caption)
+结构,SourceLink,url + description
+结构,AuthInput,email + password + challengeId + code
+结构,InteractionInput,articleId + [CommentInput|ReactionInput|CoinInput|RewardInput|ContactQuery]
+结构,CoinInput,"amount + requestKey；amount∈{1,2}，累计而非单次额度≤2"
+结构,CaseInput,kind + targetType + (targetId) + reason + {EvidenceImage}
+结构,OpsInput,operation + target + requestKey + (backupId) + confirmation
+结构,BusinessResult,status + code + message + traceId + (data)
+正则,校园邮箱,^[A-Za-z0-9._%+-]+@stu\.hzcu\.edu\.cn$
+正则,验证码,^[0-9]{6}$
+正则,普通数字标识,"^[1-9][0-9]{0,18}$"
+正则,UUID校验标识,^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+正则,幂等键,"^[A-Za-z0-9_-]{8,64}$"
+正则,业务日期,^\d{4}-\d{2}-\d{2}$
+正则,可见状态,^(DRAFT|PUBLIC|WITHDRAWN|HIDDEN)$
+正则,运维操作,^(DEPLOY|RESTART|BACKUP|RESTORE)$
+正则,资料链接,^https?://[^\s]+$

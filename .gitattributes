@@ -1,0 +1,7 @@
+# Preserve document bytes and manifest hashes on Windows and Linux.
+docs/project/** -text
+*.docx -text -diff -merge
+*.pptx -text -diff -merge
+*.mpp -text -diff -merge
+*.pdf -text -diff -merge
+server/src/main/resources/db/**/*.sql text eol=lf

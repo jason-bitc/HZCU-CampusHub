@@ -1,0 +1,32 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Account" [shape=box,label="账号",style="filled",fillcolor="white"];
+"Article" [shape=box,label="经验文章",style="filled",fillcolor="white"];
+"Comment" [shape=box,label="评论回复",style="filled",fillcolor="white"];
+"Wallet" [shape=box,label="可用币账户",style="filled",fillcolor="white"];
+"CoinEntry" [shape=box,label="币账本事件",style="filled",fillcolor="white"];
+"Contribution" [shape=box,label="作者贡献",style="filled",fillcolor="white"];
+"rel9" [shape=diamond,label="接收",style="filled",fillcolor="white"];
+"rel10" [shape=diamond,label="发表",style="filled",fillcolor="white"];
+"rel11" [shape=diamond,label="认可收藏",style="filled",fillcolor="white"];
+"rel12" [shape=diamond,label="持有",style="filled",fillcolor="white"];
+"rel13" [shape=diamond,label="记账",style="filled",fillcolor="white"];
+"rel14" [shape=diamond,label="投币贡献",style="filled",fillcolor="white"];
+"rel15" [shape=diamond,label="获得",style="filled",fillcolor="white"];
+"Article" -> "rel9" [label="1",dir=none];
+"rel9" -> "Comment" [label="0..N",dir=none];
+"Account" -> "rel10" [label="1",dir=none];
+"rel10" -> "Comment" [label="0..N",dir=none];
+"Account" -> "rel11" [label="0..N",dir=none];
+"rel11" -> "Article" [label="0..N",dir=none];
+"Account" -> "rel12" [label="1",dir=none];
+"rel12" -> "Wallet" [label="1",dir=none];
+"Account" -> "rel13" [label="1",dir=none];
+"rel13" -> "CoinEntry" [label="0..N",dir=none];
+"CoinEntry" -> "rel14" [label="1",dir=none];
+"rel14" -> "Contribution" [label="0..1",dir=none];
+"Account" -> "rel15" [label="1",dir=none];
+"rel15" -> "Contribution" [label="0..N",dir=none];
+}

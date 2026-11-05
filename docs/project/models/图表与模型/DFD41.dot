@@ -1,0 +1,28 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"P4.1" [shape=circle,label="P4.1\n接收与关联对象",style="filled",fillcolor="white"];
+"P4.2" [shape=circle,label="P4.2\n案件调查与处置",style="filled",fillcolor="white"];
+"P4.3" [shape=circle,label="P4.3\n结果登记与通知",style="filled",fillcolor="white"];
+"E1" [shape=box,label="E1\n平台用户"];
+"E2" [shape=box,label="E2\n社区管理员"];
+"D5" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D5 举报反馈与处置</TD></TR></TABLE>>];
+"P1" [shape=circle,label="P1\n身份与权限",style="filled",fillcolor="white"];
+"P2" [shape=circle,label="P2\n经验内容",style="filled",fillcolor="white"];
+"P3" [shape=circle,label="P3\n交流与激励",style="filled",fillcolor="white"];
+"E1" -> "P4.1" [label="F01.4"];
+"P4.3" -> "E1" [label="F02.4"];
+"E2" -> "P4.2" [label="F03"];
+"P4.3" -> "E2" [label="F04"];
+"P4.3" -> "D5" [label="I15"];
+"D5" -> "P4.2" [label="I16"];
+"P4.2" -> "P2" [label="I17"];
+"P2" -> "P4.2" [label="I18"];
+"P4.2" -> "P3" [label="I19"];
+"P3" -> "P4.2" [label="I20"];
+"P4.2" -> "P1" [label="I21"];
+"P1" -> "P4.2" [label="I22"];
+"P4.1" -> "P4.2" [label="案件与证据索引"];
+"P4.2" -> "P4.3" [label="理由结果与关联变更"];
+}
