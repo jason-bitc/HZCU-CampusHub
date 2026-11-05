@@ -1,0 +1,79 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500rpx;
+  padding: 64rpx 40rpx;
+  text-align: center;
+}
+
+.state-compact {
+  min-height: 280rpx;
+  padding: 36rpx 24rpx;
+}
+
+.state-title {
+  margin-top: 26rpx;
+  color: var(--color-text);
+  font-size: var(--font-lg);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.state-description {
+  max-width: 560rpx;
+  margin-top: 16rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-sm);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.state-trace {
+  margin-top: 12rpx;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-xs);
+  overflow-wrap: anywhere;
+}
+
+.state-action {
+  width: 100%;
+  max-width: 520rpx;
+  margin-top: 28rpx;
+}
+
+.state-action + .state-action {
+  margin-top: 16rpx;
+}
+
+.state-error .state-title {
+  color: var(--color-danger);
+}
+
+.state-unavailable .state-title,
+.state-permission .state-title {
+  color: var(--color-warning);
+}
+
+.skeleton-group {
+  width: 100%;
+}
+
+.skeleton {
+  height: 22rpx;
+  margin-top: 18rpx;
+  border-radius: 12rpx;
+  background: linear-gradient(90deg, #e9edeb 25%, #f5f7f6 50%, #e9edeb 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.4s infinite linear;
+}
+
+.skeleton-long { width: 100%; }
+.skeleton-short { width: 58%; }
+.skeleton-medium { width: 78%; }
+
+@keyframes skeleton-loading {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}

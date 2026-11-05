@@ -1,0 +1,13 @@
+<view class="state state-{{status}} {{compact ? 'state-compact' : ''}}" aria-live="polite">
+  <view wx:if="{{status === 'loading'}}" class="skeleton-group" aria-hidden="true">
+    <view class="skeleton skeleton-long"></view>
+    <view class="skeleton skeleton-short"></view>
+    <view class="skeleton skeleton-medium"></view>
+  </view>
+  <app-icon wx:else name="{{iconName}}" size="56" />
+  <text class="state-title">{{title}}</text>
+  <text wx:if="{{description}}" class="state-description">{{description}}</text>
+  <text wx:if="{{traceId}}" class="state-trace">追踪编号：{{traceId}}</text>
+  <button wx:if="{{actionText}}" class="button-primary state-action" bindtap="handleAction">{{actionText}}</button>
+  <button wx:if="{{secondaryText}}" class="button-secondary state-action" bindtap="handleSecondary">{{secondaryText}}</button>
+</view>

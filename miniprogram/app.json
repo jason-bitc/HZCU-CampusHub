@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/discover/discover",
+    "pages/article-detail/article-detail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#f5f7f6",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "城院帮",
+    "backgroundColor": "#f5f7f6",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

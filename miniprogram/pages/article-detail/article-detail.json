@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "经验详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "page-state": "/components/page-state/index",
+    "markdown-view": "/components/markdown-view/index"
+  }
+}

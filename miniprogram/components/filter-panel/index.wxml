@@ -1,0 +1,53 @@
+<view wx:if="{{visible}}" class="filter-layer">
+  <view class="filter-mask" bindtap="close"></view>
+  <view class="filter-sheet" role="dialog" aria-label="筛选经验">
+    <view class="sheet-header">
+      <text class="sheet-title">筛选经验</text>
+      <button class="icon-button pressable" hover-class="pressable-hover" bindtap="close" aria-label="关闭筛选">
+        <app-icon name="close" size="36" />
+      </button>
+    </view>
+    <scroll-view scroll-y class="sheet-body" enhanced show-scrollbar="{{false}}">
+      <view wx:if="{{chips.length}}" class="selected-section">
+        <text class="section-label">已选择</text>
+        <view class="chip-wrap">
+          <button wx:for="{{chips}}" wx:key="key" class="selected-chip pressable" data-key="{{item.key}}" bindtap="clearChip">
+            {{item.label}} ×
+          </button>
+        </view>
+      </view>
+
+      <view wx:if="{{catalogError}}" class="catalog-error">
+        <text>{{catalogError}}</text>
+        <button class="button-text" bindtap="retryCatalog">重新加载分类</button>
+      </view>
+
+      <view class="filter-section">
+        <text class="section-label">关键词</text>
+        <input class="keyword-input" value="{{draft.keyword}}" maxlength="100" placeholder="搜索标题或摘要" bindinput="handleKeyword" />
+        <text wx:if="{{keywordError}}" class="field-error">{{keywordError}}</text>
+      </view>
+
+      <view wx:for="{{sections}}" wx:key="key" class="filter-section">
+        <text class="section-label">{{item.label}}</text>
+        <view class="option-list">
+          <button class="option-chip {{!draft[item.key] ? 'option-active' : ''}}" data-key="{{item.key}}" data-value="0" bindtap="selectOption">全部</button>
+          <button wx:for="{{catalog[item.catalogKey]}}" wx:for-item="option" wx:key="id" class="option-chip {{draft[item.key] === option.id ? 'option-active' : ''}}" data-key="{{item.key}}" data-value="{{option.id}}" bindtap="selectOption">{{option.name}}</button>
+        </view>
+      </view>
+
+      <view class="same-major-box">
+        <view>
+          <text class="same-major-title">只看同专业</text>
+          <text class="same-major-text">需要认证账号的真实本人专业，本批未接入认证。游客可手动选择上方文章专业。</text>
+        </view>
+        <button class="button-text same-major-action" bindtap="showSameMajorExplanation">查看说明</button>
+      </view>
+      <view class="filter-tip">多个条件同时满足；没有结果时不会自动放宽专业或公司条件。</view>
+    </scroll-view>
+    <view class="sheet-footer">
+      <button class="button-secondary reset-button" bindtap="reset">重置条件</button>
+      <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogError}}">查看匹配经验</button>
+    </view>
+  </view>
+</view>

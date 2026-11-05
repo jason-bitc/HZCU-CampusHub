@@ -11,6 +11,7 @@ coverage/
 .env.*
 !.env.example
 project.private.config.json
+/miniprogram/config/local.js
 server/src/main/resources/application-local.yml
 server/src/main/resources/application-local.yaml
 *.pem
