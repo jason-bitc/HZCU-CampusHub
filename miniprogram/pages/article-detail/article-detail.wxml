@@ -10,25 +10,30 @@
       <view class="article-header">
         <view class="source-tag">{{article.sourceText}}</view>
         <text class="article-title">{{article.title}}</text>
-        <text class="article-meta">{{article.publishedText}} 发布 · {{article.jobText}}</text>
+        <text class="article-meta">{{article.publishedText}}发布 · {{article.jobText}} · {{article.jobNatureText}}</text>
         <view class="article-tags">
           <text>{{article.majorText}}</text>
           <text wx:if="{{article.companyText}}">{{article.companyText}}</text>
           <text wx:if="{{article.topicText}}">{{article.topicText}}</text>
         </view>
         <view class="stage-box">
-          <text class="stage-label">经历阶段</text>
-          <text class="stage-value">{{article.experienceStage}}</text>
+          <view class="stage-row">
+            <text class="stage-label">经历阶段：</text>
+            <text class="stage-value">{{article.experienceStage}}</text>
+          </view>
+          <view class="stage-row stage-secondary">
+            <text class="stage-label">当时基础：</text>
+            <text class="stage-secondary-value">{{article.baseLevelText}}</text>
+          </view>
         </view>
-        <view class="guest-note">作者身份与主页、联系方式、评论等受限资料不向游客展示；公开正文可完整免费阅读。</view>
+        <view class="guest-note">作者身份与主页：校园认证后可见</view>
       </view>
 
-      <markdown-view body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" />
+      <markdown-view body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" source-links="{{article.sourceLinks}}" source-note="{{article.sourceNote}}" />
 
-      <view class="source-section">
+      <view wx:if="{{article.sourceLinks.length > 1}}" class="source-section">
         <text class="source-heading">来源与外部资料</text>
-        <text class="source-note">{{article.sourceNote || '作者未补充来源说明。'}}</text>
-        <view wx:if="{{article.sourceLinks.length}}" class="source-links">
+        <view class="source-links">
           <button wx:for="{{article.sourceLinks}}" wx:key="url" class="source-link pressable" data-url="{{item.url}}" bindtap="copySourceLink">
             <view class="source-link-text">
               <text class="source-link-label">{{item.label}}</text>
@@ -37,11 +42,29 @@
             <text class="copy-label">复制链接</text>
           </button>
         </view>
-        <view wx:else class="source-empty">本文没有附加外部资料链接。</view>
-        <text class="source-disclaimer">外部内容由读者自愿访问，平台不代管站外账号或访问授权。</text>
+        <text class="source-disclaimer">外部内容由读者自愿访问，请自行核验内容与访问权限。</text>
       </view>
+      <view class="reading-note">目录点击定位到对应章节；阅读全文免费。</view>
     </view>
-    <view class="permission-rule">本批不包含点赞、投币、收藏、评论、作者联系与认证账号功能。</view>
+  </view>
+
+  <view wx:if="{{status === 'ready'}}" class="visitor-action-bar" role="toolbar" aria-label="认证后开放的互动操作">
+    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+      <app-icon name="like" size="38" />
+      <text>点赞</text>
+    </button>
+    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+      <app-icon name="coin" size="38" />
+      <text>投币</text>
+    </button>
+    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+      <app-icon name="star" size="38" />
+      <text>收藏</text>
+    </button>
+    <button class="visitor-action" bindtap="showFutureInteraction" aria-disabled="true">
+      <app-icon name="comment" size="38" />
+      <text>评论</text>
+    </button>
   </view>
   <view class="bottom-safe"></view>
 </view>

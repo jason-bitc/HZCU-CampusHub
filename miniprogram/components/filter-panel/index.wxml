@@ -1,53 +1,62 @@
-<view wx:if="{{visible}}" class="filter-layer">
-  <view class="filter-mask" bindtap="close"></view>
-  <view class="filter-sheet" role="dialog" aria-label="筛选经验">
-    <view class="sheet-header">
-      <text class="sheet-title">筛选经验</text>
-      <button class="icon-button pressable" hover-class="pressable-hover" bindtap="close" aria-label="关闭筛选">
-        <app-icon name="close" size="36" />
-      </button>
-    </view>
-    <scroll-view scroll-y class="sheet-body" enhanced show-scrollbar="{{false}}">
-      <view wx:if="{{chips.length}}" class="selected-section">
+<view wx:if="{{visible}}" class="filter-page">
+  <view class="filter-navbar">
+    <button class="nav-back pressable" bindtap="close" aria-label="返回发现页">
+      <app-icon name="chevron-left" size="42" />
+    </button>
+    <text class="nav-title">筛选经验</text>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <scroll-view scroll-y class="filter-body" enhanced show-scrollbar="{{false}}">
+    <view class="filter-card">
+      <view wx:if="{{selectedChips.length}}" class="selected-section">
         <text class="section-label">已选择</text>
-        <view class="chip-wrap">
-          <button wx:for="{{chips}}" wx:key="key" class="selected-chip pressable" data-key="{{item.key}}" bindtap="clearChip">
-            {{item.label}} ×
+        <view class="selected-list">
+          <button wx:for="{{selectedChips}}" wx:key="key" class="selected-chip pressable" data-key="{{item.key}}" bindtap="clearSelected">{{item.label}} ×</button>
+        </view>
+      </view>
+
+      <view class="major-section">
+        <text class="section-label">文章适用专业</text>
+        <button wx:for="{{catalog.majors}}" wx:key="id" class="major-row pressable" data-value="{{item.id}}" bindtap="selectMajor">
+          <text class="major-name {{draft.majorId === item.id ? 'major-active' : ''}}">{{item.name}}</text>
+          <text class="row-status {{draft.majorId === item.id ? 'status-active' : ''}}">{{draft.majorId === item.id ? '已选' : '选择'}}</text>
+        </button>
+        <button class="major-row pressable" data-value="0" bindtap="selectMajor">
+          <text class="major-name {{!draft.majorId ? 'major-active' : ''}}">全部专业</text>
+          <text class="row-status {{!draft.majorId ? 'status-active' : ''}}">{{!draft.majorId ? '已选' : '选择'}}</text>
+        </button>
+      </view>
+
+      <view class="same-major-note">“同专业”使用本人资料。未填写时可完善资料，或在此手动选择。</view>
+
+      <view class="company-section">
+        <text class="section-label">公司（可选）</text>
+        <view class="company-input-row">
+          <input class="company-input" value="{{companyInput}}" placeholder="输入公司名，或保持不限" bindinput="handleCompanyInput" />
+          <button wx:if="{{companyInput}}" class="company-clear pressable" bindtap="clearCompany" aria-label="清空公司">
+            <app-icon name="close" size="28" />
           </button>
         </view>
+        <view wx:if="{{companySuggestions.length}}" class="company-suggestions">
+          <button wx:for="{{companySuggestions}}" wx:key="id" class="company-suggestion pressable" data-id="{{item.id}}" bindtap="selectCompanySuggestion">匹配：{{item.name}}</button>
+        </view>
+        <text wx:if="{{companyError}}" class="field-error">{{companyError}}</text>
+        <text class="company-contract-note">当前接口按已启用的公司标签筛选；未启用标签不会静默放宽条件。</text>
       </view>
 
-      <view wx:if="{{catalogError}}" class="catalog-error">
-        <text>{{catalogError}}</text>
-        <button class="button-text" bindtap="retryCatalog">重新加载分类</button>
-      </view>
-
-      <view class="filter-section">
-        <text class="section-label">关键词</text>
-        <input class="keyword-input" value="{{draft.keyword}}" maxlength="100" placeholder="搜索标题或摘要" bindinput="handleKeyword" />
-        <text wx:if="{{keywordError}}" class="field-error">{{keywordError}}</text>
-      </view>
-
-      <view wx:for="{{sections}}" wx:key="key" class="filter-section">
-        <text class="section-label">{{item.label}}</text>
-        <view class="option-list">
-          <button class="option-chip {{!draft[item.key] ? 'option-active' : ''}}" data-key="{{item.key}}" data-value="0" bindtap="selectOption">全部</button>
-          <button wx:for="{{catalog[item.catalogKey]}}" wx:for-item="option" wx:key="id" class="option-chip {{draft[item.key] === option.id ? 'option-active' : ''}}" data-key="{{item.key}}" data-value="{{option.id}}" bindtap="selectOption">{{option.name}}</button>
+      <view class="topic-section">
+        <text class="section-label">主题</text>
+        <view class="topic-list">
+          <button class="topic-chip {{!draft.topicId ? 'topic-active' : ''}}" data-value="0" bindtap="selectTopic">全部</button>
+          <button wx:for="{{catalog.topics}}" wx:key="id" class="topic-chip {{draft.topicId === item.id ? 'topic-active' : ''}}" data-value="{{item.id}}" bindtap="selectTopic">{{item.name}}</button>
         </view>
       </view>
-
-      <view class="same-major-box">
-        <view>
-          <text class="same-major-title">只看同专业</text>
-          <text class="same-major-text">需要认证账号的真实本人专业，本批未接入认证。游客可手动选择上方文章专业。</text>
-        </view>
-        <button class="button-text same-major-action" bindtap="showSameMajorExplanation">查看说明</button>
-      </view>
-      <view class="filter-tip">多个条件同时满足；没有结果时不会自动放宽专业或公司条件。</view>
-    </scroll-view>
-    <view class="sheet-footer">
-      <button class="button-secondary reset-button" bindtap="reset">重置条件</button>
-      <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogError}}">查看匹配经验</button>
     </view>
+  </scroll-view>
+
+  <view class="filter-footer">
+    <button class="button-secondary reset-button" bindtap="reset">重置条件</button>
+    <button class="button-primary apply-button" bindtap="apply" disabled="{{catalogError || companyError}}">查看匹配经验</button>
   </view>
 </view>

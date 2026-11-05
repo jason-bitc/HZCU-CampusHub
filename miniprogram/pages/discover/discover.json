@@ -7,6 +7,7 @@
     "app-icon": "/components/app-icon/index",
     "article-card": "/components/article-card/index",
     "page-state": "/components/page-state/index",
-    "filter-panel": "/components/filter-panel/index"
+    "filter-panel": "/components/filter-panel/index",
+    "prototype-nav": "/components/prototype-nav/index"
   }
 }

@@ -5,6 +5,7 @@
     <view class="skeleton skeleton-medium"></view>
   </view>
   <app-icon wx:else name="{{iconName}}" size="56" />
+  <button wx:if="{{status === 'loading'}}" class="button-secondary loading-button" disabled loading>加载中</button>
   <text class="state-title">{{title}}</text>
   <text wx:if="{{description}}" class="state-description">{{description}}</text>
   <text wx:if="{{traceId}}" class="state-trace">追踪编号：{{traceId}}</text>

@@ -1,7 +1,7 @@
 const config = require('../../config/env');
 const articlesApi = require('../../services/articles');
 const { createRequestGate } = require('../../utils/request-gate');
-const { emptyFilters, activeFilterChips } = require('../../utils/filters');
+const { emptyFilters, activeFilterChips, filterSummary } = require('../../utils/filters');
 const { validateKeyword, buildArticleQuery, mergeUniqueArticles } = require('../../utils/query');
 
 Page({
@@ -12,6 +12,7 @@ Page({
     catalog: { jobs: [], majors: [], companies: [], topics: [] },
     catalogError: '',
     chips: [],
+    filterSummary: { majorText: '不限', companyText: '不限' },
     articles: [],
     listStatus: 'loading',
     errorMessage: '',
@@ -31,9 +32,7 @@ Page({
     this.activeRequest = null;
     this.catalogRequest = null;
     this.lastScrollTop = 0;
-    if (config.demoMode && options && options.scenario) {
-      articlesApi.setDemoScenario(options.scenario);
-    }
+    if (config.demoMode && options && options.scenario) articlesApi.setDemoScenario(options.scenario);
     this.setData({ demoScenario: config.demoMode ? articlesApi.getDemoScenario() : 'normal' });
     this.refreshAll();
   },
@@ -69,6 +68,16 @@ Page({
     return this.fetchArticles(true);
   },
 
+  syncFilterPresentation(filters) {
+    const current = filters || this.data.filters;
+    const chips = activeFilterChips(current, this.data.catalog).filter((item) => item.key === 'keyword' || item.key === 'topicId');
+    this.setData({ chips, filterSummary: filterSummary(current, this.data.catalog) });
+  },
+
+  setListTitle(status) {
+    wx.setNavigationBarTitle({ title: status === 'empty' ? '没有匹配的经验' : '城院帮' });
+  },
+
   loadCatalog() {
     if (this.catalogRequest) this.catalogRequest.abort();
     const operation = articlesApi.getCatalog();
@@ -76,6 +85,7 @@ Page({
     return operation.promise.then((catalog) => {
       if (this.catalogRequest !== operation) return;
       this.setData({ catalog, catalogError: '' });
+      this.syncFilterPresentation();
     }).catch((error) => {
       if (this.catalogRequest !== operation) return;
       this.setData({ catalogError: error.message || '分类加载失败，请重试' });
@@ -86,8 +96,7 @@ Page({
     if (!reset) return this.loadMore();
     if (this.activeRequest) this.activeRequest.abort();
     const token = this.gate.next();
-    const filters = Object.assign({}, this.data.filters);
-    const query = buildArticleQuery(filters, this.data.sort, 1, config.pageSize);
+    const query = buildArticleQuery(this.data.filters, this.data.sort, 1, config.pageSize);
     this.setData({
       articles: [],
       listStatus: 'loading',
@@ -99,19 +108,22 @@ Page({
       loadingMore: false,
       loadMoreError: ''
     });
+    this.setListTitle('loading');
     const operation = articlesApi.listArticles(query);
     this.activeRequest = operation;
     return operation.promise.then((page) => {
       if (!this.gate.isCurrent(token) || this.activeRequest !== operation) return;
       const items = mergeUniqueArticles([], page.items);
+      const status = items.length ? 'ready' : 'empty';
       this.activeRequest = null;
       this.setData({
         articles: items,
-        listStatus: items.length ? 'ready' : 'empty',
+        listStatus: status,
         page: page.page,
         total: page.total,
         hasMore: items.length < page.total && page.items.length > 0
       });
+      this.setListTitle(status);
     }).catch((error) => {
       if (!this.gate.isCurrent(token) || this.activeRequest !== operation) return;
       this.activeRequest = null;
@@ -122,6 +134,7 @@ Page({
         traceId: error.traceId || '',
         hasMore: false
       });
+      this.setListTitle('error');
     });
   },
 
@@ -158,11 +171,8 @@ Page({
       return;
     }
     const next = Object.assign(emptyFilters(), filters);
-    this.setData({
-      filters: next,
-      keywordInput: next.keyword,
-      chips: activeFilterChips(next, this.data.catalog)
-    });
+    this.setData({ filters: next, keywordInput: next.keyword });
+    this.syncFilterPresentation(next);
     this.fetchArticles(true);
   },
 
@@ -202,6 +212,10 @@ Page({
   applyFilter(event) {
     this.setData({ filterVisible: false });
     this.updateFilters(event.detail.filters);
+  },
+
+  clearMajorSummary() {
+    this.updateFilters(Object.assign({}, this.data.filters, { majorId: 0 }));
   },
 
   clearChip(event) {

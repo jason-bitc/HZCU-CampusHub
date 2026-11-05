@@ -88,10 +88,15 @@ test('Markdown 常用结构、图片与危险链接安全处理', () => {
 test('公开数据映射不携带作者、联系方式或评论字段', () => {
   const raw = {
     id: 1, title: '公开', summary: '摘要', categories: {}, sourceType: 'DEMO', publishedAt: '2026-01-01T00:00:00Z',
-    counts: {}, body: '正文', author: { nickname: '受限' }, avatar: '受限', contact: '受限', comments: ['受限']
+    counts: {}, body: '正文', jobNature: '实习', baseLevel: '会C++语法', author: { nickname: '受限' }, avatar: '受限', contact: '受限', comments: ['受限']
   };
   const summary = mapSummary(raw);
   const detail = mapDetail(raw);
+  assert.strictEqual(detail.jobNatureText, '实习');
+  assert.strictEqual(detail.baseLevelText, '会C++语法');
+  const fallback = mapDetail({ id: 2, title: '公开' });
+  assert.strictEqual(fallback.jobNatureText, '岗位性质未标注');
+  assert.strictEqual(fallback.baseLevelText, '未填写');
   ['author', 'avatar', 'nickname', 'contact', 'comments'].forEach((key) => {
     assert.ok(!(key in summary));
     assert.ok(!(key in detail));
@@ -102,14 +107,29 @@ async function asyncTests() {
   try {
     demo.setScenario('normal');
     const recognized = await demo.listArticles({ page: 1, size: 2, sort: 'recognized' }).promise;
-    assert.strictEqual(recognized.items[0].id, 1003);
+    assert.strictEqual(recognized.items[0].id, 1001);
     const latest = await demo.listArticles({ page: 1, size: 2, sort: 'latest' }).promise;
-    assert.strictEqual(latest.items[0].id, 1006);
+    assert.strictEqual(latest.items[0].id, 1001);
     const second = await demo.listArticles({ page: 2, size: 2, sort: 'latest' }).promise;
     assert.ok(!second.items.some((item) => latest.items.some((first) => first.id === item.id)));
-    const filtered = await demo.listArticles({ page: 1, size: 10, sort: 'latest', jobId: 1, majorId: 12 }).promise;
-    assert.ok(filtered.items.every((item) => item.categories.jobs.some((job) => job.id === 1) && item.categories.majors.some((major) => major.id === 12)));
-    results.push({ name: '演示服务认可/最新排序、分页与组合筛选', status: 'PASS' });
+    const filtered = await demo.listArticles({ page: 1, size: 10, sort: 'latest', jobId: 3, majorId: 12 }).promise;
+    assert.ok(filtered.items.length > 0);
+    assert.ok(filtered.items.every((item) => item.categories.jobs.some((job) => job.id === 3) && item.categories.majors.some((major) => major.id === 12)));
+    const detail = await demo.getArticle(1001).promise;
+    assert.ok(detail.body.length > 1800, '演示长文应包含完整阅读内容');
+    assert.strictEqual(detail.jobNature, '实习');
+    assert.strictEqual(detail.baseLevel, '会C++语法，暂无实习');
+    const parsedArticle = parseMarkdown(detail.body);
+    assert.strictEqual(parsedArticle.headings.length, 8, '完整文章目录不应被截断');
+    assert.ok(parsedArticle.headings[parsedArticle.headings.length - 1].text.indexOf('08') >= 0);
+    const allText = parsedArticle.nodes.reduce((text, node) => {
+      let value = node.text || '';
+      if (node.segments) value += ` ${node.segments.map((segment) => segment.text).join('')}`;
+      if (node.items) value += ` ${node.items.map((item) => item.segments.map((segment) => segment.text).join('')).join(' ')}`;
+      return `${text} ${value}`;
+    }, '');
+    assert.ok(allText.indexOf('真实上线时应以后端发布的公开文章为准') >= 0, '正文末尾内容必须保留');
+    results.push({ name: '演示服务认可/最新排序、分页、组合筛选与完整长文', status: 'PASS' });
   } catch (error) {
     results.push({ name: '演示服务认可/最新排序、分页与组合筛选', status: 'FAIL', message: error.message });
   }

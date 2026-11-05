@@ -13,6 +13,10 @@
   padding: 36rpx 24rpx;
 }
 
+.loading-button {
+  margin-top: 26rpx;
+}
+
 .state-title {
   margin-top: 26rpx;
   color: var(--color-text);

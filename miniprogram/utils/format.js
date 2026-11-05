@@ -11,10 +11,9 @@ function sourceLabel(type) {
 function formatDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return '发布时间未知';
-  const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
+  return `${Number(month)}月${Number(day)}日`;
 }
 
 function categoryNames(categories, key) {

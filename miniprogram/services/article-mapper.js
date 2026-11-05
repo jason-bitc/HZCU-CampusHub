@@ -24,6 +24,10 @@ function mapSummary(raw) {
     companyText: companies,
     topicText: topics,
     experienceStage: String(raw.experienceStage || '阶段未标注'),
+    jobNature: raw.jobNature ? String(raw.jobNature) : '',
+    jobNatureText: raw.jobNature ? String(raw.jobNature) : '岗位性质未标注',
+    baseLevel: raw.baseLevel ? String(raw.baseLevel) : '',
+    baseLevelText: raw.baseLevel ? String(raw.baseLevel) : '未填写',
     sourceType: raw.sourceType || '',
     sourceText: sourceLabel(raw.sourceType),
     publishedAt: raw.publishedAt || '',
@@ -37,7 +41,7 @@ function mapDetail(raw) {
   return Object.assign(mapSummary(raw), {
     body: String(raw.body || ''),
     bodyFormat: raw.bodyFormat || 'MARKDOWN',
-    sourceNote: String(raw.sourceNote || ''),
+    sourceNote: String(raw.sourceNote || '作者未补充来源说明。'),
     sourceLinks: Array.isArray(raw.sourceLinks) ? raw.sourceLinks.map((item) => ({
       label: String(item.label || '外部资料'),
       url: String(item.url || '')

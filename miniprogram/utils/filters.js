@@ -34,8 +34,25 @@ function activeFilterChips(filters, catalog) {
   return chips;
 }
 
+function selectedFilterNames(filters, catalog) {
+  return DEFINITIONS.filter((definition) => Number(filters[definition.key]) > 0).map((definition) => ({
+    key: definition.key,
+    value: Number(filters[definition.key]),
+    label: categoryName(catalog, definition.catalogKey, filters[definition.key])
+  }));
+}
+
+function filterSummary(filters, catalog) {
+  const majorId = Number(filters.majorId) || 0;
+  const companyId = Number(filters.companyId) || 0;
+  return {
+    majorText: majorId ? categoryName(catalog, 'majors', majorId) : '不限',
+    companyText: companyId ? categoryName(catalog, 'companies', companyId) : '不限'
+  };
+}
+
 function catalogReady(catalog) {
   return catalog && ['jobs', 'majors', 'companies', 'topics'].every((key) => Array.isArray(catalog[key]));
 }
 
-module.exports = { DEFINITIONS, emptyFilters, activeFilterChips, catalogReady, categoryName };
+module.exports = { DEFINITIONS, emptyFilters, activeFilterChips, selectedFilterNames, filterSummary, catalogReady, categoryName };

@@ -72,7 +72,8 @@
   min-width: 0;
 }
 
-.recognition {
+.coin-text {
   flex: none;
-  color: var(--color-primary);
+  color: var(--color-text);
+  font-weight: 500;
 }

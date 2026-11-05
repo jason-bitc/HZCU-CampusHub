@@ -1,5 +1,15 @@
-const { emptyFilters, activeFilterChips } = require('../../utils/filters');
+const { emptyFilters, selectedFilterNames, categoryName } = require('../../utils/filters');
 const { validateKeyword } = require('../../utils/query');
+
+function findCompany(catalog, value) {
+  const companies = catalog && Array.isArray(catalog.companies) ? catalog.companies : [];
+  const keyword = String(value || '').trim();
+  if (!keyword) return { exact: null, matches: [] };
+  return {
+    exact: companies.find((item) => item.name === keyword) || null,
+    matches: companies.filter((item) => item.name.indexOf(keyword) >= 0)
+  };
+}
 
 Component({
   options: { styleIsolation: 'apply-shared' },
@@ -11,61 +21,104 @@ Component({
   },
   data: {
     draft: emptyFilters(),
-    chips: [],
-    keywordError: '',
-    sections: [
-      { key: 'jobId', catalogKey: 'jobs', label: '岗位' },
-      { key: 'majorId', catalogKey: 'majors', label: '文章适用专业' },
-      { key: 'companyId', catalogKey: 'companies', label: '公司（可选）' },
-      { key: 'topicId', catalogKey: 'topics', label: '主题' }
-    ]
+    selectedChips: [],
+    companyInput: '',
+    companySuggestions: [],
+    companyError: ''
   },
   observers: {
     visible(visible) {
       if (visible) this.resetDraft(this.data.filters);
+    },
+    'visible, catalog': function catalogChanged(visible, catalog) {
+      if (visible) this.syncCompany(this.data.companyInput, catalog);
     }
   },
   methods: {
     resetDraft(filters) {
       const draft = Object.assign(emptyFilters(), filters || {});
-      this.setData({ draft, chips: activeFilterChips(draft, this.data.catalog), keywordError: '' });
-    },
-    close() { this.triggerEvent('close'); },
-    noop() {},
-    updateDraft(draft) {
-      this.setData({ draft, chips: activeFilterChips(draft, this.data.catalog) });
-    },
-    handleKeyword(event) {
-      const draft = Object.assign({}, this.data.draft, { keyword: event.detail.value });
-      this.updateDraft(draft);
-    },
-    clearChip(event) {
-      const key = event.currentTarget.dataset.key;
-      const patch = key === 'keyword' ? { keyword: '' } : { [key]: 0 };
-      this.updateDraft(Object.assign({}, this.data.draft, patch));
-    },
-    selectOption(event) {
-      const { key, value } = event.currentTarget.dataset;
-      const id = Number(value) || 0;
-      const nextValue = this.data.draft[key] === id ? 0 : id;
-      this.updateDraft(Object.assign({}, this.data.draft, { [key]: nextValue }));
-    },
-    showSameMajorExplanation() {
-      wx.showModal({
-        title: '关于“只看同专业”',
-        content: '该快捷条件必须读取认证账号已确认的本人专业。本批尚未接入认证，不会假设游客身份或伪造专业。你可以先手动选择文章专业标签。',
-        showCancel: false,
-        confirmText: '知道了'
+      const currentCompany = draft.companyId ? categoryName(this.data.catalog, 'companies', draft.companyId) : '';
+      this.setData({
+        draft,
+        selectedChips: selectedFilterNames(draft, this.data.catalog),
+        companyInput: currentCompany,
+        companySuggestions: [],
+        companyError: ''
       });
     },
-    retryCatalog() { this.triggerEvent('retrycatalog'); },
+    close() { this.triggerEvent('close'); },
+    updateDraft(draft) {
+      this.setData({ draft, selectedChips: selectedFilterNames(draft, this.data.catalog) });
+    },
+    clearSelected(event) {
+      const key = event.currentTarget.dataset.key;
+      const patch = { [key]: 0 };
+      if (key === 'companyId') {
+        patch.companyInput = '';
+        patch.companySuggestions = [];
+        patch.companyError = '';
+      }
+      this.setData(patch);
+      this.updateDraft(Object.assign({}, this.data.draft, { [key]: 0 }));
+    },
+    selectMajor(event) {
+      const id = Number(event.currentTarget.dataset.value) || 0;
+      const majorId = this.data.draft.majorId === id ? 0 : id;
+      this.updateDraft(Object.assign({}, this.data.draft, { majorId }));
+    },
+    selectTopic(event) {
+      const id = Number(event.currentTarget.dataset.value) || 0;
+      const topicId = this.data.draft.topicId === id ? 0 : id;
+      this.updateDraft(Object.assign({}, this.data.draft, { topicId }));
+    },
+    syncCompany(value, catalog) {
+      const keyword = String(value || '');
+      const { exact, matches } = findCompany(catalog || this.data.catalog, keyword);
+      const companyId = exact ? exact.id : 0;
+      let companyError = '';
+      if (keyword && !companyId) {
+        companyError = matches.length ? '请选择匹配的公司标签。' : '当前启用公司标签中没有该公司，无法按公司筛选。';
+      }
+      const draft = Object.assign({}, this.data.draft, { companyId });
+      this.setData({
+        companyInput: value,
+        companySuggestions: keyword && !exact ? matches : [],
+        companyError,
+        draft,
+        selectedChips: selectedFilterNames(draft, this.data.catalog)
+      });
+    },
+    handleCompanyInput(event) {
+      this.syncCompany(event.detail.value, this.data.catalog);
+    },
+    selectCompanySuggestion(event) {
+      const id = Number(event.currentTarget.dataset.id) || 0;
+      const name = categoryName(this.data.catalog, 'companies', id);
+      const draft = Object.assign({}, this.data.draft, { companyId: id });
+      this.setData({
+        companyInput: name,
+        companySuggestions: [],
+        companyError: '',
+        draft,
+        selectedChips: selectedFilterNames(draft, this.data.catalog)
+      });
+    },
+    clearCompany() {
+      this.setData({ companyInput: '', companySuggestions: [], companyError: '' });
+      this.updateDraft(Object.assign({}, this.data.draft, { companyId: 0 }));
+    },
     reset() {
+      this.setData({ companyInput: '', companySuggestions: [], companyError: '' });
       this.updateDraft(emptyFilters());
     },
     apply() {
       const keywordError = validateKeyword(this.data.draft.keyword);
       if (keywordError) {
-        this.setData({ keywordError });
+        wx.showToast({ title: keywordError, icon: 'none' });
+        return;
+      }
+      if (this.data.companyError) {
+        wx.showToast({ title: '请先处理公司筛选', icon: 'none' });
         return;
       }
       this.triggerEvent('apply', { filters: Object.assign({}, this.data.draft) });

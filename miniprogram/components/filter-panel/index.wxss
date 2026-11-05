@@ -1,170 +1,218 @@
-.filter-layer {
+.filter-page {
   position: fixed;
   z-index: 100;
   inset: 0;
-}
-
-.filter-mask {
-  position: absolute;
-  inset: 0;
-  background: rgba(18, 28, 23, 0.45);
-}
-
-.filter-sheet {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
-  max-height: 88vh;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-  border-radius: 28rpx 28rpx 0 0;
-  background: var(--color-surface);
-  overflow: hidden;
+  background: var(--color-bg);
 }
 
-.sheet-header {
+.filter-navbar {
   display: flex;
   flex: none;
   align-items: center;
-  justify-content: space-between;
-  padding: 28rpx 32rpx 20rpx;
-  border-bottom: 1rpx solid var(--color-border);
+  height: 104rpx;
+  padding: 0 20rpx;
+  background: var(--color-bg);
 }
 
-.sheet-title {
-  font-size: var(--font-xl);
-  font-weight: 650;
-}
-
-.icon-button {
+.nav-back,
+.nav-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64rpx;
-  height: 64rpx;
+  width: 72rpx;
+  height: 72rpx;
 }
 
-.sheet-body {
+.nav-title {
+  flex: 1;
+  color: var(--color-text);
+  font-size: 34rpx;
+  font-weight: 650;
+  text-align: center;
+}
+
+.filter-body {
   flex: 1;
   min-height: 0;
-  padding: 0 32rpx;
+  padding: 12rpx 24rpx 24rpx;
 }
 
-.selected-section,
-.filter-section {
-  padding: 26rpx 0 4rpx;
+.filter-card {
+  padding: 30rpx 28rpx 34rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.selected-section {
+  margin-bottom: 28rpx;
 }
 
 .section-label {
   display: block;
   margin-bottom: 18rpx;
-  font-size: var(--font-md);
-  font-weight: 650;
+  color: var(--color-text);
+  font-size: 30rpx;
+  font-weight: 700;
 }
 
-.chip-wrap,
-.option-list {
+.selected-list {
   display: flex;
   flex-wrap: wrap;
   gap: 14rpx;
 }
 
-.selected-chip,
-.option-chip {
-  max-width: 100%;
-  padding: 12rpx 20rpx;
-  border: 1rpx solid transparent;
-  border-radius: var(--radius-sm);
+.selected-chip {
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
   background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
-  font-size: var(--font-sm);
+  color: var(--color-primary);
+  font-size: 24rpx;
   line-height: 1.5;
-  overflow-wrap: anywhere;
 }
 
-.option-chip {
-  border-color: var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
+.major-section {
+  margin-top: 8rpx;
 }
 
-.option-active {
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
+.major-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 100rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  text-align: left;
+}
+
+.major-name {
+  color: var(--color-text);
+  font-size: 29rpx;
   font-weight: 600;
 }
 
-.keyword-input {
-  height: 88rpx;
-  padding: 0 24rpx;
+.major-active {
+  color: var(--color-primary-dark);
+}
+
+.row-status {
+  color: var(--color-text-secondary);
+  font-size: 25rpx;
+}
+
+.status-active {
+  color: var(--color-primary);
+}
+
+.same-major-note {
+  margin: 28rpx 0 30rpx;
+  padding: 24rpx;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-size: 25rpx;
+  line-height: 1.7;
+}
+
+.company-section,
+.topic-section {
+  margin-top: 30rpx;
+}
+
+.company-input-row {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  padding: 0 20rpx;
   border: 1rpx solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg);
-  font-size: var(--font-md);
+}
+
+.company-input {
+  flex: 1;
+  min-width: 0;
+  height: 76rpx;
+  font-size: 27rpx;
+}
+
+.company-clear {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 60rpx;
+}
+
+.company-suggestions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12rpx;
+  overflow: hidden;
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.company-suggestion {
+  padding: 20rpx;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 25rpx;
+  text-align: left;
+}
+
+.company-suggestion + .company-suggestion {
+  border-top: 1rpx solid var(--color-border);
 }
 
 .field-error {
   display: block;
-  margin-top: 10rpx;
+  margin-top: 12rpx;
   color: var(--color-danger);
-  font-size: var(--font-xs);
+  font-size: 23rpx;
+  line-height: 1.5;
 }
 
-.catalog-error {
-  margin-top: 24rpx;
-  padding: 20rpx;
-  border-radius: var(--radius-sm);
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-  font-size: var(--font-sm);
-}
-
-.same-major-box {
-  margin-top: 32rpx;
-  padding: 24rpx;
-  border-radius: var(--radius-md);
-  background: var(--color-primary-soft);
-}
-
-.same-major-title,
-.same-major-text {
+.company-contract-note {
   display: block;
-}
-
-.same-major-title {
-  color: var(--color-primary-dark);
-  font-weight: 650;
-}
-
-.same-major-text {
-  margin-top: 10rpx;
-  color: var(--color-text-secondary);
-  font-size: var(--font-sm);
-  line-height: 1.65;
-}
-
-.same-major-action {
-  justify-content: flex-start;
-  padding: 0;
-}
-
-.filter-tip {
-  margin: 24rpx 0 32rpx;
+  margin-top: 12rpx;
   color: var(--color-text-tertiary);
-  font-size: var(--font-xs);
+  font-size: 22rpx;
+  line-height: 1.5;
 }
 
-.sheet-footer {
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.topic-chip {
+  padding: 11rpx 18rpx;
+  border-radius: 8rpx;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.topic-active {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.filter-footer {
   display: flex;
   flex: none;
   gap: 20rpx;
-  padding: 20rpx 32rpx 24rpx;
+  padding: 18rpx 24rpx calc(18rpx + constant(safe-area-inset-bottom));
+  padding: 18rpx 24rpx calc(18rpx + env(safe-area-inset-bottom));
   border-top: 1rpx solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .reset-button { width: 34%; }

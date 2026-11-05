@@ -85,6 +85,10 @@ Page({
     });
   },
 
+  showFutureInteraction() {
+    wx.showToast({ title: '认证与互动功能后续批次开放', icon: 'none' });
+  },
+
   chooseDemoScenario() {
     if (!config.demoMode) return;
     const scenarios = ['normal', 'network', 'service', 'unavailable'];

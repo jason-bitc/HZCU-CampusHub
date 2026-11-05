@@ -3,6 +3,7 @@
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark",
   "usingComponents": {
+    "app-icon": "/components/app-icon/index",
     "page-state": "/components/page-state/index",
     "markdown-view": "/components/markdown-view/index"
   }
