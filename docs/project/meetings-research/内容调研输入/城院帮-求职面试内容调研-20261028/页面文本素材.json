@@ -1,0 +1,1042 @@
+{
+  "title": "城院帮求职与面试内容设计素材",
+  "version": "research-20261028",
+  "purpose": "用于uni-app页面设计与文案探索，不自动导入后端或发布",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "益普科技 Java开发实习生 面经",
+      "author": "凯恩血蹄",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/926599685232422912?sourceSSR=home",
+      "access_url": "https://www.nowcoder.com/discuss/926599685232422912?sourceSSR=home",
+      "content_type": "个人面试记录",
+      "published_date": "页面09-07，年份未单列",
+      "experience_date": "2026-09-07",
+      "job": "Java后端",
+      "company": "益普科技",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "记录涉及项目困难、错误呈现、Git回退和AI代码使用，包含反问与表达复盘。",
+      "evidence_location": "正文题目2、5至12及反思段",
+      "limitation": "结果未公布。候选人复述的Git讨论不作为技术定论；学校徽标不代表独立身份验证。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S02",
+      "title": "面经复盘（2026.5.7）",
+      "author": "相遇即缘分",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/feed/main/detail/124b6e9db981458e839e1771d9b4da04",
+      "access_url": "https://api-cdn.nowcoder.com/feed/main/detail/124b6e9db981458e839e1771d9b4da04?sourceSSR=post",
+      "content_type": "个人面试记录",
+      "published_date": "页面09-21，年份未单列",
+      "experience_date": "2026-05-07",
+      "job": "Java后端／AI应用",
+      "company": "北京星龙数智科技",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "记录从大二学业安排和方向意愿，延伸到Java基础与RAG项目。",
+      "evidence_location": "正文题目2、3、18至22",
+      "limitation": "账号当前实习徽标不等同于这次面试的录用结果；只提取问题类别，不提供未经核验的答案。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S03",
+      "title": "中科闻歌前端暑期实习面经",
+      "author": "Koital",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/737291903661588480?sourceSSR=users",
+      "access_url": "https://www.nowcoder.com/discuss/737291903661588480?sourceSSR=users",
+      "content_type": "个人面试记录",
+      "published_date": "2025-04-03；作者04-10补充结果",
+      "experience_date": "2025-04-03",
+      "job": "前端开发",
+      "company": "中科闻歌",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "作者给出投递至面试节点，小程序项目被追问动机与功能实现，后续说明收到拒信。",
+      "evidence_location": "时间线、项目问题及作者04-10回复",
+      "limitation": "面试者自述；具体轮次和当时结果仅适用于该次经历，不代表该公司当前统一流程。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S04",
+      "title": "美团暑期实习前端一面面经",
+      "author": "Koital",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/743955076250689536",
+      "access_url": "https://www.nowcoder.com/discuss/743955076250689536",
+      "content_type": "个人面试记录",
+      "published_date": "2025-04-21；作者04-22补充进度",
+      "experience_date": "2025-04-21",
+      "job": "前端开发",
+      "company": "美团",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "记录补充志愿、基础题与现场编码；作者后来补充收到二面邀请。",
+      "evidence_location": "前言、面试体验及作者04-22回复",
+      "limitation": "二面邀请不等于最终offer；与S03为同一作者，不能当作两名独立受访者。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S05",
+      "title": "27日常实习 前端 面经",
+      "author": "竹秋拾",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/812820108316852224",
+      "access_url": "https://www.nowcoder.com/discuss/812820108316852224",
+      "content_type": "个人多场面试记录",
+      "published_date": "2025-10-28",
+      "experience_date": "各场日期未统一列明",
+      "job": "前端开发",
+      "company": "含哔哩哔哩、字节等",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "多场记录包含性能指标测量、优化效果和技术选型追问，适合研究项目复盘结构。",
+      "evidence_location": "字节部分的FCP、优化措施与项目总结",
+      "limitation": "技术问答可能有口述错误；不沿用其题目括注作答案，也不将个人感受上升为公司结论。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S06",
+      "title": "广东电信亿迅科技测试实习生面经（已oc）",
+      "author": "为你答疑解惑的废话选手很想被叫靓仔",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/feed/main/detail/3086b74ba8004eb69356d6cc7fd2ff3d",
+      "access_url": "https://www.nowcoder.com/feed/main/detail/3086b74ba8004eb69356d6cc7fd2ff3d",
+      "content_type": "个人面试记录",
+      "published_date": "2025-05-11",
+      "experience_date": "2025年5月，具体面试日未单列",
+      "job": "软件测试",
+      "company": "广东电信亿迅科技",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "经历同时涉及测试设计、SQL、转岗动机和到岗安排，并有对测试经验不足的反馈。",
+      "evidence_location": "一面问题3至6、反问及二面HR部分",
+      "limitation": "OC为作者自述的口头录用，不等于书面offer；不采用贬低测试职业的感言、夸大可到岗时间的做法及评论区指控。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S07",
+      "title": "深圳未来技术软件，实习面试",
+      "author": "调酒师99",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/feed/main/detail/82e2decaadb642e1b5bf0b50db9dc08e",
+      "access_url": "https://www.nowcoder.com/feed/main/detail/82e2decaadb642e1b5bf0b50db9dc08e",
+      "content_type": "个人面试记录",
+      "published_date": "2025-12-18",
+      "experience_date": "2025-12-18",
+      "job": "自动化测试",
+      "company": "深圳未来技术软件",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "作者原先偏向后端，海投接触到测试岗位；HR事先说明岗位差异，作者选择参加面试。",
+      "evidence_location": "岗位、面试感想1及2",
+      "limitation": "此例不能表述成欺骗招聘；作者未说明最终录用结果，页面Java方向不是已核验的大学专业。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S08",
+      "title": "2025.5.8广州华资软件ava实习面试",
+      "author": "Lxx-123",
+      "platform": "博客园",
+      "url": "https://www.cnblogs.com/l-xx123/p/18870375",
+      "access_url": "https://www.cnblogs.com/l-xx123/p/18870375",
+      "content_type": "个人HR面试记录",
+      "published_date": "2025-05-11；正文有后续补记",
+      "experience_date": "2025-05-08",
+      "job": "Java实习／HR沟通",
+      "company": "广州华资软件",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "HR沟通涉及校内经历、项目、城市选择和工作安排，后续约面有变动。",
+      "evidence_location": "面试过程及后续段",
+      "limitation": "作者也有记不清的部分，不推断单双休或断言公司违约。原题ava按页面保存，不擅自修订来源标题。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S09",
+      "title": "记录 Java 后端开发实习历程（面经）",
+      "author": "Happysnaker",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/367015296278831104",
+      "access_url": "https://www.nowcoder.com/discuss/367015296278831104",
+      "content_type": "个人求职过程记录",
+      "published_date": "2022-07-07，页面标记已编辑",
+      "experience_date": "2022年4月至6月",
+      "job": "Java后端",
+      "company": "含趋势科技、中科全安、上汽安吉、字节",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "原帖保留多次投递与面试节点，以及面试后补项目、调整准备的过程。",
+      "evidence_location": "正文开头、趋势科技结束段及后续公司时间线",
+      "limitation": "历史结构样本，不用于推断2026招聘门槛、岗位或薪资；技术答案与择业偏好不直接采用。",
+      "commercial_screen": "所读正文未见课程或付费群引流；未对整个账号作商业审计",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S10",
+      "title": "Early in profession hiring tips",
+      "author": "Microsoft Careers",
+      "platform": "企业招聘官网",
+      "url": "https://careers.microsoft.com/v2/global/en/hiring-tips/student-interviewing",
+      "access_url": "https://careers.microsoft.com/v2/global/en/hiring-tips/student-interviewing",
+      "content_type": "官方流程说明",
+      "published_date": "页面未标发布日期",
+      "experience_date": "查阅于2026-10-28",
+      "job": "通用／技术岗位",
+      "company": "Microsoft",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "官方说明岗位间流程可能不同，准备需结合具体邀请及招聘联系人提供的信息。",
+      "evidence_location": "Early in profession hiring tips及Preparing for your interview",
+      "limitation": "全球官网口径，不等同中国区全部岗位；不作为本校学生亲历或独立效果证明。",
+      "commercial_screen": "官方发布方材料；保留其招聘或教学语境，不作为独立亲历",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S11",
+      "title": "Interview prep for technical roles",
+      "author": "Amazon Jobs",
+      "platform": "企业招聘官网",
+      "url": "https://www.amazon.jobs/content/en/how-we-hire/university/additional-tech",
+      "access_url": "https://www.amazon.jobs/content/en/how-we-hire/university/additional-tech",
+      "content_type": "官方岗位与面试说明",
+      "published_date": "页面未标发布日期",
+      "experience_date": "查阅于2026-10-28",
+      "job": "质量保障／技术岗位",
+      "company": "Amazon",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "QAE准备说明覆盖质量职责、经历表达和岗位要求，强调解释做法及决策理由。",
+      "evidence_location": "QAE职责、Behavioral interview及Technical interview for QAEs",
+      "limitation": "此页面向所述大学生技术岗位，不能套作所有SDE或中国区面试安排；正式邀请优先。",
+      "commercial_screen": "官方发布方材料；保留其招聘或教学语境，不作为独立亲历",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S12",
+      "title": "五部门联合发布警惕招转培、培训贷等风险提示",
+      "author": "人力资源和社会保障部等",
+      "platform": "中国就业网",
+      "url": "https://chinajob.mohrss.gov.cn/h5/c/2026-05-18/543038.shtml",
+      "access_url": "https://chinajob.mohrss.gov.cn/h5/c/2026-05-18/543038.shtml",
+      "content_type": "官方求职风险提示",
+      "published_date": "2026-05-18",
+      "experience_date": "2026-05-18",
+      "job": "通用",
+      "company": "不适用",
+      "decision": "入选",
+      "evidence_level": "已核对正文",
+      "access_date": "2026-10-28",
+      "short_finding": "风险提示说明以招聘引流再推销高价培训、贷款的方式，并提示核验资质与保留证据。",
+      "evidence_location": "典型套路及风险提示",
+      "limitation": "用于一般风险识别，不据此判定某条未经调查的招聘信息违法，也不生成公司黑名单。",
+      "commercial_screen": "官方发布方材料；保留其招聘或教学语境，不作为独立亲历",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "S13",
+      "title": "Amazon Leadership Principles (SIP)",
+      "author": "Amazon官方视频及配套文字稿",
+      "platform": "YouTube／企业招聘官网",
+      "url": "https://www.youtube.com/watch?v=CpcxVE5JIX4",
+      "access_url": "https://static.jobs.production.amazon-jobs.brightspot.cloud/e2/50/052314124ef4835c3345a8a68ac0/transcript-amazon-leadership-principles.docx",
+      "content_type": "官方模拟面试教学",
+      "published_date": "原视频日期未核定",
+      "experience_date": "查阅于2026-10-28",
+      "job": "通用／经历表达",
+      "company": "Amazon",
+      "decision": "入选",
+      "evidence_level": "官网下载并读取完整视频文字稿；未播放视频",
+      "access_date": "2026-10-28",
+      "short_finding": "官方模拟示例比较了笼统回答与说明个人动作、判断依据和影响的回答。",
+      "evidence_location": "官方文字稿00:41至01:05、01:55至02:10、04:56至05:59",
+      "limitation": "阅读官方完整配套文字稿，未播放视频；属于模拟教学，不是求职者真实经历。文字稿为SBI，S11网页另提STAR，二者不混写。",
+      "commercial_screen": "官方发布方材料；保留其招聘或教学语境，不作为独立亲历",
+      "hzcu_identity_verified": false
+    }
+  ],
+  "screening_records": [
+    {
+      "id": "P01",
+      "title": "计算机怎么找第一份实习",
+      "author": "",
+      "platform": "B站",
+      "url": "https://www.bilibili.com/video/BV1QsPUeRExj/",
+      "access_url": "https://www.bilibili.com/video/BV1QsPUeRExj/",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "检索元数据；视频未播放",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "视频访问返回412；只有标题、账号与简介，尚未核验正文和账号商业引流。",
+      "commercial_screen": "视频访问返回412；只有标题、账号与简介，尚未核验正文和账号商业引流。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "P02",
+      "title": "又积累了一场面试经验",
+      "author": "",
+      "platform": "抖音",
+      "url": "https://www.douyin.com/video/7574323749861858917?source=Baiduspider-sdc",
+      "access_url": "https://www.douyin.com/video/7574323749861858917?source=Baiduspider-sdc",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "检索正文摘要；视频未播放",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "页面出现群面总结，但无法确认其与视频逐句对应；需豆包读取字幕或用户观看核验。",
+      "commercial_screen": "页面出现群面总结，但无法确认其与视频逐句对应；需豆包读取字幕或用户观看核验。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "P03",
+      "title": "How to prepare for your Microsoft Interview: Virtual Interview",
+      "author": "",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/watch?v=fRozLeshPiA",
+      "access_url": "https://www.youtube.com/watch?v=fRozLeshPiA",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "官方页面反向链接；视频未播放",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "从Microsoft官网追到视频原链接；没有取得字幕或播放内容。",
+      "commercial_screen": "从Microsoft官网追到视频原链接；没有取得字幕或播放内容。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "P04",
+      "title": "秋招结束，年终总结",
+      "author": "",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/feed/main/detail/7fbaab4f5c9349c0993188af94c94814",
+      "access_url": "https://www.nowcoder.com/feed/main/detail/7fbaab4f5c9349c0993188af94c94814",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "搜索片段；原页正文未取得",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "检索结果显示个人叙述开头，原页只返回页脚；不以片段推演完整经历。",
+      "commercial_screen": "检索结果显示个人叙述开头，原页只返回页脚；不以片段推演完整经历。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "P05",
+      "title": "网易伏羲机器人-测开实习面经",
+      "author": "",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/883690384444964864",
+      "access_url": "https://www.nowcoder.com/discuss/883690384444964864",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "正文已读；技术表述另审",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "题目转述存在技术表述风险及日期年号不完整，只可作为提问线索，暂不纳入页面文本。",
+      "commercial_screen": "题目转述存在技术表述风险及日期年号不完整，只可作为提问线索，暂不纳入页面文本。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "P06",
+      "title": "计算机专业如何找实习？26届计算机找实习经验帖",
+      "author": "",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/feed/main/detail/52871c6fff7d4852b9a3d49e6652e10f",
+      "access_url": "https://www.nowcoder.com/feed/main/detail/52871c6fff7d4852b9a3d49e6652e10f",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "待复核",
+      "evidence_level": "检索摘要；原页正文未取得",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "检索摘要较长，但原页只有页脚，无法完整核验原作者、日期、推广信息和全文。",
+      "commercial_screen": "检索摘要较长，但原页只有页脚，无法完整核验原作者、日期、推广信息和全文。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E01",
+      "title": "美团Java实习一面面经：从项目拷打到算法实战的完整复盘",
+      "author": "",
+      "platform": "牛客",
+      "url": "https://www.nowcoder.com/discuss/735152276871843840?sourceSSR=users",
+      "access_url": "https://www.nowcoder.com/discuss/735152276871843840?sourceSSR=users",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索片段；未取得完整正文",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "检索片段出现训练营原题推广；原页只返回页脚，亦不足以核验。按本次保守筛选标准不采用。",
+      "commercial_screen": "检索片段出现训练营原题推广；原页只返回页脚，亦不足以核验。按本次保守筛选标准不采用。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E02",
+      "title": "得物商家产品面试录音复盘",
+      "author": "",
+      "platform": "抖音",
+      "url": "https://www.douyin.com/video/7587740511268621610?source=Googlebot-sdc",
+      "access_url": "https://www.douyin.com/video/7587740511268621610?source=Googlebot-sdc",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索摘要；页面等待加载",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "检索文本明确为学员模拟面试；不作为本人求职亲历。",
+      "commercial_screen": "检索文本明确为学员模拟面试；不作为本人求职亲历。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E03",
+      "title": "八股这些就够了 大模型秋招实习",
+      "author": "",
+      "platform": "B站",
+      "url": "https://www.bilibili.com/video/BV1zdsVzUEyh/",
+      "access_url": "https://www.bilibili.com/video/BV1zdsVzUEyh/",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "标题及简介",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "标题作覆盖性承诺，且未取得正文验证；本轮不用于学习路线和页面经验文本。",
+      "commercial_screen": "标题作覆盖性承诺，且未取得正文验证；本轮不用于学习路线和页面经验文本。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E04",
+      "title": "霍格沃兹测试开发学社2026年3月归档",
+      "author": "",
+      "platform": "博客园",
+      "url": "https://www.cnblogs.com/hogwarts/p/archive/2026/03",
+      "access_url": "https://www.cnblogs.com/hogwarts/p/archive/2026/03",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索页面与发布主体",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "培训品牌内容，与本轮排除机构引流的选材要求不符。",
+      "commercial_screen": "培训品牌内容，与本轮排除机构引流的选材要求不符。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E05",
+      "title": "文科生自学转码拿下大厂前端Offer：一份可复制的校招实战复盘",
+      "author": "",
+      "platform": "AtomGit",
+      "url": "https://blog.gitcode.com/38bc0d6383f30cd780acecce3f8806bd.html",
+      "access_url": "https://blog.gitcode.com/38bc0d6383f30cd780acecce3f8806bd.html",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索摘要",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "页面摘要为他人经历再加工并结合仓库推广，未追到可核验的本人原帖。",
+      "commercial_screen": "页面摘要为他人经历再加工并结合仓库推广，未追到可核验的本人原帖。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E06",
+      "title": "从数学转后端，双非研一拿下网易实习",
+      "author": "",
+      "platform": "AtomGit",
+      "url": "https://blog.gitcode.com/d92eaae7f1e7f9b326e6a10ce2b22ac3.html",
+      "access_url": "https://blog.gitcode.com/d92eaae7f1e7f9b326e6a10ce2b22ac3.html",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索摘要",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "二手重述，原作者经历和商业动机未核实；不以原文自称原创替代溯源。",
+      "commercial_screen": "二手重述，原作者经历和商业动机未核实；不以原文自称原创替代溯源。",
+      "hzcu_identity_verified": false
+    },
+    {
+      "id": "E07",
+      "title": "Twitter University #DesignYourCareer2020",
+      "author": "",
+      "platform": "X历史招聘PDF",
+      "url": "https://careers.x.com/content/dam/careers-twitter/university/DesignYourCareer2020.pdf",
+      "access_url": "https://careers.x.com/content/dam/careers-twitter/university/DesignYourCareer2020.pdf",
+      "content_type": "线索",
+      "published_date": "",
+      "experience_date": "",
+      "job": "",
+      "company": "",
+      "decision": "排除",
+      "evidence_level": "检索结果与文件年号",
+      "access_date": "2026-10-28",
+      "short_finding": "",
+      "evidence_location": "",
+      "limitation": "2020年历史招聘材料，与当前国内学生亲历及本轮设计素材不匹配。",
+      "commercial_screen": "2020年历史招聘材料，与当前国内学生亲历及本轮设计素材不匹配。",
+      "hzcu_identity_verified": false
+    }
+  ],
+  "cards": [
+    {
+      "id": "C01",
+      "title": "项目能运行以后，面试还会追问什么",
+      "summary": "从已读面经中整理项目动机、个人贡献和AI代码复核的准备方法。",
+      "topic": "项目表达",
+      "job_tags": [
+        "Java后端",
+        "前端开发"
+      ],
+      "company_tags": [
+        "益普科技",
+        "中科闻歌"
+      ],
+      "source_ids": [
+        "S01",
+        "S03",
+        "S13"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "凯恩血蹄",
+        "Koital",
+        "Amazon官方视频及配套文字稿"
+      ],
+      "experience_date": null,
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S01": "2026-09-07",
+        "S03": "2025-04-03",
+        "S13": "查阅于2026-10-28"
+      },
+      "original_publish_date": null,
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 项目能运行以后，面试还会追问什么\n\n整理这批面经时，一个反复出现的细节是，面试官会接着问项目的来由、实现过程和判断依据。准备实习面试，可以先从自己已经做过的项目开始，把这些部分补齐。\n\n## 先说明自己解决了什么问题\n\n一份2026年的Java实习记录包含了错误呈现和AI代码使用方面的提问。2025年的前端记录里，也出现了对小程序开发动机和功能完成情况的追问。它们提醒准备者，介绍项目时需要讲清功能从哪里来、自己实际完成了什么。[S01][S03]\n\n可以挑一个熟悉的功能，从使用者遇到的问题讲起。随后说明自己负责的部分、当时的限制，以及最后怎样确认功能能够使用。团队共同完成的内容，也要说明自己参与到了哪一步。\n\n## 为关键选择留下一份说明\n\n当一个项目同时使用数据库、缓存或消息队列时，可以分别问自己，这个组件解决了哪一处具体问题，不使用它会怎样，还有没有更简单的选择。\n\n这些问题适合拿代码和记录核对。讲到性能，手里的测量条件要能说明；只有本地演示结果，就讲本地演示。还没有测过的指标，可以直接说明下一步准备怎样验证。\n\n## AI参与过的部分也要讲得明白\n\nAI生成过代码，可以整理自己提出的要求、检查过的内容、发现的问题以及修改结果。准备者需要能够解释最后留下来的实现，碰到边界问题时也知道到哪里查。\n\n亚马逊的一份官方模拟教学，专门比较了笼统回答和细节更充分的回答。后者把个人采取的动作与决策依据说得更清楚。这个例子适合练习表达，并不意味着所有公司的面试都有同一套评分方法。[S13]\n\n练习时录下几分钟的项目介绍，再找一个同学追问。看看自己是否总在重复技术名称，是否能把话题接回真实功能，是否分清个人工作和团队工作。最后留下需要补查的两三个问题，下一轮练习再验证。\n"
+    },
+    {
+      "id": "C02",
+      "title": "第一次前端面试，小程序项目被问到了哪些细节",
+      "summary": "一份带有投递节点和后续拒信更新的记录，适合观察项目追问如何展开。",
+      "topic": "面试复盘",
+      "job_tags": [
+        "前端开发"
+      ],
+      "company_tags": [
+        "中科闻歌"
+      ],
+      "source_ids": [
+        "S03"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Koital"
+      ],
+      "experience_date": "2025-04-03",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S03": "2025-04-03"
+      },
+      "original_publish_date": "2025-04-03；作者04-10补充结果",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 第一次前端面试，小程序项目被问到了哪些细节\n\n一份带有投递节点和后续拒信更新的记录，适合观察项目追问如何展开。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C03",
+      "title": "收到二面邀请之前，一场前端面试留下的记录",
+      "summary": "从作者的当场体验与后续更新中，区分面试表现、流程进展和最终录用。",
+      "topic": "面试复盘",
+      "job_tags": [
+        "前端开发"
+      ],
+      "company_tags": [
+        "美团"
+      ],
+      "source_ids": [
+        "S04"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Koital"
+      ],
+      "experience_date": "2025-04-21",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S04": "2025-04-21"
+      },
+      "original_publish_date": "2025-04-21；作者04-22补充进度",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 收到二面邀请之前，一场前端面试留下的记录\n\n从作者的当场体验与后续更新中，区分面试表现、流程进展和最终录用。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C04",
+      "title": "简历写了性能优化，怎样把过程讲具体",
+      "summary": "前端多场记录出现指标测量与优化效果追问，适合整理可选的写作提示。",
+      "topic": "项目表达",
+      "job_tags": [
+        "前端开发"
+      ],
+      "company_tags": [
+        "哔哩哔哩",
+        "字节跳动"
+      ],
+      "source_ids": [
+        "S05"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "竹秋拾"
+      ],
+      "experience_date": "各场日期未统一列明",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S05": "各场日期未统一列明"
+      },
+      "original_publish_date": "2025-10-28",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 简历写了性能优化，怎样把过程讲具体\n\n前端多场记录出现指标测量与优化效果追问，适合整理可选的写作提示。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C05",
+      "title": "投递之前，把岗位和实际安排问清楚",
+      "summary": "结合不同岗位沟通记录，整理工作内容、可到岗时间和费用核验的问题。",
+      "topic": "投递与沟通",
+      "job_tags": [
+        "通用"
+      ],
+      "company_tags": [
+        "深圳未来技术软件",
+        "广州华资软件"
+      ],
+      "source_ids": [
+        "S07",
+        "S08",
+        "S12"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "调酒师99",
+        "Lxx-123",
+        "人力资源和社会保障部等"
+      ],
+      "experience_date": null,
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S07": "2025-12-18",
+        "S08": "2025-05-08",
+        "S12": "2026-05-18"
+      },
+      "original_publish_date": null,
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 投递之前，把岗位和实际安排问清楚\n\n这一轮资料里，有两份经历值得放在一起看。一位投递者原先偏向Java后端，后来参加了一次自动化测试面试，HR已经事先解释过岗位性质。另一份HR面试记录里，交流涉及城市选择和工作安排，作者有些细节记得并不完整。[S07][S08]\n\n## 职位名称之外，还需要确认工作内容\n\n投递前可以先保存职位说明，把自己最关心的几项记下来。实际负责什么，使用哪些工具，有没有带教，与自己希望积累的经历是否接近。这些问题适合在沟通时逐项确认。\n\n如果岗位与原先设想不同，可以在了解后决定是否继续。一次面试能够帮助认识岗位，但参加面试本身不意味着必须接受后续安排。\n\n## 到岗时间需要和自己的课程安排对得上\n\n一周可以到岗几天、能够持续多久、考试期间需要怎样安排，都要按实际情况说。涉及异地实习，还可以把通勤和住宿条件放进同一份清单。回答之前先看自己的日程，避免为了争取机会作出做不到的承诺。\n\n沟通中没听清的安排，可以再问一次。面试结束后，把仍未确认的事项列出来，下一次联系时核对。实习手续则需要回到本校当时有效的要求，外校经验只能帮助准备问题。\n\n## 出现先交费、再安排岗位的要求时要停下来核验\n\n五部门2026年的风险提示指出，有人以招聘吸引求职者，再借能力不足推销高价培训或贷款。遇到这类情况，应核对招聘和培训主体，保留原始材料，不因口头就业承诺匆忙付款。[S12]\n\n"
+    },
+    {
+      "id": "C06",
+      "title": "测试实习面试，开发项目也会被追问怎么测",
+      "summary": "一份个人记录把测试用例、SQL和到岗安排写在一起，可帮助读者了解准备范围。",
+      "topic": "面试复盘",
+      "job_tags": [
+        "软件测试"
+      ],
+      "company_tags": [
+        "广东电信亿迅科技"
+      ],
+      "source_ids": [
+        "S06"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "为你答疑解惑的废话选手很想被叫靓仔"
+      ],
+      "experience_date": "2025年5月，具体面试日未单列",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S06": "2025年5月，具体面试日未单列"
+      },
+      "original_publish_date": "2025-05-11",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 测试实习面试，开发项目也会被追问怎么测\n\n一份个人记录把测试用例、SQL和到岗安排写在一起，可帮助读者了解准备范围。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C07",
+      "title": "大二寻找Java实习，学业安排也进入了面试",
+      "summary": "个人记录包含学业阶段、方向意愿和项目问题，不能据此推断所有岗位的要求。",
+      "topic": "面试复盘",
+      "job_tags": [
+        "Java后端",
+        "AI应用开发"
+      ],
+      "company_tags": [
+        "北京星龙数智科技"
+      ],
+      "source_ids": [
+        "S02"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "相遇即缘分"
+      ],
+      "experience_date": "2026-05-07",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S02": "2026-05-07"
+      },
+      "original_publish_date": "页面09-21，年份未单列",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 大二寻找Java实习，学业安排也进入了面试\n\n个人记录包含学业阶段、方向意愿和项目问题，不能据此推断所有岗位的要求。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C08",
+      "title": "一次面试结束后，复盘里应该留下什么",
+      "summary": "把当场问题、个人判断和后续结果分开记录，方便自己回看，也方便别人继续追问。",
+      "topic": "求职复盘",
+      "job_tags": [
+        "通用"
+      ],
+      "company_tags": [],
+      "source_ids": [
+        "S03",
+        "S04",
+        "S10"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Koital",
+        "Koital",
+        "Microsoft Careers"
+      ],
+      "experience_date": null,
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S03": "2025-04-03",
+        "S04": "2025-04-21",
+        "S10": "查阅于2026-10-28"
+      },
+      "original_publish_date": null,
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 一次面试结束后，复盘里应该留下什么\n\n同一位前端作者先后写过两份记录。一份后来补充收到拒信，另一份补充收到二面邀请。把面试当时的内容和后来结果分别记下，读者才不容易把一场交流顺利误解为已经录用。[S03][S04]\n\n## 先记住过程，再写自己的判断\n\n面试刚结束时，可以先记录岗位、日期、轮次和大致过程。问题记不完整，就记得多少写多少。自己当时怎样回答，面试官又追问了什么，也尽量分开。\n\n遇到不会的问题，可以留下当时卡住的位置。以后补查到的知识放在补充部分，别把面试后的答案写成当时已经答出来的内容。这样回看时才知道自己究竟在哪一处进步了。\n\n## 下一次要改的动作需要足够具体\n\n如果项目介绍讲不清，可以把它拆成背景、个人负责部分和实际结果重新练一遍。如果现场编码没有推进，可以回看是题意没问清、思路没有整理好，还是实现细节不熟。技术问题则回到对应代码或可靠文档核对。\n\n每次只留下少量可执行的改进，并在下一次练习后检查。写下“基础薄弱”很容易，能够说出自己需要补哪一个知识点、用什么办法检验，复盘才方便继续使用。\n\n## 后续结果单独更新\n\n微软官方学生面试说明提到，不同岗位的考察和安排会有区别，招聘联系人可以帮助确认后续时间。对其他公司也应以实际沟通为依据，不照搬某篇面经中的等待天数。[S10]\n\n分享时，可以把一面的经历先写出来，收到后续消息再补日期和结果。评论区适合追问缺失信息，例如当时有什么基础、准备了多久，或者哪一个改进后来起了作用。个人感受可以保留，涉及公司的判断则需要有具体经过支持。\n"
+    },
+    {
+      "id": "C09",
+      "title": "从多次投递记录中，观察准备是怎样调整的",
+      "summary": "2022年的历史过程样本，用于学习求职记录的组织方式，不代表当前招聘标准。",
+      "topic": "准备过程",
+      "job_tags": [
+        "Java后端"
+      ],
+      "company_tags": [
+        "趋势科技",
+        "字节跳动"
+      ],
+      "source_ids": [
+        "S09"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Happysnaker"
+      ],
+      "experience_date": "2022年4月至6月",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S09": "2022年4月至6月"
+      },
+      "original_publish_date": "2022-07-07，页面标记已编辑",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 从多次投递记录中，观察准备是怎样调整的\n\n2022年的历史过程样本，用于学习求职记录的组织方式，不代表当前招聘标准。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C10",
+      "title": "官方说明里，学生面试如何因岗位而不同",
+      "summary": "Microsoft全球招聘页面的流程说明，阅读时需与具体岗位邀请相互核对。",
+      "topic": "官方参考",
+      "job_tags": [
+        "通用"
+      ],
+      "company_tags": [
+        "Microsoft"
+      ],
+      "source_ids": [
+        "S10"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Microsoft Careers"
+      ],
+      "experience_date": "查阅于2026-10-28",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S10": "查阅于2026-10-28"
+      },
+      "original_publish_date": "页面未标发布日期",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 官方说明里，学生面试如何因岗位而不同\n\nMicrosoft全球招聘页面的流程说明，阅读时需与具体岗位邀请相互核对。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C11",
+      "title": "质量保障岗位的官方准备说明可以看什么",
+      "summary": "Amazon大学生技术岗位页面涉及质量职责和经历表达，保留其岗位与地区语境。",
+      "topic": "官方参考",
+      "job_tags": [
+        "软件测试",
+        "质量保障"
+      ],
+      "company_tags": [
+        "Amazon"
+      ],
+      "source_ids": [
+        "S11"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Amazon Jobs"
+      ],
+      "experience_date": "查阅于2026-10-28",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S11": "查阅于2026-10-28"
+      },
+      "original_publish_date": "页面未标发布日期",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 质量保障岗位的官方准备说明可以看什么\n\nAmazon大学生技术岗位页面涉及质量职责和经历表达，保留其岗位与地区语境。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C12",
+      "title": "求职沟通开始推销付费培训时，需要核验什么",
+      "summary": "依据五部门风险提示整理的提醒，适合放入求职避坑内容，保留官方来源。",
+      "topic": "求职避坑",
+      "job_tags": [
+        "通用"
+      ],
+      "company_tags": [],
+      "source_ids": [
+        "S12"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "人力资源和社会保障部等"
+      ],
+      "experience_date": "2026-05-18",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S12": "2026-05-18"
+      },
+      "original_publish_date": "2026-05-18",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 求职沟通开始推销付费培训时，需要核验什么\n\n依据五部门风险提示整理的提醒，适合放入求职避坑内容，保留官方来源。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    },
+    {
+      "id": "C13",
+      "title": "一次官方模拟面试，怎样把个人动作说清楚",
+      "summary": "读取Amazon配套文字稿整理，重点是经历表达，属于教学示例，不能当作亲历面经。",
+      "topic": "官方参考",
+      "job_tags": [
+        "通用"
+      ],
+      "company_tags": [
+        "Amazon"
+      ],
+      "source_ids": [
+        "S13"
+      ],
+      "byline": "城院帮资料整理",
+      "content_label": "调研整理",
+      "source_authors": [
+        "Amazon官方视频及配套文字稿"
+      ],
+      "experience_date": "查阅于2026-10-28",
+      "experience_date_scope": "单来源按原记录；多来源整理不赋予单一经历日期",
+      "source_experience_dates": {
+        "S13": "查阅于2026-10-28"
+      },
+      "original_publish_date": "原视频日期未核定",
+      "assembled_date": "2026-10-28",
+      "school": null,
+      "major": null,
+      "grade": null,
+      "campus_verification": null,
+      "contact": null,
+      "statistics": null,
+      "preview_use": "页面设计素材，不是现有接口响应",
+      "body_markdown": "# 一次官方模拟面试，怎样把个人动作说清楚\n\n读取Amazon配套文字稿整理，重点是经历表达，属于教学示例，不能当作亲历面经。\n\n这是原帖的研究卡片，保留原文入口。长文阅读预览请使用C01、C05或C08。"
+    }
+  ],
+  "reader_followup_prompts": [
+    "你当时有哪些项目或实习基础？",
+    "这次投递属于日常实习还是暑期实习？",
+    "项目里的这一部分是你独立完成的吗？",
+    "面试结束以后，后来有收到下一轮通知吗？",
+    "你说的优化效果是在什么条件下测出来的？",
+    "学校课程与实习到岗时间是怎样协调的？"
+  ],
+  "followup_prompt_label": "用于交互设计的提问示例，不是真实用户评论"
+}

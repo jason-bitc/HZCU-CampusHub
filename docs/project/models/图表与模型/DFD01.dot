@@ -1,0 +1,28 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"P1" [shape=circle,label="P1\n身份与权限",style="filled",fillcolor="white"];
+"P2" [shape=circle,label="P2\n经验内容",style="filled",fillcolor="white"];
+"E1" [shape=box,label="E1\n平台用户"];
+"E4" [shape=box,label="E4\n邮件服务"];
+"D1" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D1 账号认证资料</TD></TR></TABLE>>];
+"D2" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D2 经验版本与文件</TD></TR></TABLE>>];
+"P4" [shape=circle,label="P4\n社区治理",style="filled",fillcolor="white"];
+"E1" -> "P1" [label="F01.1"];
+"P1" -> "E1" [label="F02.1"];
+"E1" -> "P2" [label="F01.2"];
+"P2" -> "E1" [label="F02.2"];
+"P1" -> "E4" [label="F07"];
+"E4" -> "P1" [label="F08"];
+"P1" -> "D1" [label="I01"];
+"D1" -> "P1" [label="I02"];
+"P2" -> "D1" [label="I03"];
+"D1" -> "P2" [label="I04"];
+"P2" -> "D2" [label="I05"];
+"D2" -> "P2" [label="I06"];
+"P4" -> "P2" [label="I17"];
+"P2" -> "P4" [label="I18"];
+"P4" -> "P1" [label="I21"];
+"P1" -> "P4" [label="I22"];
+}

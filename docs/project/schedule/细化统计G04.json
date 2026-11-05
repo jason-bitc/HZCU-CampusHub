@@ -1,0 +1,21 @@
+{
+  "workPackages": 52,
+  "oldCoreSubtasks": 103,
+  "coreLeafTasks": 167,
+  "projectEntries": 322,
+  "projectLeafTasks": 228,
+  "feasibilitySteps": 8,
+  "feasibilityLeafTasks": 44,
+  "requirementsLeafTasks": 44,
+  "teamHours": 226.55,
+  "hoursByPerson": {
+    "王晨": 120.35,
+    "刘景浩": 106.2
+  },
+  "laborBudget": 10366.93,
+  "rate": 45.76,
+  "sourceBaseline": "G04-BL-20261028-01",
+  "revision": "G04-BL-20261104-PROCESS",
+  "plannedDates": "沿用原工作包计划窗口；实际执行按日志登记",
+  "feedback": "FS04进一步定义问题与FS05方案比较并行迭代，FS06综合双方结果"
+}

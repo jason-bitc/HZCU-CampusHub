@@ -1,0 +1,23 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"P5.1" [shape=circle,label="P5.1\n身份白名单与确认",style="filled",fillcolor="white"];
+"P5.2" [shape=circle,label="P5.2\n任务执行与核查",style="filled",fillcolor="white"];
+"P5.3" [shape=circle,label="P5.3\n结果查询与留痕",style="filled",fillcolor="white"];
+"E3" [shape=box,label="E3\n运维管理员"];
+"E5" [shape=box,label="E5\n受控运行环境"];
+"D5" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D5 举报反馈与处置</TD></TR></TABLE>>];
+"D6" [shape=plain,label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="5"><TR><TD BORDER="1" SIDES="TB">D6 任务备份与审计</TD></TR></TABLE>>];
+"E3" -> "P5.1" [label="F05"];
+"P5.3" -> "E3" [label="F06"];
+"P5.2" -> "E5" [label="F09"];
+"E5" -> "P5.2" [label="F10"];
+"P5.3" -> "D6" [label="I23"];
+"D6" -> "P5.1" [label="I24"];
+"P5.1" -> "D5" [label="I25"];
+"D5" -> "P5.1" [label="I26"];
+"P5.1" -> "P5.2" [label="已授权幂等执行单"];
+"P5.1" -> "P5.3" [label="状态或备份查询条件"];
+"P5.2" -> "P5.3" [label="进度日志与校验结果"];
+}

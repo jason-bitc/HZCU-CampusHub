@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-04",
+ "PPTmainPages": 16,
+ "PPTappendixPages": 14,
+ "speechSeconds": 600,
+ "MPPentries": 322,
+ "coreLeaves": 167,
+ "FSleaves": 44,
+ "RAleaves": 44,
+ "nativeMismatchCount": 0,
+ "personHours": {
+  "王晨": 120.35000000000004,
+  "刘景浩": 106.2000000000001
+ },
+ "teamHours": 226.55,
+ "laborBudget": 10366.93,
+ "meeting": "2026-10-31 腾讯会议434440602",
+ "scores": {
+  "王晨": 91.2,
+  "刘景浩": 91.3
+ },
+ "actualUserInterview": false,
+ "actualUserTaskWalkthrough": false,
+ "independentTaskEvidenceRetained": false,
+ "scheduleCapacity": "两名成员仍有资源过载标记；技术变更增量待评估纳入",
+ "prototypeScreens": 64,
+ "prototypeBoards": 8
+}

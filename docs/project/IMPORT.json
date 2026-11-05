@@ -1,0 +1,1178 @@
+{
+  "date": "2026-11-05",
+  "source": "2026-11-04需求阶段最终交付",
+  "files": [
+    {
+      "path": "docs/project/presentations/城院帮需求分析专题汇报G04-10分钟.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/城院帮需求分析专题汇报G04-10分钟.pdf",
+      "sha256": "db7ecc9135e0a28e7f7766ddd0383c9bf00fca0c7ff7bda28f8fd48ddde4c590"
+    },
+    {
+      "path": "docs/project/presentations/城院帮需求分析专题汇报G04-10分钟.pptx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/城院帮需求分析专题汇报G04-10分钟.pptx",
+      "sha256": "ac368bf4cddf44a98fcf77a255040c79ebb2dce4e2ef2bc8c7da7197d258718b"
+    },
+    {
+      "path": "docs/project/presentations/城院帮需求分析专题讲稿G04-10分钟.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/城院帮需求分析专题讲稿G04-10分钟.md",
+      "sha256": "5c5cdc7b0afe8c8b2b589c0857f99ae3fc0928123488c8313737ce977408f476"
+    },
+    {
+      "path": "docs/project/presentations/城院帮需求分析专题讲稿G04-10分钟.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/城院帮需求分析专题讲稿G04-10分钟.pdf",
+      "sha256": "5862868606bd0543d0bb3ac317d584064192c063ddd75658987c4e405c914154"
+    },
+    {
+      "path": "docs/project/presentations/现场PDF查阅导航G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/现场PDF查阅导航G04.csv",
+      "sha256": "08aa1d7ee57c4606ec4e6441474b1c55f7d1abbb34559894bc1526b0bffb16a7"
+    },
+    {
+      "path": "docs/project/presentations/豆包需求阶段PPT调整提示词G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/01_汇报/豆包需求阶段PPT调整提示词G04.md",
+      "sha256": "c3fb44ac124dd529d01dab0d0a729cdc5d2089948a0da87ef94fe299b4a79bfb"
+    },
+    {
+      "path": "docs/project/reports/城院帮可行性分析报告G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮可行性分析报告G04.docx",
+      "sha256": "d3d0c8def2b0324094a2502fcea81f498ef67414d22af57e98f49565b952f895"
+    },
+    {
+      "path": "docs/project/reports/城院帮可行性分析报告G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮可行性分析报告G04.md",
+      "sha256": "0798d461a82b2e378cbec6a507c4072cf8a55a420399dd0fead3ecb3090ba85a"
+    },
+    {
+      "path": "docs/project/reports/城院帮可行性分析报告G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮可行性分析报告G04.pdf",
+      "sha256": "04ba9b1c2dcff9cb93ccaedd2599052ca36d2f53047b52067aa6a424dc455c56"
+    },
+    {
+      "path": "docs/project/reports/城院帮软件需求规格说明书G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮软件需求规格说明书G04.docx",
+      "sha256": "4e2becd8e96ee18e6f19d426e5f13ec0a9ae3e42f6baf4da4b4f65d9ca9c67ed"
+    },
+    {
+      "path": "docs/project/reports/城院帮软件需求规格说明书G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮软件需求规格说明书G04.md",
+      "sha256": "6db9f93f6fafee4135104e388b64f7cab0206bbd8784b557ec703927e27193bb"
+    },
+    {
+      "path": "docs/project/reports/城院帮软件需求规格说明书G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮软件需求规格说明书G04.pdf",
+      "sha256": "6c606a6a319393e8b29e603d5f15935c3d462ba9dc321511dd2957d129ac26a2"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析报告G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析报告G04.docx",
+      "sha256": "3dcfca34f9cc8aa1bec5ac2668f8f6e7ead01e7c14433dc8cbd5c16266ce9b9e"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析报告G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析报告G04.md",
+      "sha256": "bd6c441161e9b7eff72e3877c38705d5a8df361496eec11c15552dec59d4b48f"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析报告G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析报告G04.pdf",
+      "sha256": "36482b50bd0e8561d2a23c666896e1b3465ad03059e4f8ac82f095e0bf342bc8"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析模型说明G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析模型说明G04.docx",
+      "sha256": "1cb98328a164c852d2d48a39cfe198c1549ded862aefb56be87461189248e3f4"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析模型说明G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析模型说明G04.md",
+      "sha256": "d75745a6104fef917b36f8f6caa4a68e561c9db2b3213162b4c4a5c93093a848"
+    },
+    {
+      "path": "docs/project/reports/城院帮需求分析模型说明G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮需求分析模型说明G04.pdf",
+      "sha256": "562d933b51a8c6e73cf7f737954fe0aca6a6748c4816c0bb88dc60d36b718e40"
+    },
+    {
+      "path": "docs/project/reports/城院帮项目计划G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮项目计划G04.docx",
+      "sha256": "dcdb9f2dfa87a3755940bac798340d38e5eba029b9288d0dce968583270c04ba"
+    },
+    {
+      "path": "docs/project/reports/城院帮项目计划G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮项目计划G04.md",
+      "sha256": "d4b60b63206a7eb963ab8a68737dbbd6de48eb7ee8475d21d65c4dcb1450d110"
+    },
+    {
+      "path": "docs/project/reports/城院帮项目计划G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/02_正式报告/城院帮项目计划G04.pdf",
+      "sha256": "f1dc9f6fb04cb6bfc0d8e6c6a8be78e0299694f049fb1cfa0fbf8fbbf0333488"
+    },
+    {
+      "path": "docs/project/models/八步骤与分析模型展示索引G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/八步骤与分析模型展示索引G04.csv",
+      "sha256": "651ea47c43e23425085209742f8b8dd5e8baf32d4080570e96119fc03d9fe2c8"
+    },
+    {
+      "path": "docs/project/models/原型场景与异常G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/原型场景与异常G04.csv",
+      "sha256": "35978fa2e9d71fbf45e26b7125af34a52f00129f8e2e0254f5f4eabf9829a164"
+    },
+    {
+      "path": "docs/project/models/待确认事项G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/待确认事项G04.csv",
+      "sha256": "647ea0b3def2ae7529ce01e45584f62ff283264f0b55ea7c167890b0da91ff18"
+    },
+    {
+      "path": "docs/project/models/数据元素字典G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/数据元素字典G04.csv",
+      "sha256": "112a9ada342e91ed6ba421b35033367a3987f3dcd97f82f934e6fd13c6a7bed3"
+    },
+    {
+      "path": "docs/project/models/数据流字典G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/数据流字典G04.csv",
+      "sha256": "eeed4cd713818a3900684d2126dbdd2965e963816293405a21da78548ee1b7b0"
+    },
+    {
+      "path": "docs/project/models/数据流平衡核查G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/数据流平衡核查G04.csv",
+      "sha256": "6d9bd5c4f2a35fbb860d785ef1de30ee35bbb3d655423fab1f8ff71e5a83004a"
+    },
+    {
+      "path": "docs/project/models/数据结构与正则规则G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/数据结构与正则规则G04.csv",
+      "sha256": "d0c0ef72d587ad1dcbf220aa9f77a34ab0a9b89f30ae5f68f81faf55563b7c9b"
+    },
+    {
+      "path": "docs/project/models/用户代表与反馈登记G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/用户代表与反馈登记G04.csv",
+      "sha256": "0ed87f0652bbdc0d9de2f3e72e0c4a9ed8d870fe7b2576336166e3c6c8b67a70"
+    },
+    {
+      "path": "docs/project/models/用户任务走查与修改确认填写表G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/用户任务走查与修改确认填写表G04.csv",
+      "sha256": "c74f81877543937df3a0d5e97795773283a38297eefda478477c8aeb4ec5c3ef"
+    },
+    {
+      "path": "docs/project/models/用户反馈修改与确认G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/用户反馈修改与确认G04.csv",
+      "sha256": "110af29b5ef4a180af87cc482b2a7440d19c38ec8c28391649603dca4c9fb985"
+    },
+    {
+      "path": "docs/project/models/课件内容覆盖G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/课件内容覆盖G04.csv",
+      "sha256": "24df2915dbacdfb3fd2fca7490243abc7a0bbbf705721c8d5ef914c620b45c4a"
+    },
+    {
+      "path": "docs/project/models/调研口径复核G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/调研口径复核G04.csv",
+      "sha256": "bd537079c1857ba75abf359e61a573bf9090dfa60cad58875ca9b2a3542a3e0b"
+    },
+    {
+      "path": "docs/project/models/需求11项与PPT7项对照G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求11项与PPT7项对照G04.csv",
+      "sha256": "9704b640edf9563f05b39e15f986450df24a32a739633e48c6152f06a3f4c4f3"
+    },
+    {
+      "path": "docs/project/models/需求与原型证据对应G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求与原型证据对应G04.csv",
+      "sha256": "1735863f9255cb870c34180736bc3ffd13b5a763934643875cc7d2bae29e5ea1"
+    },
+    {
+      "path": "docs/project/models/需求参数与决定G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求参数与决定G04.csv",
+      "sha256": "2b0ff031597d4ec2e5e04832a497031f6089bd85dadcfc19a58cb5484f777631"
+    },
+    {
+      "path": "docs/project/models/需求追踪矩阵G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求追踪矩阵G04.csv",
+      "sha256": "cc92e8297d5c556038803d5a79e245cb56cb224ad8a154cd4f2d4325d221bb7a"
+    },
+    {
+      "path": "docs/project/models/需求阶段11项审查G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求阶段11项审查G04.csv",
+      "sha256": "44a31a9d07c5d5cb38107a129fb2459702a679e9e73c68d2e9778b282b7e4793"
+    },
+    {
+      "path": "docs/project/models/需求阶段成员评价填写表G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求阶段成员评价填写表G04.csv",
+      "sha256": "2ac984050b1c85ebcc338babf033aafabaa481829c8da6da509e01d8f1be34fa"
+    },
+    {
+      "path": "docs/project/models/需求阶段评审对照G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/需求阶段评审对照G04.csv",
+      "sha256": "44a31a9d07c5d5cb38107a129fb2459702a679e9e73c68d2e9778b282b7e4793"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD00.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD00.dot",
+      "sha256": "9497d700d553de97edfb847baeb3868f0fd97b294fb679a74683f6635ae50a28"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD00.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD00.pdf",
+      "sha256": "3a13e82635e2ecfc1b50d2311d29c7bdd0de337d6501d683c0b0efbf296b2945"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD00.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD00.png",
+      "sha256": "3ade50ea8497987f616d742fd3d399ac8f64cfe08858f3dd24d57b3620abb6fa"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD00.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD00.svg",
+      "sha256": "f85083af87cff9e380ab83ec2fd320b8ba13ad90e95d7806f8e5c555e9a9a359"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD01.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD01.dot",
+      "sha256": "096524ed964fa1683e2686e905a1a79961391cf3bceee7570e0220b25c288471"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD01.pdf",
+      "sha256": "b223779db6248ed8f2e7480aeabb8f88241b55fe4520ea4e34768dd5c6b50a98"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD01.png",
+      "sha256": "cae4ce429c3685f1ab97cfd194f3d396b6ce4444355db6e9d7aa252188024ef1"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD01.svg",
+      "sha256": "1e79b4ea18fc5f87a5d9ab3ba9b35ff17ec50e99119f78400a2fd7f48a786774"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD02.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD02.dot",
+      "sha256": "d54bc09283243aa2aa6bc74f5e0479ec84ca13756704fe850c8fd2db12d2b317"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD02.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD02.pdf",
+      "sha256": "add22e571d6ad8fbbe72e0996f7056a1d1334fe92165c36217a4aae4aca0d8bd"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD02.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD02.png",
+      "sha256": "1ff1a70f9b4743d7b27576e04ce75abe704c512277fb91c7f7b9f6fa7bfc663e"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD02.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD02.svg",
+      "sha256": "2cfc03246fcd9306fdb421206535bf81fe34703a06d24e9aa08416ea653b0941"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD03.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD03.dot",
+      "sha256": "4278362864c08879653a6e65a78b02c3274b0c97c85659f637a83a5e655b3991"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD03.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD03.pdf",
+      "sha256": "52d446f78730a3bea832df9a9cda206b528a6f3400a9d06ed3eaf31445e2ce59"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD03.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD03.png",
+      "sha256": "9c2946b4936dd6018682c164cc80705e4e9e867924986545d5fd8a7ecbfb0f38"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD03.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD03.svg",
+      "sha256": "846713de19318482081bebbbe0a1bd632175a54173ef5f76ec5f2556088eddc2"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD21.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD21.dot",
+      "sha256": "50bebea64af1036ab58eefc68227689e0747ea7f1a394d33aa099029ec3dd3a4"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD21.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD21.pdf",
+      "sha256": "214e6c63d89a967b9b0ec13dd20b4c75e1170eaf5edfc91c8d35f755f92b59eb"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD21.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD21.png",
+      "sha256": "4f034aae81ce57aa86847bc4f168f7c11619fbc4e77b59cd138083da93956871"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD21.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD21.svg",
+      "sha256": "af75c428aceb18c3fdada1455fadb20481fd975f7cffcdbe40f121cddcd59b33"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD31.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD31.dot",
+      "sha256": "e366f6e009801ff8fc1f9622cef326627082e00c0314426bb8f233a7984a99eb"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD31.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD31.pdf",
+      "sha256": "e9d3fff57d8ffb0c5e0d4f66826c24a041e200840bdd2829ebbb41af6f5335ce"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD31.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD31.png",
+      "sha256": "aa74892fefabdfe7976f37d43fb457b3331eff0cb9527d177c9803a65c37cbe9"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD31.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD31.svg",
+      "sha256": "f467f24cfca5fac4cf86b78c5d7527179bfe233d468f7ca167c74aee5b89ce46"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD41.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD41.dot",
+      "sha256": "3cfa9c0aa425c2626c5869dc181e740fcdb5ba427c527c892db76f639f4e1b6a"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD41.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD41.pdf",
+      "sha256": "dcbbe92848eedd3b7d87bcb37bad3b57bd5054c9044cc74e2b4b2825e82fcfa0"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD41.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD41.png",
+      "sha256": "0cf0f4c646b25a93d51d179b0f585fc3536bb5cf2ffcc623791d96bd3f61908e"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD41.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD41.svg",
+      "sha256": "e477eb67f6bb10016ae3380f0dc77a7ceebe28760cf9146b3ca8d0ebe0cbb58b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD51.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD51.dot",
+      "sha256": "0de83b57050f8a731c1659a16b5143ce158e4abc56c9833450ccf033162ba9fe"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD51.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD51.pdf",
+      "sha256": "9331a0917de1f43fbcc64f581cc2a45d665514cdd8e1eb9ac921b6308bc5c4d0"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD51.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD51.png",
+      "sha256": "a84b012daf02b9fe8af9465000ea73738aea51e8bb932abf71364a070fb9fdc9"
+    },
+    {
+      "path": "docs/project/models/图表与模型/DFD51.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/DFD51.svg",
+      "sha256": "7eafce79a7d18f7391683fa52fbe924fb1686f3e759fe4d3e664aecf2c220bb5"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER01.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER01.dot",
+      "sha256": "d52c6513b2b2bfcb0eb1507b73a7fe35af6036c3a387436791780ca325f5b3a5"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER01.pdf",
+      "sha256": "68c84d0cc429324f09200b30def65d2ae918278155a78277d83c0df05a62abd9"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER01.png",
+      "sha256": "5089a65a4802f83f8976b285c34b95254bc10cbe41639341dc59a6ce478ae256"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER01.svg",
+      "sha256": "d51bb72cb1883959cc07f697806efd490796e45bde85127b108c8d0ede518e56"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02.dot",
+      "sha256": "d95431bf7e0ff8128136a5ce18abfb2f2eafb43836cfb484dd019a2ba4531fd8"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02.pdf",
+      "sha256": "fee6a39e371b775e4f95db19a7300380462b99a20692fd1d998a37d5ef696300"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02.png",
+      "sha256": "6dcfee83c4acb830eb621f276c2216c17bf2e21441ffb061c7153803f19cb9ac"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02.svg",
+      "sha256": "86b496b2f2e150d57036c8453e769f856023ae4f01ae1d7e3d05ed611ed40693"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02A.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02A.dot",
+      "sha256": "5c98e595101905bfd70ff04c007d2aa588de5a288165210a4f592f22daee2a16"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02A.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02A.pdf",
+      "sha256": "00a5419c6730fa9903f142c026e9b02cbf34a936d7cd790bf3d4ca4454cd41e0"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02A.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02A.png",
+      "sha256": "e53d4b4e0038e6c5c089c03ef47356dac141ce4feb5582e63028bd6d2f9ef66f"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02A.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02A.svg",
+      "sha256": "6b36fcf3b186699ca5fc7e40bcc00e4f79ac48e7adb579e8c725a2e18ab39007"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02B.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02B.dot",
+      "sha256": "8cd4335021695ea8aef8f1faf7b43b752b5282f275d6f550a97e3569d5745546"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02B.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02B.pdf",
+      "sha256": "b9d1bfa0782b7dc3aefdb9cb6d58a9401e2f5237e4d8e1450c7f5e143c926c73"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02B.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02B.png",
+      "sha256": "6ec4ff04af6b20f153d985e769732b9eb77f9dfb670a6bbce46ba3a92a738078"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER02B.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER02B.svg",
+      "sha256": "e5d9122dc5241dcefe957c2607d9bface9a7e30cf66d29abd956cf0dac966c6d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03.dot",
+      "sha256": "d108601369ef9eb5bc2550425f8abd724f060f476e7bcf70ce30ba346d5c4f97"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03.pdf",
+      "sha256": "2c59b10c92c86000c6c1129496bd1d38cc928dd5bae5e4e5e1965a14e338bcec"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03.png",
+      "sha256": "bbc05cb61edb6615de2be1731e2d5841bee7848b7f68e04149d43ab5052859ab"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03.svg",
+      "sha256": "91cadcde0ec757cdffc93cd53d961314cb258938b631cff285544d3e4094b3a6"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03A.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03A.dot",
+      "sha256": "009a7d473d2bd26fa5edeef30ca462c90f4a14336d98bfeb3093f904768b7062"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03A.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03A.pdf",
+      "sha256": "af3736ee710923b92235c6ba45ceea88d73e5c9fee2aad93ab72b44bf8d84292"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03A.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03A.png",
+      "sha256": "affe9bcbca48b009974a6071483f6a506be361f06bfd5a64fc63874f0259779d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03A.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03A.svg",
+      "sha256": "a1775325c9e26d836ec80420cddff684f5967e7be34cca182d4acede7ffa364f"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03B.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03B.dot",
+      "sha256": "6e689675343878e6397d0854822762de7bd83112dece4210a0083a3b70fdc0ee"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03B.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03B.pdf",
+      "sha256": "14703eee344000c2836b24d939963278b448200277b1653b56cabe43bc18e19d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03B.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03B.png",
+      "sha256": "51fd77d8acb19f18f863b06018bd5c9f8a28ec523a116477afd9c0b6261908d4"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER03B.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER03B.svg",
+      "sha256": "dfc43ba1f698a5c8aae3c442f951ba528d67b11ddc15bf4bc4295ffc1fab9e14"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04.dot",
+      "sha256": "7778e07c02ae3eb5176164e4b24b1f9e5499078d8022ef6a14886f17c5f7b73d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04.pdf",
+      "sha256": "dc95d31df50e586af53feee83f4bd021e7e8c0edddd35d3b1469f21e2557a9b0"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04.png",
+      "sha256": "922e3d15e049cd3a933d19b69cb802e3852302b8823df3dc9777014871347d01"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04.svg",
+      "sha256": "eefe4e391a091f6d9e7a1a86beda75e5109c42accb287aba9eb55b3be7651313"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04A.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04A.dot",
+      "sha256": "05c9079e4588da58b43e5e0859c13fead7079128166f3938bd1e4c67f521e942"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04A.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04A.pdf",
+      "sha256": "b093d58d2300594941cd1769e215f9f726476296102b831e7ae86a6a1af02981"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04A.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04A.png",
+      "sha256": "6c08cf9aad3b3f31b8bb14c44745e8ddfa6c8fd02ecac3102e556ea8e5706b03"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04A.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04A.svg",
+      "sha256": "0ef572baa0d0e0f47d0e20c4464709902f5e108f489e4b4f35f3ea4672b275d9"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04B.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04B.dot",
+      "sha256": "f022f860245b819a3aa8d238f6573848a3630e7ca1070bf8a2180352c28bd5bd"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04B.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04B.pdf",
+      "sha256": "42a1f55bc5ce78c9019a69c261a7b8e1512ba3a19469cc054c4959e4f865657b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04B.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04B.png",
+      "sha256": "879552262dd782fe8f34160b67057bca364264821ca8a64ddc00391bed1b364e"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER04B.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER04B.svg",
+      "sha256": "e6ae55e4ec9314a0c8703c3330c546846741a22ab98f890616e4a2a5898820e7"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER05.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER05.dot",
+      "sha256": "27c447b5c8ca72297d4e092a4cf20969e6fa0a3511384061638922f7f3d67adc"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER05.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER05.pdf",
+      "sha256": "1da90ce52545ba201cab45c5a54fa1eaa684b1cc491f516e7a845011afb6bf4c"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER05.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER05.png",
+      "sha256": "c07f45914c5ccb670a66508ff968720595497066cbe18945cf77da6c3a65637d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER05.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER05.svg",
+      "sha256": "a71866ad870e9f515c5ea70880af591b2260e7e582e512892599eecdbba6b270"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER06.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER06.dot",
+      "sha256": "66ff25b8827c733dbc4f9b547346ccb730d89d347d84c5aa2befdf6d0c2a80e8"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER06.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER06.pdf",
+      "sha256": "ae00b269b7bde5389115f4d2496fe2e56d411f8cad23a420bd39ae9778e2267d"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER06.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER06.png",
+      "sha256": "ec8cfac888e5075a4ec385ba12c308b85c3dc54105017161e58b7f352d266346"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER06.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER06.svg",
+      "sha256": "d0ebff3bf482e0470e4ed78377031fe213b21268af8aa2fa1e620d56f8db5c74"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER07.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER07.dot",
+      "sha256": "23fc3ac8c40dc6a4e238ae447275100581251ea364a12246a2cc3eade46dd419"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER07.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER07.pdf",
+      "sha256": "0c51d2b4b3726b2d8305eb1ec351df0e358076738d57ddee65cf145566e48409"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER07.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER07.png",
+      "sha256": "c152c12d0d14c2800a8db184f5bf578699d17a4966101490cd879609f53521a1"
+    },
+    {
+      "path": "docs/project/models/图表与模型/ER07.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/ER07.svg",
+      "sha256": "8c7edde0f053cc29a102fd2a092b0ad4a6230791bec01cf57e3930d61f2f267b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/HIER01.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/HIER01.dot",
+      "sha256": "89a458b31f2835f23e65a9e8097ecd3ced7e338f94bab13575f15884b0daa43e"
+    },
+    {
+      "path": "docs/project/models/图表与模型/HIER01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/HIER01.pdf",
+      "sha256": "e5036b0e3b11953ba02c9735111a8382edc3ad3a9d1e17b0bd41cb5b06f5cd0e"
+    },
+    {
+      "path": "docs/project/models/图表与模型/HIER01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/HIER01.png",
+      "sha256": "6cc8a2a8b7c0a7418c40e92f3a69de8d960d8b69c93640b2d0df78c7731024de"
+    },
+    {
+      "path": "docs/project/models/图表与模型/HIER01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/HIER01.svg",
+      "sha256": "abbb3e176200fb9141a4d45a0fc20bf4334f9bd82e3ab2f539df8ad8ecdf67f2"
+    },
+    {
+      "path": "docs/project/models/图表与模型/IPO01.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/IPO01.dot",
+      "sha256": "15444f1d34bf015580c48d55048eae3f5a9153af7181c12c3ae3ec5e2928ebb2"
+    },
+    {
+      "path": "docs/project/models/图表与模型/IPO01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/IPO01.pdf",
+      "sha256": "0c97bcd779644b207843b9a7b9522b4376e271e2b0263a8faa421a3c90fff53c"
+    },
+    {
+      "path": "docs/project/models/图表与模型/IPO01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/IPO01.png",
+      "sha256": "255fe00e0dc75d8351aa312c7a916375629429138a68051c2c2fe61acc0a3bf8"
+    },
+    {
+      "path": "docs/project/models/图表与模型/IPO01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/IPO01.svg",
+      "sha256": "81c7a773312021a1a5aa63121e4cd3542377cde74fa02592b11c912d8c0c0e96"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD01.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD01.dot",
+      "sha256": "67ae55519cb85316d8f48973664c5a4374cad59484f0c4a620da55a52ab333ae"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD01.pdf",
+      "sha256": "c6b1131dd2f8ada8086fc4beaf668bf4be2e4cae8710b451b405e198cd7de15c"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD01.png",
+      "sha256": "7c3e0da041464cb92ec616634b28da4a726dc69cd274d6a824177b010b98b2d4"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD01.svg",
+      "sha256": "213433e31bc3f2a3e5677062d2915c6b03d36c12bac0a02bc3a17cc5e5afe105"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD02.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD02.dot",
+      "sha256": "468f0af845834fbc5a9628fccd5ccc42f4b1f9bb38f5329f8fbc6635a6f6ff03"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD02.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD02.pdf",
+      "sha256": "71d96d200e74d7755d653fc0d3976aa96cbe3103b61ca76fc58bed573ca6e39c"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD02.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD02.png",
+      "sha256": "02abb07fa8cf4c20b75c4a4510014f58a1f25be061860706dd8a0ac70e2eef0b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD02.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD02.svg",
+      "sha256": "3372fa8e79501af8a5e41950ea945382b41b50410c2256e964d8ae31c6a7788b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD03.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD03.dot",
+      "sha256": "856ac0056abadcad567b50414013ef4fa7b22b49ef36962ed65ee358b6e573cf"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD03.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD03.pdf",
+      "sha256": "15bdcc0c5ad0537cabe8202e38dc2b0b64b008efef033f92afb441342335cc47"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD03.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD03.png",
+      "sha256": "962b1ce56f0865c5345cd97c4af858779decad219cc588833bedfad9b9e9427b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD03.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD03.svg",
+      "sha256": "bd4bc713796b2f3c3713a3cf98932f5cd257d6767690459036907737fc58b4a0"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD04.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD04.dot",
+      "sha256": "ca98630268f48dd9183194a795ae7c33a671b7e011463593a6577da3f9ed02c8"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD04.pdf",
+      "sha256": "700eb2232717f84c00c48ad8ef6a202bc2a61a2f7573c4552458be2cc7322412"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD04.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD04.png",
+      "sha256": "319dc18132177c2676362aa4aee286c9dd5768a891ab535fbadfda5248aeeffb"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD04.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD04.svg",
+      "sha256": "4152cbc4ea5c5d09cae8cc1a89a81976f66f8f30e548c3f8c396130205839b0a"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD05.dot",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD05.dot",
+      "sha256": "fec3103d38a7397e7ff4434710a6d0b934bd4e13589a4ce0e8b287f8d7c05f3a"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD05.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD05.pdf",
+      "sha256": "735cb24bd1bb62bee1206a5149a0e3e3f72bb354ddf64bfdc95fd5552cf5d7dd"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD05.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD05.png",
+      "sha256": "1f80af41117452f0267afad0374839c09bc3f19052f90e41ec230dd9252b3f4b"
+    },
+    {
+      "path": "docs/project/models/图表与模型/STD05.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/STD05.svg",
+      "sha256": "96dc4dbea00690e45716e4ac93560927b39b92061c6af464d96680b7c2786d3c"
+    },
+    {
+      "path": "docs/project/models/图表与模型/WARN01.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/WARN01.pdf",
+      "sha256": "ba6674a93c4ff40e7b1db4ce61c91cb6ba17e02b789c0238c49585651e62bdcb"
+    },
+    {
+      "path": "docs/project/models/图表与模型/WARN01.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/WARN01.png",
+      "sha256": "936071a138e0ded48a6567cfed64d5724aa745e246117dce1d4d6bda2adf8bd9"
+    },
+    {
+      "path": "docs/project/models/图表与模型/WARN01.svg",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/WARN01.svg",
+      "sha256": "48bb80c70262b08a43010c8282a901392bf96ece9dc50c8824c712061b637d10"
+    },
+    {
+      "path": "docs/project/models/图表与模型/功能层次与IPO衔接G04.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/功能层次与IPO衔接G04.drawio",
+      "sha256": "1771e1ba289732f2f69aad394c1b9516319b7fd14855cd30821616e66182ee46"
+    },
+    {
+      "path": "docs/project/models/图表与模型/功能层次与IPO衔接G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/功能层次与IPO衔接G04.pdf",
+      "sha256": "8637d157a2e8b338b343e6260b45e4fcd9a18023be015d54477b1234eef435ca"
+    },
+    {
+      "path": "docs/project/models/图表与模型/功能层次与IPO衔接G04.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/功能层次与IPO衔接G04.png",
+      "sha256": "d3e65a60dc69ccafb718161b4a0488973bdb810456470bc3a39bd791966a3e18"
+    },
+    {
+      "path": "docs/project/models/图表与模型/模型数据源G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/模型数据源G04.json",
+      "sha256": "e1b172dfa33c38d2b2d227ba87d4811735194a32d4f4f839b2e328e42277f824"
+    },
+    {
+      "path": "docs/project/models/图表与模型/界面线框原型G04.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/界面线框原型G04.drawio",
+      "sha256": "ff257000a22d99b83dcb59486c13e08b562855d987ca4ec11f5fc9cc05b475e5"
+    },
+    {
+      "path": "docs/project/models/图表与模型/需求分析图表汇编G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/需求分析图表汇编G04.pdf",
+      "sha256": "85e61b009d8d088181552dc5e65d4c8cc16204a2559d0072065be8c9a17d4ab2"
+    },
+    {
+      "path": "docs/project/models/图表与模型/需求分析模型G04.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/03_需求模型附件/图表与模型/需求分析模型G04.drawio",
+      "sha256": "ab2b7f7c8c26faad9828e0f80e6aa8e9034d75bf85a816dba5789cbaec9e4672"
+    },
+    {
+      "path": "docs/project/prototypes/README.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/04_界面原型/README.md",
+      "sha256": "1d36b56765718d0ad2517a782d556abe55a905341741a9eed3df1371791ae87c"
+    },
+    {
+      "path": "docs/project/prototypes/全需求原型覆盖对照G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/04_界面原型/全需求原型覆盖对照G04.json",
+      "sha256": "3628e3a1d4c3c43628d922da2c8247ad42bb4c82848c27ff56da6996fb87250d"
+    },
+    {
+      "path": "docs/project/prototypes/城院帮-青绿紧凑版四页.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/04_界面原型/城院帮-青绿紧凑版四页.png",
+      "sha256": "8407620187552251fa1c99af9da313f4befc0e402f64d36d04a96159031a461f"
+    },
+    {
+      "path": "docs/project/prototypes/城院帮全需求界面原型G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/04_界面原型/城院帮全需求界面原型G04.pdf",
+      "sha256": "95bcd6aca02735985b3d239a8bb62df1242633cc48a1ffbbb52a9241a5d11e6e"
+    },
+    {
+      "path": "docs/project/prototypes/界面线框原型G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/04_界面原型/界面线框原型G04.pdf",
+      "sha256": "268ae4f494cb7432ee786acc57a88434a4fd8be94415292ce53852e9ea765fdd"
+    },
+    {
+      "path": "docs/project/meetings-research/20261031会议来源摘录G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/20261031会议来源摘录G04.md",
+      "sha256": "3c3d68e518a6478ea62232409abd4cc03065f1a119b951b6b7cd7a25711e4617"
+    },
+    {
+      "path": "docs/project/meetings-research/20261031需求阶段周会议纪要与成员评价G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/20261031需求阶段周会议纪要与成员评价G04.docx",
+      "sha256": "afad2f20c8434812d03d7ca29e1f6ae8f78aa43f490077bdb24a8dffcba59f81"
+    },
+    {
+      "path": "docs/project/meetings-research/20261031需求阶段周会议纪要与成员评价G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/20261031需求阶段周会议纪要与成员评价G04.md",
+      "sha256": "8b4421df9e5ea2f51869205881053acb34c4ea2d908088f2be3206d40b22d641"
+    },
+    {
+      "path": "docs/project/meetings-research/20261031需求阶段周会议纪要与成员评价G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/20261031需求阶段周会议纪要与成员评价G04.pdf",
+      "sha256": "b2ded0f6d61a70f05c3f657efcdbf72cd7486173b36e51fb3a4ad1932253e4b4"
+    },
+    {
+      "path": "docs/project/meetings-research/会议与调研证据索引G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/会议与调研证据索引G04.csv",
+      "sha256": "e396fa80248111c9c1803bd66f7e4eee471fe4894299b2a0fc743636b22ca3da"
+    },
+    {
+      "path": "docs/project/meetings-research/原型用户反馈修改与确认记录G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/原型用户反馈修改与确认记录G04.docx",
+      "sha256": "c5c16059afbce1bb124f8a504c8f84299942bc100e9d6bf468d19beedf2e0003"
+    },
+    {
+      "path": "docs/project/meetings-research/原型用户反馈修改与确认记录G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/原型用户反馈修改与确认记录G04.md",
+      "sha256": "be1b1a7fe33768c487cb297fe3b85e10c482f64f04254135a7818e22d5a5528c"
+    },
+    {
+      "path": "docs/project/meetings-research/原型用户反馈修改与确认记录G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/原型用户反馈修改与确认记录G04.pdf",
+      "sha256": "df91b3846f4c1e43c2fa6436fdf19f6a90e239a78fdb3407f40c96201df00636"
+    },
+    {
+      "path": "docs/project/meetings-research/城院帮需求调研与原型交接说明G04.docx",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/城院帮需求调研与原型交接说明G04.docx",
+      "sha256": "5a38c80d1c3db11b7b5ca50727032a24a706c664d664ff07725a4c9ce2bce5c7"
+    },
+    {
+      "path": "docs/project/meetings-research/城院帮需求调研与原型交接说明G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/城院帮需求调研与原型交接说明G04.md",
+      "sha256": "d846457904dbad74b3a84f8a4059eec7831778dd110fda4cd240a8e8eaa1fdab"
+    },
+    {
+      "path": "docs/project/meetings-research/城院帮需求调研与原型交接说明G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/城院帮需求调研与原型交接说明G04.pdf",
+      "sha256": "40b50116fb5598367bf418ca446b2df93609ac04ae838c27aae82a6e4b0fde7b"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/来源与筛选记录.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/来源与筛选记录.csv",
+      "sha256": "eb71a2d5d1aed325ca23158712c321d1d192f8f0bf749f6f4ad5caa4be619e80"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/请先阅读.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/请先阅读.md",
+      "sha256": "f71f4ab8c33b7a3839f7bb3d6339a807b247fca3d26ea233206d7266e100f3a4"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/调研报告与设计建议.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/调研报告与设计建议.md",
+      "sha256": "2636a556fc57fa1dcfdd2de42885f0b1aac198ae01f064edd027082b6f8854ce"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/豆包补充调研提示词.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/豆包补充调研提示词.md",
+      "sha256": "90d72eb9c8abda8320594cead140da7f295b6d6dedb4117860e112083a6046a7"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/页面文本素材.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/页面文本素材.json",
+      "sha256": "07c7dd8d5cfe89b3491383e777b35ec8bea0e53da878a200b1f55b51a47df29a"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/城院帮-求职面试内容调研-20261028/页面文本素材.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/城院帮-求职面试内容调研-20261028/页面文本素材.md",
+      "sha256": "c019db05989493083668e94d79979850934bff3342795f13f3e8c2db16480132"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/排除记录.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/排除记录.md",
+      "sha256": "35c9f2f1dd19f02c3678b220afce9da92973b351a36ad395911b2be698ffb252"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/独立摘要与读者追问.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/独立摘要与读者追问.md",
+      "sha256": "881f5a51d8d17b56a219a1aed8cca00181de822ee0de92fa7552de652afb3d04"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/补充来源表.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/补充来源表.csv",
+      "sha256": "f83ec67375186e96094a471152f55d44d19077021ea3dbc318543d61295b8538"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/补充调研汇总.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/补充调研汇总.md",
+      "sha256": "550859414b91eabb6ab5561c72bcfde4d981f1a7cec84d9dc5d18db22a877f1e"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/覆盖说明.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/覆盖说明.md",
+      "sha256": "e9e9ead6470140e10a9fecaef4ab42cb5f541eda6743d76e8d53d2612a0a2881"
+    },
+    {
+      "path": "docs/project/meetings-research/内容调研输入/补充调研-20261028/页面设计信息建议.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/05_会议与用户研究/内容调研输入/补充调研-20261028/页面设计信息建议.md",
+      "sha256": "6019fac9b587ca9e7937a3d4486ec8be348694fa0fc61acaf7cf597031dfd530"
+    },
+    {
+      "path": "docs/project/schedule/MicrosoftProject任务源.xml",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/MicrosoftProject任务源.xml",
+      "sha256": "bf7357a62ce5daaf58fb769a601135f7b6d94c7961c85af84ac0961b57a85f16"
+    },
+    {
+      "path": "docs/project/schedule/Project实际任务核查.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project实际任务核查.csv",
+      "sha256": "bb4f9a3c6a6a0efd01468e06dc0fbef1604e87f6c330acbe57df514203d46391"
+    },
+    {
+      "path": "docs/project/schedule/Project实际分配工时核查.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project实际分配工时核查.csv",
+      "sha256": "e8b860a64fb460057b3e1166133ca36d8502ed9101a6944e3e4fe40791059853"
+    },
+    {
+      "path": "docs/project/schedule/Project实际资源核查.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project实际资源核查.csv",
+      "sha256": "20d671bf7ea6e5670926147b056f9fb80093be2f972763afa6be981a49666e6a"
+    },
+    {
+      "path": "docs/project/schedule/Project条目.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project条目.json",
+      "sha256": "96e2d1c2e34ecfb06a90b2c571b370f6aa4a350fd7d5957801b8e2f0f61c1acd"
+    },
+    {
+      "path": "docs/project/schedule/Project甘特图与资源核查G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project甘特图与资源核查G04.pdf",
+      "sha256": "dcdcc4bef42b3af6a4ddebe4dbcfcfa0fb24e2af8f878461e443ac32b1278b5b"
+    },
+    {
+      "path": "docs/project/schedule/Project视图清单.txt",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project视图清单.txt",
+      "sha256": "546fe59252bbb522a58f2dee2272130910f696e36544cd6488a5531f4f46dc28"
+    },
+    {
+      "path": "docs/project/schedule/Project详细甘特图G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project详细甘特图G04.pdf",
+      "sha256": "250c21caabb71b955e1207557a69016072b1daa616f6aca50aae7c071658574f"
+    },
+    {
+      "path": "docs/project/schedule/Project资源核查G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project资源核查G04.pdf",
+      "sha256": "e57be27da3404c4ed15c99db99d9fe040432c4ef7fa87cd9297bb18a24bb2eb5"
+    },
+    {
+      "path": "docs/project/schedule/Project阶段总览G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/Project阶段总览G04.pdf",
+      "sha256": "318e2102b1cbee3f1fde3dd234579e8aa0c53af4e03660a1f35c8eae939ffb8c"
+    },
+    {
+      "path": "docs/project/schedule/WBS图表页索引G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/WBS图表页索引G04.json",
+      "sha256": "9804e83222be0dd6725f0b71702485d091fb8f83f8bcd09fa2ea6e47eca50931"
+    },
+    {
+      "path": "docs/project/schedule/WBS树状结构图G04.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/WBS树状结构图G04.drawio",
+      "sha256": "60814affdf4b81b6edef21d413129246b68f58c6b12a520694c0ebd41c677ff4"
+    },
+    {
+      "path": "docs/project/schedule/WBS树状结构图G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/WBS树状结构图G04.pdf",
+      "sha256": "db075e50676e3de1c06d474f09a23b7d6d1f794252ce681c22816fbe36abb79a"
+    },
+    {
+      "path": "docs/project/schedule/任务人员工时明细G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/任务人员工时明细G04.csv",
+      "sha256": "ad4398813d5deae1a1c330817b44b00afe9bf932590be7d9275823995f78a8bd"
+    },
+    {
+      "path": "docs/project/schedule/任务数据.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/任务数据.json",
+      "sha256": "1197393a989484a8416c33943dd01f8037544da87adfac8d9d7cb5f32dc9c1b0"
+    },
+    {
+      "path": "docs/project/schedule/八步骤排期G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/八步骤排期G04.json",
+      "sha256": "9bbba37bb8d55b31d8799ce563cdc0d41d13e256f553a4153672f2e783d97abd"
+    },
+    {
+      "path": "docs/project/schedule/关键路径说明.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/关键路径说明.md",
+      "sha256": "86e0ca539f4a795076569c5305c325669f614c76b2c1083faf164922adb53316"
+    },
+    {
+      "path": "docs/project/schedule/功能层次与IPO衔接G04.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/功能层次与IPO衔接G04.drawio",
+      "sha256": "1771e1ba289732f2f69aad394c1b9516319b7fd14855cd30821616e66182ee46"
+    },
+    {
+      "path": "docs/project/schedule/功能层次与IPO衔接G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/功能层次与IPO衔接G04.pdf",
+      "sha256": "8637d157a2e8b338b343e6260b45e4fcd9a18023be015d54477b1234eef435ca"
+    },
+    {
+      "path": "docs/project/schedule/功能层次与IPO衔接G04.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/功能层次与IPO衔接G04.png",
+      "sha256": "d3e65a60dc69ccafb718161b4a0488973bdb810456470bc3a39bd791966a3e18"
+    },
+    {
+      "path": "docs/project/schedule/原生MPP资源同步核查G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/原生MPP资源同步核查G04.json",
+      "sha256": "c5cb7ea7354d79735f136b80d33770522c2d6773198e03eeee0c3b5b2dde1824"
+    },
+    {
+      "path": "docs/project/schedule/原生MPP资源同步说明G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/原生MPP资源同步说明G04.md",
+      "sha256": "f0b83fec15d74b9a30863f45ef712ae187b56ee66333a1dc2ca897c6acb4bb58"
+    },
+    {
+      "path": "docs/project/schedule/可行性八步与需求分析甘特图G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/可行性八步与需求分析甘特图G04.pdf",
+      "sha256": "c6d70b1e9264b3587b929173da417242341d4745c9c6df80b9e3dffdfa13da58"
+    },
+    {
+      "path": "docs/project/schedule/可行性八步骤与需求分析任务明细G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/可行性八步骤与需求分析任务明细G04.csv",
+      "sha256": "1167b8078ee2c5543b49ed08118b924926149616861176ce22242944b918ea2a"
+    },
+    {
+      "path": "docs/project/schedule/周计划数据.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/周计划数据.json",
+      "sha256": "7f373e0f36a020d979d4226faff133d79a778fc37213f72641929b4702c91aa6"
+    },
+    {
+      "path": "docs/project/schedule/城院帮项目计划G04.mpp",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/城院帮项目计划G04.mpp",
+      "sha256": "695f6c506e594c9a8a8dc900cf1b4d95fbe2bd9d5e7095601d2d992d35be0b3a"
+    },
+    {
+      "path": "docs/project/schedule/子任务数据.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/子任务数据.json",
+      "sha256": "ed45fb4a149e0a0e0b2242468a87869543ba1fd795750b4e35827c0388e02d79"
+    },
+    {
+      "path": "docs/project/schedule/工程网络与阶段图表G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/工程网络与阶段图表G04.pdf",
+      "sha256": "91f56bf5991cbaa858f3432d61bc19c34655ae3117b83a5ef2e6a30edc59c320"
+    },
+    {
+      "path": "docs/project/schedule/工程网络图.drawio",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/工程网络图.drawio",
+      "sha256": "24b2b5a735f42014b1e3298693e3c3f25315a2e0571f37e30aa07d0f1534db96"
+    },
+    {
+      "path": "docs/project/schedule/工程网络计算.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/工程网络计算.json",
+      "sha256": "5ee9a7605b51f26d241a74d13cf4d1edf9b268b3294d001e1533755fb8434a69"
+    },
+    {
+      "path": "docs/project/schedule/本次交付核查G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/本次交付核查G04.json",
+      "sha256": "bd1436423a5b8940bd0c18ab145f389d0bb414480679606259a4dcb54bbe82db"
+    },
+    {
+      "path": "docs/project/schedule/目录与跳转核查G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/目录与跳转核查G04.json",
+      "sha256": "0bf8dbb44e1caab53e82b2ed167acdb6f6a511ad019a12765603aad105c8b302"
+    },
+    {
+      "path": "docs/project/schedule/细化统计G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/细化统计G04.json",
+      "sha256": "24270626201fc85a8b34e5c234c500384511c20caaede87bb1957f0f5415f040"
+    },
+    {
+      "path": "docs/project/schedule/详细任务与验收标准.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/详细任务与验收标准.csv",
+      "sha256": "6c0683c1d057ce70ee1fe85dd765ea0426de53141e44bf9b7ee27b4369bb749d"
+    },
+    {
+      "path": "docs/project/schedule/详细周计划G04.md",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/详细周计划G04.md",
+      "sha256": "23863db727f30bcbdc5d81f6cc234f00cf3be8eda64cfead528eaaf3ca8d2086"
+    },
+    {
+      "path": "docs/project/schedule/详细周计划G04.pdf",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/详细周计划G04.pdf",
+      "sha256": "fd38bfd10ff214c02cff95a3570c13ddc7e6b717a15d54fadca211132cf2a73f"
+    },
+    {
+      "path": "docs/project/schedule/过程甘特-1.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/过程甘特-1.png",
+      "sha256": "d45b8919fd975adb561bb28c405518faebae746195eb58cea670f2881ec79a42"
+    },
+    {
+      "path": "docs/project/schedule/过程甘特-2.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/过程甘特-2.png",
+      "sha256": "744e19b2e0588307466d7acdf9bd1a486a3e67729a172863af046a522e37fadb"
+    },
+    {
+      "path": "docs/project/schedule/过程细化任务G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/过程细化任务G04.json",
+      "sha256": "2cac327f16eaf2b90965b808f67bca6760d6716b55c8e4475985f8c03c6e1b67"
+    },
+    {
+      "path": "docs/project/schedule/阶段甘特总览.png",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/阶段甘特总览.png",
+      "sha256": "48f102dd9902c604c92db31682ae3ac7bdabbcc69eccc9d28bb26bc35e7319d4"
+    },
+    {
+      "path": "docs/project/schedule/需求11项与PPT7项对照G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/需求11项与PPT7项对照G04.csv",
+      "sha256": "9704b640edf9563f05b39e15f986450df24a32a739633e48c6152f06a3f4c4f3"
+    },
+    {
+      "path": "docs/project/schedule/需求主题索引G04.json",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/需求主题索引G04.json",
+      "sha256": "3396447e1e4c408440f7127d9d922295926650329919f76aa625704f41034643"
+    },
+    {
+      "path": "docs/project/schedule/需求阶段11项审查G04.csv",
+      "original": "deliverables/SE2026-G04-需求阶段交付-20261104/06_排期与评审附件/需求阶段11项审查G04.csv",
+      "sha256": "44a31a9d07c5d5cb38107a129fb2459702a679e9e73c68d2e9778b282b7e4793"
+    }
+  ],
+  "exclusions": [
+    "历史交付ZIP、旧版本和缓存",
+    "国标与教师课件原始扫描件",
+    "甲乙视觉探索",
+    "本机配置、实际密钥、日志和私人媒体"
+  ],
+  "interpretation": "导入当前已形成的文档，不重写会议事实或把计划任务标为已完成"
+}

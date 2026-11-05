@@ -1,0 +1,26 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Account" [shape=box,label="账号",style="filled",fillcolor="white"];
+"Session" [shape=box,label="登录会话",style="filled",fillcolor="white"];
+"EmailChallenge" [shape=box,label="邮箱校验",style="filled",fillcolor="white"];
+"Account_a0" [shape=ellipse,label=<<U>ID 主标识</U>>,style="filled",fillcolor="white"];
+"Account_a1" [shape=ellipse,label="校园邮箱",style="filled",fillcolor="white"];
+"Session_a0" [shape=ellipse,label=<<U>会话ID 主标识</U>>,style="filled",fillcolor="white"];
+"Session_a1" [shape=ellipse,label="账号标识",style="filled",fillcolor="white"];
+"EmailChallenge_a0" [shape=ellipse,label=<<U>校验ID 主标识</U>>,style="filled",fillcolor="white"];
+"EmailChallenge_a1" [shape=ellipse,label="校园邮箱",style="filled",fillcolor="white"];
+"rel23" [shape=diamond,label="建立会话",style="filled",fillcolor="white"];
+"rel24" [shape=diamond,label="邮箱对应",style="filled",fillcolor="white"];
+"Account" -> "Account_a0" [label="",dir=none];
+"Account" -> "Account_a1" [label="",dir=none];
+"Session" -> "Session_a0" [label="",dir=none];
+"Session" -> "Session_a1" [label="",dir=none];
+"EmailChallenge" -> "EmailChallenge_a0" [label="",dir=none];
+"EmailChallenge" -> "EmailChallenge_a1" [label="",dir=none];
+"Account" -> "rel23" [label="1",dir=none];
+"rel23" -> "Session" [label="0..N",dir=none];
+"Account" -> "rel24" [label="0..1",dir=none];
+"rel24" -> "EmailChallenge" [label="0..N",dir=none];
+}

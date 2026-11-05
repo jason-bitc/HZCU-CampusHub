@@ -1,0 +1,26 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Account" [shape=box,label="账号",style="filled",fillcolor="white"];
+"Article" [shape=box,label="经验文章",style="filled",fillcolor="white"];
+"ArticleVersion" [shape=box,label="正文版本",style="filled",fillcolor="white"];
+"Media" [shape=box,label="图片资料",style="filled",fillcolor="white"];
+"Job" [shape=box,label="岗位",style="filled",fillcolor="white"];
+"Company" [shape=box,label="公司",style="filled",fillcolor="white"];
+"rel3" [shape=diamond,label="撰写",style="filled",fillcolor="white"];
+"rel4" [shape=diamond,label="形成",style="filled",fillcolor="white"];
+"rel5" [shape=diamond,label="对应",style="filled",fillcolor="white"];
+"rel6" [shape=diamond,label="关联",style="filled",fillcolor="white"];
+"rel8" [shape=diamond,label="引用",style="filled",fillcolor="white"];
+"Account" -> "rel3" [label="1",dir=none];
+"rel3" -> "Article" [label="0..N",dir=none];
+"Article" -> "rel4" [label="1",dir=none];
+"rel4" -> "ArticleVersion" [label="1..N",dir=none];
+"Job" -> "rel5" [label="1",dir=none];
+"rel5" -> "Article" [label="0..N",dir=none];
+"Company" -> "rel6" [label="0..1",dir=none];
+"rel6" -> "Article" [label="0..N",dir=none];
+"ArticleVersion" -> "rel8" [label="0..N",dir=none];
+"rel8" -> "Media" [label="0..N",dir=none];
+}

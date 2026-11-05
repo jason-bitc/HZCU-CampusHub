@@ -1,0 +1,22 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"start" [shape=point,label="",style="filled",fillcolor="white",fillcolor="black",width=0.14];
+"Q" [shape=box,label="已排队"];
+"R" [shape=box,label="执行中"];
+"V" [shape=box,label="核查中"];
+"S" [shape=doublecircle,label="成功",style="filled",fillcolor="white"];
+"F" [shape=doublecircle,label="失败",style="filled",fillcolor="white"];
+"X" [shape=box,label="中断待核查"];
+"start" -> "Q" [label=""];
+"Q" -> "R" [label="T01"];
+"Q" -> "F" [label="T02"];
+"R" -> "V" [label="T03"];
+"R" -> "F" [label="T04"];
+"R" -> "X" [label="T05"];
+"X" -> "V" [label="T06"];
+"X" -> "F" [label="T07"];
+"V" -> "S" [label="T08"];
+"V" -> "F" [label="T09"];
+}

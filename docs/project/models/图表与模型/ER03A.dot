@@ -1,0 +1,29 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"Account" [shape=box,label="账号",style="filled",fillcolor="white"];
+"Article" [shape=box,label="经验文章",style="filled",fillcolor="white"];
+"Comment" [shape=box,label="评论回复",style="filled",fillcolor="white"];
+"Account_a0" [shape=ellipse,label=<<U>ID 主标识</U>>,style="filled",fillcolor="white"];
+"Account_a1" [shape=ellipse,label="校园邮箱",style="filled",fillcolor="white"];
+"Article_a0" [shape=ellipse,label=<<U>文章ID 主标识</U>>,style="filled",fillcolor="white"];
+"Article_a1" [shape=ellipse,label="作者标识",style="filled",fillcolor="white"];
+"Comment_a0" [shape=ellipse,label=<<U>评论ID 主标识</U>>,style="filled",fillcolor="white"];
+"Comment_a1" [shape=ellipse,label="文章标识",style="filled",fillcolor="white"];
+"rel9" [shape=diamond,label="接收",style="filled",fillcolor="white"];
+"rel10" [shape=diamond,label="发表",style="filled",fillcolor="white"];
+"rel11" [shape=diamond,label="认可收藏",style="filled",fillcolor="white"];
+"Account" -> "Account_a0" [label="",dir=none];
+"Account" -> "Account_a1" [label="",dir=none];
+"Article" -> "Article_a0" [label="",dir=none];
+"Article" -> "Article_a1" [label="",dir=none];
+"Comment" -> "Comment_a0" [label="",dir=none];
+"Comment" -> "Comment_a1" [label="",dir=none];
+"Article" -> "rel9" [label="1",dir=none];
+"rel9" -> "Comment" [label="0..N",dir=none];
+"Account" -> "rel10" [label="1",dir=none];
+"rel10" -> "Comment" [label="0..N",dir=none];
+"Account" -> "rel11" [label="0..N",dir=none];
+"rel11" -> "Article" [label="0..N",dir=none];
+}

@@ -1,0 +1,21 @@
+digraph G {
+graph [rankdir=LR,nodesep=0.30,ranksep=0.48,bgcolor="white",splines=polyline,pad=0.20];
+node [fontname="Microsoft YaHei",fontsize=13,color="#223846",penwidth=1.25,margin="0.10,0.07",style="rounded,filled",fillcolor="#F6F8FA"];
+edge [fontname="Microsoft YaHei",fontsize=10,color="#526775",arrowsize=0.7];
+"E1" [shape=box,label="E1\n平台用户"];
+"E2" [shape=box,label="E2\n社区管理员"];
+"E3" [shape=box,label="E3\n运维管理员"];
+"E4" [shape=box,label="E4\n邮件服务"];
+"E5" [shape=box,label="E5\n受控运行环境"];
+"P0" [shape=circle,label="P0\n城院帮\n经验社区",style="filled",fillcolor="white"];
+"E1" -> "P0" [label="F01"];
+"P0" -> "E1" [label="F02"];
+"E2" -> "P0" [label="F03"];
+"P0" -> "E2" [label="F04"];
+"E3" -> "P0" [label="F05"];
+"P0" -> "E3" [label="F06"];
+"P0" -> "E4" [label="F07"];
+"E4" -> "P0" [label="F08"];
+"P0" -> "E5" [label="F09"];
+"E5" -> "P0" [label="F10"];
+}

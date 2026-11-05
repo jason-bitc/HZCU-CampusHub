@@ -1,0 +1,1857 @@
+{
+  "origin": "2026-10-08",
+  "finish": "2027-01-06",
+  "total_workdays": 64.0,
+  "calendar_release_constraints": true,
+  "deadline_constraints": {
+    "3.4": 12.0,
+    "4.5": 21.0,
+    "5.12": 37.0,
+    "6.7": 42.0,
+    "8.3": 56.0,
+    "8.5": 64.0,
+    "1.3": 6.0,
+    "6.8": 44.0,
+    "7.1": 46.0,
+    "7.2": 47.0,
+    "7.4": 49.0,
+    "8.4": 62.0
+  },
+  "events": {
+    "1": {
+      "EET": 0.0,
+      "LET": 0.0
+    },
+    "2": {
+      "EET": 1.0,
+      "LET": 1.0
+    },
+    "3": {
+      "EET": 1.0,
+      "LET": 1.0
+    },
+    "4": {
+      "EET": 2.0,
+      "LET": 2.0
+    },
+    "5": {
+      "EET": 5.0,
+      "LET": 5.0
+    },
+    "6": {
+      "EET": 6.0,
+      "LET": 6.0
+    },
+    "7": {
+      "EET": 0.0,
+      "LET": 1.0
+    },
+    "8": {
+      "EET": 3.0,
+      "LET": 4.0
+    },
+    "9": {
+      "EET": 2.0,
+      "LET": 2.0
+    },
+    "10": {
+      "EET": 4.0,
+      "LET": 4.0
+    },
+    "11": {
+      "EET": 4.0,
+      "LET": 4.0
+    },
+    "12": {
+      "EET": 6.0,
+      "LET": 6.0
+    },
+    "13": {
+      "EET": 6.0,
+      "LET": 6.0
+    },
+    "14": {
+      "EET": 8.0,
+      "LET": 8.0
+    },
+    "15": {
+      "EET": 8.0,
+      "LET": 8.0
+    },
+    "16": {
+      "EET": 10.0,
+      "LET": 10.0
+    },
+    "17": {
+      "EET": 8.0,
+      "LET": 8.0
+    },
+    "18": {
+      "EET": 10.0,
+      "LET": 10.0
+    },
+    "19": {
+      "EET": 10.0,
+      "LET": 10.0
+    },
+    "20": {
+      "EET": 12.0,
+      "LET": 12.0
+    },
+    "21": {
+      "EET": 19.5,
+      "LET": 19.5
+    },
+    "22": {
+      "EET": 20.0,
+      "LET": 20.0
+    },
+    "23": {
+      "EET": 14.0,
+      "LET": 14.5
+    },
+    "24": {
+      "EET": 16.0,
+      "LET": 16.5
+    },
+    "25": {
+      "EET": 16.0,
+      "LET": 16.5
+    },
+    "26": {
+      "EET": 17.0,
+      "LET": 17.5
+    },
+    "27": {
+      "EET": 17.0,
+      "LET": 17.5
+    },
+    "28": {
+      "EET": 18.0,
+      "LET": 18.5
+    },
+    "29": {
+      "EET": 18.0,
+      "LET": 18.5
+    },
+    "30": {
+      "EET": 19.0,
+      "LET": 19.5
+    },
+    "31": {
+      "EET": 12.0,
+      "LET": 13.0
+    },
+    "32": {
+      "EET": 15.0,
+      "LET": 16.0
+    },
+    "33": {
+      "EET": 15.0,
+      "LET": 16.0
+    },
+    "34": {
+      "EET": 17.0,
+      "LET": 18.0
+    },
+    "35": {
+      "EET": 15.0,
+      "LET": 16.0
+    },
+    "36": {
+      "EET": 18.0,
+      "LET": 19.0
+    },
+    "37": {
+      "EET": 17.0,
+      "LET": 18.0
+    },
+    "38": {
+      "EET": 19.0,
+      "LET": 20.0
+    },
+    "39": {
+      "EET": 20.0,
+      "LET": 20.0
+    },
+    "40": {
+      "EET": 21.0,
+      "LET": 21.0
+    },
+    "41": {
+      "EET": 18.0,
+      "LET": 19.0
+    },
+    "42": {
+      "EET": 19.0,
+      "LET": 20.0
+    },
+    "43": {
+      "EET": 35.0,
+      "LET": 35.0
+    },
+    "44": {
+      "EET": 36.0,
+      "LET": 36.0
+    },
+    "45": {
+      "EET": 21.0,
+      "LET": 22.0
+    },
+    "46": {
+      "EET": 22.0,
+      "LET": 23.0
+    },
+    "47": {
+      "EET": 22.0,
+      "LET": 23.0
+    },
+    "48": {
+      "EET": 24.0,
+      "LET": 25.0
+    },
+    "49": {
+      "EET": 24.0,
+      "LET": 25.0
+    },
+    "50": {
+      "EET": 27.0,
+      "LET": 28.0
+    },
+    "51": {
+      "EET": 21.0,
+      "LET": 21.0
+    },
+    "52": {
+      "EET": 24.0,
+      "LET": 24.0
+    },
+    "53": {
+      "EET": 24.0,
+      "LET": 24.0
+    },
+    "54": {
+      "EET": 27.0,
+      "LET": 27.0
+    },
+    "55": {
+      "EET": 27.0,
+      "LET": 28.0
+    },
+    "56": {
+      "EET": 29.0,
+      "LET": 30.0
+    },
+    "57": {
+      "EET": 29.0,
+      "LET": 30.0
+    },
+    "58": {
+      "EET": 31.0,
+      "LET": 32.0
+    },
+    "59": {
+      "EET": 31.0,
+      "LET": 32.0
+    },
+    "60": {
+      "EET": 34.0,
+      "LET": 35.0
+    },
+    "61": {
+      "EET": 27.0,
+      "LET": 27.0
+    },
+    "62": {
+      "EET": 30.0,
+      "LET": 30.0
+    },
+    "63": {
+      "EET": 30.0,
+      "LET": 30.0
+    },
+    "64": {
+      "EET": 33.0,
+      "LET": 33.0
+    },
+    "65": {
+      "EET": 33.0,
+      "LET": 33.0
+    },
+    "66": {
+      "EET": 35.0,
+      "LET": 35.0
+    },
+    "67": {
+      "EET": 36.0,
+      "LET": 36.0
+    },
+    "68": {
+      "EET": 37.0,
+      "LET": 37.0
+    },
+    "69": {
+      "EET": 37.0,
+      "LET": 37.0
+    },
+    "70": {
+      "EET": 39.0,
+      "LET": 39.0
+    },
+    "71": {
+      "EET": 37.0,
+      "LET": 37.0
+    },
+    "72": {
+      "EET": 39.0,
+      "LET": 39.0
+    },
+    "73": {
+      "EET": 39.0,
+      "LET": 39.0
+    },
+    "74": {
+      "EET": 40.0,
+      "LET": 40.0
+    },
+    "75": {
+      "EET": 39.0,
+      "LET": 39.0
+    },
+    "76": {
+      "EET": 40.0,
+      "LET": 40.0
+    },
+    "77": {
+      "EET": 40.0,
+      "LET": 40.5
+    },
+    "78": {
+      "EET": 41.0,
+      "LET": 41.5
+    },
+    "79": {
+      "EET": 40.0,
+      "LET": 40.0
+    },
+    "80": {
+      "EET": 41.5,
+      "LET": 41.5
+    },
+    "81": {
+      "EET": 41.5,
+      "LET": 41.5
+    },
+    "82": {
+      "EET": 42.0,
+      "LET": 42.0
+    },
+    "83": {
+      "EET": 42.0,
+      "LET": 42.0
+    },
+    "84": {
+      "EET": 44.0,
+      "LET": 44.0
+    },
+    "85": {
+      "EET": 44.0,
+      "LET": 44.0
+    },
+    "86": {
+      "EET": 46.0,
+      "LET": 46.0
+    },
+    "87": {
+      "EET": 46.0,
+      "LET": 46.0
+    },
+    "88": {
+      "EET": 47.0,
+      "LET": 47.0
+    },
+    "89": {
+      "EET": 47.0,
+      "LET": 47.0
+    },
+    "90": {
+      "EET": 48.0,
+      "LET": 48.0
+    },
+    "91": {
+      "EET": 48.0,
+      "LET": 48.0
+    },
+    "92": {
+      "EET": 49.0,
+      "LET": 49.0
+    },
+    "93": {
+      "EET": 50.0,
+      "LET": 50.0
+    },
+    "94": {
+      "EET": 51.0,
+      "LET": 51.0
+    },
+    "95": {
+      "EET": 51.0,
+      "LET": 51.0
+    },
+    "96": {
+      "EET": 53.0,
+      "LET": 53.0
+    },
+    "97": {
+      "EET": 53.0,
+      "LET": 53.0
+    },
+    "98": {
+      "EET": 55.0,
+      "LET": 55.0
+    },
+    "99": {
+      "EET": 55.0,
+      "LET": 55.0
+    },
+    "100": {
+      "EET": 56.0,
+      "LET": 56.0
+    },
+    "101": {
+      "EET": 60.0,
+      "LET": 60.0
+    },
+    "102": {
+      "EET": 62.0,
+      "LET": 62.0
+    },
+    "103": {
+      "EET": 63.0,
+      "LET": 63.0
+    },
+    "104": {
+      "EET": 64.0,
+      "LET": 64.0
+    }
+  },
+  "activities": [
+    {
+      "code": "1.1",
+      "a": 1,
+      "b": 2,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "1.2",
+      "a": 2,
+      "b": 4,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "1.3",
+      "a": 5,
+      "b": 6,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "2.1",
+      "a": 7,
+      "b": 8,
+      "duration": 3,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "2.2",
+      "a": 9,
+      "b": 10,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "2.3",
+      "a": 11,
+      "b": 12,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.1",
+      "a": 12,
+      "b": 14,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.2",
+      "a": 15,
+      "b": 16,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.3",
+      "a": 17,
+      "b": 18,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.4",
+      "a": 19,
+      "b": 20,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.5",
+      "a": 21,
+      "b": 22,
+      "duration": 0.5,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "3.6",
+      "a": 23,
+      "b": 24,
+      "duration": 2,
+      "float": 0.5,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "3.7",
+      "a": 24,
+      "b": 26,
+      "duration": 1,
+      "float": 0.5,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "3.8",
+      "a": 26,
+      "b": 28,
+      "duration": 1,
+      "float": 0.5,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "3.9",
+      "a": 28,
+      "b": 30,
+      "duration": 1,
+      "float": 0.5,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.1",
+      "a": 31,
+      "b": 32,
+      "duration": 3,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.2",
+      "a": 33,
+      "b": 34,
+      "duration": 2,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.3",
+      "a": 35,
+      "b": 36,
+      "duration": 3,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.4",
+      "a": 37,
+      "b": 38,
+      "duration": 2,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.5",
+      "a": 39,
+      "b": 40,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "4.6",
+      "a": 41,
+      "b": 42,
+      "duration": 1,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "4.7",
+      "a": 43,
+      "b": 44,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.1",
+      "a": 45,
+      "b": 46,
+      "duration": 1,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.2",
+      "a": 46,
+      "b": 48,
+      "duration": 2,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.3",
+      "a": 48,
+      "b": 50,
+      "duration": 3,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.4",
+      "a": 51,
+      "b": 52,
+      "duration": 3,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.5",
+      "a": 52,
+      "b": 54,
+      "duration": 3,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.6",
+      "a": 50,
+      "b": 56,
+      "duration": 2,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.7",
+      "a": 57,
+      "b": 58,
+      "duration": 2,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.8",
+      "a": 58,
+      "b": 60,
+      "duration": 3,
+      "float": 1.0,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "5.9",
+      "a": 61,
+      "b": 62,
+      "duration": 3,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.10",
+      "a": 62,
+      "b": 64,
+      "duration": 3,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.11",
+      "a": 64,
+      "b": 66,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "5.12",
+      "a": 44,
+      "b": 68,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.1",
+      "a": 69,
+      "b": 70,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.2",
+      "a": 71,
+      "b": 72,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.3",
+      "a": 72,
+      "b": 74,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.4",
+      "a": 70,
+      "b": 76,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.5",
+      "a": 77,
+      "b": 78,
+      "duration": 1,
+      "float": 0.5,
+      "critical": false,
+      "kind": "activity"
+    },
+    {
+      "code": "6.6",
+      "a": 79,
+      "b": 80,
+      "duration": 1.5,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.7",
+      "a": 81,
+      "b": 82,
+      "duration": 0.5,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "6.8",
+      "a": 82,
+      "b": 84,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "7.1",
+      "a": 85,
+      "b": 86,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "7.2",
+      "a": 86,
+      "b": 88,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "7.3",
+      "a": 88,
+      "b": 90,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "7.4",
+      "a": 90,
+      "b": 92,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "7.5",
+      "a": 93,
+      "b": 94,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "8.1",
+      "a": 95,
+      "b": 96,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "8.2",
+      "a": 96,
+      "b": 98,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "8.3",
+      "a": 98,
+      "b": 100,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "8.4",
+      "a": 101,
+      "b": 102,
+      "duration": 2,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "8.5",
+      "a": 103,
+      "b": 104,
+      "duration": 1,
+      "float": 0.0,
+      "critical": true,
+      "kind": "activity"
+    },
+    {
+      "code": "虚 1.2→1.3",
+      "a": 4,
+      "b": 5,
+      "duration": 0,
+      "float": 3.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 1.2→2.2",
+      "a": 4,
+      "b": 9,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 2.1→2.3",
+      "a": 8,
+      "b": 11,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 2.2→2.3",
+      "a": 10,
+      "b": 11,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.1→3.2",
+      "a": 14,
+      "b": 15,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.1→3.3",
+      "a": 14,
+      "b": 17,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.2→3.4",
+      "a": 16,
+      "b": 19,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.3→3.4",
+      "a": 18,
+      "b": 19,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.9→3.5",
+      "a": 30,
+      "b": 21,
+      "duration": 0,
+      "float": 0.5,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.4→3.6",
+      "a": 20,
+      "b": 23,
+      "duration": 0,
+      "float": 2.5,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.4→4.1",
+      "a": 20,
+      "b": 31,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.1→4.2",
+      "a": 32,
+      "b": 33,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.1→4.3",
+      "a": 32,
+      "b": 35,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.2→4.4",
+      "a": 34,
+      "b": 37,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.3→4.5",
+      "a": 36,
+      "b": 39,
+      "duration": 0,
+      "float": 2.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.4→4.5",
+      "a": 38,
+      "b": 39,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.6→4.5",
+      "a": 42,
+      "b": 39,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 3.5→4.5",
+      "a": 22,
+      "b": 39,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.3→4.6",
+      "a": 36,
+      "b": 41,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.2→4.6",
+      "a": 34,
+      "b": 41,
+      "duration": 0,
+      "float": 2.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.8→4.7",
+      "a": 60,
+      "b": 43,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.11→4.7",
+      "a": 66,
+      "b": 43,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.5→5.1",
+      "a": 40,
+      "b": 45,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 4.5→5.4",
+      "a": 40,
+      "b": 51,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.6→5.7",
+      "a": 56,
+      "b": 57,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.5→5.7",
+      "a": 54,
+      "b": 57,
+      "duration": 0,
+      "float": 3.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.5→5.9",
+      "a": 54,
+      "b": 61,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.12→6.1",
+      "a": 68,
+      "b": 69,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 5.12→6.2",
+      "a": 68,
+      "b": 71,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.3→6.5",
+      "a": 74,
+      "b": 77,
+      "duration": 0,
+      "float": 0.5,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.4→6.6",
+      "a": 76,
+      "b": 79,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.3→6.6",
+      "a": 74,
+      "b": 79,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.6→6.7",
+      "a": 80,
+      "b": 81,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.5→6.7",
+      "a": 78,
+      "b": 81,
+      "duration": 0,
+      "float": 0.5,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.8→7.1",
+      "a": 84,
+      "b": 85,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 6.8→7.5",
+      "a": 84,
+      "b": 93,
+      "duration": 0,
+      "float": 6.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 7.4→8.1",
+      "a": 92,
+      "b": 95,
+      "duration": 0,
+      "float": 2.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 7.5→8.1",
+      "a": 94,
+      "b": 95,
+      "duration": 0,
+      "float": 0.0,
+      "critical": true,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 8.3→8.4",
+      "a": 100,
+      "b": 101,
+      "duration": 0,
+      "float": 4.0,
+      "critical": false,
+      "kind": "dummy"
+    },
+    {
+      "code": "虚 8.4→8.5",
+      "a": 102,
+      "b": 103,
+      "duration": 0,
+      "float": 1.0,
+      "critical": false,
+      "kind": "dummy"
+    }
+  ],
+  "critical_chains": [
+    [
+      "1.1",
+      "1.2",
+      "1.3"
+    ],
+    [
+      "1.1",
+      "1.2",
+      "2.2",
+      "2.3",
+      "3.1",
+      "3.2",
+      "3.4"
+    ],
+    [
+      "1.1",
+      "1.2",
+      "2.2",
+      "2.3",
+      "3.1",
+      "3.3",
+      "3.4"
+    ],
+    [
+      "3.5",
+      "4.5",
+      "5.4",
+      "5.5",
+      "5.9",
+      "5.10",
+      "5.11",
+      "4.7",
+      "5.12",
+      "6.1",
+      "6.4",
+      "6.6",
+      "6.7",
+      "6.8",
+      "7.1",
+      "7.2",
+      "7.3",
+      "7.4",
+      "8.1",
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5"
+    ],
+    [
+      "3.5",
+      "4.5",
+      "5.4",
+      "5.5",
+      "5.9",
+      "5.10",
+      "5.11",
+      "4.7",
+      "5.12",
+      "6.1",
+      "6.4",
+      "6.6",
+      "6.7",
+      "6.8",
+      "7.5",
+      "8.1",
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5"
+    ],
+    [
+      "3.5",
+      "4.5",
+      "5.4",
+      "5.5",
+      "5.9",
+      "5.10",
+      "5.11",
+      "4.7",
+      "5.12",
+      "6.2",
+      "6.3",
+      "6.6",
+      "6.7",
+      "6.8",
+      "7.1",
+      "7.2",
+      "7.3",
+      "7.4",
+      "8.1",
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5"
+    ],
+    [
+      "3.5",
+      "4.5",
+      "5.4",
+      "5.5",
+      "5.9",
+      "5.10",
+      "5.11",
+      "4.7",
+      "5.12",
+      "6.2",
+      "6.3",
+      "6.6",
+      "6.7",
+      "6.8",
+      "7.5",
+      "8.1",
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5"
+    ]
+  ],
+  "verification": [
+    {
+      "code": "1.1",
+      "start": "2026-10-08T09:00:00",
+      "finish": "2026-10-08T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "1.2",
+      "start": "2026-10-09T09:00:00",
+      "finish": "2026-10-09T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "1.3",
+      "start": "2026-10-15T09:00:00",
+      "finish": "2026-10-15T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "2.1",
+      "start": "2026-10-08T09:00:00",
+      "finish": "2026-10-12T18:00:00",
+      "duration": 3,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "2.2",
+      "start": "2026-10-12T09:00:00",
+      "finish": "2026-10-13T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "2.3",
+      "start": "2026-10-14T09:00:00",
+      "finish": "2026-10-15T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.1",
+      "start": "2026-10-16T09:00:00",
+      "finish": "2026-10-19T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.2",
+      "start": "2026-10-20T09:00:00",
+      "finish": "2026-10-21T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.3",
+      "start": "2026-10-20T09:00:00",
+      "finish": "2026-10-21T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.4",
+      "start": "2026-10-22T09:00:00",
+      "finish": "2026-10-23T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.5",
+      "start": "2026-11-04T14:00:00",
+      "finish": "2026-11-04T18:00:00",
+      "duration": 0.5,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "3.6",
+      "start": "2026-10-28T09:00:00",
+      "finish": "2026-10-29T18:00:00",
+      "duration": 2,
+      "float": 0.5,
+      "native_float": 0.5,
+      "match": true
+    },
+    {
+      "code": "3.7",
+      "start": "2026-10-30T09:00:00",
+      "finish": "2026-10-30T18:00:00",
+      "duration": 1,
+      "float": 0.5,
+      "native_float": 0.5,
+      "match": true
+    },
+    {
+      "code": "3.8",
+      "start": "2026-11-02T09:00:00",
+      "finish": "2026-11-02T18:00:00",
+      "duration": 1,
+      "float": 0.5,
+      "native_float": 0.5,
+      "match": true
+    },
+    {
+      "code": "3.9",
+      "start": "2026-11-03T09:00:00",
+      "finish": "2026-11-03T18:00:00",
+      "duration": 1,
+      "float": 0.5,
+      "native_float": 0.5,
+      "match": true
+    },
+    {
+      "code": "4.1",
+      "start": "2026-10-26T09:00:00",
+      "finish": "2026-10-28T18:00:00",
+      "duration": 3,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "4.2",
+      "start": "2026-10-29T09:00:00",
+      "finish": "2026-10-30T18:00:00",
+      "duration": 2,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "4.3",
+      "start": "2026-10-29T09:00:00",
+      "finish": "2026-11-02T18:00:00",
+      "duration": 3,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "4.4",
+      "start": "2026-11-02T09:00:00",
+      "finish": "2026-11-03T18:00:00",
+      "duration": 2,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "4.5",
+      "start": "2026-11-05T09:00:00",
+      "finish": "2026-11-05T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "4.6",
+      "start": "2026-11-03T09:00:00",
+      "finish": "2026-11-03T18:00:00",
+      "duration": 1,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "4.7",
+      "start": "2026-11-26T09:00:00",
+      "finish": "2026-11-26T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.1",
+      "start": "2026-11-06T09:00:00",
+      "finish": "2026-11-06T18:00:00",
+      "duration": 1,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.2",
+      "start": "2026-11-09T09:00:00",
+      "finish": "2026-11-10T18:00:00",
+      "duration": 2,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.3",
+      "start": "2026-11-11T09:00:00",
+      "finish": "2026-11-13T18:00:00",
+      "duration": 3,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.4",
+      "start": "2026-11-06T09:00:00",
+      "finish": "2026-11-10T18:00:00",
+      "duration": 3,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.5",
+      "start": "2026-11-11T09:00:00",
+      "finish": "2026-11-13T18:00:00",
+      "duration": 3,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.6",
+      "start": "2026-11-16T09:00:00",
+      "finish": "2026-11-17T18:00:00",
+      "duration": 2,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.7",
+      "start": "2026-11-18T09:00:00",
+      "finish": "2026-11-19T18:00:00",
+      "duration": 2,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.8",
+      "start": "2026-11-20T09:00:00",
+      "finish": "2026-11-24T18:00:00",
+      "duration": 3,
+      "float": 1.0,
+      "native_float": 1.0,
+      "match": true
+    },
+    {
+      "code": "5.9",
+      "start": "2026-11-16T09:00:00",
+      "finish": "2026-11-18T18:00:00",
+      "duration": 3,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.10",
+      "start": "2026-11-19T09:00:00",
+      "finish": "2026-11-23T18:00:00",
+      "duration": 3,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.11",
+      "start": "2026-11-24T09:00:00",
+      "finish": "2026-11-25T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "5.12",
+      "start": "2026-11-27T09:00:00",
+      "finish": "2026-11-27T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.1",
+      "start": "2026-11-30T09:00:00",
+      "finish": "2026-12-01T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.2",
+      "start": "2026-11-30T09:00:00",
+      "finish": "2026-12-01T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.3",
+      "start": "2026-12-02T09:00:00",
+      "finish": "2026-12-02T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.4",
+      "start": "2026-12-02T09:00:00",
+      "finish": "2026-12-02T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.5",
+      "start": "2026-12-03T09:00:00",
+      "finish": "2026-12-03T18:00:00",
+      "duration": 1,
+      "float": 0.5,
+      "native_float": 0.5,
+      "match": true
+    },
+    {
+      "code": "6.6",
+      "start": "2026-12-03T09:00:00",
+      "finish": "2026-12-04T13:00:00",
+      "duration": 1.5,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.7",
+      "start": "2026-12-04T14:00:00",
+      "finish": "2026-12-04T18:00:00",
+      "duration": 0.5,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "6.8",
+      "start": "2026-12-07T09:00:00",
+      "finish": "2026-12-08T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "7.1",
+      "start": "2026-12-09T09:00:00",
+      "finish": "2026-12-10T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "7.2",
+      "start": "2026-12-11T09:00:00",
+      "finish": "2026-12-11T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "7.3",
+      "start": "2026-12-14T09:00:00",
+      "finish": "2026-12-14T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "7.4",
+      "start": "2026-12-15T09:00:00",
+      "finish": "2026-12-15T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "7.5",
+      "start": "2026-12-17T09:00:00",
+      "finish": "2026-12-17T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "8.1",
+      "start": "2026-12-18T09:00:00",
+      "finish": "2026-12-21T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "8.2",
+      "start": "2026-12-22T09:00:00",
+      "finish": "2026-12-23T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "8.3",
+      "start": "2026-12-24T09:00:00",
+      "finish": "2026-12-24T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "8.4",
+      "start": "2026-12-31T09:00:00",
+      "finish": "2027-01-04T18:00:00",
+      "duration": 2,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    },
+    {
+      "code": "8.5",
+      "start": "2027-01-06T09:00:00",
+      "finish": "2027-01-06T18:00:00",
+      "duration": 1,
+      "float": 0.0,
+      "native_float": 0.0,
+      "match": true
+    }
+  ]
+}
