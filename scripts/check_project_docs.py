@@ -39,6 +39,21 @@ def check():
                 with zipfile.ZipFile(p) as z:
                     if z.testzip():errors.append('Corrupt Office ZIP: '+name)
                     ET.fromstring(z.read('[Content_Types].xml'))
+                    if p.suffix.lower()=='.docx' and '周会议纪要' in p.stem:
+                        document=ET.fromstring(z.read('word/document.xml'))
+                        ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+                        cover=document.findall('w:body/w:p',ns)[:8]
+                        if not any(q.find('.//w:drawing',ns) is not None for q in cover):
+                            errors.append('Missing meeting cover logo: '+name)
+                        styles=ET.fromstring(z.read('word/styles.xml'))
+                        key='{'+ns['w']+'}'
+                        heading_ids=set()
+                        for style in styles.findall('w:style',ns):
+                            label=style.find('w:name',ns)
+                            if label is not None and label.get(key+'val','').lower().replace(' ','') in {'heading1','标题1'}:
+                                heading_ids.add(style.get(key+'styleId'))
+                        headings=[q for q in document.findall('w:body/w:p/w:pPr/w:pStyle',ns) if q.get(key+'val') in heading_ids]
+                        if len(headings)!=5:errors.append('Meeting template requires five main sections: '+name)
             except Exception:errors.append('Invalid Office package: '+name)
             if not p.with_suffix('.pdf').exists():errors.append('Missing PDF companion: '+name)
             if p.suffix.lower()=='.docx' and not p.with_suffix('.md').exists():errors.append('Missing Markdown companion: '+name)
