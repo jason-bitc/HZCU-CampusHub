@@ -7,7 +7,13 @@ import { imagePath, safeLink } from "../lib/content";
 import { session } from "../lib/session";
 
 const props = withDefaults(
-  defineProps<{ body: string; privateImages?: boolean; toc?: boolean }>(),
+  defineProps<{
+    body: string;
+    privateImages?: boolean;
+    toc?: boolean;
+    blockImages?: boolean;
+    imageSources?: Record<string, string>;
+  }>(),
   { privateImages: false, toc: false },
 );
 const urls = ref<Record<string, string>>({});
@@ -44,6 +50,15 @@ const html = computed(() => {
     for (const child of token.children || []) {
       if (child.type !== "image") continue;
       const src = String(child.attrGet("src") || "");
+      if (props.blockImages) {
+        const resolved = props.imageSources?.[src];
+        if (resolved) child.attrSet("src", resolved);
+        else {
+          child.type = "text";
+          child.content = `[图片：${child.content || "本案图片"}，需读取本案授权资源]`;
+        }
+        continue;
+      }
       const internal = imagePath(src);
       if (internal)
         child.attrSet(

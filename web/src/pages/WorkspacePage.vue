@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { get, message, send } from "../lib/api";
 import {
   readPrivate,
@@ -12,6 +12,7 @@ import { dateText, stateName } from "../lib/content";
 import type { Owned, Page } from "../types";
 import MemberGate from "../components/MemberGate.vue";
 const router = useRouter();
+const route = useRoute();
 const result = ref<Page<Owned>>();
 const page = ref(1);
 const busy = ref(false);
@@ -26,6 +27,13 @@ const states = [
   "ADMIN_HIDDEN",
   "DELETED",
 ];
+function restoreFilter() {
+  const requested =
+    typeof route.query.state === "string" ? route.query.state : "ALL";
+  filter.value = states.includes(requested) ? requested : "ALL";
+}
+restoreFilter();
+watch(() => route.query.state, restoreFilter);
 async function load() {
   if (session.status !== "ready") return;
   busy.value = true;
@@ -113,6 +121,9 @@ watch(() => session.status, load);
       {{ error }} <button @click="load">重新读取状态</button>
     </p>
     <p v-if="busy" role="status">正在读取或处理，请稍候…</p>
+    <RouterLink class="workspace-favorites-link" to="/favorites"
+      >查看我的收藏 →</RouterLink
+    >
     <div class="workspace-grid">
       <article
         v-for="item in result?.items.filter(

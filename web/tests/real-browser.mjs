@@ -7,7 +7,11 @@ import assert from "node:assert/strict";
 import { deflateSync } from "node:zlib";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const out = resolve(root, "docs/screenshots/20261106-web-foundation");
+const out = resolve(
+  root,
+  process.env.CAMPUSHUB_WEB_SCREENSHOT_DIR ||
+    "docs/screenshots/20261106-web-foundation",
+);
 const base = process.env.CAMPUSHUB_WEB_URL || "http://127.0.0.1:5173";
 const credentialsPath = process.env.CAMPUSHUB_WEB_CREDENTIAL_FILE;
 if (!credentialsPath)
@@ -489,7 +493,10 @@ try {
   report.fixtureArticleId = fixtureId;
   report.uncaughtPageErrors = errors.length;
   await writeFile(
-    resolve(root, "docs/REAL-BROWSER-20261106.json"),
+    resolve(
+      root,
+      process.env.CAMPUSHUB_WEB_REPORT || "docs/REAL-BROWSER-20261106.json",
+    ),
     JSON.stringify(report, null, 2) + "\n",
   );
   await browser.close();

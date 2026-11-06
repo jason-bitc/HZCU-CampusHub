@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Article } from "../types";
+import FavoriteButton from "./FavoriteButton.vue";
 import { dateText, sourceName } from "../lib/content";
-defineProps<{ article: Article }>();
+defineProps<{ article: Article; showFavorite?: boolean }>();
 </script>
 <template>
   <article class="article-card panel">
@@ -29,5 +30,6 @@ defineProps<{ article: Article }>();
       ><span>投币 {{ article.counts.effectiveCoins }}</span
       ><span>点赞 {{ article.counts.effectiveLikes }}</span>
     </p>
+    <FavoriteButton v-if="showFavorite" :article-id="article.id" />
   </article>
 </template>

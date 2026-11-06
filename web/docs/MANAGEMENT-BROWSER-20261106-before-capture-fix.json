@@ -1,0 +1,221 @@
+{
+  "checkedAt": "2026-11-06T11:46:53.805Z",
+  "status": "PASS",
+  "prototypeScreens": [
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": false,
+      "file": "A01-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": false,
+      "file": "A02-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A03",
+      "path": "/admin/cases/102",
+      "mobile": false,
+      "file": "A03-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A04",
+      "path": "/admin/content",
+      "mobile": false,
+      "file": "A04-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A05",
+      "path": "/admin/accounts",
+      "mobile": false,
+      "file": "A05-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A06",
+      "path": "/admin/categories",
+      "mobile": false,
+      "file": "A06-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A07",
+      "path": "/admin/contributions",
+      "mobile": false,
+      "file": "A07-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A08",
+      "path": "/admin/audit",
+      "mobile": false,
+      "file": "A08-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O01",
+      "path": "/ops/login",
+      "mobile": false,
+      "file": "O01-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": false,
+      "file": "O02-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O03",
+      "path": "/ops/logs",
+      "mobile": false,
+      "file": "O03-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O04",
+      "path": "/ops/deploy",
+      "mobile": false,
+      "file": "O04-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O05",
+      "path": "/ops/restart",
+      "mobile": false,
+      "file": "O05-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O06",
+      "path": "/ops/backups",
+      "mobile": false,
+      "file": "O06-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O07",
+      "path": "/ops/restore",
+      "mobile": false,
+      "file": "O07-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O08",
+      "path": "/ops/tasks/DEMO-T108",
+      "mobile": false,
+      "file": "O08-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O09",
+      "path": "/ops/exceptions",
+      "mobile": false,
+      "file": "O09-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O10",
+      "path": "/ops/manual",
+      "mobile": false,
+      "file": "O10-prototype.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": true,
+      "file": "A01-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": true,
+      "file": "A02-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A03",
+      "path": "/admin/cases/102",
+      "mobile": true,
+      "file": "A03-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": true,
+      "file": "O02-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O07",
+      "path": "/ops/restore",
+      "mobile": true,
+      "file": "O07-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O10",
+      "path": "/ops/manual",
+      "mobile": true,
+      "file": "O10-prototype-mobile.png",
+      "mode": "explicit prototype fixtures; not real data"
+    }
+  ],
+  "actualReadOnlyScreens": [
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": false,
+      "file": "A01-actual.png"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": false,
+      "file": "A02-actual.png"
+    },
+    {
+      "code": "A06",
+      "path": "/admin/categories",
+      "mobile": false,
+      "file": "A06-actual.png"
+    },
+    {
+      "code": "O01",
+      "path": "/ops/login",
+      "mobile": false,
+      "file": "O01-actual.png"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": false,
+      "file": "O02-actual.png"
+    },
+    {
+      "code": "W01",
+      "file": "W01-single-column-actual.png",
+      "mode": "real public backend"
+    }
+  ],
+  "simulatedContractChecks": [
+    "isolated admin login, claim and no public-media fallback for hidden context",
+    "simulated lost management receipt survives reload and keeps original request/revision/text",
+    "admin logout leaves ordinary session and never sends its token to ordinary API"
+  ],
+  "realAdminLogin": "NOT_RUN_NO_PRIVATE_ADMIN_CREDENTIALS",
+  "opsBackend": "NOT_IMPLEMENTED_USER_CONFIRMED",
+  "realOperationsExecuted": 0,
+  "uncaughtPageErrors": 0,
+  "prototypeCaptureValidation": "NOT_ACCEPTED: reviewer found A03 desktop captured the previous page; replaced after route-specific readiness checks"
+}

@@ -72,7 +72,7 @@ onBeforeUnmount(() => (generation += 1));
       <p>从相似的起点出发，看看准备、投递与复盘。</p>
     </div>
   </div>
-  <div class="discovery-layout">
+  <div class="discovery-layout discovery-single">
     <div>
       <section class="panel filters" aria-label="筛选经验">
         <form class="search-form" role="search" @submit.prevent="search">
@@ -147,6 +147,7 @@ onBeforeUnmount(() => (generation += 1));
           v-for="article in result?.items"
           :key="article.id"
           :article="article"
+          show-favorite
         />
         <section
           v-if="result && !result.items.length"
@@ -181,28 +182,5 @@ onBeforeUnmount(() => (generation += 1));
         </button>
       </nav>
     </div>
-    <aside class="discovery-sidebar">
-      <section class="panel">
-        <h2>找到相似起点</h2>
-        <p>
-          岗位是主要入口，专业与公司按需筛选。文章适用专业与作者本人专业分别记录。
-        </p>
-        <RouterLink class="button primary full" to="/workspace"
-          >分享我的经历</RouterLink
-        >
-      </section>
-      <section class="panel">
-        <h2>我的工作区</h2>
-        <p>
-          草稿、公开经验与下架文章统一管理，完整 Markdown 可在网页继续编辑。
-        </p>
-        <RouterLink class="inline-link" to="/workspace"
-          >进入工作区 <span aria-hidden="true">→</span></RouterLink
-        >
-      </section>
-      <p class="aside-note">
-        用经历帮助判断，用来源核对细节。演示内容会明确标记。
-      </p>
-    </aside>
   </div>
 </template>
