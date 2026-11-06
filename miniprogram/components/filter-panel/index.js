@@ -18,7 +18,8 @@ Component({
     filters: { type: Object, value: {} },
     catalog: { type: Object, value: {} },
     catalogLoading: { type: Boolean, value: false },
-    catalogError: { type: String, value: '' }
+    catalogError: { type: String, value: '' },
+    signedIn: { type: Boolean, value: false }, ownMajorId: { type: Number, value: 0 }, profileError: { type: String, value: '' }
   },
   data: {
     draft: emptyFilters(),
@@ -48,6 +49,7 @@ Component({
       });
     },
     close() { this.triggerEvent('close'); },
+    sameMajor() { if (this.data.ownMajorId && this.data.catalog.majors.some((m) => m.id === this.data.ownMajorId)) this.updateDraft(Object.assign({}, this.data.draft, { majorId: this.data.ownMajorId })); else this.triggerEvent(this.data.signedIn ? 'profile' : 'login'); },
     retry() { this.triggerEvent('retry'); },
     updateDraft(draft) {
       this.setData({ draft, selectedChips: selectedFilterNames(draft, this.data.catalog) });

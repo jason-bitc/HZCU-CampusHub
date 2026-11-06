@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
+    "secure-image": "/components/secure-image/index",
     "app-icon": "/components/app-icon/index"
   }
 }

@@ -1,0 +1,4 @@
+.editor-preview { margin-top: 24rpx; padding: 24rpx; background: var(--color-surface); border: 1rpx solid var(--color-border); border-radius: var(--radius-md); }
+.editor-status { display: block; margin-bottom: 20rpx; color: var(--color-primary); font-size: 28rpx; }
+.block-caption { white-space: pre-wrap; overflow-wrap: anywhere; }
+.conflict-content { max-height: 500rpx; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 28rpx; }

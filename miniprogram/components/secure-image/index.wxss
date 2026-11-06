@@ -1,0 +1,2 @@
+.secure-picture { display: block; width: 100%; border-radius: var(--radius-sm); }
+.secure-image { margin: 16rpx 0; }

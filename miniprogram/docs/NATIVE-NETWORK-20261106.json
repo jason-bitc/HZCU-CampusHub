@@ -1,0 +1,104 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/v1/catalog",
+    "status": 200,
+    "traceId": "2089c5a9-ddf0-4d1a-9fb8-808f77d3b98a"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/articles",
+    "status": 200,
+    "traceId": "9c820ef6-7b62-46b2-93d1-7124a232b31f"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login",
+    "status": 200,
+    "traceId": "771c3d41-55f4-4182-a733-306b08265cef"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me",
+    "status": 200,
+    "traceId": "30f2bed9-dbfb-4aa3-ac7b-6c3be2d03b37"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me",
+    "status": 200,
+    "traceId": "0e5cf141-2595-4e95-af3e-54a486666167"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/articles/2007/draft",
+    "status": 200,
+    "traceId": "848caf8b-1f54-4158-a560-ecb2cbd39ba9"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/profile",
+    "status": 200,
+    "traceId": "6096f9d8-3baa-4568-828b-ac83f4c037d1"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/catalog",
+    "status": 200,
+    "traceId": "6f0e5cd3-6158-4108-8d68-924897c532bb"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/me/articles/2007/draft",
+    "status": 409,
+    "traceId": "747183a9-fdd2-4bc3-9316-8f99d128b65d"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/articles/2007/draft",
+    "status": 200,
+    "traceId": "b2f5d419-123f-4009-a58b-10dcf8d99ecc"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/articles/2007/draft",
+    "status": 200,
+    "traceId": "895b5152-b553-40c1-9d96-b0eebe498d68"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/profile",
+    "status": 200,
+    "traceId": "e70efbc3-b72d-4600-998e-2a824797eea2"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/catalog",
+    "status": 200,
+    "traceId": "ec7f1ec3-6f52-470f-bfb7-90bccb16c059"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me",
+    "status": 200,
+    "traceId": "e268d94e-288b-4911-9b7a-209f670b7122"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/profile",
+    "status": 200,
+    "traceId": "ae2476ce-df81-4029-912b-cb24e59517ab"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/me/coins",
+    "status": 200,
+    "traceId": "0b0660a4-ba88-44aa-a5a4-75ab92ae7ac4"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/logout",
+    "status": 200,
+    "traceId": "6e7e39b7-567a-4265-9058-104ee086cb52"
+  }
+]

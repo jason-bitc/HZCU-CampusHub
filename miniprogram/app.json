@@ -1,7 +1,16 @@
 {
   "pages": [
     "pages/discover/discover",
-    "pages/article-detail/article-detail"
+    "pages/favorites/favorites",
+    "pages/workspace/workspace",
+    "pages/me/me",
+    "pages/article-detail/article-detail",
+    "pages/account/account",
+    "pages/profile/profile",
+    "pages/editor/editor",
+    "pages/comments/comments",
+    "pages/author/author",
+    "pages/wallet/wallet"
   ],
   "window": {
     "navigationBarBackgroundColor": "#f5f7f6",
@@ -11,6 +20,17 @@
     "backgroundTextStyle": "dark"
   },
   "style": "v2",
+  "tabBar": {
+    "custom": true,
+    "color": "#58645d",
+    "selectedColor": "#0d6b57",
+    "list": [
+      { "pagePath": "pages/discover/discover", "text": "发现" },
+      { "pagePath": "pages/favorites/favorites", "text": "收藏" },
+      { "pagePath": "pages/workspace/workspace", "text": "创作" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
+  },
   "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }

@@ -1,18 +1,18 @@
 <view class="prototype-nav" role="navigation" aria-label="小程序主导航">
-  <view class="nav-item nav-active" aria-current="page">
+  <button class="nav-item {{active === 'discover' ? 'nav-active' : ''}}" data-name="discover" bindtap="navigate" aria-label="发现">
     <app-icon name="home" size="42" />
     <text>发现</text>
-  </view>
-  <button class="nav-item nav-disabled" disabled aria-label="收藏，尚未开放">
+  </button>
+  <button class="nav-item {{active === 'favorites' ? 'nav-active' : ''}}" data-name="favorites" bindtap="navigate" aria-label="收藏">
     <app-icon name="favorite" size="42" />
-    <text>收藏</text><text class="nav-status">未开放</text>
+    <text>收藏</text>
   </button>
-  <button class="nav-item nav-disabled" disabled aria-label="创作，尚未开放">
+  <button class="nav-item {{active === 'workspace' ? 'nav-active' : ''}}" data-name="workspace" bindtap="navigate" aria-label="创作">
     <app-icon name="create" size="42" />
-    <text>创作</text><text class="nav-status">未开放</text>
+    <text>创作</text>
   </button>
-  <button class="nav-item nav-disabled" disabled aria-label="我的，尚未开放">
+  <button class="nav-item {{active === 'me' ? 'nav-active' : ''}}" data-name="me" bindtap="navigate" aria-label="我的">
     <app-icon name="user" size="42" />
-    <text>我的</text><text class="nav-status">未开放</text>
+    <text>我的</text>
   </button>
 </view>

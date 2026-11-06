@@ -3,6 +3,9 @@ const articlesApi = require('../../services/articles');
 const { createRequestGate } = require('../../utils/request-gate');
 const { emptyFilters, activeFilterChips, filterSummary } = require('../../utils/filters');
 const { cleanKeyword, validateKeyword, buildArticleQuery, mergeUniqueArticles } = require('../../utils/query');
+const session = require('../../services/session');
+const member = require('../../services/member');
+const access = require('../../utils/member-page');
 
 Page({
   data: {
@@ -26,10 +29,15 @@ Page({
     loadMoreError: '',
     filterVisible: false,
     demoMode: config.demoMode,
-    demoScenario: 'normal'
+    demoScenario: 'normal',
+    signedIn: false,
+    ownMajorId: 0,
+    profileError: ''
   },
 
   onLoad(options) {
+    this.profileRound = 0;
+    this._unsubscribe = session.subscribe(() => { this.profileRound += 1; this.setData({ signedIn: false, ownMajorId: 0, profileError: '' }); });
     this.gate = createRequestGate();
     this.activeRequest = null;
     this.catalogRequest = null;
@@ -40,6 +48,8 @@ Page({
   },
 
   onShow() {
+    if (this.getTabBar && this.getTabBar()) this.getTabBar().setData({ active: 'discover' });
+    this.loadOwnMajor();
     // Returning from detail leaves this page instance and its query/list intact.
     if (this.hasShown && this.lastScrollTop > 0) {
       wx.nextTick(() => wx.pageScrollTo({ scrollTop: this.lastScrollTop, duration: 0 }));
@@ -52,10 +62,20 @@ Page({
   },
 
   onUnload() {
+    if (this._unsubscribe) this._unsubscribe();
+    this.profileRound += 1;
     if (this.activeRequest) this.activeRequest.abort();
     if (this.catalogRequest) this.catalogRequest.abort();
     this.gate.next();
   },
+
+  loadOwnMajor() {
+    const round = ++this.profileRound;
+    if (!session.token() || config.demoMode) { this.setData({ signedIn: false, ownMajorId: 0 }); return; }
+    member.profile().then((profile) => { if (round === this.profileRound) this.setData({ signedIn: true, ownMajorId: profile.majorId || 0, profileError: '' }); }).catch((error) => { if (round === this.profileRound) this.setData({ ownMajorId: 0, profileError: error.message }); });
+  },
+  login: access.login,
+  editProfile() { wx.navigateTo({ url: '/pages/profile/profile' }); },
 
   onPullDownRefresh() {
     const tasks = [this.loadCatalog(), this.fetchArticles(true)];

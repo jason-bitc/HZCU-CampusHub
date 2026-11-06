@@ -27,7 +27,12 @@
             <text class="stage-secondary-value">{{article.baseLevelText}}</text>
           </view>
         </view>
-        <view class="guest-note">游客可阅读全文。作者身份、主页与交流需校园认证，本版本尚未开放。</view>
+        <view wx:if="{{!authenticated}}" class="guest-note">游客可阅读全文。登录校园账号后可查看作者及参与交流。<button wx:if="{{!demoMode}}" class="button-text" bindtap="login">登录校园账号</button></view>
+        <button wx:if="{{author}}" class="menu-row" bindtap="author"><text>{{author.nickname}}</text><text class="menu-note">查看作者主页</text></button>
+        <text wx:if="{{authenticated && !author && !privateLoading && !memberError}}" class="hint">当前文章没有可访问的作者主页。</text>
+        <text wx:if="{{privateLoading}}" class="hint">正在读取本人互动状态…</text>
+        <view wx:if="{{memberError}}"><text class="field-error">{{memberError}}</text><button class="button-secondary" bindtap="refreshMember">重新核对互动状态</button></view>
+        <text wx:if="{{pendingCoin}}" class="hint">投币结果待确认，点击底部“核对投币”会沿用原请求。</text>
       </view>
 
       <markdown-view id="article-reader" demo-mode="{{demoMode}}" body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" source-links="{{article.sourceLinks}}" source-note="{{article.sourceNote}}" binddrawerchange="handleDrawerChange" bindsources="goToSources" />
@@ -50,20 +55,20 @@
     </view>
   </view>
 
-  <view wx:if="{{status === 'ready'}}" class="visitor-action-bar" role="toolbar" aria-label="认证后开放的互动操作">
-    <button class="visitor-action" disabled aria-label="点赞，尚未开放">
+  <view wx:if="{{status === 'ready'}}" class="visitor-action-bar" role="toolbar" aria-label="文章互动操作">
+    <button class="visitor-action {{interaction.liked ? 'action-selected' : ''}}" data-kind="like" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="点赞">
       <app-icon name="like" size="38" />
-      <text>点赞</text>
+      <text>{{interaction.liked ? '已赞' : '点赞'}} {{article.effectiveLikes}}</text>
     </button>
-    <button class="visitor-action" disabled aria-label="投币，尚未开放">
+    <button class="visitor-action" bindtap="coins" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="投币">
       <app-icon name="coin" size="38" />
-      <text>投币</text>
+      <text>{{pendingCoin ? '核对投币' : '投币'}} {{article.effectiveCoins}}</text>
     </button>
-    <button class="visitor-action" disabled aria-label="收藏，尚未开放">
+    <button class="visitor-action {{interaction.favorited ? 'action-selected' : ''}}" data-kind="favorite" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="收藏">
       <app-icon name="star" size="38" />
-      <text>收藏</text>
+      <text>{{interaction.favorited ? '已收藏' : '收藏'}}</text>
     </button>
-    <button class="visitor-action" disabled aria-label="评论，尚未开放">
+    <button class="visitor-action" bindtap="comments" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="评论">
       <app-icon name="comment" size="38" />
       <text>评论</text>
     </button>

@@ -1,0 +1,12 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看收藏" description="收藏只对本人可见。" action-text="登录校园账号" secondary-text="去发现经验" bindaction="login" bindsecondary="discover" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
+  <view wx:else>
+    <text class="form-title">我的收藏</text><text class="hint">收藏是你的重访入口，不增加公开认可数。</text>
+    <view wx:for="{{items}}" wx:key="articleId" class="favorite-item"><article-card wx:if="{{item.available}}" article="{{item.article}}" bindopen="open" /><view wx:else class="list-row"><text class="row-title">内容不可用</text><text class="hint">收藏的经验当前无法阅读，原文和历史资料不再展示。</text></view><button class="button-text" data-id="{{item.articleId}}" bindtap="remove" disabled="{{busy}}">移除收藏</button></view>
+    <page-state wx:if="{{loaded && !items.length && !error}}" status="empty" title="还没有收藏" description="阅读经验时可以收藏，方便之后继续。" action-text="去发现经验" bindaction="discover" />
+    <text wx:if="{{busy}}" class="load-end">正在加载…</text><button wx:elif="{{items.length < total}}" class="button-secondary" bindtap="retry">继续加载收藏</button><text wx:elif="{{items.length}}" class="load-end">已加载全部收藏</text>
+    <view wx:if="{{error}}"><text class="field-error">{{error}}</text><button class="button-secondary" bindtap="retry" disabled="{{busy}}">重试当前请求</button></view>
+  </view>
+</view>

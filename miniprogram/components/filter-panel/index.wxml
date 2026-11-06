@@ -43,7 +43,7 @@
         </button>
       </view>
 
-      <view class="same-major-note">游客可手动选择文章适用专业。“同专业”快捷筛选需校园认证及本人专业资料，本版本尚未开放。</view>
+      <view class="same-major-note"><text>{{signedIn ? ownMajorId ? '按本人当前专业选择文章适用背景，应用前仍可调整。' : '尚未填写本人专业，也可继续手动筛选。' : '游客可手动选择专业，登录并完善资料后可用同专业快捷筛选。'}}</text><button class="button-secondary" bindtap="sameMajor">{{signedIn ? ownMajorId ? '只看同专业' : '完善本人专业' : '登录后使用同专业'}}</button><text wx:if="{{profileError}}">{{profileError}}</text></view>
 
       <view class="company-section">
         <text class="section-label">公司（可选）</text>

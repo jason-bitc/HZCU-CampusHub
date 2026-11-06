@@ -18,7 +18,8 @@
     </view>
     <scroll-view wx:elif="{{item.type === 'code'}}" scroll-x class="md-code" enhanced show-scrollbar="{{true}}"><text class="md-code-text" user-select>{{item.text}}</text></scroll-view>
     <view wx:elif="{{item.type === 'image'}}" class="md-image-block">
-      <image wx:if="{{!item.failed}}" class="md-image" src="{{item.src}}" mode="widthFix" lazy-load show-menu-by-longpress data-index="{{index}}" bindload="handleImageLoad" binderror="handleImageError" bindtap="previewImage" aria-label="{{item.alt}}" />
+      <secure-image wx:if="{{item.privateImage}}" url="{{item.src}}" alt="{{item.alt}}" />
+      <image wx:elif="{{!item.failed}}" class="md-image" src="{{item.src}}" mode="widthFix" lazy-load show-menu-by-longpress data-index="{{index}}" bindload="handleImageLoad" binderror="handleImageError" bindtap="previewImage" aria-label="{{item.alt}}" />
       <view wx:else class="image-error">
         <app-icon name="image" size="48" /><text class="image-error-message">图片加载失败：{{item.alt}}</text>
         <button wx:if="{{item.originalSrc}}" class="button-secondary image-retry" data-index="{{index}}" bindtap="retryImage">重试图片</button>

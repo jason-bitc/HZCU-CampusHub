@@ -1,4 +1,6 @@
 const { parseMarkdown, normalizeExternalUrl } = require('../../utils/markdown');
+const config = require('../../config/env');
+function privateNodes(nodes, enabled) { return nodes.map((node) => Object.assign({}, node, { privateImage: !!enabled && node.type === 'image' && String(node.src || '').startsWith(`${config.apiBaseUrl}/api/v1/media/images/`) })); }
 
 function insertResourceCard(nodes, sourceLinks) {
   if (!Array.isArray(sourceLinks) || !sourceLinks.length) return nodes;
@@ -24,7 +26,8 @@ Component({
     assetBaseUrl: { type: String, value: '' },
     sourceLinks: { type: Array, value: [] },
     sourceNote: { type: String, value: '' },
-    demoMode: { type: Boolean, value: false }
+    demoMode: { type: Boolean, value: false },
+    privateMode: { type: Boolean, value: false }
   },
   data: {
     nodes: [],
@@ -43,7 +46,7 @@ Component({
       const firstSourceLink = safeLinks[0] || null;
       this.anchorTops = null;
       this.setData({
-        nodes: insertResourceCard(parsed.nodes, safeLinks),
+        nodes: privateNodes(insertResourceCard(parsed.nodes, safeLinks), this.data.privateMode),
         headings: parsed.headings,
         filteredHeadings: parsed.headings,
         tocSearch: '',
@@ -52,7 +55,8 @@ Component({
         tocDrawerVisible: false,
         firstSourceLink
       }, () => this.measureHeadings());
-    }
+    },
+    privateMode(value) { if (this.data.nodes) this.setData({ nodes: privateNodes(this.data.nodes, value) }); }
   },
   methods: {
     openToc() {

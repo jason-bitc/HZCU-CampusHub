@@ -1,0 +1,10 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重新核验" bindaction="onShow" />
+  <view wx:else><text class="profile-name">{{profile ? profile.nickname : '校园同学'}}</text><text class="hint">校园邮箱已验证 · 认证不代表经历核验</text>
+    <button class="menu-row" bindtap="profile"><text>资料与隐私</text><text class="menu-note">编辑</text></button><button class="menu-row" bindtap="wallet"><text>我的非现金币</text><text class="menu-note">{{wallet ? wallet.balance + ' 币' : '查看钱包'}}</text></button><button class="menu-row" bindtap="favorites"><text>我的收藏</text><text class="menu-note">查看</text></button><button class="menu-row" bindtap="articles"><text>我的文章与草稿</text><text class="menu-note">管理</text></button>
+    <text wx:if="{{wallet}}" class="hint form-section">收到的有效贡献 {{wallet.receivedContribution}} 币。非现金币不能购买、提现或兑换现金。</text><button class="button-secondary form-section" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出当前账号</button>
+  </view>
+  <text wx:if="{{error && authStatus === 'ready'}}" class="field-error">{{error}}</text><button wx:if="{{error && authStatus === 'ready' && !logoutUncertain}}" class="button-secondary" bindtap="onShow">重试读取个人中心</button><view wx:if="{{logoutUncertain}}"><text class="hint">服务端退出尚未确认，可以重试。也可先清理本机数据。</text><button class="button-secondary" bindtap="forget">仅清理本机登录数据</button></view>
+</view>

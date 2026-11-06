@@ -1,0 +1,1 @@
+<prototype-nav active="{{active}}" />

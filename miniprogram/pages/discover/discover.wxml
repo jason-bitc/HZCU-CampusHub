@@ -60,9 +60,8 @@
       </view>
     </view>
 
-    <view class="reader-rule">公开经验免费阅读。作者资料与交流需校园认证，本版本尚未开放。</view>
+    <view class="reader-rule">公开经验免费阅读。登录校园账号后可查看作者资料、收藏并参与交流。</view>
   </view>
 
-  <prototype-nav />
-  <filter-panel visible="{{filterVisible}}" filters="{{filters}}" catalog="{{catalog}}" catalog-loading="{{catalogLoading}}" catalog-error="{{catalogError}}" bindretry="loadCatalog" bindclose="closeFilter" bindapply="applyFilter" />
+  <filter-panel visible="{{filterVisible}}" filters="{{filters}}" catalog="{{catalog}}" catalog-loading="{{catalogLoading}}" catalog-error="{{catalogError}}" signed-in="{{signedIn}}" own-major-id="{{ownMajorId}}" profile-error="{{profileError}}" bindlogin="login" bindprofile="editProfile" bindretry="loadCatalog" bindclose="closeFilter" bindapply="applyFilter" />
 </view>
