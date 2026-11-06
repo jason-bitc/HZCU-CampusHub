@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: campushub-server
+  profiles:
+    default: demo
+  servlet:
+    multipart:
+      max-file-size: ${CAMPUSHUB_MEDIA_MAX_BYTES:10485760}
+      max-request-size: ${CAMPUSHUB_MULTIPART_MAX_BYTES:12582912}
+  flyway:
+    locations: classpath:db/migration
+    clean-disabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: false
+  mvc:
+    problemdetails:
+      enabled: false
+  web:
+    resources:
+      add-mappings: false
+server:
+  address: ${CAMPUSHUB_BIND_ADDRESS:127.0.0.1}
+  port: ${CAMPUSHUB_PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+campushub:
+  run-mode: ${CAMPUSHUB_RUN_MODE:release}
+  runtime-environment: ${CAMPUSHUB_RUNTIME_ENV:local}
+  community:
+    text-max-code-points: ${CAMPUSHUB_CASE_MAX_CODE_POINTS:10000}
+    json-max-bytes: ${CAMPUSHUB_CASE_JSON_MAX_BYTES:2097152}
+  coins:
+    login-reward: ${CAMPUSHUB_COIN_LOGIN_REWARD:2}
+    reading-reward: ${CAMPUSHUB_COIN_READING_REWARD:1}
+    reading-seconds: ${CAMPUSHUB_COIN_READING_SECONDS:180}
+    article-limit: ${CAMPUSHUB_COIN_ARTICLE_LIMIT:2}
+  comments:
+    body-max-code-points: ${CAMPUSHUB_COMMENT_MAX_CODE_POINTS:10000}
+    json-max-bytes: ${CAMPUSHUB_COMMENT_JSON_MAX_BYTES:131072}
+  logs:
+    diagnostics-enabled: ${CAMPUSHUB_LOG_DIAGNOSTICS:false}
+    enabled: ${CAMPUSHUB_LOG_ENABLED:true}
+    root: ${CAMPUSHUB_LOG_ROOT:.local-data/logs}
+    max-bytes: ${CAMPUSHUB_LOG_MAX_BYTES:10485760}
+    archives: ${CAMPUSHUB_LOG_ARCHIVES:7}
+  authoring:
+    body-max-bytes: ${CAMPUSHUB_BODY_MAX_BYTES:1048576}
+    json-max-bytes: ${CAMPUSHUB_JSON_MAX_BYTES:2097152}
+  media:
+    root: ${CAMPUSHUB_MEDIA_ROOT:.local-data/media}
+    max-bytes: ${CAMPUSHUB_MEDIA_MAX_BYTES:10485760}
+    max-pixels: ${CAMPUSHUB_MEDIA_MAX_PIXELS:25000000}
+  auth:
+    pepper: ${CAMPUSHUB_AUTH_PEPPER:}
+  mail:
+    host: ${CAMPUSHUB_MAIL_HOST:smtp.qiye.163.com}
+    port: ${CAMPUSHUB_MAIL_PORT:465}
+    from: ${CAMPUSHUB_MAIL_FROM:32401211@stu.hzcu.edu.cn}
+    username: ${CAMPUSHUB_MAIL_USERNAME:32401211@stu.hzcu.edu.cn}
+    password: ${CAMPUSHUB_MAIL_PASSWORD:}
+    tls-mode: ${CAMPUSHUB_MAIL_TLS_MODE:SSL}
+    timeout-ms: ${CAMPUSHUB_MAIL_TIMEOUT_MS:10000}
+  db:
+    host: ${CAMPUSHUB_DB_HOST:127.0.0.1}
+    port: ${CAMPUSHUB_DB_PORT:3306}
+    name: ${CAMPUSHUB_DB_NAME:campushub_dev}
+    username: ${CAMPUSHUB_DB_USERNAME:}
+    password: ${CAMPUSHUB_DB_PASSWORD:}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: false
+logging:
+  level:
+    root: WARN
+    cn.edu.hzcu.campushub: INFO
+    org.springframework.boot.SpringApplication: OFF
+    org.springframework.boot.diagnostics: OFF
+    com.zaxxer.hikari: OFF
+    org.springframework.boot.web.server.servlet.context: OFF
+    org.springframework.boot.jdbc.health.DataSourceHealthIndicator: OFF
+    org.springframework.web.servlet.PageNotFound: OFF
+    org.springframework.mail: OFF
+    org.eclipse.angus.mail: OFF
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%X{traceId}] %logger{40} - %msg%n'
