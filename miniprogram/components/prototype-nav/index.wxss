@@ -1,11 +1,16 @@
 .prototype-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
   display: flex;
   align-items: stretch;
   justify-content: space-around;
   padding: 12rpx 20rpx calc(12rpx + constant(safe-area-inset-bottom));
   padding: 12rpx 20rpx calc(12rpx + env(safe-area-inset-bottom));
-  border-top: 1rpx solid var(--color-border);
-  background: var(--color-surface);
+  border-top: 1rpx solid var(--color-border, #e3e8e5);
+  background: var(--color-surface, #ffffff);
 }
 
 .nav-item {
@@ -14,18 +19,22 @@
   align-items: center;
   justify-content: center;
   gap: 6rpx;
-  width: 25%;
+  width: 25% !important;
   min-height: 92rpx;
-  color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  color: var(--color-text-secondary, #58645d);
+  font-size: var(--font-xs, 24rpx);
   line-height: 1.3;
 }
 
 .nav-active {
-  color: var(--color-primary);
+  color: var(--color-primary, #0d6b57);
   font-weight: 650;
 }
 
 .nav-disabled {
-  opacity: 0.78;
+  color: var(--color-text-secondary) !important;
+  opacity: 1 !important;
+  background: transparent !important;
 }
+
+.nav-status { font-size: 24rpx; }

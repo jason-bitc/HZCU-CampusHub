@@ -1,0 +1,2 @@
+.workspace-state { margin: 12rpx 0; color: var(--color-primary); font-size: 28rpx; }
+.workspace-article.list-row { margin: 28rpx 0; border: 2rpx solid #9aafa6; }

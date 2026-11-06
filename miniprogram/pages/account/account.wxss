@@ -1,0 +1,2 @@
+.auth-links { display: flex; flex-wrap: wrap; justify-content: space-between; margin: 20rpx 0; }
+.auth-intro { margin-bottom: 48rpx; }

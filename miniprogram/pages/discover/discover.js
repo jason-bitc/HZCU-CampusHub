@@ -2,7 +2,10 @@ const config = require('../../config/env');
 const articlesApi = require('../../services/articles');
 const { createRequestGate } = require('../../utils/request-gate');
 const { emptyFilters, activeFilterChips, filterSummary } = require('../../utils/filters');
-const { validateKeyword, buildArticleQuery, mergeUniqueArticles } = require('../../utils/query');
+const { cleanKeyword, validateKeyword, buildArticleQuery, mergeUniqueArticles } = require('../../utils/query');
+const session = require('../../services/session');
+const member = require('../../services/member');
+const access = require('../../utils/member-page');
 
 Page({
   data: {
@@ -11,11 +14,13 @@ Page({
     sort: 'recognized',
     catalog: { jobs: [], majors: [], companies: [], topics: [] },
     catalogError: '',
+    catalogLoading: true,
     chips: [],
     filterSummary: { majorText: '不限', companyText: '不限' },
     articles: [],
     listStatus: 'loading',
     errorMessage: '',
+    errorTitle: '加载失败',
     traceId: '',
     page: 1,
     total: 0,
@@ -24,10 +29,15 @@ Page({
     loadMoreError: '',
     filterVisible: false,
     demoMode: config.demoMode,
-    demoScenario: 'normal'
+    demoScenario: 'normal',
+    signedIn: false,
+    ownMajorId: 0,
+    profileError: ''
   },
 
   onLoad(options) {
+    this.profileRound = 0;
+    this._unsubscribe = session.subscribe(() => { this.profileRound += 1; this.setData({ signedIn: false, ownMajorId: 0, profileError: '' }); });
     this.gate = createRequestGate();
     this.activeRequest = null;
     this.catalogRequest = null;
@@ -38,6 +48,9 @@ Page({
   },
 
   onShow() {
+    if (this.getTabBar && this.getTabBar()) this.getTabBar().setData({ active: 'discover' });
+    this.loadOwnMajor();
+    // Returning from detail leaves this page instance and its query/list intact.
     if (this.hasShown && this.lastScrollTop > 0) {
       wx.nextTick(() => wx.pageScrollTo({ scrollTop: this.lastScrollTop, duration: 0 }));
     }
@@ -49,10 +62,20 @@ Page({
   },
 
   onUnload() {
+    if (this._unsubscribe) this._unsubscribe();
+    this.profileRound += 1;
     if (this.activeRequest) this.activeRequest.abort();
     if (this.catalogRequest) this.catalogRequest.abort();
     this.gate.next();
   },
+
+  loadOwnMajor() {
+    const round = ++this.profileRound;
+    if (!session.token() || config.demoMode) { this.setData({ signedIn: false, ownMajorId: 0 }); return; }
+    member.profile().then((profile) => { if (round === this.profileRound) this.setData({ signedIn: true, ownMajorId: profile.majorId || 0, profileError: '' }); }).catch((error) => { if (round === this.profileRound) this.setData({ ownMajorId: 0, profileError: error.message }); });
+  },
+  login: access.login,
+  editProfile() { wx.navigateTo({ url: '/pages/profile/profile' }); },
 
   onPullDownRefresh() {
     const tasks = [this.loadCatalog(), this.fetchArticles(true)];
@@ -80,15 +103,16 @@ Page({
 
   loadCatalog() {
     if (this.catalogRequest) this.catalogRequest.abort();
+    this.setData({ catalogLoading: true });
     const operation = articlesApi.getCatalog();
     this.catalogRequest = operation;
     return operation.promise.then((catalog) => {
       if (this.catalogRequest !== operation) return;
-      this.setData({ catalog, catalogError: '' });
+      this.setData({ catalog, catalogError: '', catalogLoading: false });
       this.syncFilterPresentation();
     }).catch((error) => {
       if (this.catalogRequest !== operation) return;
-      this.setData({ catalogError: error.message || '分类加载失败，请重试' });
+      this.setData({ catalogError: error.message || '分类加载失败，请重试', catalogLoading: false });
     });
   },
 
@@ -130,6 +154,7 @@ Page({
       this.setData({
         articles: [],
         listStatus: 'error',
+        errorTitle: error.kind === 'SERVICE' ? '服务暂时不可用' : error.kind === 'PERMISSION' ? '暂时无法访问' : '加载失败',
         errorMessage: error.message || '加载失败，请重试',
         traceId: error.traceId || '',
         hasMore: false
@@ -170,9 +195,10 @@ Page({
       wx.showToast({ title: keywordError, icon: 'none' });
       return;
     }
-    const next = Object.assign(emptyFilters(), filters);
+    const next = Object.assign(emptyFilters(), filters, { keyword: cleanKeyword(filters.keyword) });
     this.setData({ filters: next, keywordInput: next.keyword });
     this.syncFilterPresentation(next);
+    wx.pageScrollTo({ scrollTop: 0, duration: 0 });
     this.fetchArticles(true);
   },
 
@@ -198,19 +224,23 @@ Page({
     const sort = event.currentTarget.dataset.sort === 'latest' ? 'latest' : 'recognized';
     if (sort === this.data.sort) return;
     this.setData({ sort });
+    wx.pageScrollTo({ scrollTop: 0, duration: 0 });
     this.fetchArticles(true);
   },
 
   openFilter() {
+    wx.hideKeyboard();
+    wx.setNavigationBarTitle({ title: '筛选经验' });
     this.setData({ filterVisible: true });
   },
 
   closeFilter() {
     this.setData({ filterVisible: false });
+    this.setListTitle(this.data.listStatus);
   },
 
   applyFilter(event) {
-    this.setData({ filterVisible: false });
+    this.closeFilter();
     this.updateFilters(event.detail.filters);
   },
 
@@ -248,19 +278,5 @@ Page({
     const id = Number(event.detail.id);
     if (!id) return;
     wx.navigateTo({ url: `/pages/article-detail/article-detail?id=${id}` });
-  },
-
-  chooseDemoScenario() {
-    if (!config.demoMode) return;
-    const scenarios = ['normal', 'empty', 'network', 'service'];
-    wx.showActionSheet({
-      itemList: ['正常演示数据', '空结果状态', '网络失败状态', '服务异常状态'],
-      success: (result) => {
-        const scenario = scenarios[result.tapIndex];
-        articlesApi.setDemoScenario(scenario);
-        this.setData({ demoScenario: scenario });
-        this.refreshAll();
-      }
-    });
   }
 });

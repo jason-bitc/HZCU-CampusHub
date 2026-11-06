@@ -8,7 +8,7 @@ function adapt(call, mapper) {
     const operation = call();
     return { promise: operation.promise.then(mapper), abort: operation.abort };
   }
-  const operation = request(call);
+  const operation = request(call());
   return { promise: operation.promise.then(mapper), abort: operation.abort };
 }
 

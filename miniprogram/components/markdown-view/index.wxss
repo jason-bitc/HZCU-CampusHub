@@ -1,47 +1,10 @@
 .markdown-view {
   color: var(--color-text);
-  font-size: 30rpx;
-  line-height: 1.9;
+  padding-top: 32rpx;
+  font-size: 32rpx;
+  line-height: 1.75;
 }
 
-.toc {
-  margin-bottom: 36rpx;
-  padding: 0 0 24rpx;
-  border-bottom: 1rpx solid var(--color-border);
-}
-
-.toc-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 64rpx;
-  color: var(--color-primary);
-  font-size: var(--font-sm);
-  font-weight: 600;
-}
-
-.toc-toggle text:first-child {
-  color: var(--color-text);
-  font-size: var(--font-md);
-}
-
-.toc-list {
-  padding-top: 10rpx;
-}
-
-.toc-item {
-  display: block;
-  width: 100%;
-  padding: 10rpx 0;
-  color: var(--color-primary);
-  font-size: var(--font-sm);
-  line-height: 1.55;
-  text-align: left;
-}
-
-.toc-level-3 { padding-left: 24rpx; }
-.toc-level-4 { padding-left: 48rpx; }
 
 .md-block {
   margin-top: 28rpx;
@@ -51,6 +14,8 @@
 .md-block:first-child {
   margin-top: 0;
 }
+
+.md-block:first-child .md-heading { margin-top: 0; }
 
 .md-heading {
   margin: 46rpx 0 20rpx;
@@ -63,6 +28,7 @@
 .md-h2 { font-size: 36rpx; }
 .md-h3 { font-size: 32rpx; }
 .md-h4 { font-size: 30rpx; }
+.md-h5, .md-h6 { font-size: 30rpx; }
 
 .md-paragraph,
 .md-quote,
@@ -127,9 +93,12 @@
   white-space: nowrap;
 }
 
-.md-code text {
+.md-code-text {
+  display: inline-block;
+  min-width: 100%;
+  white-space: pre;
   font-family: Consolas, Monaco, monospace;
-  font-size: 25rpx;
+  font-size: 26rpx;
   line-height: 1.8;
 }
 
@@ -158,12 +127,12 @@
   text-align: center;
 }
 
-.image-error text {
+.image-error-message {
   margin-top: 16rpx;
 }
 
 .image-retry {
-  min-height: 68rpx;
+  min-height: var(--touch-target);
   margin-top: 20rpx;
 }
 
@@ -190,6 +159,8 @@
   padding: 28rpx;
   border-radius: var(--radius-md);
   background: var(--color-primary-soft);
+  width: 100% !important;
+  text-align: left;
 }
 
 .resource-title {
@@ -207,27 +178,29 @@
 .toc-float {
   position: fixed;
   right: 24rpx;
-  bottom: calc(156rpx + constant(safe-area-inset-bottom));
-  bottom: calc(156rpx + env(safe-area-inset-bottom));
   z-index: 90;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4rpx;
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 21rpx;
+  width: 44px !important;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 12rpx;
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  font-size: 24rpx;
   font-weight: 600;
-  box-shadow: 0 10rpx 30rpx rgba(13, 107, 87, 0.22);
+  line-height: 1.15;
 }
 
 .toc-float:active,
 .toc-float.pressable-hover {
-  background: var(--color-primary-dark);
+  background: var(--color-primary-soft);
 }
 
 .toc-drawer-layer {
@@ -251,8 +224,7 @@
   flex-direction: column;
   width: 72%;
   max-width: 560rpx;
-  padding-top: constant(safe-area-inset-top);
-  padding-top: env(safe-area-inset-top);
+  padding-top: 0;
   background: var(--color-surface);
   box-shadow: -12rpx 0 36rpx rgba(18, 28, 23, 0.12);
 }
@@ -271,7 +243,8 @@
 }
 
 .toc-drawer-close {
-  min-height: 56rpx;
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
   color: var(--color-primary);
   font-size: 25rpx;
 }
@@ -285,7 +258,8 @@
 
 .toc-drawer-item {
   display: block;
-  width: 100%;
+  width: 100% !important;
+  min-height: var(--touch-target);
   padding: 22rpx 0;
   border-bottom: 1rpx solid var(--color-border);
   color: var(--color-text);
@@ -298,3 +272,8 @@
 .toc-drawer-item:last-child {
   border-bottom: 0;
 }
+
+.toc-search { margin: 16rpx 24rpx; padding: 0 20rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); }
+.toc-search-input { height: var(--touch-target); font-size: var(--font-sm); }
+.toc-current { color: var(--color-primary-dark); background: var(--color-primary-soft); font-weight: 700; }
+.toc-no-match { display: block; padding: 24rpx 0; color: var(--color-text-secondary); font-size: var(--font-sm); }

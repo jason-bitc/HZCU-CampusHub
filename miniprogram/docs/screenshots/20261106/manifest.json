@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-06",
+  "source": "WeChat native simulator; no browser redraw",
+  "count": 20,
+  "images": [
+    {
+      "file": "M01-real.png",
+      "title": "M01 真实发现",
+      "note": "真实接口7篇公开经验，无演示模式横条。",
+      "bytes": 77427,
+      "sha256": "7e91cfbcfbf401ac1dfc5c33fa84765782ddef1e3f16b8dfdb010f10cb057610"
+    },
+    {
+      "file": "M06-member-detail.png",
+      "title": "M06 认证阅读",
+      "note": "原生真实作者及互动读取；右上角小方框目录保留。",
+      "bytes": 60900,
+      "sha256": "2b6a207f82ac0c3bb69e0e7b38e09a3457c966b956c722461aecc203092f5ed0"
+    },
+    {
+      "file": "M06-liked-favorited.png",
+      "title": "M06 真实点赞与收藏",
+      "note": "本轮DEMO文章2007，真实liked/favorited均true；关系已清理。",
+      "bytes": 60984,
+      "sha256": "95593c549537c41e24163661c6e48e493845bb8af5d4f727addeb81aa46a1378"
+    },
+    {
+      "file": "M07-comments.png",
+      "title": "M07 原生文字评论",
+      "note": "原生提交得到评论3，普通文字呈现。测试评论已软删除；时间格式随后统一。",
+      "bytes": 52229,
+      "sha256": "d3e39781f1dd0903cabf03b795c0a80bf99a1a01af0595cd9a7dc42181f45174"
+    },
+    {
+      "file": "M11-contact-closed.png",
+      "title": "M09/M11 作者与关闭联系",
+      "note": "当前作者基础资料和公开文章；联系关闭，不展示隐藏值。",
+      "bytes": 80779,
+      "sha256": "eb0b6edee685ccf2021e26b562ed4af6ac8b6f8c0a05cef2ef8020afaf6e1e08"
+    },
+    {
+      "file": "M12-login.png",
+      "title": "M12 登录",
+      "note": "真实原生账号表单，未包含凭据。登录成功另有本人中心证据。",
+      "bytes": 52756,
+      "sha256": "94195d47504bc52c6cdb73a5d2f1a94a432f734268c5bb838c2bb5a19f8eca64"
+    },
+    {
+      "file": "M13-register.png",
+      "title": "M13 注册",
+      "note": "校园邮箱及验证码表单；没有执行真实发送或注册。",
+      "bytes": 68916,
+      "sha256": "191c39fb87125f3e724decd038dcbec387a9b11161bb7059c03927027ef551f2"
+    },
+    {
+      "file": "M14-reset.png",
+      "title": "M14 找回密码",
+      "note": "确认密码及验证码表单；没有发送真实邮件或修改密码。",
+      "bytes": 69535,
+      "sha256": "ef55866b3b69fdfda303a86134422407771fe7b2dd47e505d9764bd6548d3de1"
+    },
+    {
+      "file": "M15-profile.png",
+      "title": "M15 资料与隐私",
+      "note": "读取本人默认资料；本轮未改写原资料或联系设置。",
+      "bytes": 43465,
+      "sha256": "6968f059b6885dfef908a83d28019a133686893a886d23ba38958111332a51de"
+    },
+    {
+      "file": "M16-member.png",
+      "title": "M16 本人中心",
+      "note": "真实登录后读取资料和钱包。没有伪造余额或认证状态。",
+      "bytes": 44002,
+      "sha256": "a63ff805f5c07c1c928b8bd8ad4f7eaa35706c41659860d9dfa73da89328963b"
+    },
+    {
+      "file": "M17-favorites.png",
+      "title": "M17 空收藏",
+      "note": "本人真实列表为空，提供发现入口。",
+      "bytes": 35153,
+      "sha256": "9093ad6c812d148335fd1d56e689b51b59b5b5c7b0d1ddbd3fcc74827786a8d2"
+    },
+    {
+      "file": "M17-unavailable.png",
+      "title": "M17 不可用收藏",
+      "note": "测试文章下架后仅剩不可用占位，数据严格为articleId/available；取消后total为0。",
+      "bytes": 37617,
+      "sha256": "9b2304b934c93420c7a2d48ea99cdd4057de89b49d9e99a6b2203bb7096718a7"
+    },
+    {
+      "file": "M18-workspace.png",
+      "title": "M18/M19 文章与草稿",
+      "note": "状态区分及多草稿入口，日期按设备时区可读显示；测试文章最终仍下架。",
+      "bytes": 61529,
+      "sha256": "9fab279f5b0cd04bb392cd2ab8db7d7ecfcf9fa1e22913a118b73c99bc2da93c"
+    },
+    {
+      "file": "M20-editor.png",
+      "title": "M20 轻量编辑",
+      "note": "载入真实草稿和分类。阶段与当前个人阶段分开。",
+      "bytes": 62924,
+      "sha256": "848e0970fd7ab75c6d3e66ae511f97abb8c8d28d6146a459949ca585e74cb8f2"
+    },
+    {
+      "file": "M22-preview.png",
+      "title": "M22 私有草稿预览",
+      "note": "带鉴权下载后的真实图片；源文章处于作者下架状态。",
+      "bytes": 72088,
+      "sha256": "7dcab01e1da7f164d6c88a50d14c1bd2d302a9482c3e2f5b53649886c4fb3bf7"
+    },
+    {
+      "file": "M22-native-upload-preview.png",
+      "title": "M21/M22 正常选图后预览",
+      "note": "Computer Use从正常选图器选PNG，上传done并插入正文，真实保存修订11。",
+      "bytes": 58891,
+      "sha256": "ba65f58badf728eac34c2b78a65f92bddcc0ad2ff865425c2319cad05963bdcb"
+    },
+    {
+      "file": "M24-conflict.png",
+      "title": "M24 真实409冲突",
+      "note": "本机修订13/云端14；保存失败且保留本机内容，未自动覆盖。",
+      "bytes": 71341,
+      "sha256": "86866a4ba0a4c55990aae577652289cd7bbdf11f337c4851886a44c8a175a362"
+    },
+    {
+      "file": "M25-complex-preserved.png",
+      "title": "M25 复杂正文保护",
+      "note": "真实草稿15，complexSource/readOnly/preview均true；保留原文及副本。末尾按钮文案最终统一为查看字段。",
+      "bytes": 82852,
+      "sha256": "0708c4cbbaff41512fa0c89c0e8ffba63d53e5de297cbe5a8ed41de5b126cf34"
+    },
+    {
+      "file": "M26-wallet.png",
+      "title": "M26/M27 非现金币与账本",
+      "note": "真实余额、奖励规则、服务端计时资格与空账本；没有领取奖励。",
+      "bytes": 56191,
+      "sha256": "aa6f393cb8510866566ff75875d191315e773076dc1c62bb84653bfcdf367d6c"
+    },
+    {
+      "file": "M32-logout.png",
+      "title": "M32 退出后游客状态",
+      "note": "真实退出撤销会话，本人资料与钱包为null，未保留受限界面。",
+      "bytes": 31254,
+      "sha256": "19bdb5724b36d1bd192c07917671d40911183f9eee18ae9d4334397f797dda68"
+    }
+  ]
+}

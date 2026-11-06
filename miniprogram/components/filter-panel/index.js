@@ -17,7 +17,9 @@ Component({
     visible: { type: Boolean, value: false },
     filters: { type: Object, value: {} },
     catalog: { type: Object, value: {} },
-    catalogError: { type: String, value: '' }
+    catalogLoading: { type: Boolean, value: false },
+    catalogError: { type: String, value: '' },
+    signedIn: { type: Boolean, value: false }, ownMajorId: { type: Number, value: 0 }, profileError: { type: String, value: '' }
   },
   data: {
     draft: emptyFilters(),
@@ -47,12 +49,14 @@ Component({
       });
     },
     close() { this.triggerEvent('close'); },
+    sameMajor() { if (this.data.ownMajorId && this.data.catalog.majors.some((m) => m.id === this.data.ownMajorId)) this.updateDraft(Object.assign({}, this.data.draft, { majorId: this.data.ownMajorId })); else this.triggerEvent(this.data.signedIn ? 'profile' : 'login'); },
+    retry() { this.triggerEvent('retry'); },
     updateDraft(draft) {
       this.setData({ draft, selectedChips: selectedFilterNames(draft, this.data.catalog) });
     },
     clearSelected(event) {
       const key = event.currentTarget.dataset.key;
-      const patch = { [key]: 0 };
+      const patch = {};
       if (key === 'companyId') {
         patch.companyInput = '';
         patch.companySuggestions = [];
@@ -66,18 +70,22 @@ Component({
       const majorId = this.data.draft.majorId === id ? 0 : id;
       this.updateDraft(Object.assign({}, this.data.draft, { majorId }));
     },
+    selectJob(event) {
+      const id = Number(event.currentTarget.dataset.value) || 0;
+      this.updateDraft(Object.assign({}, this.data.draft, { jobId: id }));
+    },
     selectTopic(event) {
       const id = Number(event.currentTarget.dataset.value) || 0;
       const topicId = this.data.draft.topicId === id ? 0 : id;
       this.updateDraft(Object.assign({}, this.data.draft, { topicId }));
     },
     syncCompany(value, catalog) {
-      const keyword = String(value || '');
+      const keyword = String(value || '').trim();
       const { exact, matches } = findCompany(catalog || this.data.catalog, keyword);
       const companyId = exact ? exact.id : 0;
       let companyError = '';
       if (keyword && !companyId) {
-        companyError = matches.length ? '请选择匹配的公司标签。' : '当前启用公司标签中没有该公司，无法按公司筛选。';
+        companyError = matches.length ? '请从下方选择公司。' : '没有匹配的公司，请修改输入或清空公司条件。';
       }
       const draft = Object.assign({}, this.data.draft, { companyId });
       this.setData({
@@ -109,9 +117,10 @@ Component({
     },
     reset() {
       this.setData({ companyInput: '', companySuggestions: [], companyError: '' });
-      this.updateDraft(emptyFilters());
+      this.updateDraft(Object.assign(emptyFilters(), { keyword: this.data.filters.keyword || '' }));
     },
     apply() {
+      if (this.data.catalogLoading || this.data.catalogError) return;
       const keywordError = validateKeyword(this.data.draft.keyword);
       if (keywordError) {
         wx.showToast({ title: keywordError, icon: 'none' });

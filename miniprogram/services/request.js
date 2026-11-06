@@ -1,5 +1,6 @@
 const config = require('../config/env');
 const { ApiError, fromHttp, fromNetwork } = require('./api-error');
+const session = require('./session');
 
 function log(event) {
   if (!config.debug) return;
@@ -13,15 +14,18 @@ function getTraceId(headers) {
 
 function request(options) {
   const startedAt = Date.now();
+  const accessToken = options.auth ? session.token() : '';
+  const captured = session.version();
+  if (options.auth && !accessToken) return { promise: Promise.reject(new ApiError({ kind: 'AUTH', status: 401, message: '请登录校园账号后继续' })), abort() {} };
   let task;
   const promise = new Promise((resolve, reject) => {
-    task = wx.request({
+    const input = {
       url: `${config.apiBaseUrl}${options.path}`,
       method: options.method || 'GET',
-      data: options.data || {},
       timeout: config.requestTimeout,
-      header: { 'content-type': 'application/json' },
+      header: Object.assign({ 'content-type': 'application/json' }, accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       success(response) {
+        if (options.auth && captured !== session.version()) { reject(new ApiError({ kind: 'ABORTED', message: '会话已变化，已丢弃旧响应' })); return; }
         const event = {
           path: options.path,
           status: response.statusCode,
@@ -35,16 +39,20 @@ function request(options) {
           return;
         }
         if (response.statusCode >= 200 && response.statusCode < 300) {
-          reject(new ApiError({ kind: 'CONTRACT', status: response.statusCode, traceId: event.traceId, message: '服务响应格式不符合公开接口合同' }));
+          reject(new ApiError({ kind: 'CONTRACT', status: response.statusCode, traceId: event.traceId, message: '服务响应格式不符合接口合同' }));
           return;
         }
+        if (options.auth && (response.statusCode === 401 || response.statusCode === 403)) session.invalidate(captured, response.statusCode);
         reject(fromHttp(response.statusCode, payload, event.traceId));
       },
       fail(error) {
         log({ path: options.path, status: 0, durationMs: Date.now() - startedAt, traceId: '' });
         reject(fromNetwork(error));
       }
-    });
+    };
+    // Bodyless writes must omit data entirely: even {} is rejected by interactions.
+    if (Object.prototype.hasOwnProperty.call(options, 'data')) input.data = options.data;
+    task = wx.request(input);
   });
   return {
     promise,

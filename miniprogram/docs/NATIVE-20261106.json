@@ -1,0 +1,86 @@
+{
+  "checkedAt": "2026-11-06T06:44:31.876066+00:00",
+  "baseline": "4c9e9c56113728d66e5f375cfec52abe422d1bfd",
+  "branch": "feat/ljh-frontend-foundation",
+  "environment": {
+    "devtools": "2.02.2609240 Stable",
+    "actualSDKVersion": "3.8.12",
+    "viewport": [
+      363,
+      785
+    ],
+    "backendBase": "http://127.0.0.1:8080",
+    "backendJarSha256": "DF9A0AA75F42F620E8D75DB29DB53322A4A3FDC555D6001869760258C8365459"
+  },
+  "automated": {
+    "structure": [
+      10,
+      10
+    ],
+    "guestBehavior": [
+      10,
+      10
+    ],
+    "memberBehavior": [
+      20,
+      20
+    ],
+    "jsFiles": 50
+  },
+  "nativeCompiler": {
+    "wxmlFiles": 19,
+    "wxssFiles": 23,
+    "exitCodes": [
+      0,
+      0
+    ]
+  },
+  "nativeObserved": [
+    "Real login via native page submit, /me and profile/wallet loading",
+    "Session restored across native reload and checked against backend",
+    "Normal file dialog selected existing DEMO PNG using built-in Computer Use",
+    "After lifecycle fix: uploads.length=1, state=done, hasImage=true, dirty=true",
+    "Native save confirmed revision 11; private images rendered via authenticated download",
+    "Native publish method confirmed PUBLISHED revision 12",
+    "Native interaction-state liked=true,favorited=true on fixture article 2007",
+    "Native text comment receipt 3; deleted after capture",
+    "Unavailable favorite data exactly {articleId:2007,available:false}; remove => total=0",
+    "Author/contact closed and wallet/reading rules read in native pages",
+    "Real conflict: local revision13/cloud14, saved=false, conflict=true; no overwrite",
+    "Complex draft15: complexSource=true,readOnly=true,preview=true; full original retained",
+    "Login returnTo resolved to editor route with articleId2007",
+    "Native logout: authStatus=guest,profile=null,wallet=null; latest error-filter console empty"
+  ],
+  "drivingMethod": "Native page methods and actual wx requests; built-in Computer Use for normal file picker. No backend response mocks.",
+  "cleanup": {
+    "articleId": 2007,
+    "finalState": "AUTHOR_OFFLINE",
+    "finalRevision": 15,
+    "nativeComment3": "soft-deleted",
+    "apiComments": "soft-deleted",
+    "like": "canceled",
+    "favorite": "canceled",
+    "rewardClaimed": false,
+    "coinsSpent": 0,
+    "privateConfigRestored": true,
+    "privateConfigSha256": "6f3c4894ddba596d7b849d42f10cc7f2a56cc9af867a9ad4512bee6b32fce6ba",
+    "nativeTestSessions": "logged-out"
+  },
+  "notExecuted": [
+    "Real email sending/receipt, registration and password reset",
+    "Successful cross-account coin spend: second account is not registered",
+    "Reward claims",
+    "Real profile/contact writes; original values preserved",
+    "All native comment-image and upload-failure manual combinations",
+    "Phone, small-screen, landscape and system large-font acceptance",
+    "All TOC last-section and mask scrolling manual edges"
+  ],
+  "evidence": {
+    "screenshots": "screenshots/20261106/index.html",
+    "imageManifest": "screenshots/20261106/manifest.json",
+    "sanitizedNativeNetwork": "NATIVE-NETWORK-20261106.json",
+    "realServiceAdapter": "REAL-MEMBER-API-20261106.json",
+    "publicRegression": "REAL-PUBLIC-API-20261106.json",
+    "unregisteredSecondAccount": "REAL-COINS-API-20261106.json"
+  }
+}

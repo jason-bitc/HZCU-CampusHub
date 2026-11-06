@@ -114,7 +114,7 @@ const articles = [
     summary: '补基础、做项目，再到投递和面试。',
     categories: { jobs: [catalog.jobs[0]], majors: [catalog.majors[0]], companies: [], topics: [catalog.topics[0]] },
     experienceStage: '大二暑假', jobNature: '实习', baseLevel: '会C++语法，暂无实习',
-    sourceType: 'FIRST_HAND', publishedAt: '2026-11-02T01:30:00Z', updatedAt: '2026-11-02T01:30:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-11-02T01:30:00Z', updatedAt: '2026-11-02T01:30:00Z',
     counts: { effectiveCoins: 12, effectiveLikes: 12, origin: 'LIVE' }, body: article1001Body, bodyFormat: 'MARKDOWN',
     sourceNote: '课程笔记整理', sourceLinks: [{ label: '课程笔记整理', url: 'https://example.com/campus-demo-notes' }]
   },
@@ -124,7 +124,7 @@ const articles = [
     summary: '简历准备、投递节奏与面试复盘。',
     categories: { jobs: [catalog.jobs[0]], majors: [catalog.majors[0]], companies: [catalog.companies[0]], topics: [catalog.topics[1]] },
     experienceStage: '大三暑假', jobNature: '实习', baseLevel: '做过课程项目，缺少实习经历',
-    sourceType: 'FIRST_HAND', publishedAt: '2026-11-01T08:00:00Z', updatedAt: '2026-11-01T08:00:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-11-01T08:00:00Z', updatedAt: '2026-11-01T08:00:00Z',
     counts: { effectiveCoins: 12, effectiveLikes: 8, origin: 'LIVE' }, body: '## 投递前\n\n先确认岗位要求和简历内容一致。\n\n## 复盘\n\n- 每次投递记录岗位、时间和结果。\n- 面试问题当天整理。', bodyFormat: 'MARKDOWN',
     sourceNote: '个人投递记录（演示）', sourceLinks: []
   },
@@ -134,7 +134,7 @@ const articles = [
     summary: '把筛选、详情、失败恢复与验证证据串起来。',
     categories: { jobs: [catalog.jobs[1]], majors: [catalog.majors[0]], companies: [catalog.companies[1]], topics: [catalog.topics[0]] },
     experienceStage: '大二暑期实践', jobNature: '项目实践', baseLevel: '完成前端课程设计',
-    sourceType: 'CURATED', publishedAt: '2026-10-29T02:00:00Z', updatedAt: '2026-10-29T02:00:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-10-29T02:00:00Z', updatedAt: '2026-10-29T02:00:00Z',
     counts: { effectiveCoins: 7, effectiveLikes: 20, origin: 'LIVE' }, body: '## 先定义任务\n\n页面完成不等于任务闭环。\n\n1. 写清输入。\n2. 处理失败。\n3. 保存验证证据。', bodyFormat: 'MARKDOWN',
     sourceNote: '项目复盘资料（演示）', sourceLinks: [{ label: '需求原型覆盖说明', url: 'https://example.com/prototype-notes' }]
   },
@@ -144,7 +144,7 @@ const articles = [
     summary: '从用例设计、边界意识到表达结构整理复盘。',
     categories: { jobs: [catalog.jobs[2]], majors: [catalog.majors[1]], companies: [], topics: [catalog.topics[1]] },
     experienceStage: '大三实习准备', jobNature: '实习', baseLevel: '熟悉基础测试方法',
-    sourceType: 'CURATED', publishedAt: '2026-10-26T02:00:00Z', updatedAt: '2026-10-26T02:00:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-10-26T02:00:00Z', updatedAt: '2026-10-26T02:00:00Z',
     counts: { effectiveCoins: 5, effectiveLikes: 6, origin: 'LIVE' }, body: '## 用例设计\n\n先区分正常、边界与失败，再说明优先级。\n\n> 不要把未执行的检查写成通过。', bodyFormat: 'MARKDOWN',
     sourceNote: '面试复盘模板（演示）', sourceLinks: []
   },
@@ -154,7 +154,7 @@ const articles = [
     summary: '长标题不应挤压标签或操作区域，摘要仍保持清楚的信息层级。',
     categories: { jobs: [catalog.jobs[1]], majors: [catalog.majors[2]], companies: [catalog.companies[0]], topics: [catalog.topics[1]] },
     experienceStage: '大四秋招', jobNature: '校招', baseLevel: '有一段完整项目经历',
-    sourceType: 'FIRST_HAND', publishedAt: '2026-10-21T02:00:00Z', updatedAt: '2026-10-21T02:00:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-10-21T02:00:00Z', updatedAt: '2026-10-21T02:00:00Z',
     counts: { effectiveCoins: 3, effectiveLikes: 9, origin: 'LIVE' }, body: article1001Body, bodyFormat: 'MARKDOWN',
     sourceNote: '长文排版演示', sourceLinks: [{ label: '长文资料', url: 'https://example.com/long-readability' }]
   },
@@ -164,7 +164,7 @@ const articles = [
     summary: '背景、行动、验证和不足，四部分说清项目。',
     categories: { jobs: [catalog.jobs[0]], majors: [catalog.majors[0]], companies: [catalog.companies[0]], topics: [catalog.topics[0]] },
     experienceStage: '大三实习准备', jobNature: '实习', baseLevel: '会Java基础，准备第一个项目',
-    sourceType: 'FIRST_HAND', publishedAt: '2026-10-18T02:00:00Z', updatedAt: '2026-10-18T02:00:00Z',
+    sourceType: 'DEMO', publishedAt: '2026-10-18T02:00:00Z', updatedAt: '2026-10-18T02:00:00Z',
     counts: { effectiveCoins: 9, effectiveLikes: 11, origin: 'LIVE' }, body: '## 背景\n\n为什么做。\n\n## 行动\n\n具体做了什么。\n\n## 验证\n\n怎样知道有效。', bodyFormat: 'MARKDOWN',
     sourceNote: '项目表达提纲（演示）', sourceLinks: []
   }

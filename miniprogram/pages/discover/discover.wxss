@@ -1,6 +1,6 @@
 .discover-page {
   min-height: 100vh;
-  padding-bottom: 118rpx;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
 }
 
 .demo-banner {
@@ -51,8 +51,8 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 48rpx;
-  height: 64rpx;
+  width: var(--touch-target) !important;
+  height: var(--touch-target);
 }
 
 .job-scroll {
@@ -71,12 +71,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 62rpx;
+  min-height: var(--touch-target);
   padding: 0 22rpx;
   border-radius: 8rpx;
   background: var(--color-surface);
   color: var(--color-text-secondary);
-  font-size: 25rpx;
+  font-size: var(--font-sm);
   white-space: nowrap;
 }
 
@@ -111,7 +111,7 @@
 .summary-value {
   display: flex;
   align-items: center;
-  min-height: 48rpx;
+  min-height: var(--touch-target);
   color: var(--color-primary);
   font-size: 25rpx;
   font-weight: 600;
@@ -127,7 +127,7 @@
   flex: none;
   align-items: center;
   gap: 4rpx;
-  min-height: 48rpx;
+  min-height: var(--touch-target);
   color: var(--color-text-secondary);
   font-size: 25rpx;
 }
@@ -140,16 +140,19 @@
 }
 
 .extra-chip {
-  padding: 6rpx 12rpx;
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  padding: 8rpx 16rpx;
   border-radius: 8rpx;
   background: var(--color-primary-soft);
   color: var(--color-primary-dark);
-  font-size: 22rpx;
+  font-size: var(--font-xs);
   line-height: 1.5;
 }
 
 .catalog-warning {
-  width: 100%;
+  width: 100% !important;
   margin-top: 12rpx;
   padding: 16rpx 20rpx;
   border-radius: var(--radius-sm);
@@ -167,7 +170,7 @@
 
 .sort-tab {
   position: relative;
-  min-height: 76rpx;
+  min-height: var(--touch-target);
   color: var(--color-text-secondary);
   font-size: 29rpx;
   font-weight: 500;
@@ -210,13 +213,13 @@
 }
 
 .load-more {
-  min-height: 60rpx;
+  min-height: var(--touch-target);
   color: var(--color-primary);
   font-size: var(--font-sm);
 }
 
 .load-more-error {
-  width: 100%;
+  width: 100% !important;
   padding: 20rpx;
   border-radius: var(--radius-sm);
   background: var(--color-danger-soft);
@@ -226,8 +229,17 @@
 
 .reader-rule {
   margin: 28rpx 0 24rpx;
-  color: var(--color-primary);
+  padding: 24rpx;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
   font-size: var(--font-sm);
   line-height: 1.7;
   text-align: center;
 }
+
+.search-submit { flex: none; min-height: var(--touch-target); padding: 0 8rpx; color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
+.filter-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+.filter-entry { display: flex; align-items: center; gap: 12rpx; min-height: var(--touch-target); color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
+.result-count, .list-end { color: var(--color-text-secondary); font-size: var(--font-xs); }
+.list-end { display: block; padding: 24rpx 0; }

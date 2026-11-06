@@ -42,7 +42,7 @@
 }
 
 .state-action {
-  width: 100%;
+  width: 100% !important;
   max-width: 520rpx;
   margin-top: 28rpx;
 }

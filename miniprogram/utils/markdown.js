@@ -1,13 +1,15 @@
 function normalizeExternalUrl(value) {
   const url = String(value || '').trim();
-  return /^https?:\/\/[^\s]+$/i.test(url) ? url : '';
+  // Reject control characters, backslashes and credentials; text is never HTML.
+  return /^https?:\/\/[^\s\\<>"\u0000-\u001f\u007f]+$/i.test(url) && !/^https?:\/\/[^/]*@/i.test(url) ? url : '';
 }
 
 function resolveAssetUrl(value, assetBaseUrl) {
   const url = String(value || '').trim();
-  if (/^https?:\/\/[^\s]+$/i.test(url)) return url;
+  const absolute = normalizeExternalUrl(url);
+  if (absolute) return absolute;
   if (url.charAt(0) === '/' && !url.startsWith('//') && assetBaseUrl) {
-    return `${String(assetBaseUrl).replace(/\/+$/, '')}${url}`;
+    return normalizeExternalUrl(`${String(assetBaseUrl).replace(/\/+$/, '')}${url}`);
   }
   return '';
 }
@@ -34,7 +36,8 @@ function parseInline(value) {
     cursor = match.index + token.length;
   }
   if (cursor < text.length) segments.push({ type: 'text', text: text.slice(cursor) });
-  return segments.length ? segments : [{ type: 'text', text: '' }];
+  const result = segments.length ? segments : [{ type: 'text', text: '' }];
+  return result.map((segment, key) => Object.assign({ key }, segment));
 }
 
 function parseMarkdown(body, options) {
@@ -67,13 +70,14 @@ function parseMarkdown(body, options) {
       continue;
     }
 
-    const fence = /^```\s*([\w-]*)\s*$/.exec(trimmed);
+    const fence = /^(`{3,}|~{3,})\s*([\w+-]*)[^\n]*$/.exec(trimmed);
     if (fence) {
       flushParagraph();
       const codeLines = [];
-      const language = fence[1] || '';
+      const language = fence[2] || '';
+      const closeFence = new RegExp(`^${fence[1].charAt(0)}{${fence[1].length},}\\s*$`);
       lineIndex += 1;
-      while (lineIndex < lines.length && !/^```\s*$/.test(lines[lineIndex].trim())) {
+      while (lineIndex < lines.length && !closeFence.test(lines[lineIndex].trim())) {
         codeLines.push(lines[lineIndex]);
         lineIndex += 1;
       }
@@ -81,23 +85,34 @@ function parseMarkdown(body, options) {
       continue;
     }
 
-    const heading = /^(#{1,4})\s+(.+)$/.exec(trimmed);
+    const heading = /^(#{1,6})\s+(.+)$/.exec(trimmed);
     if (heading) {
       flushParagraph();
       const id = nextId();
-      const node = { id, type: 'heading', level: heading[1].length, text: heading[2].trim() };
+      const node = { id, type: 'heading', level: heading[1].length, text: heading[2].replace(/\s+#+\s*$/, '').trim() };
       nodes.push(node);
-      headings.push({ id, level: node.level, text: node.text });
+      headings.push({ id, level: node.level, text: node.text, indent: Math.max(0, node.level - 2) * 16 });
       continue;
     }
 
-    const image = /^!\[([^\]]*)\]\((\S+?)(?:\s+["'][^"']*["'])?\)$/.exec(trimmed);
+    const imagePattern = /!\[([^\]]*)\]\((\S+?)(?:\s+["'][^"']*["'])?\)/g;
+    const image = imagePattern.exec(line);
     if (image) {
       flushParagraph();
-      const src = resolveAssetUrl(image[2], settings.assetBaseUrl);
-      const node = { id: nextId(), type: 'image', alt: image[1] || '正文图片', src, originalSrc: src, failed: !src };
-      nodes.push(node);
-      if (src) images.push(src);
+      let cursor = 0;
+      let match = image;
+      while (match) {
+        if (match.index > cursor) {
+          paragraph.push(line.slice(cursor, match.index));
+          flushParagraph();
+        }
+        const src = resolveAssetUrl(match[2], settings.assetBaseUrl);
+        nodes.push({ id: nextId(), type: 'image', alt: match[1] || '正文图片', src, originalSrc: src, failed: !src });
+        if (src) images.push(src);
+        cursor = match.index + match[0].length;
+        match = imagePattern.exec(line);
+      }
+      if (cursor < line.length) paragraph.push(line.slice(cursor));
       continue;
     }
 
@@ -115,18 +130,25 @@ function parseMarkdown(body, options) {
 
     if (/^([-*+]\s+|\d+[.)]\s+)/.test(trimmed)) {
       flushParagraph();
-      const ordered = /^\d+[.)]\s+/.test(trimmed);
       const items = [];
-      const itemPattern = ordered ? /^\d+[.)]\s+/ : /^[-*+]\s+/;
-      while (lineIndex < lines.length && itemPattern.test(lines[lineIndex].trim())) {
-        items.push({
-          marker: ordered ? `${items.length + 1}.` : '•',
-          segments: parseInline(lines[lineIndex].trim().replace(itemPattern, ''))
-        });
+      const itemPattern = /^(\s*)([-*+]|\d+[.)])\s+(.*)$/;
+      const indentStack = [];
+      while (lineIndex < lines.length) {
+        const item = itemPattern.exec(lines[lineIndex]);
+        if (item) {
+          const indent = item[1].replace(/\t/g, '    ').length;
+          while (indentStack.length && indent < indentStack[indentStack.length - 1]) indentStack.pop();
+          if (!indentStack.length || indent > indentStack[indentStack.length - 1]) indentStack.push(indent);
+          const level = indentStack.length - 1;
+          items.push({ id: items.length, marker: /^\d/.test(item[2]) ? item[2] : '•', level, indent: Math.min(level, 5) * 24, segments: parseInline(item[3]) });
+        } else if (/^\s+\S/.test(lines[lineIndex]) && items.length) {
+          const segments = items[items.length - 1].segments;
+          parseInline(`\n${lines[lineIndex].trim()}`).forEach((segment) => segments.push(Object.assign({}, segment, { key: segments.length })));
+        } else break;
         lineIndex += 1;
       }
       lineIndex -= 1;
-      nodes.push({ id: nextId(), type: 'list', ordered, items });
+      nodes.push({ id: nextId(), type: 'list', ordered: /^\d/.test(items[0].marker), items });
       continue;
     }
 

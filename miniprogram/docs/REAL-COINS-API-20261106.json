@@ -1,0 +1,94 @@
+{
+  "status": "FAIL",
+  "checkedAt": "2026-11-06T05:53:54.329Z",
+  "evidence": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "11534308-63a0-4a40-9f82-8c6ee7eedbad"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "681e0e1e-59f5-4347-87a3-6342e93c7c0e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coins",
+      "status": 200,
+      "code": "OK",
+      "traceId": "af429567-9263-4956-b110-7eecb958cdb9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2203205e-d275-457f-8283-5a8312c292db"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/restore",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ce7513fe-dc2d-4bd2-8d88-33b53d50715e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1992da98-b555-4f6f-b7ba-030d94216608"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 401,
+      "code": "LOGIN_FAILED",
+      "traceId": "8b05a5ce-b99b-4c68-a3a8-6a56dad4809d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9b1efd23-81a9-45f0-9ed8-5b594f34020f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bb2da6a9-61c1-4486-aa59-95911557e64d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "46d50437-9949-4ccd-9ef4-1e5aee14e187"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/unpublish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2258afff-58f5-476a-989a-3aaf4e6272b5"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "eb741d62-6cab-4115-9810-26cb16cdf3b7"
+    }
+  ],
+  "credentials": "omitted",
+  "userConfirmedUnregistered": true,
+  "rewardOrCoinWriteExecuted": false,
+  "outcome": "NOT_VERIFIED_ACCOUNT_UNREGISTERED"
+}

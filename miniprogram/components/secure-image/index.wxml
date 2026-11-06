@@ -1,0 +1,5 @@
+<view class="secure-image">
+  <image wx:if="{{src}}" class="secure-picture" src="{{src}}" mode="widthFix" bindtap="preview" aria-label="{{alt}}" />
+  <text wx:elif="{{loading}}" class="hint">正在读取图片…</text>
+  <view wx:elif="{{error}}"><text class="field-error">{{error}}</text><button class="button-secondary" bindtap="load">重试图片</button></view>
+</view>

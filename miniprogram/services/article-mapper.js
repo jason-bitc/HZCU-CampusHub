@@ -1,4 +1,5 @@
 const { sourceLabel, formatDate, joinCategoryNames } = require('../utils/format');
+const { normalizeExternalUrl } = require('../utils/markdown');
 
 function categories(value) {
   const input = value && typeof value === 'object' ? value : {};
@@ -41,11 +42,11 @@ function mapDetail(raw) {
   return Object.assign(mapSummary(raw), {
     body: String(raw.body || ''),
     bodyFormat: raw.bodyFormat || 'MARKDOWN',
-    sourceNote: String(raw.sourceNote || '作者未补充来源说明。'),
+    sourceNote: String(raw.sourceNote || ''),
     sourceLinks: Array.isArray(raw.sourceLinks) ? raw.sourceLinks.map((item) => ({
       label: String(item.label || '外部资料'),
-      url: String(item.url || '')
-    })) : []
+      url: normalizeExternalUrl(item.url)
+    })).filter((item) => item.url) : []
   });
 }
 

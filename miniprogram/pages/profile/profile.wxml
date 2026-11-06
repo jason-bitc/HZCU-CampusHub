@@ -1,0 +1,20 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="请先登录" description="{{error}}" action-text="登录校园账号" bindaction="login" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
+  <view wx:else>
+    <view wx:if="{{profile && contact}}">
+      <view class="field"><text class="field-label">昵称</text><input class="field-input" value="{{nickname}}" maxlength="-1" data-field="nickname" bindinput="input" disabled="{{busy || conflict}}" aria-label="昵称" /></view>
+      <view class="field"><text class="field-label">当前专业（可选）</text><picker range="{{majors}}" range-key="name" bindchange="major" disabled="{{busy || conflict}}"><view class="field-picker">{{majorName}}</view></picker></view>
+      <view class="field"><text class="field-label">当前在校／毕业阶段</text><picker range="{{stageNames}}" value="{{stageIndex}}" bindchange="stage" disabled="{{busy || conflict}}"><view class="field-picker">{{stageNames[stageIndex]}}</view></picker></view>
+      <view class="field"><text class="field-label">个人简介（可选）</text><textarea class="field-textarea" value="{{bio}}" maxlength="-1" data-field="bio" bindinput="input" disabled="{{busy || conflict}}" aria-label="个人简介" /></view>
+      <text class="hint">这里是当前阶段，文章的经历阶段需单独确认。校园邮箱仅本人可见。</text><button class="button-primary form-section" data-kind="profile" bindtap="save" loading="{{busy}}" disabled="{{busy || conflict}}">保存个人资料</button>
+      <text class="section-title">站外联系</text><view class="menu-row"><text>向认证读者公开联系方式</text><switch checked="{{enabled}}" color="#0d6b57" bindchange="enabled" disabled="{{busy || conflict}}" aria-label="公开联系方式" /></view>
+      <view class="field"><text class="field-label">联系类型</text><picker range="{{typeNames}}" value="{{typeIndex}}" bindchange="type" disabled="{{busy || conflict}}"><view class="field-picker">{{typeNames[typeIndex]}}</view></picker></view>
+      <view class="field"><text class="field-label">联系方式（可选，清空后保存可删除）</text><input class="field-input" value="{{contactValue}}" data-field="contactValue" bindinput="input" maxlength="-1" disabled="{{busy || conflict}}" aria-label="联系方式" /></view><text class="hint">关闭后仍为你保留已填内容。作者有公开文章且开关开启时，认证读者才能查看。</text><button class="button-primary form-section" data-kind="contact" bindtap="save" loading="{{busy}}" disabled="{{busy || conflict}}">保存联系设置</button>
+    </view>
+    <button wx:elif="{{!busy}}" class="button-secondary" bindtap="load">重新加载资料</button><text wx:else class="hint">正在读取资料…</text>
+    <view wx:if="{{conflict}}" class="list-row"><text class="section-title">另一端已有新修订</text><text class="hint">本机输入保留，尚未覆盖云端。请比较后选择。</text><text class="field-label">本机待保存</text><text class="conflict-copy">{{conflict.local}}</text><text class="field-label">云端最新</text><text class="conflict-copy">{{conflict.server}}</text><view class="form-actions"><button class="button-secondary" data-keep="server" bindtap="resolve">采用云端内容</button><button class="button-secondary" data-keep="local" bindtap="resolve">保留本机内容，继续核对</button></view></view>
+  </view>
+  <text wx:if="{{error}}" class="field-error">{{error}}</text><text wx:if="{{notice}}" class="success-note">{{notice}}</text>
+</view>

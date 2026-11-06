@@ -1,0 +1,456 @@
+{
+  "checkedAt": "2026-11-06T05:48:38.330Z",
+  "status": "PASS",
+  "base": "http://127.0.0.1:8080",
+  "fixtureArticleId": 2007,
+  "fixtureFinalState": "AUTHOR_OFFLINE",
+  "checks": [
+    {
+      "name": "前端登录适配器与/me核验成功",
+      "result": "PASS"
+    },
+    {
+      "name": "互动无正文，空对象会被真实后端拒绝",
+      "result": "PASS"
+    },
+    {
+      "name": "相同创建键不重复创建草稿",
+      "result": "PASS"
+    },
+    {
+      "name": "旧revision不会覆盖较新草稿",
+      "result": "PASS"
+    },
+    {
+      "name": "私有图片真实上传、同键重试及带鉴权下载",
+      "result": "PASS"
+    },
+    {
+      "name": "同一发布键返回原公开版本且正文图片公开可读",
+      "result": "PASS"
+    },
+    {
+      "name": "点赞与收藏真实设置、读取和取消",
+      "result": "PASS"
+    },
+    {
+      "name": "作者主页与联系开关遵守当前合同",
+      "result": "PASS"
+    },
+    {
+      "name": "评论与图片、同键回执和直接回复",
+      "result": "PASS"
+    },
+    {
+      "name": "本人评论删除后不泄露正文，正常回复保留",
+      "result": "PASS"
+    },
+    {
+      "name": "钱包、账目快照、奖励及阅读计时真实可读",
+      "result": "PASS"
+    },
+    {
+      "name": "本人文章和无真实作者演示文投币边界",
+      "result": "PASS"
+    },
+    {
+      "name": "下架后收藏只留允许字段，仍可无正文取消",
+      "result": "PASS"
+    },
+    {
+      "name": "恢复公开版本不会发布未保存内容",
+      "result": "PASS"
+    },
+    {
+      "name": "联调保留原资料和联系设置，测试文章最终下架",
+      "result": "PASS"
+    },
+    {
+      "name": "退出真实撤销令牌，端侧会话清空",
+      "result": "PASS"
+    }
+  ],
+  "evidence": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "841e39f8-0e9f-4905-9b86-e72d8997cefd"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "69e164fe-0bbe-4fb9-a742-2993373abe00"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bf680c96-d895-4984-a8e5-b7594dea254d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/contact-settings",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d563b53e-9d9b-4805-8c4c-1eed819864ed"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1001/like",
+      "status": 400,
+      "code": "INVALID_PARAMETER",
+      "traceId": "3acd0640-a2c9-437b-b1e2-0d607815d1a0"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "code": "OK",
+      "traceId": "0e602864-78d3-4e92-ab7a-1374ee50742f"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "code": "OK",
+      "traceId": "8e94c77f-2f95-433a-a3d4-cf60948a86c5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1c22aee2-856e-4114-afa6-8e0619ddf2ba"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b1775cb3-e3b4-4d4e-b70c-eb0277eb2e46"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e4dec094-83ec-43b7-8e38-06bccd7b4229"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 409,
+      "code": "REVISION_CONFLICT",
+      "traceId": "e5ea5a9d-c571-483f-b52c-57ae599a2780"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ad10e776-2abc-4d10-981b-655656e88c36"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/images",
+      "status": 200,
+      "code": "OK",
+      "traceId": "347e07d9-1eda-4c4a-ab7f-7a32cb22324d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/images",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9d515a42-4028-443d-bbd6-3e88c06b0458"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/b365d985-a0bf-46b5-9e4b-a94f7f8ef53f",
+      "status": 200,
+      "binary": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2007/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a0d4061a-18ba-4373-88a5-716d068cad83"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/publish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1aaff3f4-d8ad-4ab6-8ef5-f2cfedf405e3"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/publish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8eb5a99f-2375-4725-ac34-49ce7b694fd9"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2007/like",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2a3793f6-1b98-4d34-8b96-e777eef088b7"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2007/favorite",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b305250a-6d22-446d-87db-ac19069e353f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2007/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "257c9ef3-81aa-45d0-b14e-b9dd86df2f77"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2007/like",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5b6e6bb7-18af-4d5f-b373-ba8e0492c897"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2007/author",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9d87a9b6-e847-46a3-8a09-2ec31ad91ac3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authors/1",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7542f596-7810-4113-a99a-c1a72a2c8b67"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authors/1/contact",
+      "status": 200,
+      "code": "OK",
+      "traceId": "aa5b9fb5-cad8-43d0-96ff-d89ee1b5b825"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authors/1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e19c167f-1fe4-44e2-9e9a-ce4bb35f1c69"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/comment-images",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c0c5f942-5a74-4ab6-8363-239e810628b6"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/comments",
+      "status": 201,
+      "code": "OK",
+      "traceId": "3ff39cbb-2bc4-42d3-b68a-5b2ad330436e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/comments",
+      "status": 201,
+      "code": "OK",
+      "traceId": "d515b6d7-92e9-486d-b758-12c0ecf13c95"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2007/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8ecc6c81-65cb-4164-9b63-3871aa79369c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/comment-images/3d1ce86a-15b8-4c47-817b-9d4ad23432bd",
+      "status": 200,
+      "binary": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/comments",
+      "status": 201,
+      "code": "OK",
+      "traceId": "146b4b43-9b4c-4f62-a132-2bf884f1c460"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/comments/1/replies",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d5ff8bb1-0183-4c6c-b00d-acf503d876e2"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/comments/1",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b7d09b64-92fc-4fed-9d09-7ba3a02b0907"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/comments/1/replies",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cbe0aff9-d559-4a4d-a545-6c6759b423d6"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/comments/2",
+      "status": 200,
+      "code": "OK",
+      "traceId": "17dec756-712b-45d4-ac59-16eb7ba8326c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coins",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5867be8d-db6f-4162-8e45-b327e9e459d1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coin-ledger",
+      "status": 200,
+      "code": "OK",
+      "traceId": "783105c7-ce4c-49d3-9ac1-1d765a8f600a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coin-ledger",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a0f6fcce-16b5-4cb8-925b-f4096e984276"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/rewards",
+      "status": 200,
+      "code": "OK",
+      "traceId": "83a684f6-8d6e-4ef4-a57c-27b4719457d4"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/reading-session",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d2aefa4d-a4e1-4f46-b89a-0b21c9aaecc8"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/reading-session",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6993f055-bc63-421a-a176-0b73649a9441"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2007/coin-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2ffab05b-67b2-4c4b-a44e-fb3db75cf42b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/coin-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "627fe7dc-c389-444e-8875-a00e9b238a38"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2007/coins",
+      "status": 409,
+      "code": "SELF_ARTICLE",
+      "traceId": "2c4a0f8c-36c2-45b3-aa67-34ad14957c6b"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/unpublish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0693c3ac-1e91-47ed-bfc0-92ce2fc00052"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2244c225-4a80-4282-b95e-0731f3843cbb"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2007/favorite",
+      "status": 200,
+      "code": "OK",
+      "traceId": "94874f60-e408-4378-829a-8ee207c2f964"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/restore",
+      "status": 200,
+      "code": "OK",
+      "traceId": "dae7c3b2-86fd-41f5-929b-7aa2c6746a57"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2007/unpublish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4eefcf3d-341e-48cb-9f34-ceeb75c63f66"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5ebb9bcb-c329-47b9-a816-262c247a96d0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/contact-settings",
+      "status": 200,
+      "code": "OK",
+      "traceId": "da4a5d07-2e6d-4c25-80f9-bb1997103c30"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "eaea2c36-872d-4ff2-ac5c-4a5f31f65296"
+    }
+  ],
+  "notExecuted": [
+    "真实验证码邮件与注册/重置",
+    "第二账号成功投币",
+    "微信原生上传与下载行为",
+    "手机真机"
+  ],
+  "notes": [
+    "使用既有本机账号与私密密码，不输出凭据。",
+    "未修改个人资料、联系设置或原有文章。",
+    "未领取奖励；阅读会话只建立服务端计时，不自动发币。",
+    "Node wx桥用于执行实际前端service适配器；不代表模拟器或真机验收。"
+  ]
+}

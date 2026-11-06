@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-11-06T07:52:33.666905+00:00",
+  "source": "Google Chrome 156 / Playwright；真实本机 Java 后端；1440×1000 / 390×844，完整冲突面板另有全图。",
+  "count": 13,
+  "images": [
+    {
+      "file": "W01-discover-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "0ad207226c7f7e3fb90d74612d7908589a830e109d7975d880d4f13d877773dc"
+    },
+    {
+      "file": "W01-discover-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "817d89cbe54ffaea5de8540845eb45a1fcc6d4663551799bcaa9acfe6833406f"
+    },
+    {
+      "file": "W02-guest-reading.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e05dfc065156889814e5725bcb35b160305a5070afdec4a25868eee9e6c033fe"
+    },
+    {
+      "file": "W05-editor-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4c8a533b59b96f94a4ca417f398468a46161db0cb8f35dcccebb404bd7e3cef5"
+    },
+    {
+      "file": "W05-editor-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "69d67f71142192dc4ca914968dfe990c8f692c25bfe2c0f7e9b14e5c26b70f64"
+    },
+    {
+      "file": "W05-mobile-preview.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "264080f32a9b0fefcf265f6f0716628236a358b49429212bf37a58e9a8116c16"
+    },
+    {
+      "file": "W05-mobile-publish-info.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "ee89dd4691a5badd36fb715c4c8f7e767cc0f358bc1905102e220fd3d09b4579"
+    },
+    {
+      "file": "W06-workspace-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "3184d73f75d3af7ff41e9ab946859d7b0fa1fa041bb112fc8036a6ef81d27a27"
+    },
+    {
+      "file": "W06-workspace-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "e68826770e7d15ac9116906f9ae432860941edfa14c1bfe93331fd91d49dabbc"
+    },
+    {
+      "file": "W07-conflict-mobile-server.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "49e10b632170a0f2d7bff626d269af19ebde7a69c8ab5812f3f7f15af796123e"
+    },
+    {
+      "file": "W07-conflict-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "d0b47e86ec64c1703837b4bbf69f4fb1f219b9a32013fbb7d7b93f35590e5860"
+    },
+    {
+      "file": "W07-revision-conflict-full.png",
+      "width": 1368,
+      "height": 1607,
+      "sha256": "28166955271931f22321e8b26f021f4aa31897788da38b74f56c86e482545567"
+    },
+    {
+      "file": "W07-revision-conflict.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "0ce8abfca310e9c5507e6b4e49e1df03a424bc5cfa6e3bbfe815e15afd1d2afa"
+    }
+  ]
+}
