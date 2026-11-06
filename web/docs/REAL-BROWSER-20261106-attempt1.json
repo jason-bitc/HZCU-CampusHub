@@ -1,0 +1,117 @@
+{
+  "checkedAt": "2026-11-06T07:31:35.632Z",
+  "status": "FAIL",
+  "base": "http://127.0.0.1:5173",
+  "browser": "Installed Google Chrome, Playwright",
+  "backend": "real local Java/MySQL",
+  "assertions": [
+    "real empty-result and clear-filter recovery",
+    "guest full article, safe Markdown and compact TOC navigation",
+    "real login and session recovery after browser reload"
+  ],
+  "evidence": [
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "traceId": "691f25cc-17c9-44e3-a3a9-3568e7d25543"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "51e1cd57-7dad-437d-b11c-b5cff2602017"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "323d6397-c3b2-4618-b77d-1e7be8c6659a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "89536e3d-3515-42bc-9778-7119aaf0be49"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005",
+      "status": 200,
+      "traceId": "d239dbaf-6f45-47c9-ba02-335362b1eeb3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/e3b9d1ff-ddc9-403f-a98c-26fd92ea54ad",
+      "status": 200,
+      "traceId": "6fff6ae7-cb03-4f1d-800b-f8607d6c6f64"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "traceId": "0f0577f1-3fd0-4944-b6a7-07db2a0953c9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "7f871278-4aab-4de6-8515-9c28c4c3a182"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "traceId": "d9446a2d-44c9-43a0-8505-800a90228f7a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "eafee833-33ab-4dba-ad65-122fdeea6a08"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "traceId": "3dca2ae8-1d95-484d-bee9-64590dc7e665"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "traceId": "d09dcb71-0c13-465b-90df-f1ffcf4117df"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "traceId": "aba087a4-1af4-4388-a801-f41b991308a3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "480cb992-da30-4a39-bfd6-95bfbd1a91d3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "03755734-76cd-47e4-afb9-6a5a33bbc57b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "2ef3d4a1-df65-4930-bba4-02bad6ea2263"
+    }
+  ],
+  "emailsSent": 0,
+  "coinsSpent": 0,
+  "realDevice": "NOT_RUN",
+  "failure": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('内容来源', { exact: true })\u001b[22m\n",
+  "fixtureFinalState": "DRAFT",
+  "fixtureArticleId": 2008,
+  "uncaughtPageErrors": 0
+}

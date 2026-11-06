@@ -1,0 +1,76 @@
+{
+  "checkedAt": "2026-11-06T07:52:33.674905+00:00",
+  "baseline": "9598179ea0b2adfce867cf1aef05f735e14b0e03",
+  "branch": "feat/ljh-frontend-foundation",
+  "native": {
+    "tests": {
+      "structure": [
+        10,
+        10
+      ],
+      "guestBehavior": [
+        10,
+        10
+      ],
+      "memberBehavior": [
+        20,
+        20
+      ]
+    },
+    "compiler": {
+      "WXML": 19,
+      "WXMLExit": 0,
+      "WXSS": 23,
+      "WXSSExit": 0,
+      "firstWxssInvocation": "Windows separators did not resolve imports; normalized to / and reran successfully"
+    },
+    "simulator": "Stable 2.02.2609240; 363x785",
+    "realActions": [
+      "login",
+      "workspace read",
+      "wallet read",
+      "logout"
+    ],
+    "configRestoredByteExact": true,
+    "screenshots": "screenshots/20261106-polish/index.html",
+    "realDevice": "NOT_RUN"
+  },
+  "web": {
+    "typecheck": "PASS",
+    "build": "PASS",
+    "logicTests": [
+      7,
+      7
+    ],
+    "realBrowserAssertions": [
+      14,
+      14
+    ],
+    "screenshots": "../../web/docs/screenshots/20261106-web-foundation/index.html",
+    "realDevice": "NOT_RUN"
+  },
+  "backend": {
+    "checkoutBranch": "feat/wc-community-foundation",
+    "checkoutHead": "399dcbb0009fa9ae4ac557fb7e9296775fcd7be9",
+    "runningJarSha256": "DF9A0AA75F42F620E8D75DB29DB53322A4A3FDC555D6001869760258C8365459",
+    "jarChanged": false
+  },
+  "sideEffects": {
+    "fixtureArticleId": 2008,
+    "finalFixtureState": "AUTHOR_OFFLINE",
+    "fixtureLikesAndFavoritesRemoved": true,
+    "verificationEmailsSent": 0,
+    "coinRewardsClaimed": 0,
+    "coinsSpent": 0,
+    "profileAndContactChanged": false
+  },
+  "review": {
+    "initialDisposition": "fix",
+    "finalDisposition": "ship",
+    "resolved": [
+      "readable conflict fields",
+      "source metadata placement",
+      "balanced mobile title"
+    ]
+  }
+}

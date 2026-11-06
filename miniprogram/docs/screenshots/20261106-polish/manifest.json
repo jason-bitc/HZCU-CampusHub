@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-11-06T07:52:33.670906+00:00",
+  "source": "微信开发者工具 Stable 2.02.2609240；真实本机后端；363×785。",
+  "count": 2,
+  "images": [
+    {
+      "file": "wallet.png",
+      "width": 363,
+      "height": 785,
+      "sha256": "84b6703668263b48d4d7cb85cee2702935521f872d25205da8d0ec34ee6314c3"
+    },
+    {
+      "file": "workspace.png",
+      "width": 363,
+      "height": 785,
+      "sha256": "0199bdff2013eaaa219436c5eb10a5afdb3892a4828864341a736f7846af7051"
+    }
+  ]
+}

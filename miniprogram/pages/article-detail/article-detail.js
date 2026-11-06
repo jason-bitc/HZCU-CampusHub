@@ -87,11 +87,11 @@ Page({
     const reasons = { NO_REAL_AUTHOR: '该文章没有关联真实作者，不能投币。', SELF_ARTICLE: '不能给自己的文章投币。', ARTICLE_COIN_LIMIT: '已达到这篇文章的累计投币额度。' };
     if (!state.eligible) { this.setData({ memberError: reasons[state.reason] || '当前文章暂不可投币' }); return; }
     const max = Math.min(2, state.remaining, wallet.balance);
-    if (max < 1) { this.setData({ memberError: '非现金币余额不足，可在“我的 → 我的非现金币”查看奖励。' }); return; }
+    if (max < 1) { this.setData({ memberError: '硬币余额不足，可在“我的 → 我的硬币”查看奖励。' }); return; }
     const amounts = max >= 2 ? [1, 2] : [1];
     wx.showActionSheet({ itemList: amounts.map((n) => `投 ${n} 币`), success: (choice) => {
       const amount = amounts[choice.tapIndex];
-      wx.showModal({ title: `确认投 ${amount} 币？`, content: '将从你的非现金币余额中扣除，不能自行撤回。投币不会购买内容，全文始终免费。', success: (r) => { if (!r.confirm || !this.data.authenticated) return; const value = { amount, requestId: pending.uuid() }; try { pending.write(`coin:${this.data.articleId}`, value); this.setData({ pendingCoin: value }); this.submitCoins(); } catch (_) { this.setData({ memberError: '无法保留投币请求，请稍后重试' }); } } });
+      wx.showModal({ title: `确认投 ${amount} 币？`, content: '将从你的硬币余额中扣除，不能自行撤回。投币不会购买内容，全文始终免费。', success: (r) => { if (!r.confirm || !this.data.authenticated) return; const value = { amount, requestId: pending.uuid() }; try { pending.write(`coin:${this.data.articleId}`, value); this.setData({ pendingCoin: value }); this.submitCoins(); } catch (_) { this.setData({ memberError: '无法保留投币请求，请稍后重试' }); } } });
     } });
   },
   async submitCoins() {

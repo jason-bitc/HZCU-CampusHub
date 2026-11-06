@@ -1,0 +1,291 @@
+{
+  "checkedAt": "2026-11-06T07:33:23.811Z",
+  "status": "FAIL",
+  "base": "http://127.0.0.1:5173",
+  "browser": "Installed Google Chrome, Playwright",
+  "backend": "real local Java/MySQL",
+  "assertions": [
+    "real empty-result and clear-filter recovery",
+    "guest full article, safe Markdown and compact TOC navigation",
+    "real login and session recovery after browser reload",
+    "complete Markdown/table/code retained and HTML script remains literal",
+    "real multipart image upload and Bearer Blob preview without token URL",
+    "real 409 preserves local edits and shows server/local versions; explicit merge required",
+    "explicit publish confirmation and real publish receipt",
+    "real bodyless like/favorite and visible favorites list",
+    "unavailable favorite does not reveal historical title/body"
+  ],
+  "evidence": [
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "traceId": "65f1b169-9c8d-47c9-89c4-99da0338e680"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "464b5f96-50f3-4135-a87b-ef36a4eb71be"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "46049755-c12c-4114-8ce3-3fec8306a98a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "287e7dd4-9497-4993-9482-6bdad596a9f8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005",
+      "status": 200,
+      "traceId": "995ee94d-df2a-42a5-b149-f9693a0bd851"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/e3b9d1ff-ddc9-403f-a98c-26fd92ea54ad",
+      "status": 200,
+      "traceId": "505f7bf8-34a9-4f53-a986-93c616d5519c"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "traceId": "576980c8-7b04-43f0-a82e-4cc833498672"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "38adfcdf-2f7d-4154-bec3-06fb2594b91e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "traceId": "0afb9f99-8ce5-4483-8c1f-5321967b9689"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "916da3a3-d766-464d-b741-23d55fed88b2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "traceId": "673d1e20-5c9a-4324-8198-a4396632d005"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "8221cbd8-e2ed-4697-9647-47b482013e9e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "traceId": "966dc5b8-fa87-4f48-88bb-55aed5751cb3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "835cb11c-d0e2-4bc4-8e53-22bd985f7506"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "87e360e7-3903-4268-9ea7-fe4d2bf73e15"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "ee766619-92bd-4cf1-a4a1-17095e0030a6"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2008/images",
+      "status": 200,
+      "traceId": "2529798d-1fa1-43ec-a9c8-289c9de3e398"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/3ea3af61-6ee4-40e5-a18e-d27844f1c5b4",
+      "status": 200,
+      "traceId": "30dab88b-26dc-46d1-8e43-1ae104051f33"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "5ccc25e8-5517-4b85-afec-9360b2972669"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "59484b17-348e-49a3-b410-fc271a8c5993"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "4df05560-4350-4d06-9b5e-15ec50969601"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 409,
+      "traceId": "fb6aa400-0e8d-481b-b12a-b553502bd50f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "a26269e6-964d-422b-b343-6e521d7963fa"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "8668d0f4-dadb-4e87-97b5-19781c3a4907"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2008/publish",
+      "status": 200,
+      "traceId": "128e558a-4cf4-4f26-a420-ba93b92c3152"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "857d3558-782f-42fa-b91e-37c2729dbeac"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008",
+      "status": 200,
+      "traceId": "7c396d44-f4cf-4fcd-9228-06bea16dea5e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008/interaction-state",
+      "status": 200,
+      "traceId": "0b0c0fe5-dc4c-43e7-8009-337b0a086a6e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/3ea3af61-6ee4-40e5-a18e-d27844f1c5b4",
+      "status": 200,
+      "traceId": "29e6d46a-7e17-4945-88e1-13f851a1fde4"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2008/like",
+      "status": 200,
+      "traceId": "35c1c6ea-8c32-49c8-98dc-3ac1ea57416b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008/interaction-state",
+      "status": 200,
+      "traceId": "c9744bdc-6b8c-4e61-a328-66ef15e0921b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008",
+      "status": 200,
+      "traceId": "52810bef-590d-43ac-a912-cea01ead0fbc"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2008/favorite",
+      "status": 200,
+      "traceId": "c3c39f8d-c82e-402d-b1d1-698f3991a11e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008/interaction-state",
+      "status": 200,
+      "traceId": "50940398-e4bc-4c2c-acbb-43c721541c0c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2008",
+      "status": 200,
+      "traceId": "1a724ce3-0d3d-412d-8015-9d2bd37f996a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "4b8506c7-71d5-4544-b730-59cbbd6a54d9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "0cdf9d73-2749-4931-b8b5-b2b782371a29"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2008/unpublish",
+      "status": 200,
+      "traceId": "d9b496e5-de6c-42b2-aa34-073e3aace112"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "26807357-e8f5-4013-aaea-c5a2c5864ba1"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2008/like",
+      "status": 404,
+      "traceId": "fbfa0b04-e20d-4336-a85a-cc6edcb0ad16"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2008/favorite",
+      "status": 200,
+      "traceId": "0ce0ce44-fbe8-437a-bc73-f87329e43004"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "4009e2be-ceee-454c-9a42-6279403c9fc4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "d3615d4a-3091-47d8-a052-e3bb5c12c2c3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2008/draft",
+      "status": 200,
+      "traceId": "f296b31e-7dad-4307-aabe-cb9255eaaf5c"
+    }
+  ],
+  "emailsSent": 0,
+  "coinsSpent": 0,
+  "realDevice": "NOT_RUN",
+  "failure": "page.evaluate: Error: 404 NOT_FOUND\n    at eval (eval at evaluate (:370:30), <anonymous>:6:52)\n    at async <anonymous>:381:23",
+  "fixtureFinalState": "AUTHOR_OFFLINE",
+  "fixtureArticleId": 2008,
+  "uncaughtPageErrors": 0
+}
