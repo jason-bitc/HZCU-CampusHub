@@ -9,6 +9,9 @@
     <view wx:if="{{complexSource}}" class="notice">复杂 Markdown 暂不支持在小程序内修改。原文已完整保留，可预览或复制到完整编辑器继续处理。</view>
     <view wx:elif="{{readOnly}}" class="notice">这篇内容处于不可编辑状态，可以查看和复制草稿，不能自行发布或恢复。</view>
     <button wx:if="{{readOnly}}" class="button-secondary form-section" bindtap="copyBody">复制原始 Markdown 正文</button>
+    <view wx:if="{{complexSource && articleState !== 'ADMIN_HIDDEN'}}" class="notice form-section">在电脑端使用同一校园账号，打开网页工作区继续编辑云端草稿。</view>
+    <button wx:if="{{complexSource && webHandoff && articleState !== 'ADMIN_HIDDEN'}}" class="button-secondary form-section" bindtap="copyWebEditor">复制网页编辑地址</button>
+    <button wx:if="{{publishRestricted}}" class="button-secondary form-section" bindtap="appeals">查看发布限制与申诉</button>
     <view wx:if="{{recovery}}" class="list-row"><text class="row-title">发现本机编辑副本</text><text class="hint">{{recovery.savedAt}} · 基于修订 {{recovery.baseRevision}}。云端内容已载入，选择后再继续。</text><view class="form-actions"><button class="button-secondary" bindtap="recover" disabled="{{readOnly}}">恢复本机副本并核对修订</button><button class="button-secondary" bindtap="copyRecovery">复制完整本机副本</button><button class="button-text" bindtap="keepServer">继续使用当前云端内容</button></view></view>
     <view wx:if="{{form}}">
       <text wx:if="{{notice}}" class="success-note">{{notice}}</text><text wx:if="{{error}}" class="field-error">{{error}}</text>

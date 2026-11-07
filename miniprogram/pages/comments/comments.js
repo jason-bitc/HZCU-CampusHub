@@ -3,13 +3,14 @@ const media = require('../../services/media');
 const access = require('../../utils/member-page');
 const local = require('../../utils/operation');
 const { mapComment } = require('../../utils/comment-view');
-const blank = { items: [], root: null, total: 0, page: 0, body: '', uploads: [], replyTo: null, pendingComment: null, commentUncertain: false, loaded: false };
+const blank = { items: [], root: null, total: 0, page: 0, body: '', uploads: [], replyTo: null, pendingComment: null, commentUncertain: false, restricted: false, loaded: false };
 Page({
   data: Object.assign({ articleId: 0, rootId: 0, authStatus: 'checking', busy: false, error: '', notice: '' }, blank),
   onLoad(options) { this.setData({ articleId: Number(options.id) }); access.attach(this, blank, (reason) => { if (reason && reason !== 'logout') this.checkpoint(); }); },
   async onShow() { if (this._choosingMedia && this.data.authStatus === 'ready') return; if (!await access.enter(this)) return; if (!Number.isSafeInteger(this.data.articleId) || this.data.articleId <= 0) { this.setData({ error: '文章链接无效' }); return; } const saved = local.read(`comment:${this.data.articleId}`); if (saved && !this.data.body && !this.data.uploads.length) this.setData(saved); await this.load(true); },
   onHide() { this.checkpoint(); }, onUnload() { this.checkpoint(); access.leave(this); }, login: access.login,
-  checkpoint() { if (!this._ownerId) return; try { local.write(`comment:${this.data.articleId}`, { body: this.data.body, uploads: this.data.uploads, replyTo: this.data.replyTo, pendingComment: this.data.pendingComment, commentUncertain: this.data.commentUncertain }, this._ownerId); } catch (_) { this.setData({ notice: '本机副本存储失败，请保留当前页面。' }); } },
+  checkpoint() { if (!this._ownerId) return false; try { local.write(`comment:${this.data.articleId}`, { body: this.data.body, uploads: this.data.uploads, replyTo: this.data.replyTo, pendingComment: this.data.pendingComment, commentUncertain: this.data.commentUncertain }, this._ownerId); return true; } catch (_) { this.setData({ notice: '本机副本存储失败，请保留当前页面。' }); return false; } },
+  saveInput() { if (this.checkpoint()) this.setData({ notice: '已保存当前文字及附件状态。' }); },
   async load(reset, preserveError = false) {
     if (this.data.busy || this.data.authStatus !== 'ready') return; const epoch = this._epoch; const root = this.data.rootId; const page = reset === true ? 1 : this.data.page + 1; this.setData({ busy: true, error: preserveError ? this.data.error : '' });
     try { const result = await (root ? api.replies(root, page) : api.comments(this.data.articleId, page)); if (epoch !== this._epoch || root !== this.data.rootId) return; const seen = new Map((page === 1 ? [] : this.data.items).map((r) => [r.commentId, r])); result.items.map(mapComment).forEach((r) => seen.set(r.commentId, r)); this.setData({ items: [...seen.values()], root: result.root ? mapComment(result.root) : null, total: result.total, page, loaded: true }); }
@@ -44,8 +45,8 @@ Page({
       this.setData({ commentUncertain: false, pendingComment: { requestId: local.uuid(), body: this.data.body, imageIds: this.data.uploads.map((f) => f.image.imageId), replyToCommentId: this.data.replyTo ? this.data.replyTo.commentId : null } }); this.checkpoint();
     }
     const epoch = this._epoch; this.setData({ busy: true, error: '' });
-    try { const receipt = await api.comment(this.data.articleId, this.data.pendingComment); if (epoch !== this._epoch) return; this.setData({ body: '', replyTo: null, pendingComment: null, commentUncertain: false, uploads: [], notice: `评论已提交 · 编号 ${receipt.commentId}` }); local.remove(`comment:${this.data.articleId}`); }
-    catch (error) { if (epoch === this._epoch) { this.setData({ error: access.errorText(error) }); if (!error.status || error.status >= 500) this.setData({ commentUncertain: true }); if (!this.data.commentUncertain && error.status >= 400 && error.status < 500 && ![401, 403, 409].includes(error.status)) this.setData({ pendingComment: null }); this.checkpoint(); } }
+    try { const receipt = await api.comment(this.data.articleId, this.data.pendingComment); if (epoch !== this._epoch) return; this.setData({ body: '', replyTo: null, pendingComment: null, commentUncertain: false, restricted: false, uploads: [], notice: `评论已提交 · 编号 ${receipt.commentId}` }); local.remove(`comment:${this.data.articleId}`); }
+    catch (error) { if (epoch === this._epoch) { this.setData({ error: access.errorText(error) }); if (!error.status || error.status >= 500) this.setData({ commentUncertain: true }); if (error.code === 'BEHAVIOR_RESTRICTED') this.setData({ restricted: true }); if (!this.data.commentUncertain && (error.code === 'BEHAVIOR_RESTRICTED' || error.status >= 400 && error.status < 500 && ![401, 403, 409].includes(error.status))) this.setData({ pendingComment: null }); this.checkpoint(); } }
     finally { if (epoch === this._epoch) { this.setData({ busy: false }); if (!this.data.pendingComment) this.load(true, true); } }
   },
   copy() { wx.setClipboardData({ data: this.data.body }); },
@@ -54,5 +55,16 @@ Page({
     if (this.data.busy) return; const commentId = Number(e.currentTarget.dataset.id);
     wx.showModal({ title: '删除这条本人评论？', content: '删除后正文和图片不再展示，他人的回复会保留。', success: async (r) => { if (!r.confirm) return; const epoch = this._epoch; this.setData({ busy: true }); try { await api.deleteComment(commentId); } catch (error) { if (epoch === this._epoch) this.setData({ error: access.errorText(error) }); } finally { if (epoch === this._epoch) { this.setData({ busy: false }); this.load(true); } } } });
   },
+  original() {
+    const pages = getCurrentPages();
+    const previous = pages[pages.length - 2];
+    if (previous && previous.route === 'pages/article-detail/article-detail' && previous.options && Number(previous.options.id) === this.data.articleId) wx.navigateBack();
+    else wx.navigateTo({ url: `/pages/article-detail/article-detail?id=${this.data.articleId}` });
+  },
+  report(e) {
+    const id = Number(e.currentTarget.dataset.id);
+    if (this.data.authStatus === 'ready' && Number.isSafeInteger(id) && id > 0) wx.navigateTo({ url: `/pages/feedback-form/feedback-form?type=COMMENT&id=${id}` });
+  },
+  appeals() { wx.navigateTo({ url: '/pages/appeals/appeals?scope=COMMENT' }); },
   author(e) { wx.navigateTo({ url: `/pages/author/author?id=${e.currentTarget.dataset.id}` }); }
 });

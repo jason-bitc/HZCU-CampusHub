@@ -7,9 +7,9 @@ const { bytes } = require('../../utils/validation');
 const config = require('../../config/env');
 const sourceTypes = [null, 'FIRST_HAND', 'CURATED', 'DEMO'];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
-const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false };
+const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false };
 Page({
-  data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
+  data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, webHandoff: !!config.webBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
   onLoad(options) {
     const articleId = Number(options.id); this.setData({ articleId });
     access.attach(this, blank, (reason) => { if (reason && reason !== 'logout') this.checkpoint(); this.saved = null; });
@@ -23,7 +23,7 @@ Page({
   onUnload() { this.checkpoint(); access.leave(this); }, login: access.login,
   checkpoint() {
     if (!this.data.form || !this._ownerId) return;
-    try { local.write(`draft:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, savedAt: new Date().toISOString() }, this._ownerId); }
+    try { local.write(`draft:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, dirty: this.data.dirty, savedAt: new Date().toISOString() }, this._ownerId); }
     catch (_) { this.setData({ notice: '本机副本存储失败，请保持当前页面并先复制正文。云端保存尚未确认。' }); }
   },
   async load() {
@@ -87,7 +87,7 @@ Page({
   backup() { const recovery = local.read(`backup:${this.data.articleId}`); if (recovery) this.setData({ recovery }); },
   keepServer() { this.setData({ recovery: null }); },
   resolve(e) {
-    const conflict = this.data.conflict; if (!conflict) return; this.checkpoint(); local.write(`backup:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, savedAt: new Date().toISOString() }, this._ownerId); this.setData({ hasBackup: true });
+    const conflict = this.data.conflict; if (!conflict) return; this.checkpoint(); local.write(`backup:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, dirty: this.data.dirty, savedAt: new Date().toISOString() }, this._ownerId); this.setData({ hasBackup: true });
     if (e.currentTarget.dataset.keep === 'local' && content.blocks(conflict.latest.content.body) === null) { this.setData({ error: '云端新版本含复杂 Markdown。本机副本已保留，请复制后在完整编辑器中比较合并。' }); return; }
     if (e.currentTarget.dataset.keep === 'local') { this.setData({ revision: conflict.latest.revision, articleState: conflict.latest.state, stateText: stateNames[conflict.latest.state] || '状态待核对', readOnly: conflict.latest.state === 'ADMIN_HIDDEN' || conflict.latest.state === 'DELETED', conflict: null, notice: '已保留本机内容，请比较修改后再次保存。尚未写入云端。' }); this.checkpoint(); }
     else { this.applyDraft(conflict.latest); this.setData({ conflict: null, notice: '已载入云端版本，原本机副本仍保留。' }); }
@@ -106,11 +106,22 @@ Page({
   },
   async retryPublish() {
     if (!this.data.pendingPublish || this.data.busy || this.data.authStatus !== 'ready') return; const epoch = this._epoch; this.setData({ busy: true, error: '', notice: '正在核对发布结果…' });
-    try { const receipt = await api.publish(this.data.articleId, this.data.pendingPublish); if (epoch !== this._epoch) return; this.setData({ pendingPublish: null, reconciled: null, revision: receipt.revision, articleState: 'PUBLISHED', stateText: '已发布', notice: `发布成功 · 公开版本 ${receipt.versionId}`, dirty: false }); this.saved = JSON.stringify(this.data.form); this.checkpoint(); }
-    catch (error) { if (epoch === this._epoch) this.setData({ error: access.errorText(error), notice: '发布结果未确认。继续核对会沿用原请求，不会重新保存或新建公开版本。' }); }
+    try { const receipt = await api.publish(this.data.articleId, this.data.pendingPublish); if (epoch !== this._epoch) return; this.setData({ pendingPublish: null, reconciled: null, publishRestricted: false, revision: receipt.revision, articleState: 'PUBLISHED', stateText: '已发布', notice: `发布成功 · 公开版本 ${receipt.versionId}`, dirty: false }); this.saved = JSON.stringify(this.data.form); this.checkpoint(); }
+    catch (error) {
+      if (epoch !== this._epoch) return;
+      if (error.code === 'BEHAVIOR_RESTRICTED') {
+        this.setData({ error: access.errorText(error), publishRestricted: true, pendingPublish: null, notice: '发布未受理，草稿已保留。' });
+        this.checkpoint();
+      } else this.setData({ error: access.errorText(error), notice: '发布结果未确认。继续核对会沿用原请求，不会重新保存或新建公开版本。' });
+    }
     finally { if (epoch === this._epoch) this.setData({ busy: false }); }
   },
   async reconcile() { const epoch = this._epoch; try { const draft = await api.draft(this.data.articleId); if (epoch === this._epoch) this.setData({ reconciled: draft }); } catch (e) { if (epoch === this._epoch) this.setData({ error: access.errorText(e) }); } },
   endPending() { if (!this.data.reconciled) return; wx.showModal({ title: '停止重试上次发布？', content: '上次请求可能已经成功。请先查看当前公开文章核对；停止后保留本机内容，再按云端修订处理差异。', success: (r) => { if (!r.confirm) return; this.setData({ pendingPublish: null }); this.readConflict(); this.checkpoint(); } }); },
+  appeals() { wx.navigateTo({ url: '/pages/appeals/appeals?scope=PUBLISH' }); },
+  copyWebEditor() {
+    if (!config.webBaseUrl || this.data.authStatus !== 'ready' || !this.data.complexSource || this.data.articleState === 'ADMIN_HIDDEN') return;
+    wx.setClipboardData({ data: `${config.webBaseUrl}/#/editor/${this.data.articleId}` });
+  },
   viewPublished() { wx.navigateTo({ url: `/pages/article-detail/article-detail?id=${this.data.articleId}` }); }
 });

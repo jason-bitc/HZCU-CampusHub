@@ -1,0 +1,6 @@
+@import '../../styles/sections.wxss';
+.feedback-link { margin: 24rpx 0 !important; display: block; width: 100% !important; text-align: left; }
+.history-row { display: flex; gap: 22rpx; align-items: flex-start; padding: 22rpx 0; }
+.history-row + .history-row { border-top: 1rpx solid var(--color-border); }
+.history-marker { width: 18rpx; height: 18rpx; flex: 0 0 18rpx; margin-top: 15rpx; border-radius: 50%; background: var(--color-primary); }
+.history-copy { min-width: 0; flex: 1; }

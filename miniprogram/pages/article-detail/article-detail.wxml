@@ -52,6 +52,7 @@
         <text class="source-disclaimer">外部内容由读者自愿访问，请自行核验内容与访问权限。</text>
       </view>
       <view class="reading-note">目录点击定位到对应章节；阅读全文免费。</view>
+      <button wx:if="{{!demoMode}}" class="button-text article-report" bindtap="report">举报这篇经验</button>
     </view>
   </view>
 

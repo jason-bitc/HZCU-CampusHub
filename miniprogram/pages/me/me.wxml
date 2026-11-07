@@ -1,10 +1,40 @@
-<view class="member-page">
+<view class="member-page my-page">
   <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重新核验" bindaction="onShow" />
-  <view wx:else><text class="profile-name">{{profile ? profile.nickname : '校园同学'}}</text><text class="hint">校园邮箱已验证 · 认证不代表经历核验</text>
-    <button class="menu-row" bindtap="profile"><text>资料与隐私</text><text class="menu-note">编辑</text></button><button class="menu-row" bindtap="wallet"><text>我的硬币</text><text class="menu-note">{{wallet ? wallet.balance + ' 币' : '查看钱包'}}</text></button><button class="menu-row" bindtap="favorites"><text>我的收藏</text><text class="menu-note">查看</text></button><button class="menu-row" bindtap="articles"><text>我的文章与草稿</text><text class="menu-note">管理</text></button>
-    <text wx:if="{{wallet}}" class="hint form-section">收到的有效贡献 {{wallet.receivedContribution}} 币。硬币不能购买、提现或兑换现金。</text><button class="button-secondary form-section" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出当前账号</button>
+  <view wx:else>
+    <button class="section-card identity-card" bindtap="profile" aria-label="资料与隐私">
+      <text class="profile-avatar" aria-hidden="true">{{avatar || '城'}}</text>
+      <view class="profile-copy">
+        <text class="profile-name">{{profile ? profile.nickname : '校园同学'}}</text>
+        <text class="status-tag">校园邮箱已验证</text>
+        <text wx:if="{{profileSummary}}" class="hint">{{profileSummary}}</text>
+      </view>
+      <app-icon name="chevron-right" size="34" />
+    </button>
+    <view class="section-card my-entries" aria-label="我的内容与反馈">
+      <button data-filter="EXPERIENCES" bindtap="workspace"><text class="metric-value">{{counts.articles === null ? '查看' : counts.articles}}</text><text>我的经验</text></button>
+      <button data-filter="DRAFT" bindtap="workspace"><text class="metric-value">{{counts.drafts === null ? '查看' : counts.drafts}}</text><text>草稿</text></button>
+      <button bindtap="favorites"><text class="metric-value">{{counts.favorites === null ? '查看' : counts.favorites}}</text><text>收藏</text></button>
+      <button bindtap="feedback"><text class="metric-value">{{counts.feedback === null ? '查看' : counts.feedback}}</text><text>反馈进度</text></button>
+    </view>
+    <button class="wallet-card" bindtap="wallet" aria-label="打开硬币和贡献">
+      <view class="wallet-metrics">
+        <view><text>可用硬币</text><text class="wallet-metric">{{wallet ? wallet.balance : '—'}}</text></view>
+        <view><text>累计有效贡献</text><text class="wallet-metric">{{wallet ? wallet.receivedContribution : '—'}}</text></view>
+      </view>
+      <text class="wallet-caption">钱包余额与作者贡献分别计算</text>
+    </button>
+    <view class="section-card my-links">
+      <button class="menu-row" bindtap="wallet">
+        <view><text class="row-title">每日奖励</text><text class="hint">{{rewards ? '登录 ' + rewards.rules.loginReward + ' 币，阅读满 ' + rewards.rules.readingSeconds + ' 秒可领 ' + rewards.rules.readingReward + ' 币' : '查看今日资格与领取条件'}}</text></view>
+        <text class="my-link-label">去领取</text>
+      </button>
+      <button class="menu-row" bindtap="wallet"><view><text class="row-title">贡献与账目</text><text class="hint">查看有效贡献及本人账目</text></view><text class="my-link-label">查看</text></button>
+    </view>
   </view>
-  <text wx:if="{{error && authStatus === 'ready'}}" class="field-error">{{error}}</text><button wx:if="{{error && authStatus === 'ready' && !logoutUncertain}}" class="button-secondary" bindtap="onShow">重试读取个人中心</button><view wx:if="{{logoutUncertain}}"><text class="hint">服务端退出尚未确认，可以重试。也可先清理本机数据。</text><button class="button-secondary" bindtap="forget">仅清理本机登录数据</button></view>
+  <view class="section-card my-links"><button class="menu-row" bindtap="settings"><text class="row-title">反馈、帮助与设置</text><text class="my-link-label">进入</text></button></view>
+  <text wx:if="{{loading}}" class="hint">正在读取个人中心…</text>
+  <text wx:if="{{error && authStatus === 'ready'}}" class="field-error" role="alert">{{error}}</text>
+  <button wx:if="{{error && authStatus === 'ready'}}" class="button-secondary" bindtap="onShow">重试读取个人中心</button>
 </view>

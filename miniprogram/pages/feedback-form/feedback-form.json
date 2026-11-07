@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "举报 / 使用反馈",
+  "usingComponents": {
+    "page-state": "/components/page-state/index",
+    "secure-image": "/components/secure-image/index"
+  }
+}

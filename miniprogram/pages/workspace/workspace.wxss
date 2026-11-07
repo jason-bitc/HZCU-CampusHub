@@ -1,2 +1,7 @@
-.workspace-state { margin: 12rpx 0; color: var(--color-primary); font-size: 28rpx; }
+@import '../../styles/sections.wxss';
+.workspace-filters { gap: 8rpx; }
+.workspace-filters button { flex: 1 1 auto; padding: 8rpx 12rpx; font-size: 25rpx; white-space: nowrap; }
 .workspace-article.list-row { margin: 28rpx 0; border: 2rpx solid #9aafa6; }
+.workspace-title { margin: 12rpx 0 8rpx; }
+.workspace-secondary { margin-top: 4rpx; }
+.workspace-secondary .button-text { padding-left: 0; padding-right: 16rpx; }

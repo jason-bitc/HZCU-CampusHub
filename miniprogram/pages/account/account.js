@@ -4,7 +4,7 @@ const session = require('../../services/session');
 const check = require('../../utils/validation');
 const { errorText } = require('../../utils/member-page');
 const tabs = ['/pages/discover/discover', '/pages/favorites/favorites', '/pages/workspace/workspace', '/pages/me/me'];
-const returns = tabs.concat(['/pages/editor/editor', '/pages/profile/profile', '/pages/wallet/wallet', '/pages/article-detail/article-detail', '/pages/comments/comments', '/pages/author/author']);
+const returns = tabs.concat(['/pages/editor/editor', '/pages/profile/profile', '/pages/wallet/wallet', '/pages/article-detail/article-detail', '/pages/comments/comments', '/pages/author/author', '/pages/feedback-form/feedback-form', '/pages/feedback/feedback', '/pages/appeals/appeals', '/pages/settings/settings']);
 Page({
   data: { mode: 'login', title: '登录城院帮', email: '', password: '', confirmation: '', code: '', challenge: null, wait: 0, expired: false, busy: false, sending: false, error: '', errors: {}, notice: '', demoMode: config.demoMode },
   onLoad(options) { this.challenges = {}; try { this.returnTo = options.returnTo ? decodeURIComponent(options.returnTo) : '/pages/me/me'; } catch (_) { this.returnTo = '/pages/me/me'; } this.changeMode(options.mode || 'login'); this.offSession = session.subscribe(({ reason }) => { if (reason === 'logout') { this.challenges = {}; this.setData({ email: '', password: '', confirmation: '', code: '', challenge: null }); } }); },

@@ -1,2 +1,4 @@
 .comment-body { display: block; margin-top: 16rpx; white-space: pre-wrap; overflow-wrap: anywhere; }
 .comment-author { color: var(--color-primary); text-align: left; min-height: 64rpx; }
+
+.comment-original { margin-bottom: 18rpx !important; }

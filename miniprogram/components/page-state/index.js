@@ -14,7 +14,7 @@ Component({
   },
   observers: {
     status(status) {
-      const icons = { loading: 'document', empty: 'search', error: 'alert', unavailable: 'lock', permission: 'lock' };
+      const icons = { loading: 'document', empty: 'search', success: 'check', error: 'alert', unavailable: 'lock', permission: 'lock' };
       this.setData({ iconName: icons[status] || 'document' });
     }
   },

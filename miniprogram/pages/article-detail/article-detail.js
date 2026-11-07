@@ -77,6 +77,10 @@ Page({
     catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
     finally { if (round === this.memberRound) this.setData({ busyAction: '' }); }
   },
+  report() {
+    if (this.data.demoMode || this.data.status !== 'ready') return;
+    wx.navigateTo({ url: `/pages/feedback-form/feedback-form?type=ARTICLE&id=${this.data.articleId}` });
+  },
   comments() { if (!this.data.authenticated) { this.login(); return; } wx.navigateTo({ url: `/pages/comments/comments?id=${this.data.articleId}` }); },
   author() { if (this.data.author) wx.navigateTo({ url: `/pages/author/author?id=${this.data.author.authorId}` }); },
   coins() {

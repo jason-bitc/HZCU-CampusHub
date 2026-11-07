@@ -42,7 +42,7 @@ function request(options) {
           reject(new ApiError({ kind: 'CONTRACT', status: response.statusCode, traceId: event.traceId, message: '服务响应格式不符合接口合同' }));
           return;
         }
-        if (options.auth && (response.statusCode === 401 || response.statusCode === 403)) session.invalidate(captured, response.statusCode);
+        if (options.auth && (response.statusCode === 401 || response.statusCode === 403 && payload && payload.code === 'ACCESS_RESTRICTED')) session.invalidate(captured, response.statusCode);
         reject(fromHttp(response.statusCode, payload, event.traceId));
       },
       fail(error) {

@@ -111,5 +111,60 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
   await test('既有复杂Markdown进入只读预览，完整原文保留且不能被轻量编辑覆盖', () => {
     const p = page('pages/editor/editor.js', {}); const body = '# original\n\n```cpp\n<int> keep;\n```\n\n- list'; const draft = { articleId: 1, revision: 3, state: 'DRAFT', content: { title: 'complex', summary: '', body, tags: { jobIds: [1], majorIds: [11], companyIds: [], topicIds: [] }, experienceStage: '', sourceType: null, sourceNote: '', sourceLinks: [] } }; p.setData({ authStatus: 'ready' }); p.applyDraft(draft); assert.equal(p.data.complexSource, true); assert.equal(p.data.preview, true); assert.equal(p.data.readOnly, true); p.input({ currentTarget: { dataset: { field: 'body' } }, detail: { value: 'overwrite' } }); assert.equal(p.data.form.body, body);
   });
+  await test('行为限制403保留校园会话，账号认证受限仍清理', async () => {
+    const e = environment(); e.session.accept(login()); const sent = [];
+    e.wx.request = (o) => { sent.push(o); return { abort() {} }; };
+    const transport = load('services/request.js', { '../config/env': e.config, './session': e.session }, { wx: e.wx });
+    const blocked = transport.request({ path: '/api/v1/articles/1/comments', method: 'POST', auth: true }).promise;
+    sent[0].success({ statusCode: 403, data: { code: 'BEHAVIOR_RESTRICTED' } });
+    await assert.rejects(blocked, (error) => error.kind === 'BEHAVIOR');
+    assert.ok(e.session.token());
+    const own = transport.request({ path: '/api/v1/me/restrictions', auth: true }).promise;
+    sent[1].success({ statusCode: 200, data: { code: 'OK', data: { items: [] } } });
+    assert.equal((await own).items.length, 0);
+    const expired = transport.request({ path: '/api/v1/me', auth: true }).promise;
+    sent[2].success({ statusCode: 403, data: { code: 'ACCESS_RESTRICTED' } });
+    await assert.rejects(expired); assert.equal(e.session.token(), '');
+  });
+  await test('举报结果不确定，重开仍使用原对象、说明、图片和幂等键', async () => {
+    let saved = null; const sent = [];
+    const mocks = {
+      '../../services/community': { createCase: async (body) => { sent.push(structuredClone(body)); if (sent.length === 1) throw new Error('network'); return { caseId: 11 }; } },
+      '../../utils/member-page': { attach() {}, enter: async (p) => { p._ownerId = 1; p._epoch = 1; p.setData({ authStatus: 'ready' }); return true; }, errorText: (e) => e.message },
+      '../../utils/operation': { uuid: () => 'one-key', read: () => saved, write: (_, value) => { saved = structuredClone(value); }, remove: () => { saved = null; } }
+    };
+    const first = page('pages/feedback-form/feedback-form.js', mocks);
+    first.onLoad({ type: 'COMMENT', id: '12' }); await first.onShow();
+    first.setData({ category: 'OTHER', description: '原说明', uploads: [{ state: 'done', image: { id: 'fixture-image' } }] });
+    await first.submit(); assert.equal(first.data.uncertain, true);
+    const second = page('pages/feedback-form/feedback-form.js', mocks);
+    second.onLoad({ type: 'COMMENT', id: '12' }); await second.onShow();
+    second.input({ detail: { value: '修改不能覆盖原请求' } }); await second.submit();
+    assert.deepEqual(sent[1], sent[0]); assert.equal(sent[1].targetId, 12); assert.equal(sent[1].description, '原说明');
+    assert.equal(second.data.receipt.caseId, 11); assert.equal(saved, null);
+  });
+  await test('本人反馈投影只展示提交材料和公开进度，丢弃后台备注与隐藏原文', () => {
+    const view = require('../utils/community-view');
+    const detail = view.caseDetail({ caseId: 2, kind: 'REPORT', category: 'OTHER', targetType: 'ARTICLE', articleId: 7,
+      state: 'CLOSED', description: '本人说明', article: { title: '隐藏标题', body: '隐藏正文' },
+      images: [{ id: '12345678-1234-4abc-8abc-123456789abc' }, { id: '../bad' }],
+      history: [{ revision: 1, action: 'DECIDE', state: 'CLOSED', outcome: 'ANSWERED', reply: '公开答复', internalNote: '内部备注', actorId: 99 }] });
+    assert.equal(detail.targetText, '文章 #7'); assert.equal(detail.images.length, 1); assert.equal(detail.history[0].reply, '公开答复');
+    assert.doesNotMatch(JSON.stringify(detail), /隐藏标题|隐藏正文|内部备注|actorId/);
+  });
+  await test('申诉提交前发现限制版本变化，保留说明且不发送写请求', async () => {
+    let writes = 0;
+    const p = page('pages/appeals/appeals.js', {
+      '../../services/community': { restrictions: async () => ({ items: [{ id: 9, revision: 2, enabled: true, scope: 'COMMENT' }] }), appeals: async () => ({ items: [], page: 1, total: 0 }), appeal: async () => { writes += 1; } },
+      '../../utils/operation': { write() {}, remove() {} }
+    });
+    p._epoch = 1; p._loadedOwner = 4; p.setData({ authStatus: 'ready', loaded: true, selected: { id: 9, revision: 1 }, restrictions: [{ id: 9, revision: 1, enabled: true }], reason: '请复核' });
+    await p.submit(); assert.equal(writes, 0); assert.equal(p.data.reason, '请复核'); assert.equal(p.data.selected, null); assert.match(p.data.error, /已变化/);
+  });
+  await test('删除草稿只带当前修订查询参数，无请求正文', async () => {
+    const sent = [];
+    const api = load('services/member.js', { './request': { request: (input) => { sent.push(input); return { promise: Promise.resolve({ state: 'DELETED' }) }; } } });
+    await api.deleteArticle(12, 3); assert.equal(sent[0].path, '/api/v1/me/articles/12?expectedRevision=3'); assert.equal(sent[0].method, 'DELETE'); assert.equal('data' in sent[0], false);
+  });
   results.forEach((r) => console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.name}${r.error ? '\n' + r.error : ''}`)); console.log(`\n${results.filter((r) => r.pass).length}/${results.length} member behavior checks passed`); if (results.some((r) => !r.pass)) process.exitCode = 1;
 })();

@@ -1,0 +1,46 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看我的反馈" description="只能查看本人提交的举报、反馈和公开答复。" action-text="登录校园账号" bindaction="login" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
+  <page-state wx:elif="{{invalid || unavailable}}" status="unavailable" title="反馈不可用" description="{{error || '反馈链接无效'}}" action-text="返回我的反馈" bindaction="list" />
+  <view wx:elif="{{id}}">
+    <page-state wx:if="{{busy && !detail}}" status="loading" title="正在读取反馈进度" />
+    <page-state wx:elif="{{error}}" status="error" title="读取反馈失败" description="{{error}}" action-text="重试" bindaction="refresh" />
+    <view wx:elif="{{detail}}">
+      <view class="section-card">
+        <view class="status-heading"><text class="status-tag">{{detail.stateText}}</text></view>
+        <text class="row-title">反馈编号 #{{detail.caseId}}</text>
+        <text class="hint">{{detail.kindText}} · {{detail.categoryText}} · {{detail.createdText}}</text>
+        <text class="hint">{{detail.targetText}} · 仅本人可查</text>
+      </view>
+      <view class="section-card">
+        <text class="row-title">处理进度</text>
+        <view wx:for="{{detail.history}}" wx:key="revision" class="history-row">
+          <view class="history-marker" aria-hidden="true"></view>
+          <view class="history-copy"><text class="row-title">{{item.title}}</text><text class="hint">{{item.occurredText}}</text><text wx:if="{{item.reply}}" class="section-copy" user-select>{{item.reply}}</text></view>
+        </view>
+        <text wx:if="{{!detail.history.length}}" class="hint">暂无已记录的处理进度。</text>
+      </view>
+      <view class="section-card">
+        <text class="row-title">我的说明与证据</text>
+        <text class="section-copy" user-select>{{detail.description}}</text>
+        <secure-image wx:for="{{detail.images}}" wx:key="id" url="{{item.url}}" alt="本人反馈证据" />
+      </view>
+      <view class="notice">处理记录只显示允许查看的信息。内容下架后，隐藏原文仍不可见。</view>
+      <button class="button-secondary form-section" bindtap="list">返回我的反馈列表</button>
+    </view>
+  </view>
+  <view wx:else>
+    <text class="form-title">我的反馈</text>
+    <button class="button-primary" bindtap="create">提交使用反馈</button>
+    <button wx:for="{{items}}" wx:key="caseId" class="section-card feedback-link" data-id="{{item.caseId}}" bindtap="detail">
+      <view class="status-heading"><text class="row-title">{{item.kindText}} #{{item.caseId}}</text><text class="status-tag">{{item.stateText}}</text></view>
+      <text class="hint">{{item.categoryText}} · {{item.targetText}}</text><text class="hint">更新于 {{item.updatedText}}</text>
+    </button>
+    <page-state wx:if="{{loaded && !items.length && !error}}" status="empty" title="还没有反馈记录" description="举报及使用反馈的处理进度会显示在这里。" />
+    <text wx:if="{{busy}}" class="load-end">正在读取反馈记录…</text>
+    <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+    <button wx:if="{{error}}" class="button-secondary" bindtap="refresh" disabled="{{busy}}">重新读取</button>
+    <button wx:elif="{{items.length < total}}" class="button-secondary" bindtap="more" disabled="{{busy}}">继续加载</button>
+  </view>
+</view>
