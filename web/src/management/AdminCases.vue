@@ -13,7 +13,14 @@ const route = useRoute();
 const router = useRouter();
 const preview = computed(() => route.query.preview === "1");
 const data = ref<CasePage>();
+interface Overview {
+  openCases: number;
+  processingCases: number;
+  needsActionCases: number;
+  hiddenArticles: number;
+}
 const stats = ref<number[]>([]);
+const statsError = ref("");
 const busy = ref(false);
 const error = ref("");
 const owner = ref("all");
@@ -51,21 +58,28 @@ async function load() {
   busy.value = true;
   error.value = "";
   data.value = undefined;
+  stats.value = [];
+  statsError.value = "";
   try {
     const p = new URLSearchParams({ page: value("page") || "1", size: "20" });
     for (const k of ["kind", "state", "snapshot"])
       if (value(k)) p.set(k, value(k));
-    const result = await adminRequest<CasePage>(`/admin/cases?${p}`);
+    const [cases, overview] = await Promise.allSettled([
+      adminRequest<CasePage>(`/admin/cases?${p}`),
+      adminRequest<Overview>("/admin/overview"),
+    ]);
     if (current !== generation) return;
-    data.value = result;
-    const s = await Promise.all(
-      ["OPEN", "PROCESSING", "NEEDS_ACTION"].map((state) =>
-        adminRequest<CasePage>(
-          `/admin/cases?page=1&size=1&state=${state}&snapshot=${result.snapshot}`,
-        ),
-      ),
-    );
-    if (current === generation) stats.value = s.map((r) => r.total);
+    if (cases.status === "fulfilled") data.value = cases.value;
+    else error.value = message(cases.reason);
+    if (overview.status === "fulfilled") {
+      const v = overview.value;
+      stats.value = [
+        v.openCases,
+        v.processingCases,
+        v.needsActionCases,
+        v.hiddenArticles,
+      ];
+    } else statsError.value = message(overview.reason);
   } catch (e) {
     if (current === generation) error.value = message(e);
   } finally {
@@ -92,9 +106,14 @@ onBeforeUnmount(() => generation++);
     ><p class="console-note case-list-note">
       举报属于待核查线索，不会自动认定违规。案件处理需查看对应文章、评论及必要证据。
     </p>
-    <div class="console-stat-grid">
+    <p v-if="statsError && !preview" class="error" role="alert">
+      总览读取失败。{{ statsError }}
+    </p>
+    <div class="console-stat-grid" :class="{ 'console-live-stats': !preview }">
       <section
-        v-for="(label, i) in ['待受理', '处理中', '待后续治理']"
+        v-for="(label, i) in preview
+          ? ['待受理', '处理中', '待后续治理']
+          : ['待受理', '处理中', '待后续治理', '隐藏文章']"
         :key="label"
         class="console-panel console-stat"
       >

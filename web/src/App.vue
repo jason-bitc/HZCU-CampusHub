@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 import { clearSession, restoreSession, session } from "./lib/session";
 import { get, message } from "./lib/api";
 import type { Me } from "./types";
+import { surface } from "./surface";
+import BackToTop from "./components/BackToTop.vue";
 const route = useRoute();
-const consoleRoute = computed(() => /^\/(admin|ops)(\/|$)/.test(route.path));
+const consoleRoute = surface !== "user";
 let memberInitialized = false;
 function focusMain() {
   document.getElementById("main")?.focus();
 }
 async function initializeMember() {
-  if (consoleRoute.value || memberInitialized) return;
+  if (consoleRoute || memberInitialized) return;
   memberInitialized = true;
   restoreSession();
   if (session.token) {
@@ -27,9 +29,6 @@ async function initializeMember() {
   }
 }
 onMounted(initializeMember);
-watch(consoleRoute, (value) => {
-  if (!value) void initializeMember();
-});
 </script>
 <template>
   <RouterView v-if="consoleRoute" />
@@ -93,11 +92,8 @@ watch(consoleRoute, (value) => {
     </main>
     <footer class="site-footer">
       <span>城院帮 · 分享经历，找到自己的起点</span
-      ><span>校园邮箱认证不等于经历真实性认证</span
-      ><span class="service-entries"
-        ><RouterLink to="/admin/login">社区管理</RouterLink
-        ><RouterLink to="/ops/login">独立运维</RouterLink></span
-      >
+      ><span>校园邮箱认证不等于经历真实性认证</span>
     </footer>
+    <BackToTop />
   </template>
 </template>

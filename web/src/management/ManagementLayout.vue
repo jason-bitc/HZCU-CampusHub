@@ -8,6 +8,7 @@ import {
   logoutAdmin,
 } from "./client";
 import { message } from "../lib/api";
+import { opsSession, initializeOps, logoutOps, clearOps } from "./ops-client";
 import "./management.css";
 const route = useRoute();
 const router = useRouter();
@@ -47,17 +48,20 @@ function active(path: string) {
   );
 }
 async function init() {
-  if (!ops.value && !preview.value) await initializeAdmin();
+  if (preview.value) return;
+  if (ops.value) await initializeOps();
+  else await initializeAdmin();
 }
 async function logout() {
   error.value = "";
-  if (preview.value || ops.value) {
+  if (preview.value) {
     await router.push(link(ops.value ? "/ops/login" : "/admin/login"));
     return;
   }
   try {
-    await logoutAdmin();
-    await router.push("/admin/login");
+    if (ops.value) await logoutOps();
+    else await logoutAdmin();
+    await router.push(ops.value ? "/ops/login" : "/admin/login");
   } catch (e) {
     error.value = message(e);
   }
@@ -80,7 +84,11 @@ onMounted(init);
       >跳到主要内容</a
     >
     <aside class="console-sidebar" :class="{ expanded: menu }">
-      <RouterLink class="console-brand" to="/">城院帮</RouterLink>
+      <RouterLink
+        class="console-brand"
+        :to="ops ? '/ops/overview' : '/admin/cases'"
+        >城院帮</RouterLink
+      >
       <p class="console-domain">{{ ops ? "独立运维" : "社区管理" }}</p>
       <nav :aria-label="ops ? '运维导航' : '社区管理导航'">
         <RouterLink
@@ -111,7 +119,7 @@ onMounted(init);
       <div class="console-sidebar-footer">
         <span>{{ preview ? "原型示例 · 非真实授权" : "独立授权身份" }}</span
         ><button @click="logout">
-          {{ preview || ops ? "返回登录页" : "退出管理账号" }}
+          {{ preview ? "返回登录页" : ops ? "退出运维账号" : "退出管理账号" }}
         </button>
       </div>
     </aside>
@@ -127,7 +135,9 @@ onMounted(init);
         preview
           ? "示例身份"
           : ops
-            ? "运维接口待接入"
+            ? opsSession.status === "ready"
+              ? "已授权运维账号"
+              : "未登录运维账号"
             : adminSession.status === "ready"
               ? "已授权管理员"
               : "未登录管理账号"
@@ -156,10 +166,27 @@ onMounted(init);
           清除本机管理会话
         </button>
       </p>
+      <p v-if="opsSession.error && !preview && ops" class="error" role="alert">
+        {{ opsSession.error }}
+        <button
+          v-if="opsSession.status === 'error'"
+          @click="
+            opsSession.status = 'checking';
+            initializeOps();
+          "
+        >
+          重新核验</button
+        ><button
+          v-if="opsSession.token"
+          @click="clearOps('已清除本机运维会话，服务端退出尚未确认。')"
+        >
+          清除本机运维会话
+        </button>
+      </p>
       <RouterView v-slot="{ Component }"
         ><component
           :is="Component"
-          :key="`${route.path}:${preview}:${adminSession.epoch}`"
+          :key="`${route.path}:${preview}:${ops ? opsSession.epoch : adminSession.epoch}`"
       /></RouterView>
       <p v-if="preview" class="console-preview-note">
         原型示例模式：人物、数字和运行状态均来自原型，不代表真实系统；不会执行治理或运维操作。<RouterLink

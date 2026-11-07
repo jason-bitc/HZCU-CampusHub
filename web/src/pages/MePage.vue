@@ -156,6 +156,7 @@ watch(() => session.status, load);
             硬币不能购买、提现或兑换现金。网页奖励和账本待接入，暂请在小程序查看。
           </p>
         </section>
+        <RouterLink class="button" to="/me/appeals">我的限制与申诉</RouterLink>
         <button :disabled="busy" @click="load">重新读取服务器资料</button>
       </div>
     </div></MemberGate

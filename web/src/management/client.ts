@@ -32,7 +32,7 @@ export function clearAdmin(message = "") {
 }
 function schedule() {
   const ms = Date.parse(adminSession.expiresAt) - Date.now();
-  if (ms <= 0) {
+  if (!Number.isFinite(ms) || ms <= 0) {
     clearAdmin("管理会话已过期，请重新登录。");
     return;
   }
@@ -53,7 +53,9 @@ export async function adminRequest<T>(
   const epoch = adminSession.epoch;
   if (
     !publicLogin &&
-    (!adminSession.token || Date.parse(adminSession.expiresAt) <= Date.now())
+    (!adminSession.token ||
+      !Number.isFinite(Date.parse(adminSession.expiresAt)) ||
+      Date.parse(adminSession.expiresAt) <= Date.now())
   ) {
     clearAdmin("请登录独立社区管理账号。");
     throw new ApiError(401, "ADMIN_UNAUTHORIZED", "请登录独立社区管理账号");
@@ -77,9 +79,20 @@ export async function adminRequest<T>(
         "SESSION_CHANGED",
         "管理会话已变化，旧响应已丢弃",
       );
+    if (!publicLogin && response.status === 401)
+      clearAdmin("管理会话失效，请重新登录。");
+    if (
+      !(binary && response.ok) &&
+      !response.headers.get("content-type")?.includes("application/json")
+    )
+      throw new ApiError(
+        response.status || 503,
+        "SERVICE_UNAVAILABLE",
+        "管理服务没有返回有效接口响应，请核对服务与代理目标。",
+      );
     const value: unknown =
       binary && response.ok ? await response.blob() : await response.json();
-    if (!publicLogin && epoch !== adminSession.epoch)
+    if (!publicLogin && response.status !== 401 && epoch !== adminSession.epoch)
       throw new ApiError(
         409,
         "SESSION_CHANGED",
@@ -89,8 +102,6 @@ export async function adminRequest<T>(
     if (!value || typeof value !== "object" || !("code" in value))
       throw new Error("管理服务响应格式不正确");
     if (!response.ok || value.code !== "OK") {
-      if (!publicLogin && response.status === 401)
-        clearAdmin("管理会话失效，请重新登录。");
       throw new ApiError(
         response.status,
         String(value.code),
@@ -134,6 +145,8 @@ export async function initializeAdmin() {
     schedule();
     if (!adminSession.token) return;
     adminSession.me = await adminRequest<AdminMe>("/admin/me");
+    if (adminSession.me.actorDomain !== "COMMUNITY_ADMIN")
+      throw new Error("管理身份域不正确");
     adminSession.status = "ready";
   } catch (error) {
     if (adminSession.token) {
@@ -150,7 +163,11 @@ export async function loginAdmin(login: string, password: string) {
     { login, password },
     true,
   );
-  if (value.tokenType !== "Bearer" || !value.accessToken.startsWith("adm_"))
+  if (
+    value.tokenType !== "Bearer" ||
+    !value.accessToken.startsWith("adm_") ||
+    !Number.isFinite(Date.parse(value.expiresAt))
+  )
     throw new Error("管理登录响应域不正确");
   clearAdmin();
   sessionStorage.setItem(KEY, JSON.stringify(value));

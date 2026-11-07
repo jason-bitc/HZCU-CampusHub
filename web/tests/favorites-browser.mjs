@@ -210,9 +210,19 @@ try {
     });
     return { admin: a.status, member: m.status };
   });
-  assert.deepEqual(domain, { admin: 401, member: 200 });
+  assert.deepEqual(domain, { admin: 404, member: 200 });
+  const adminBase = process.env.CAMPUSHUB_ADMIN_URL || "http://127.0.0.1:5174";
+  const campusToken = await page.evaluate(
+    () =>
+      JSON.parse(sessionStorage.getItem("campushub.web.session.v1"))
+        .accessToken,
+  );
+  const crossDomain = await fetch(`${adminBase}/api/v1/admin/me`, {
+    headers: { Authorization: `Bearer ${campusToken}` },
+  });
+  assert.equal(crossDomain.status(), 401);
   assertions.push(
-    "real backend rejects ordinary campus Bearer on admin/me while the ordinary session remains valid",
+    "public proxy rejects privileged route and community backend rejects campus Bearer while ordinary session remains valid",
   );
   assert.equal(uncaught, 0);
   report.status = "PASS";

@@ -1543,3 +1543,73 @@
     padding-bottom: 14px;
   }
 }
+
+/* Live contract views use the prototype shell while allowing actual rows to grow. */
+.console-table small {
+  display: block;
+  margin-top: 5px;
+  color: var(--console-muted, #606772);
+}
+.console-preserve {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.console-fingerprint {
+  max-width: 230px;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.console-check {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+}
+.console-check input {
+  width: 18px !important;
+  min-height: 18px !important;
+  flex: 0 0 18px;
+}
+.console-confirmation {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--console-border, #e3e7eb);
+}
+.console-patrol-context {
+  max-height: 720px;
+  overflow: auto;
+}
+.console-shell:not(.console-preview) .console-account-limit {
+  min-height: 0;
+}
+.console-shell:not(.console-preview) .console-table {
+  table-layout: auto;
+}
+.console-shell:not(.console-preview) .console-panel {
+  overflow-wrap: anywhere;
+}
+.console-shell:not(.console-preview) .console-account-limit .console-table {
+  min-width: 470px;
+}
+.console-shell:not(.console-preview) .console-account-limit .console-table td {
+  height: auto;
+}
+
+.console-live-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .console-live-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.console-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+.ops-overview .ops-task-list {
+  margin-top: 24px;
+}

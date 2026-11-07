@@ -99,6 +99,7 @@ export const outcomes: Record<string, string> = {
   NO_VIOLATION: "未发现违规",
   DUPLICATE: "重复举报",
   REQUIRES_GOVERNANCE: "交接后续治理",
+  GOVERNANCE_COMPLETED: "已执行治理并闭案",
   ANSWERED: "已答复",
   RECORDED: "已记录",
 };

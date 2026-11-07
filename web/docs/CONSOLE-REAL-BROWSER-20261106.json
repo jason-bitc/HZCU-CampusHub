@@ -1,0 +1,1479 @@
+{
+  "checkedAt": "2026-11-07T04:41:54.537Z",
+  "status": "PASS",
+  "mode": "real isolated campushub_test, business 8082, ops 8092; browser surfaces 5173/5174/5175",
+  "checks": [
+    "real independent operations login on its own port and identity domain",
+    "reopened the persisted successful browser deployment from the prior test attempt",
+    "public surface has no management links, no management routes and no privileged API proxy",
+    "hover highlights article card and clicking its summary enters reading",
+    "circular right-side back-to-top button returns to top with reduced motion respected",
+    "real community login and overview on 5174 with an independently scoped identity",
+    "real article hide makes public content unavailable; dropped receipt replays exact request key and revision across reload",
+    "case closure refuses absent governance, then succeeds after recorded hide",
+    "actual article and comment restore plus comment hide reflect server revisions",
+    "creates, renames, reorders and disables a real category without deleting historical links",
+    "real comment restriction is enforced, the campus user appeals and the admin accepts only the corresponding version",
+    "real governance audit contains one event for the retried operation",
+    "actual isolated business restart changes PID and ends with successful health check",
+    "real complete backup retains original task ID when receipt is dropped across browser reload",
+    "real browser restore protects current state and restores the database value from the selected backup",
+    "nested favorite button stays on discovery and keyboard link opens the card’s article",
+    "390px user, community and ops surfaces render within the viewport",
+    "fixture article taken offline and all three browser sessions logged out; no uncaught page errors"
+  ],
+  "evidence": [
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5a16be0e-ab7c-456e-b035-b34d4bb0485a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d4bf6216-d70c-4f85-aaed-3c68cb24e49b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f0cf7a55-3d96-442a-94c2-57f0230912a9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "772cf17b-a1d9-447b-b3e3-e100a172aa13"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f67f2538-4e63-4b04-b7f8-763be5608904"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "04607e5f-fd8b-4f65-be80-2c9be1020790"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d725b130-24c0-4efd-afa3-64786f2fcb50"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8e38cc07-cac9-4b4d-807e-0ccd4a5147cf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/c4aee080-b14c-4c1a-999b-2067bb8492bc",
+      "status": 200,
+      "code": "OK",
+      "traceId": "05088075-6eae-4567-aa0d-206d118b543c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ec9808ec-fb8d-4b53-a4cc-0d451016c663"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f20c7e67-fa4e-42ce-abc0-e168512ca665"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "edfa2c7b-6a9e-44b6-87cc-19aab2030afb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6bfb2599-e6db-4a3b-8174-bf6928cba61e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0cb8853b-bf4c-4ea4-a43a-9e31e86294c9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ee68503a-0fdd-45f6-a445-fe42c4d8cba9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7e65de9e-3b3b-4ffd-91c1-869de0f1bfef"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6a6e6007-bf88-45ef-b948-12754dab3b93"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "43ee436c-d0f7-445d-a04c-b693f3798fc3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "87c3c025-688c-45ba-a9cf-25347a868466"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "51d80a8c-dd29-4998-812f-9f64324384a7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f03a563d-02b8-4a39-b4fa-4999f0742ff4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e9bd81be-d0ee-43a8-a349-916038793778"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a0964dbc-2a5a-45c1-9341-6fca4acfcff2"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f4591a3b-e3c6-45f7-b6ea-ae52828a55e2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "11e9b3c3-320a-4f2f-a3b6-d1ce691663f9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/overview",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d2f7bc4e-bb1c-428e-91bc-0e66c52823a3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7c357271-754e-48a6-89ea-4da2812ace43"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/overview",
+      "status": 200,
+      "code": "OK",
+      "traceId": "245f9def-d801-4a84-bbb5-52374ff4081d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users/371/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cd15a2d4-04d4-4055-a19e-f4e515c17b71"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "94a99c60-99ec-402b-8a8f-806e2f7362fa"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "53777964-69fb-4ee3-a1d2-aeb7ecf7ce1d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b5a0fbcc-c8a3-4bb1-8913-8f2f208df2cc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b8ea64d2-b68c-47d3-9284-4046bd01ba98"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "code": "OK",
+      "traceId": "672f6055-81d1-4a03-9f62-54b6f48435a9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4103a4b3-1316-4823-b666-4ae1054e9c44"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2604/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9630f121-f209-4ece-99a5-994997515db6"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2604/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e4f160be-9edf-4202-a56b-884afbf7c5ca"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2604/publish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "84b0105a-fb55-4d64-a030-c9b2adcd9e23"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2604/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fd061a07-b8bb-4d95-bed5-51876c013cbb"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2604/comments",
+      "status": 201,
+      "code": "OK",
+      "traceId": "74811b36-db9a-4cac-b8c2-b229fafa6802"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4a5c468f-035d-42c9-94ca-06931abdbe32"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233",
+      "status": 200,
+      "code": "OK",
+      "traceId": "deb28dc3-93c0-4d62-b32d-6e6922c099eb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233/context",
+      "status": 200,
+      "code": "OK",
+      "traceId": "105b21b3-0dd4-434b-8b3e-56c21bcc1358"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/cases/233/claim",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3478816b-2892-4fee-8a96-f208f7dbc581"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a637e961-f7ee-4edd-b62b-31fefcdd6350"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233/context",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0c2a6c1f-f4e2-45df-a8a3-8eee41160065"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/cases/233/decisions",
+      "status": 409,
+      "code": "GOVERNANCE_NOT_RECORDED",
+      "traceId": "2ac5973b-4794-4535-b06a-4deefc504773"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b0b12f12-5380-4735-8c5d-36b8fcf604a9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233/context",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5ea4f661-7d71-4c98-a40a-d2975abfd0d5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "06143bd2-76cf-4197-8c50-3d8b304a9f0c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "821858a6-0c12-48a6-b7a3-2f3285a186a6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f56c8aff-cb06-4e26-8c87-595d281ac005"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/articles/2604/moderation",
+      "status": 200,
+      "traceId": "8e3b9e5b-37fc-48f1-acf9-8c776cc4592c",
+      "condition": "real response deliberately dropped"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c77b693d-ecaf-4853-994b-3db276cd6ca4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "251fa6fa-7d6a-4b11-9d14-9768f29f1b8e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e1a03fdb-cea6-489f-b51c-72184461f34f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bcee06c4-b461-45ce-ad01-905a9f6e01de"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/articles/2604/moderation",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1a74f30e-66cc-4664-ac39-826d504d73ad"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7d7666b8-8547-4160-83bb-7b50b775a519"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4b247055-f99c-49b6-940a-ee001c1f47cf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fe36470b-e9bd-4209-8a2b-ae0410f07080"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4cafc82e-6c12-4d28-986b-7b781de16cb3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233/context",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f9822678-dce8-41c9-b72f-eccbfbb270b5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "32008aca-d8dc-4ccd-96e8-e6c68e002022"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/cases/233/decisions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d75c501e-81fb-469f-8d40-cb7c596735c7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1f8cd3bf-b03b-425e-8f0e-f437eb11020f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b6bddf65-aba4-43cd-8d27-df9e7c0db284"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2980d20f-e1a3-4cf9-a753-a8e7637bc5ff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases/233/context",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fd805da6-c109-4c1e-bbf4-517c17ca73e2"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/articles/2604/moderation",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e5a9ea1d-9e04-48da-9cca-1df46155c1c8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "041198ac-629a-4d58-b7a6-8e797223997f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4da52c05-906f-4666-b302-3d816399792e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bc46e96c-7af6-432d-9e84-4e74b8dc28a0"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/comments/385/moderation",
+      "status": 200,
+      "code": "OK",
+      "traceId": "12842e26-fc20-450f-8eed-f2466504300a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0eb4bb7a-503c-4091-a241-99cff8dcca62"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cf22b6b5-f769-4757-a9e6-7c8517fdd5be"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6d0d95bc-e307-4398-91dd-742b93660ab8"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/comments/385/moderation",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c439f184-ccc9-4ebe-a749-96a74e6f7258"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "84571fed-c890-4431-a710-751221d373a6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7aa35f20-6933-4281-aacb-c9dbdf544cf8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/articles/2604/comments",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2695fc4a-4a07-43cf-9729-15f11604fdef"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "eed7d7cb-db7a-4c5f-8b65-44606b11bd57"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4e8453da-6109-481a-b4b1-5d7dfa1c1b2b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fd793cb4-0342-4ccd-acc0-b08815f5dfe8"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/categories/37",
+      "status": 200,
+      "code": "OK",
+      "traceId": "37d22a16-5435-450a-bb9f-d94e5b73d909"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "60285563-0d62-47ea-8120-75b3f83c484b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b9cb75a5-0c85-4573-b40b-3bda5780bba9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "status": 200,
+      "code": "OK",
+      "traceId": "59c6904a-e268-4235-b2e8-097ef33afb08"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users/371/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "949b1e44-9f19-4086-9b45-65880af809c5"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/users/371/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e389f51c-462a-45f8-8121-821b2fd8650c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "status": 200,
+      "code": "OK",
+      "traceId": "587395d0-badd-478b-ae57-3d6cf0a92a8e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "058b2d86-6a6b-47fe-b12b-1b2e665a69d6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users/371/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "66dbf8d4-d0b0-4e65-b77f-f739fc152ab9"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2604/comments",
+      "status": 403,
+      "code": "BEHAVIOR_RESTRICTED",
+      "traceId": "c3349ef1-ed8b-4da2-a873-b23b08ef2ca2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f391c497-f1ab-423b-bc88-65dd0cd4776e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "163501d9-69bb-4d3d-bc93-c1c16436abfe"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4e4115b7-788f-4704-83bc-68a4e4e3639b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a9b6b48f-5f36-4666-ade9-f514ecb0c1a8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "50f93ab6-1160-4830-b5ce-b7824a881bce"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6324669d-d157-407d-92ad-5d342e1a702c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4afee641-08ca-473e-8387-82a83cdd4fb9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "61c3598a-4a41-4aca-bc92-2c01655359f2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "status": 200,
+      "code": "OK",
+      "traceId": "64b185a4-60e7-4e01-b22c-24f8a8051524"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/appeals/5/decisions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7d41ff5b-9ba8-46a1-b952-0a4f1106b1f4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c537a6bb-32fe-4983-8c31-eb4eaa054da8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8f9a0a83-d61b-46b4-aafc-c2e8040ecd4d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d5dfa91a-8b71-4fe4-890d-32ee9f14a54a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cf9954f9-aed0-4cf1-815c-caca4988f175"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "80d01f28-3662-47c3-ade3-15f79e4536e2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a5524653-0db3-47ef-ab24-68c9871c7251"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/governance-events",
+      "status": 200,
+      "code": "OK",
+      "traceId": "38a04302-c55a-4fbc-96bc-4bdfc92c79f8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "85c37e7e-a1cd-4831-847c-1fdd17b3d51b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "be908a7d-fd39-4a61-b251-839466aafd0a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "57542000-e4f9-44ae-a608-a9017af3975a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "621d24af-b4ce-47cb-a74b-1fbfd8fce2cf"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/confirmations",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d9e4dcf5-4d3f-40b9-97a0-f5a6d9072acb"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "dc70412f-571a-48c0-ba34-41d3d62c12f4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d09cb85b-801a-4e1c-b77a-20a25e4b9112"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "93f6d47a-b401-496f-bc7a-ad6e49b81c24"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "891c9b79-173e-4d29-b93b-4ccc91a9eecb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d5379cc0-1fac-4c5a-b500-30e38a32c188"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cf86da80-404e-4b7a-84ee-d9eb4c2054c6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b2b6d914-a8e0-4c9c-abab-afb11d695473"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b2903c98-4427-4e18-9623-251bd9a9adac"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6334fe9c-7611-4c03-9dca-cc9ef7e55e26"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d97e37c4-d554-462c-ba90-786c9fa808ef"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2b05a56a-c31b-4813-be84-ba13b7ea5e1a"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/confirmations",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ac927c93-2fa3-4ee8-8d17-41d70f1d0870"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "traceId": "d10d5fcd-b488-4842-8664-17de285050dd",
+      "condition": "real task receipt deliberately dropped"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c68f6e79-d423-40d5-8cdc-9621c58239ad"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8b0d835e-9248-4810-939d-4cecf85ede9e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fafa523e-7876-4369-9efe-43702ed98d57"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a8dbc0b1-b3e4-441c-bf96-7371126ca9ad"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "62261010-a509-4fd4-916a-4621311bdd56"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a6efa386-b8c1-4304-88be-6888381a57de"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "377c1ce4-4ff9-482b-a10f-3880b10916f4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e6da31d9-00d2-494a-8027-5b327dafa9ac"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "38dc8201-dcb3-4fec-914e-11cbfe2467be"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "592712d5-86c4-42a7-b81c-d73cdab55fa6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "51a86b3a-1f81-4fd5-b7ae-daa59e213b5c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e379dab0-09ce-4f9f-b39f-785a498272be"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7ef06938-977e-42f1-92a9-81b5366cb2c6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e1a73ad3-d142-4469-9b92-1aec651af6fa"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/categories/37",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2da3f4c9-4953-4632-9b56-e8706964e554"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "4cc1300a-0ded-4b37-8933-e2f8d1295300"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "788e1243-05c1-4ec6-bec0-882a0c678aff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "82d87684-1616-470e-84f5-f49ab6ebaa24"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6afb1e98-5fe9-49a4-9ffc-44cfba37e29c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5c4998bf-0177-482a-8408-4fffae4276b7"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/confirmations",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2b246351-3d3a-4bf6-9a7f-9a26af5fa11d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e2f7fa0b-d3b4-4a8d-a118-37fd077d4645"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d5c2aa59-4550-47b0-bef6-45c03f890ab2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c91ee0ab-a8de-4f40-8ec9-4d3994798269"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fa6f46ed-6716-4f8a-9a4f-5a19317cfac6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "95866ef5-408c-4943-abf0-b08bbce951fd"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "05a96e27-bd28-46ba-babe-f00edfdd4a66"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fc0f5fa4-3db9-4a77-8525-f53cfd8ca86e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "75aeb0ba-58dd-4bae-854c-02bc6d8d435b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs/93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "status": 200,
+      "code": "OK",
+      "traceId": "923f3c4f-b834-4594-bdb7-9b6029cffd5b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c8f3e0b9-ba91-4dc7-9243-085f7465947b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/categories",
+      "status": 200,
+      "code": "OK",
+      "traceId": "65d343c8-2e29-486b-9da2-35639b5521da"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "20024b3a-a897-47b1-af43-4b782879a15b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "93298e02-cf10-485a-a1ce-d89f0b8938fb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "af346afe-bf1d-497c-82c2-3a3a5ce7b651"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/logs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a168192f-90f2-464e-acbb-a2a333e07387"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "53b24211-fe6d-47ff-b903-b41e61953e2d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/logs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "313f40b4-cc49-4151-85d9-58aa23262954"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "97acc482-3580-4ec8-aed4-f089cfbaaaee"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "168eb348-caba-4fad-872b-7ef5c1a9e0dd"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "b8e82c2e-368c-4b1f-8b6c-06a574ef1803"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "073ad8ef-0404-403c-b647-2fcd17de3450"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2604/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "62092b30-271a-495c-b047-3be2c58d8dc0"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2604/favorite",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3e906121-416d-4a53-851e-a145c3dc2e56"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2604/favorite",
+      "status": 200,
+      "code": "OK",
+      "traceId": "66a19ea9-3304-48f4-93cd-9ee1474b742d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2604",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5db10bf4-92b5-4d01-b046-e4d1cf6cbdd8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c6ecec07-b5cc-475d-b9d9-b9d90dd6be61"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ee8cdbe4-ea0e-45a3-9f30-18d7f562114b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/undefined/interaction-state",
+      "status": 400,
+      "code": "INVALID_PARAMETER",
+      "traceId": "03b5fc20-25cb-4f36-95d9-886bbec40952"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2604/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8adf277a-977b-4081-ab82-8b711f8c121a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1004/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9e887880-eccc-480e-8ddd-928e0246c06f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5fcd58cd-e894-4510-a3b7-6f1e932339c3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "78e5a0da-337c-44c3-a806-87088d424013"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "70a7aa10-c433-4742-9521-afa3951a7372"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "0d463185-e57e-4e49-b8de-76e026d859fa"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a4645134-8e1c-4b7f-96ed-d122b0d08ed3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/overview",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2ba4b94a-0029-43a0-8189-189fa7a0d4fb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "80677a1e-baa4-4482-8783-c7c35db95872"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/jobs",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d5974130-05a3-42b8-be38-db8efaf0cd33"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/artifacts",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cdbf7710-035d-4879-82c7-07d64a415e74"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/backups",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9cef4dc2-64f2-4d0b-95dd-58e03ad20d00"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ops/status",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e14f6902-049d-412f-866f-fb82439f1605"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3f608723-39fe-400c-8b9b-fc93c6d59c05"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2604/unpublish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6f456a1d-3e62-4c26-9f12-a1fd058ecf9a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "da93069e-ec93-4218-be31-69e3ba5f62ef"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "49e53487-d382-4f23-a0bf-ebd4b0c39598"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/contact-settings",
+      "status": 200,
+      "code": "OK",
+      "traceId": "23755efa-b461-4c16-b671-92ebeda2d3a0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "status": 200,
+      "code": "OK",
+      "traceId": "66fe4703-d53f-4ba1-9813-37852e7911ee"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coins",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bcbb6178-13ad-4b02-ad5c-8f87e60b88c9"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3b48ba04-24a7-48b2-9401-c219375ee923"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "15579a80-e151-4093-824a-fb11f0ccc0b0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "code": "OK",
+      "traceId": "5c9f295f-9620-409d-b7cf-7947ed2f6e0d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "694198c8-7c8e-48a2-9576-9827e7449ccc"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ops/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "942e6cae-364f-4de6-840e-c6b33d9a318a"
+    }
+  ],
+  "screenshots": [
+    "O08-deploy-real.png",
+    "O02-overview-real.png",
+    "W01-card-hover-real.png",
+    "W02-back-to-top-real.png",
+    "A02-cases-real.png",
+    "A04-content-real.png",
+    "A06-category-real.png",
+    "A05-appeal-real.png",
+    "A08-audit-real.png",
+    "O08-backup-real.png",
+    "O08-restore-real.png",
+    "O03-logs-real.png",
+    "W01-mobile-real.png",
+    "A02-mobile-real.png",
+    "O02-mobile-real.png",
+    "W02-back-to-top-mobile-real.png"
+  ],
+  "errors": [],
+  "articleId": 2604,
+  "loadedMobileCapture": {
+    "status": "PASS",
+    "checks": [
+      "W01-mobile-real.png",
+      "W02-back-to-top-mobile-real.png",
+      "A02-mobile-real.png",
+      "O02-mobile-real.png"
+    ],
+    "width": 390,
+    "height": 844
+  }
+}

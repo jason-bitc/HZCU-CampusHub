@@ -2,13 +2,28 @@
 // This does not create real admins, handle real cases, or execute any operations.
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const out = resolve(root, "docs/screenshots/20261106-management");
+const out = resolve(
+  root,
+  process.env.CAMPUSHUB_MANAGEMENT_SCREENSHOT_DIR ||
+    "../tmp/management-browser",
+);
+const reportPath = resolve(
+  root,
+  process.env.CAMPUSHUB_MANAGEMENT_REPORT ||
+    "../tmp/management-browser/report.json",
+);
 await mkdir(out, { recursive: true });
 const base = process.env.CAMPUSHUB_WEB_URL || "http://127.0.0.1:5173";
+const adminBase = process.env.CAMPUSHUB_ADMIN_URL || "http://127.0.0.1:5174";
+const opsBase = process.env.CAMPUSHUB_OPS_URL || "http://127.0.0.1:5175";
+function baseFor(path) {
+  return path.startsWith("/admin/") ? adminBase : opsBase;
+}
+
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const context = await browser.newContext({
   viewport: { width: 1440, height: 960 },
@@ -54,32 +69,14 @@ const headings = {
   O09: "任务异常与冲突操作",
   O10: "运维手册与交接",
 };
-try {
-  const prior = JSON.parse(
-    await readFile(
-      resolve(root, "docs/MANAGEMENT-BROWSER-20261106.json"),
-      "utf8",
-    ),
-  );
-  if (!prior.captureMethod) {
-    prior.prototypeCaptureValidation =
-      "NOT_ACCEPTED: reviewer found A03 desktop captured the previous page; replaced after route-specific readiness checks";
-    await writeFile(
-      resolve(root, "docs/MANAGEMENT-BROWSER-20261106-before-capture-fix.json"),
-      JSON.stringify(prior, null, 2) + "\n",
-    );
-  }
-} catch {
-  /* No previous capture report exists. */
-}
 const report = {
   checkedAt: new Date().toISOString(),
   status: "RUNNING",
   prototypeScreens: [],
   actualReadOnlyScreens: [],
   simulatedContractChecks: [],
-  realAdminLogin: "NOT_RUN_NO_PRIVATE_ADMIN_CREDENTIALS",
-  opsBackend: "NOT_IMPLEMENTED_USER_CONFIRMED",
+  realAdminLogin: "NOT_RUN_IN_PROTOTYPE_AND_MOCK_SUITE",
+  opsBackend: "NOT_EXERCISED_IN_THIS_SUITE",
   realOperationsExecuted: 0,
   uncaughtPageErrors: 0,
   captureMethod:
@@ -95,7 +92,7 @@ async function capture(code, path, preview = true, mobile = false) {
     mobile ? { width: 390, height: 844 } : { width: 1440, height: 960 },
   );
   const before = apiCount;
-  await page.goto(`${base}/#${path}${preview ? "?preview=1" : ""}`);
+  await page.goto(`${baseFor(path)}/#${path}${preview ? "?preview=1" : ""}`);
   await page
     .getByRole("heading", { level: 1, name: headings[code], exact: true })
     .waitFor();
@@ -111,7 +108,7 @@ async function capture(code, path, preview = true, mobile = false) {
       .waitFor();
   if (code === "A06" && !preview)
     await page
-      .getByRole("cell", { name: "Java后端开发（演示）", exact: true })
+      .getByRole("heading", { name: "请先登录社区管理", exact: true })
       .waitFor();
   if (preview) await page.locator(".console-preview-note").waitFor();
   await page.evaluate(() => document.fonts.ready);
@@ -259,6 +256,13 @@ try {
       assert.equal(r.postData(), null);
       return ok({ loggedOut: true });
     }
+    if (path === "/admin/overview")
+      return ok({
+        openCases: 1,
+        processingCases: 0,
+        needsActionCases: 0,
+        hiddenArticles: 0,
+      });
     if (path === "/admin/cases") {
       const matches =
         !url.searchParams.get("state") ||
@@ -345,7 +349,7 @@ try {
     }
     throw new Error(`Unhandled contract mock path ${path}`);
   });
-  await p.goto(`${base}/#/admin/login`);
+  await p.goto(`${adminBase}/#/admin/login`);
   await p.locator("input[name=admin-login]").waitFor();
   await p.evaluate(() =>
     sessionStorage.setItem(
@@ -422,10 +426,8 @@ try {
   report.failure = error instanceof Error ? error.message : String(error);
   process.exitCode = 1;
 } finally {
-  await writeFile(
-    resolve(root, "docs/MANAGEMENT-BROWSER-20261106.json"),
-    JSON.stringify(report, null, 2) + "\n",
-  );
+  await mkdir(dirname(reportPath), { recursive: true });
+  await writeFile(reportPath, JSON.stringify(report, null, 2) + "\n");
   await browser.close();
   console.log(
     JSON.stringify({

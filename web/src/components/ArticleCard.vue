@@ -2,10 +2,29 @@
 import type { Article } from "../types";
 import FavoriteButton from "./FavoriteButton.vue";
 import { dateText, sourceName } from "../lib/content";
-defineProps<{ article: Article; showFavorite?: boolean }>();
+import { useRouter } from "vue-router";
+const props = defineProps<{ article: Article; showFavorite?: boolean }>();
+const router = useRouter();
+function open(event: MouseEvent) {
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey ||
+    event.altKey
+  )
+    return;
+  if (
+    (event.target as Element).closest("a,button,input,select,textarea,label") ||
+    window.getSelection()?.toString()
+  )
+    return;
+  void router.push(`/articles/${props.article.id}`);
+}
 </script>
 <template>
-  <article class="article-card panel">
+  <article class="article-card panel" @click="open">
     <h2>
       <RouterLink :to="`/articles/${article.id}`">{{
         article.title

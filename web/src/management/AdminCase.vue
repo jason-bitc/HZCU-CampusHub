@@ -44,7 +44,12 @@ const canHandle = computed(
 const choices = computed(() =>
   detail.value?.kind === "FEEDBACK"
     ? ["ANSWERED", "RECORDED"]
-    : ["NO_VIOLATION", "DUPLICATE", "REQUIRES_GOVERNANCE"],
+    : [
+        "NO_VIOLATION",
+        "DUPLICATE",
+        "REQUIRES_GOVERNANCE",
+        "GOVERNANCE_COMPLETED",
+      ],
 );
 const frozen = computed(() => preview.value || busy.value || !!pending.value);
 async function load() {
@@ -209,6 +214,18 @@ onBeforeUnmount(() => {
     </p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <p v-if="busy" role="status">正在读取或处理案件…</p>
+    <p v-if="detail?.articleId && !preview" class="console-note">
+      需要先执行内容治理时，<RouterLink
+        :to="{
+          path: '/admin/content',
+          query: {
+            article: String(detail.articleId),
+            comment: detail.commentId ? String(detail.commentId) : undefined,
+          },
+        }"
+        >前往对应文章与评论巡查</RouterLink
+      >。完成后返回并重新读取案件；后端核对真实治理事件后才允许选择“已执行治理并闭案”。
+    </p>
     <section v-if="pending" class="console-note">
       <h2>上次操作结果待确认</h2>
       <p>
