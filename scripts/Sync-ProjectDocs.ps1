@@ -29,7 +29,7 @@ foreach($r in $rows){
  $expected[$r.path]=$r
 }
 if($rows.Count -ne $payload.Count){throw 'Manifest count differs from document count'}
-$allowed=@('.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg')
+$allowed=@('.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg','.cdm','.ldm','.pdm')
 foreach($p in $payload){
  $rel=$p.FullName.Substring($docs.Length+1).Replace('\','/')
  if($p.Name.StartsWith('~$') -or $p.Name.StartsWith('.env') -or $p.Extension.ToLowerInvariant() -notin $allowed){throw ('Disallowed document: '+$rel)}

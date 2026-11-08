@@ -4,7 +4,7 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.1，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
+|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.2，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
 |[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
@@ -35,7 +35,7 @@
 
 [11项评审与PDF页码定位](models/统一SRS评审条目定位G04.csv)。
 
-ER图使用1:1、1:N、M:N；[28项联系与参与约束](models/ER联系与参与约束G04.csv)与SRS表6-1同步。
+第6章采用 PowerDesigner 原生转换后的 LDM 图。[CDM、LDM、PDM候选及字段图册](models/PowerDesigner/README.md)可直接查阅。[28项概念联系与参与约束](models/ER联系与参与约束G04.csv)与SRS表6-1同步。
 
 ## 本轮评审定位
 
