@@ -4,7 +4,7 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.9、可行性V1.6、统一SRS V1.5.2，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
+|[reports](reports)|项目计划V1.9、可行性V1.6、统一SRS V1.5.3，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
 |[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
