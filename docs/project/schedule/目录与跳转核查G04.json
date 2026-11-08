@@ -52,7 +52,7 @@
     "file": "城院帮项目计划G04.pdf",
     "pages": 103,
     "links": 25,
-    "outline": 163,
+    "outline": 164,
     "brokenInternalLinks": [],
     "WBSPhysicalPage": 26,
     "WBSTocPhysicalPages": [
@@ -60,7 +60,8 @@
     ],
     "userRepresentativePage": 103,
     "appendixCPage": 68,
-    "appendixIPage": 82
+    "appendixIPage": 82,
+    "userCategoryPage": 11
   },
   {
     "file": "详细周计划G04.pdf",
@@ -94,7 +95,7 @@
     "file": "项目计划与可行性分析合订G04.pdf",
     "pages": 175,
     "links": 56,
-    "outline": 279,
+    "outline": 280,
     "brokenInternalLinks": [],
     "WBSPhysicalPage": 26,
     "WBSTocPhysicalPages": [
@@ -102,7 +103,8 @@
     ],
     "userRepresentativePage": 103,
     "appendixCPage": 68,
-    "appendixIPage": 82
+    "appendixIPage": 82,
+    "userCategoryPage": 11
   },
   {
     "file": "城院帮ER图与数据结构G04.pdf",
