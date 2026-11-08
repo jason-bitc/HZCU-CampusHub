@@ -1,0 +1,363 @@
+{
+  "checkedAt": "2026-11-08T12:15:44.990Z",
+  "status": "PASS",
+  "browser": "Installed Google Chrome, Playwright",
+  "backend": "real local Java/MySQL at 8080",
+  "faultInjection": "one empty 503 response for GET /api/v1/articles; GET /me/profile mocked with majorId=11 only for the positive same-major branch; article filtering and all other requests real",
+  "assertions": [
+    "guest discovery sends no private profile request",
+    "target job leads to complete guest reading with source links",
+    "empty result preserves target job and keyword",
+    "real authenticated account without a major gets a profile completion entry; profile was not changed",
+    "same-major shortcut preserves target job and applies the profile majorId (profile response mocked; article filtering real)",
+    "empty gateway 503 has actionable error and retry preserves all conditions",
+    "desktop and mobile screenshots have no horizontal overflow"
+  ],
+  "evidence": [
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "12ea27d3-0254-4cd1-9a5a-3a4ae4b6e613"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized",
+      "status": 200,
+      "traceId": "2b785086-5aaa-43de-ae44-27dee364908b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "1c6872ca-00f3-45a3-bbd7-1fbebac83dd1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized",
+      "status": 200,
+      "traceId": "80adda6b-9887-49be-a455-c51538970ab5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&jobId=1",
+      "status": 200,
+      "traceId": "72cd3c05-3bab-4cb6-aa4e-5caca47edfd0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001",
+      "query": "",
+      "status": 200,
+      "traceId": "09e49a29-5b1e-42d3-b498-03a32d3265a6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "0296ba46-5df8-41f3-9429-ca985b8bd67a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&jobId=1",
+      "status": 200,
+      "traceId": "e6a4f143-aff4-48a6-b474-c233ce9391db"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&keyword=%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E8%AF%BB%E8%80%85%E9%AA%8C%E6%94%B6-20261108&jobId=1",
+      "status": 200,
+      "traceId": "0c3a9feb-8eef-4439-9f78-0b576f587fd1"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "query": "",
+      "status": 200,
+      "traceId": "7604b230-a1f6-4060-beda-e1ea167a8e65"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "query": "",
+      "status": 200,
+      "traceId": "b1dc0030-d7d1-49cf-88f9-cc2a3173040d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "query": "page=1&size=20",
+      "status": 200,
+      "traceId": "b707dd88-9e34-435e-b933-6077ed37da53"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&jobId=1",
+      "status": 200,
+      "traceId": "496dcc75-3c93-4d0e-954a-5d5b78599b73"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "query": "",
+      "status": 200,
+      "traceId": "66c3002c-af5b-41c0-8e16-9c2ade967d8b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "560e33a9-69e0-4122-a775-73294d93ab7b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "8bdb7ede-b6ae-4c3b-83ed-dda5d99e3606"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "c4a0cc71-946f-493f-8d6c-2a99ec44c80b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "4cb9a250-220c-4706-922e-b81480b84202"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "f4797e09-7c1c-4258-83ed-f079dea4e4fd"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "8e432a3d-c23c-4975-826e-fdb24b11b991"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "c105643a-6572-4c01-b255-bb48c15bce05"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "query": "",
+      "status": 200,
+      "traceId": "3ecf2832-3597-44fc-8de7-96edde0b0f85"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "query": "",
+      "status": 200,
+      "traceId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&jobId=1",
+      "status": 200,
+      "traceId": "a2bd13af-c258-4fb6-b2ee-4368094afc2c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "f912b89d-f9ac-4abb-94f2-ea4f39496bc8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "0b04f60a-5793-4f38-b549-1c803551976c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "19424d7b-2252-4626-801b-8513fef841ee"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "3789c6a8-d2a9-4aed-bc01-9a22012c6908"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "d9d87c52-bd98-4cc6-88be-6f987224240c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "b05e8a63-b44c-4091-a4fc-2666610ffbc1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "3af7674c-48b2-4dac-a464-b7bac9026634"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=recognized&jobId=1&majorId=11",
+      "status": 200,
+      "traceId": "000cae41-e327-4833-9dcf-89df872dfa77"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "52a2a659-961e-4454-96aa-5cbdc9b1a2f5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "5620040b-7a59-409b-adf5-3e588d9434a3"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "39bfdfe6-a1dc-4f01-92c3-e0bc6a9455f7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "e733722e-4e8b-4f9d-875c-ce733da42f54"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "b9f55d6f-3c9e-49bb-a8d5-2fefd576c1c5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=latest&jobId=1&majorId=11",
+      "status": 503,
+      "traceId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "query": "size=10&page=1&sort=latest&jobId=1&majorId=11",
+      "status": 200,
+      "traceId": "5b3750f4-74b5-47a6-812d-2afaa81601c0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "5fec22f0-fd72-4608-b146-7c28e2fd4830"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "a0688b5c-2edc-4e9f-b12b-af6db5a4d79e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "bb493ff6-71d8-4393-aa0c-bd14789975d1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "91b4013d-b5a0-41e8-b987-4a81d2249cb7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "query": "",
+      "status": 200,
+      "traceId": "bba045b8-c9b3-4d12-ac24-208997b3656f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/profile",
+      "query": "",
+      "status": 200,
+      "traceId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "query": "",
+      "status": 200,
+      "traceId": "6317b34c-c56b-4822-ad39-428b183e3096"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/coins",
+      "query": "",
+      "status": 200,
+      "traceId": "5f340b6f-0bb4-472e-a74d-1a11c6c9fb1a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/contact-settings",
+      "query": "",
+      "status": 200,
+      "traceId": "7e8f98f2-5b7b-4c4c-a538-d5baa81ee5c8"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "query": "",
+      "status": 200,
+      "traceId": "6f24e02a-9be2-4558-add6-4856d06da93e"
+    }
+  ],
+  "writes": "login and logout only; no content, profile, interaction, reward or coin changes",
+  "realDevice": "NOT_RUN"
+}

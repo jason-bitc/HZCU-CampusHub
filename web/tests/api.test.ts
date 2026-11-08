@@ -84,6 +84,35 @@ test("401 clears authentication and does not retry the mutation", async () => {
     clearSession();
   }
 });
+test("an empty gateway failure becomes an actionable service error", async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response(null, { status: 503 });
+  try {
+    await assert.rejects(request("/articles"), {
+      status: 503,
+      code: "HTTP_503",
+      message: "服务暂时不可用，请稍后重试。",
+    });
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+test("an empty 401 response still clears a private session", async () => {
+  const original = globalThis.fetch;
+  login();
+  globalThis.fetch = async () => new Response(null, { status: 401 });
+  try {
+    await assert.rejects(request("/me/profile", { auth: true }), {
+      status: 401,
+      code: "HTTP_401",
+    });
+    assert.equal(session.token, "");
+    assert.equal(session.status, "guest");
+  } finally {
+    globalThis.fetch = original;
+    clearSession();
+  }
+});
 test("private image download returns a Blob rather than parsing JSON", async () => {
   const original = globalThis.fetch;
   login();

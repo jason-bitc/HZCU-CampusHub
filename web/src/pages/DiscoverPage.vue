@@ -3,16 +3,21 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { LocationQueryRaw } from "vue-router";
 import { get, message } from "../lib/api";
-import type { Article, Catalog, Page } from "../types";
+import type { Article, Catalog, Page, Profile } from "../types";
 import ArticleCard from "../components/ArticleCard.vue";
+import { session } from "../lib/session";
 const route = useRoute();
 const router = useRouter();
 const catalog = ref<Catalog>();
 const result = ref<Page<Article>>();
+const profile = ref<Profile>();
 const busy = ref(false);
 const error = ref("");
+const profileBusy = ref(false);
+const profileError = ref("");
 const keyword = ref("");
 let generation = 0;
+let profileGeneration = 0;
 const groups = [
   { key: "jobs", param: "jobId", label: "目标岗位" },
   { key: "majors", param: "majorId", label: "文章适用专业" },
@@ -61,9 +66,48 @@ async function load() {
     if (current === generation) busy.value = false;
   }
 }
+async function loadOwnMajor() {
+  const current = ++profileGeneration;
+  profileError.value = "";
+  if (session.status !== "ready") {
+    profile.value = undefined;
+    profileBusy.value = false;
+    return;
+  }
+  profileBusy.value = true;
+  try {
+    const value = await get<Profile>("/me/profile", true);
+    if (current === profileGeneration) profile.value = value;
+  } catch (e) {
+    if (current === profileGeneration) profileError.value = message(e);
+  } finally {
+    if (current === profileGeneration) profileBusy.value = false;
+  }
+}
+function useSameMajor() {
+  if (session.status !== "ready") {
+    void router.push({ path: "/account", query: { next: route.fullPath } });
+    return;
+  }
+  const majorId = profile.value?.majorId;
+  if (!majorId) {
+    void router.push("/me");
+    return;
+  }
+  if (!catalog.value?.majors.some((major) => major.id === majorId)) {
+    profileError.value = "本人专业当前不在可筛选分类中，请手动选择。";
+    return;
+  }
+  change("majorId", String(majorId));
+}
 onMounted(load);
+onMounted(loadOwnMajor);
 watch(() => route.query, load);
-onBeforeUnmount(() => (generation += 1));
+watch(() => session.status, loadOwnMajor);
+onBeforeUnmount(() => {
+  generation += 1;
+  profileGeneration += 1;
+});
 </script>
 <template>
   <div class="page-heading">
@@ -104,6 +148,40 @@ onBeforeUnmount(() => (generation += 1));
             </select></label
           >
         </div>
+        <div class="same-major">
+          <p v-if="session.status !== 'ready'">
+            游客可手动选择专业；登录并填写本人专业后可用同专业快捷筛选。
+          </p>
+          <p v-else-if="profileBusy">正在读取本人专业，仍可手动筛选。</p>
+          <p v-else-if="profileError">
+            本人专业读取失败或不可用，仍可手动筛选。{{ profileError }}
+          </p>
+          <p v-else-if="!profile?.majorId">
+            尚未填写本人专业，可继续手动选择。
+          </p>
+          <p v-else>按本人资料中的专业筛选文章适用背景，仍可手动调整。</p>
+          <button
+            v-if="session.status !== 'ready'"
+            :disabled="session.status === 'checking'"
+            @click="useSameMajor"
+          >
+            登录后使用同专业
+          </button>
+          <button v-else-if="profileBusy" disabled>正在读取本人专业</button>
+          <button v-else-if="profileError" @click="loadOwnMajor">
+            重试读取本人专业
+          </button>
+          <RouterLink v-else-if="!profile?.majorId" class="button" to="/me">
+            完善本人专业
+          </RouterLink>
+          <button
+            v-else
+            :aria-pressed="selected('majorId') === String(profile.majorId)"
+            @click="useSameMajor"
+          >
+            只看同专业
+          </button>
+        </div>
         <div class="filter-bottom">
           <div class="segmented" aria-label="排序">
             <button
@@ -131,9 +209,11 @@ onBeforeUnmount(() => (generation += 1));
         <span>{{
           busy
             ? "正在查找经验…"
-            : result
-              ? `找到 ${result.total} 篇经验`
-              : "经验列表"
+            : error
+              ? "当前条件读取失败"
+              : result
+                ? `找到 ${result.total} 篇经验`
+                : "经验列表"
         }}</span
         ><span>全文免费阅读</span>
       </div>

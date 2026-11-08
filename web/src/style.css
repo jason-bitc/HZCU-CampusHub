@@ -517,6 +517,25 @@ main:focus {
   font-size: 14px;
   padding: 10px 6px;
 }
+.same-major {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 13px;
+}
+.same-major p {
+  margin: 0;
+}
+.same-major .button,
+.same-major button {
+  flex-shrink: 0;
+}
 .filter-bottom {
   display: flex;
   align-items: center;

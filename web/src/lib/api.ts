@@ -57,22 +57,35 @@ export async function request<T>(
         throw new ApiError(409, "SESSION_CHANGED", "会话已变化，已忽略旧请求");
       return value as T;
     }
-    const value: unknown = await response.json();
+    const value: unknown = await response.json().catch(() => null);
     if (auth && epoch !== session.epoch)
       throw new ApiError(409, "SESSION_CHANGED", "会话已变化，已忽略旧请求");
-    if (!value || typeof value !== "object" || !("code" in value))
-      throw new Error("服务响应格式不正确");
-    if (!response.ok || value.code !== "OK") {
-      if (
-        auth &&
-        (response.status === 401 ||
-          (response.status === 403 && value.code === "ACCESS_RESTRICTED"))
-      )
-        clearSession(
-          response.status === 403
-            ? "账号或校园认证受限。"
-            : "会话已失效，请重新登录。",
+    if (
+      auth &&
+      (response.status === 401 ||
+        (response.status === 403 &&
+          value &&
+          typeof value === "object" &&
+          "code" in value &&
+          value.code === "ACCESS_RESTRICTED"))
+    )
+      clearSession(
+        response.status === 403
+          ? "账号或校园认证受限。"
+          : "会话已失效，请重新登录。",
+      );
+    if (!value || typeof value !== "object" || !("code" in value)) {
+      if (!response.ok)
+        throw new ApiError(
+          response.status,
+          `HTTP_${response.status}`,
+          response.status >= 500
+            ? "服务暂时不可用，请稍后重试。"
+            : "请求未完成，请稍后重试。",
         );
+      throw new Error("服务响应格式不正确");
+    }
+    if (!response.ok || value.code !== "OK") {
       throw new ApiError(
         response.status,
         String(value.code),
