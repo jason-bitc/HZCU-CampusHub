@@ -4,7 +4,7 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.7、可行性V1.6、统一SRS V1.5.1，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
+|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.1，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
 |[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
@@ -36,3 +36,8 @@
 [11项评审与PDF页码定位](models/统一SRS评审条目定位G04.csv)。
 
 ER图使用1:1、1:N、M:N；[28项联系与参与约束](models/ER联系与参与约束G04.csv)与SRS表6-1同步。
+
+## 本轮评审定位
+
+- [项目计划 PDF](reports/城院帮项目计划G04.pdf)第7章图7-1为WBS总览，PDF第25页，目录第3页可直接跳转。[合订 PDF](reports/项目计划与可行性分析合订G04.pdf)采用同一计划，完整分解见[WBS树状结构图](schedule/WBS树状结构图G04.pdf)。
+- [用户代表邀约与原型走查](meetings-research/用户代表邀约与原型走查G04.md)记录读者、作者候选状态及走查方法。[需求阶段11项审查](schedule/需求阶段11项审查G04.csv)第6、8项同步更新。实际结果填入[用户任务走查与修改确认填写表](models/用户任务走查与修改确认填写表G04.csv)。
