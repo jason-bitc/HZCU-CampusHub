@@ -120,13 +120,20 @@ onBeforeUnmount(() => {
     <div>
       <section class="panel filters" aria-label="筛选经验">
         <form class="search-form" role="search" @submit.prevent="search">
-          <label class="sr-only" for="search">搜索文章标题或摘要</label
-          ><input
-            id="search"
-            v-model="keyword"
-            type="search"
-            placeholder="搜索文章标题或摘要"
-          /><button class="primary" type="submit">搜索</button>
+          <label class="sr-only" for="search">搜索文章标题或摘要</label>
+          <div class="search-control">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m15.5 15.5 5 5" />
+            </svg>
+            <input
+              id="search"
+              v-model="keyword"
+              type="search"
+              placeholder="搜索文章标题或摘要"
+            />
+          </div>
+          <button class="primary" type="submit">搜索</button>
         </form>
         <div v-if="catalog" class="filter-grid">
           <label v-for="group in groups" :key="group.key"
@@ -218,6 +225,7 @@ onBeforeUnmount(() => {
         ><span>全文免费阅读</span>
       </div>
       <section v-if="error" class="panel state-panel" role="alert">
+        <span class="state-icon" aria-hidden="true">!</span>
         <h2>暂时无法读取经验</h2>
         <p>{{ error }}</p>
         <button @click="load">重试当前条件</button>
@@ -233,13 +241,32 @@ onBeforeUnmount(() => {
           v-if="result && !result.items.length"
           class="panel state-panel"
         >
+          <svg
+            class="empty-icon"
+            viewBox="0 0 48 48"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="21" cy="21" r="12" />
+            <path d="m30 30 9 9M15 21h12" />
+          </svg>
           <h2>当前条件下还没有经验</h2>
           <p>可以减少筛选条件，或清除条件重新查找。</p>
           <button @click="router.push('/')">清除条件</button>
         </section></template
       >
-      <div v-else class="panel state-panel" role="status">
-        <p>正在读取公开文章，请稍候。</p>
+      <div v-else class="loading-list" role="status">
+        <span class="sr-only">正在读取公开文章，请稍候。</span>
+        <div
+          v-for="index in 3"
+          :key="index"
+          class="panel article-skeleton"
+          aria-hidden="true"
+        >
+          <span class="skeleton-line skeleton-title"></span>
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line skeleton-short"></span>
+        </div>
       </div>
       <nav
         v-if="result && result.total > result.size && !busy && !error"

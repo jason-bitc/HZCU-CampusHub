@@ -57,7 +57,12 @@ watch(() => session.status, load);
 <template>
   <div class="card-favorite">
     <button :disabled="busy" :aria-pressed="saved === true" @click="act">
-      {{
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"
+        />
+      </svg>
+      <span>{{
         busy
           ? "读取收藏…"
           : session.status !== "ready"
@@ -67,7 +72,7 @@ watch(() => session.status, load);
               : saved
                 ? "已收藏 · 取消"
                 : "收藏经验"
-      }}
+      }}</span>
     </button>
     <p v-if="error" class="field-error" role="alert">{{ error }}</p>
   </div>

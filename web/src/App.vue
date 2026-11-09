@@ -38,9 +38,19 @@ onMounted(initializeMember);
     >
     <header class="site-header">
       <div class="header-inner">
-        <RouterLink class="brand" to="/" aria-label="城院帮首页"
-          >城院帮<span>校园经验</span></RouterLink
-        >
+        <RouterLink class="brand" to="/" aria-label="城院帮首页">
+          <img
+            class="brand-logo"
+            src="/campushub-logo.png"
+            alt=""
+            width="44"
+            height="34"
+          />
+          <span class="brand-copy">
+            <span class="brand-name">城院帮</span>
+            <span class="brand-tagline">校园经验</span>
+          </span>
+        </RouterLink>
         <nav aria-label="主导航">
           <RouterLink to="/" :class="{ active: route.path === '/' }"
             >发现经验</RouterLink
@@ -51,14 +61,19 @@ onMounted(initializeMember);
         <RouterLink
           class="account-link"
           :to="session.status === 'ready' ? '/me' : '/account'"
-          >{{
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M5 20c.7-4 3.1-6 7-6s6.3 2 7 6" />
+          </svg>
+          <span>{{
             session.status === "ready"
               ? "我的账号"
               : session.status === "checking"
                 ? "核验会话…"
                 : "校园账号登录"
-          }}</RouterLink
-        >
+          }}</span>
+        </RouterLink>
       </div>
     </header>
     <div v-if="session.message" class="global-notice" role="status">

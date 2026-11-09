@@ -25,11 +25,18 @@ function open(event: MouseEvent) {
 </script>
 <template>
   <article class="article-card panel" @click="open">
-    <h2>
-      <RouterLink :to="`/articles/${article.id}`">{{
-        article.title
-      }}</RouterLink>
-    </h2>
+    <div class="article-card-heading">
+      <h2>
+        <RouterLink :to="`/articles/${article.id}`">{{
+          article.title
+        }}</RouterLink>
+      </h2>
+      <span class="card-open" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    </div>
     <p class="summary">{{ article.summary }}</p>
     <p class="article-tags">
       <span
@@ -43,12 +50,14 @@ function open(event: MouseEvent) {
         >{{ category.name }}</span
       ><span>{{ article.experienceStage }}</span>
     </p>
-    <p class="meta">
-      <span>{{ sourceName[article.sourceType] || "来源待确认" }}</span
-      ><time>{{ dateText(article.publishedAt) }}</time
-      ><span>投币 {{ article.counts.effectiveCoins }}</span
-      ><span>点赞 {{ article.counts.effectiveLikes }}</span>
-    </p>
-    <FavoriteButton v-if="showFavorite" :article-id="article.id" />
+    <div class="article-card-footer">
+      <p class="meta">
+        <span>{{ sourceName[article.sourceType] || "来源待确认" }}</span
+        ><time>{{ dateText(article.publishedAt) }}</time
+        ><span>投币 {{ article.counts.effectiveCoins }}</span
+        ><span>点赞 {{ article.counts.effectiveLikes }}</span>
+      </p>
+      <FavoriteButton v-if="showFavorite" :article-id="article.id" />
+    </div>
   </article>
 </template>
