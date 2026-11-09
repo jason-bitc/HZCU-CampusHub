@@ -5,6 +5,7 @@ import type { LocationQueryRaw } from "vue-router";
 import { get, message } from "../lib/api";
 import type { Article, Catalog, Page, Profile } from "../types";
 import ArticleCard from "../components/ArticleCard.vue";
+import FilterSelect from "../components/FilterSelect.vue";
 import { session } from "../lib/session";
 const route = useRoute();
 const router = useRouter();
@@ -119,41 +120,31 @@ onBeforeUnmount(() => {
   <div class="discovery-layout discovery-single">
     <div>
       <section class="panel filters" aria-label="筛选经验">
-        <form class="search-form" role="search" @submit.prevent="search">
-          <label class="sr-only" for="search">搜索文章标题或摘要</label>
-          <div class="search-control">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="10.5" cy="10.5" r="6.5" />
-              <path d="m15.5 15.5 5 5" />
-            </svg>
-            <input
-              id="search"
-              v-model="keyword"
-              type="search"
-              placeholder="搜索文章标题或摘要"
-            />
-          </div>
-          <button class="primary" type="submit">搜索</button>
-        </form>
-        <div v-if="catalog" class="filter-grid">
-          <label v-for="group in groups" :key="group.key"
-            >{{ group.label
-            }}<select
-              :value="selected(group.param)"
-              @change="
-                change(group.param, ($event.target as HTMLSelectElement).value)
-              "
-            >
-              <option value="">全部</option>
-              <option
-                v-for="item in catalog[group.key]"
-                :key="item.id"
-                :value="String(item.id)"
-              >
-                {{ item.name }}
-              </option>
-            </select></label
-          >
+        <div class="filter-toolbar">
+          <form class="search-form" role="search" @submit.prevent="search">
+            <label class="toolbar-label" for="search">搜索经验</label>
+            <div class="search-control">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m15.5 15.5 5 5" />
+              </svg>
+              <input
+                id="search"
+                v-model="keyword"
+                type="search"
+                placeholder="搜索文章标题或摘要"
+              />
+              <button class="primary" type="submit">搜索</button>
+            </div>
+          </form>
+          <FilterSelect
+            v-for="group in groups"
+            :key="group.key"
+            :label="group.label"
+            :model-value="selected(group.param)"
+            :options="catalog?.[group.key] ?? []"
+            @update:model-value="change(group.param, $event)"
+          />
         </div>
         <div class="filter-footer">
           <div class="same-major">

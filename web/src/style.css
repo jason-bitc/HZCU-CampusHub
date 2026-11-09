@@ -1874,25 +1874,178 @@ a {
   }
 }
 .filters {
-  padding: 24px 26px 18px;
+  padding: 22px 24px 18px;
+  border-radius: 16px;
   box-shadow: 0 4px 18px rgb(32 59 44 / 4%);
 }
-.search-form {
-  margin-bottom: 20px;
+.filter-toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 16px 12px;
 }
-.filter-grid {
-  gap: 12px;
+.filter-toolbar .search-form {
+  grid-column: 1 / -1;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
 }
-.filter-grid label {
-  margin-bottom: 18px;
+.toolbar-label,
+.filter-select-label {
+  display: block;
+  margin: 0;
   color: #43594d;
   font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.filter-toolbar .search-control {
+  width: 100%;
+}
+.filter-toolbar .search-form .search-control input {
+  width: 100%;
+  height: 48px;
+  padding-right: 88px;
+  border-color: #d7e2db;
+  border-radius: 10px;
+}
+.filter-toolbar .search-form .search-control .primary {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+.filter-select {
+  position: relative;
+  min-width: 0;
+}
+.filter-select-label {
+  margin-bottom: 8px;
+}
+.filter-select-control {
+  position: relative;
+}
+.filter-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  color: #526359;
+  border: 1px solid #d7e2db;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+.filter-select-trigger:hover {
+  border-color: #8ca998;
+  background: #fbfdfc;
+}
+.filter-select-trigger:focus,
+.filter-select-trigger.is-open {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px rgb(13 107 87 / 8%);
+}
+.filter-select-trigger.has-value {
+  color: #173e30;
+  font-weight: 500;
+}
+.filter-select-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.filter-select-trigger > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: #71857a;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  transition: transform 160ms ease;
+}
+.filter-select-trigger.is-open > svg {
+  transform: rotate(180deg);
+}
+.filter-select-options {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 7px);
+  right: 0;
+  left: 0;
+  max-height: 264px;
+  padding: 6px;
+  overflow-y: auto;
+  border: 1px solid #dce6df;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgb(23 62 48 / 14%);
+}
+.filter-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  padding: 9px 10px;
+  color: #40574a;
+  border-radius: 7px;
+  font-size: 14px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.filter-select-option.is-active {
+  color: #095441;
+  background: #edf6f0;
+}
+.filter-select-option.is-selected {
+  color: var(--green);
+  font-weight: 600;
+}
+.filter-select-option > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.filter-popover-enter-active,
+.filter-popover-leave-active {
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+.filter-popover-enter-from,
+.filter-popover-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
 }
 .filter-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid #e3ebe6;
 }
@@ -1944,6 +2097,11 @@ a {
 @media (max-width: 760px) {
   .filters {
     padding: 18px;
+    border-radius: 12px;
+  }
+  .filter-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
   }
   .filter-footer {
     align-items: stretch;
@@ -1966,5 +2124,13 @@ a {
   .result-tools {
     justify-content: space-between;
     width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-select-trigger,
+  .filter-select-trigger > svg,
+  .filter-popover-enter-active,
+  .filter-popover-leave-active {
+    transition: none;
   }
 }
