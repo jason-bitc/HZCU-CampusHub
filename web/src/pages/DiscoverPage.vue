@@ -155,41 +155,58 @@ onBeforeUnmount(() => {
             </select></label
           >
         </div>
-        <div class="same-major">
-          <p v-if="session.status !== 'ready'">
-            游客可手动选择专业；登录并填写本人专业后可用同专业快捷筛选。
-          </p>
-          <p v-else-if="profileBusy">正在读取本人专业，仍可手动筛选。</p>
-          <p v-else-if="profileError">
-            本人专业读取失败或不可用，仍可手动筛选。{{ profileError }}
-          </p>
-          <p v-else-if="!profile?.majorId">
-            尚未填写本人专业，可继续手动选择。
-          </p>
-          <p v-else>按本人资料中的专业筛选文章适用背景，仍可手动调整。</p>
+        <div class="filter-footer">
+          <div class="same-major">
+            <p v-if="session.status !== 'ready'">
+              登录后可按本人专业快速筛选，也可手动选择。
+            </p>
+            <p v-else-if="profileBusy">正在读取本人专业…</p>
+            <p v-else-if="profileError">本人专业暂不可用，可重试或手动选择。</p>
+            <p v-else-if="!profile?.majorId">本人资料尚未填写专业。</p>
+            <p v-else>按本人专业筛选适用经验。</p>
+            <button
+              v-if="session.status !== 'ready'"
+              :disabled="session.status === 'checking'"
+              @click="useSameMajor"
+            >
+              登录后使用同专业
+            </button>
+            <button v-else-if="profileBusy" disabled>正在读取</button>
+            <button v-else-if="profileError" @click="loadOwnMajor">
+              重试读取
+            </button>
+            <RouterLink v-else-if="!profile?.majorId" class="button" to="/me">
+              完善本人专业
+            </RouterLink>
+            <button
+              v-else
+              :aria-pressed="selected('majorId') === String(profile.majorId)"
+              @click="useSameMajor"
+            >
+              只看同专业
+            </button>
+          </div>
           <button
-            v-if="session.status !== 'ready'"
-            :disabled="session.status === 'checking'"
-            @click="useSameMajor"
+            class="text-button clear-filters"
+            :disabled="!Object.keys(route.query).length"
+            @click="router.push('/')"
           >
-            登录后使用同专业
-          </button>
-          <button v-else-if="profileBusy" disabled>正在读取本人专业</button>
-          <button v-else-if="profileError" @click="loadOwnMajor">
-            重试读取本人专业
-          </button>
-          <RouterLink v-else-if="!profile?.majorId" class="button" to="/me">
-            完善本人专业
-          </RouterLink>
-          <button
-            v-else
-            :aria-pressed="selected('majorId') === String(profile.majorId)"
-            @click="useSameMajor"
-          >
-            只看同专业
+            清除所有条件
           </button>
         </div>
-        <div class="filter-bottom">
+      </section>
+      <div class="result-heading">
+        <span class="result-count" aria-live="polite">{{
+          busy
+            ? "正在查找经验…"
+            : error
+              ? "当前条件读取失败"
+              : result
+                ? `找到 ${result.total} 篇经验`
+                : "经验列表"
+        }}</span>
+        <div class="result-tools">
+          <span class="free-reading">全文免费阅读</span>
           <div class="segmented" aria-label="排序">
             <button
               :aria-pressed="selected('sort') !== 'latest'"
@@ -203,26 +220,7 @@ onBeforeUnmount(() => {
               最新发布
             </button>
           </div>
-          <button
-            class="text-button"
-            :disabled="!Object.keys(route.query).length"
-            @click="router.push('/')"
-          >
-            清除所有条件
-          </button>
         </div>
-      </section>
-      <div class="result-heading" aria-live="polite">
-        <span>{{
-          busy
-            ? "正在查找经验…"
-            : error
-              ? "当前条件读取失败"
-              : result
-                ? `找到 ${result.total} 篇经验`
-                : "经验列表"
-        }}</span
-        ><span>全文免费阅读</span>
       </div>
       <section v-if="error" class="panel state-panel" role="alert">
         <span class="state-icon" aria-hidden="true">!</span>
