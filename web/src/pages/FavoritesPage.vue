@@ -100,19 +100,6 @@ onBeforeUnmount(() => {
       </div>
       <button :disabled="busy || changing" @click="load">刷新收藏</button>
     </div>
-    <nav class="collection-tabs" aria-label="工作区分类">
-      <RouterLink
-        v-for="item in [
-          { text: '公开经验', state: 'PUBLISHED' },
-          { text: '草稿', state: 'DRAFT' },
-          { text: '自主下架', state: 'AUTHOR_OFFLINE' },
-          { text: '管理员隐藏', state: 'ADMIN_HIDDEN' },
-        ]"
-        :key="item.state"
-        :to="{ path: '/workspace', query: { state: item.state } }"
-        >{{ item.text }}</RouterLink
-      ><RouterLink class="active" to="/favorites">收藏</RouterLink>
-    </nav>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <section v-if="error" class="panel" role="alert">
       <h2>收藏暂时读取或操作失败</h2>

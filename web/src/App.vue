@@ -56,7 +56,10 @@ onMounted(initializeMember);
             >发现经验</RouterLink
           ><RouterLink to="/workspace" active-class="active"
             >我的工作区</RouterLink
-          ><RouterLink to="/favorites" active-class="active">收藏</RouterLink>
+          ><RouterLink to="/favorites" active-class="active">收藏</RouterLink
+          ><RouterLink to="/me/appeals" active-class="active"
+            >我的限制与申诉</RouterLink
+          >
         </nav>
         <RouterLink
           class="account-link"

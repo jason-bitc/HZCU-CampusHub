@@ -110,7 +110,14 @@ onBeforeUnmount(() => generation++);
         <h1>我的限制与申诉</h1>
         <p>仅显示本人行为限制及复核结果。</p>
       </div>
-      <RouterLink to="/me">返回个人中心</RouterLink>
+      <nav class="appeal-jumps" aria-label="本页内容">
+        <RouterLink :to="{ path: '/me/appeals', hash: '#restrictions' }">
+          当前行为限制
+        </RouterLink>
+        <RouterLink :to="{ path: '/me/appeals', hash: '#appeal-records' }">
+          申诉记录
+        </RouterLink>
+      </nav>
     </div>
     <p v-if="error" class="error" role="alert">{{ error }}</p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
@@ -122,7 +129,7 @@ onBeforeUnmount(() => generation++);
       ><button :disabled="busy" @click="reconcile">读取记录并核对后结束</button>
     </section>
     <div class="profile-layout">
-      <section class="panel">
+      <section id="restrictions" class="panel appeal-section">
         <h2>当前行为限制</h2>
         <p v-if="!busy && !restrictions.length">暂无行为限制记录。</p>
         <div v-for="row in restrictions" :key="row.id" class="restriction-row">
@@ -176,7 +183,7 @@ onBeforeUnmount(() => generation++);
           同一限制版本仅允许一条待复核申诉。解除限制不自动恢复被隐藏的文章或评论。
         </p>
       </section>
-      <section class="panel">
+      <section id="appeal-records" class="panel appeal-section">
         <h2>申诉记录</h2>
         <p v-if="appeals && !appeals.items.length">暂无申诉记录。</p>
         <div
