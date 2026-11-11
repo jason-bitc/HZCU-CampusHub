@@ -50,10 +50,14 @@
  },
  {
   "file": "城院帮项目计划G04.pdf",
-  "pages": 100,
-  "links": 23,
-  "outline": 41,
-  "brokenInternalLinks": []
+  "pages": 101,
+  "links": 24,
+  "outline": 162,
+  "brokenInternalLinks": [],
+  "WBSPhysicalPage": 25,
+  "WBSTocPhysicalPages": [
+   3
+  ]
  },
  {
   "file": "详细周计划G04.pdf",
@@ -82,5 +86,16 @@
   "agendaLinks": 4,
   "outline": 30,
   "status": "按4个章节跳转，目标页3/6/12/15；答疑附录17—30"
+ },
+ {
+  "file": "项目计划与可行性分析合订G04.pdf",
+  "pages": 173,
+  "links": 55,
+  "outline": 278,
+  "brokenInternalLinks": [],
+  "WBSPhysicalPage": 25,
+  "WBSTocPhysicalPages": [
+   3
+  ]
  }
 ]
