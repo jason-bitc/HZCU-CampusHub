@@ -3637,122 +3637,637 @@
   {
     "code": "4.1.1",
     "parent": "4.1",
-    "name": "设计业务模块与接口契约",
-    "duration": 1,
+    "name": "梳理候选架构与数据方案",
+    "duration": 0.125,
     "start": "2026-10-26T09:00:00",
-    "finish": "2026-10-26T18:00:00",
+    "finish": "2026-10-26T10:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
       "3.4.2"
     ],
-    "budget": 114.4,
-    "accept": "共享API、错误响应、版本号、ER和权限边界明确；客户端不直连数据库",
-    "evidence": "架构、ER、部署图；API契约",
+    "budget": 18.3,
+    "accept": "至少3个候选方案，含架构、数据与端侧选择",
+    "evidence": "候选方案清单、技术可行性判断",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
       {
         "resource": "王晨",
-        "workHours": 2.5,
-        "units": 0.3125,
+        "workHours": 0.4,
+        "units": 0.4,
         "role": "主负责人／原共同任务"
       }
     ],
-    "planWorkHours": 2.5,
+    "planWorkHours": 0.4,
     "taskType": "fixedDuration",
     "effortDriven": false,
-    "laborBudget": 114.4,
+    "laborBudget": 18.3,
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
     "code": "4.1.2",
     "parent": "4.1",
-    "name": "设计数据关系与本机部署边界",
-    "duration": 2,
-    "start": "2026-10-27T09:00:00",
-    "finish": "2026-10-28T18:00:00",
+    "name": "形成方案清单并判断技术可行性",
+    "duration": 0.125,
+    "start": "2026-10-26T10:00:00",
+    "finish": "2026-10-26T11:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
       "4.1.1"
     ],
-    "budget": 91.52,
-    "accept": "共享API、错误响应、版本号、ER和权限边界明确；客户端不直连数据库",
-    "evidence": "架构、ER、部署图；API契约",
+    "budget": 18.3,
+    "accept": "至少3个候选方案，含架构、数据与端侧选择",
+    "evidence": "候选方案清单、技术可行性判断",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
       {
         "resource": "王晨",
-        "workHours": 2.0,
-        "units": 0.125,
+        "workHours": 0.4,
+        "units": 0.4,
         "role": "主负责人／原共同任务"
       }
     ],
-    "planWorkHours": 2.0,
+    "planWorkHours": 0.4,
     "taskType": "fixedDuration",
     "effortDriven": false,
-    "laborBudget": 91.52,
+    "laborBudget": 18.3,
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
     "code": "4.2.1",
     "parent": "4.2",
-    "name": "细化认证文章与治理状态",
-    "duration": 1,
-    "start": "2026-10-29T09:00:00",
-    "finish": "2026-10-29T18:00:00",
+    "name": "编制低成本、中等与高成本方案",
+    "duration": 0.125,
+    "start": "2026-10-26T11:00:00",
+    "finish": "2026-10-26T12:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
       "4.1.2"
     ],
-    "budget": 114.4,
-    "accept": "验证码失效、越权、版本冲突、重复请求、下架及申诉均有处理规则",
-    "evidence": "状态图；事务和失败处理设计",
+    "budget": 18.3,
+    "accept": "三档方案均含系统流程图、物理元素、成本效益与进度",
+    "evidence": "三档成本方案、工程规模与进度对比",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
       {
         "resource": "王晨",
-        "workHours": 2.5,
-        "units": 0.3125,
+        "workHours": 0.4,
+        "units": 0.4,
         "role": "主负责人／原共同任务"
       }
     ],
-    "planWorkHours": 2.5,
+    "planWorkHours": 0.4,
     "taskType": "fixedDuration",
     "effortDriven": false,
-    "laborBudget": 114.4,
+    "laborBudget": 18.3,
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
     "code": "4.2.2",
     "parent": "4.2",
-    "name": "细化币事务、隐私及异常处理",
-    "duration": 1,
-    "start": "2026-10-30T09:00:00",
-    "finish": "2026-10-30T18:00:00",
+    "name": "比较工程规模、成本效益与进度",
+    "duration": 0.125,
+    "start": "2026-10-26T12:00:00",
+    "finish": "2026-10-26T13:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
       "4.2.1"
     ],
+    "budget": 18.3,
+    "accept": "三档方案均含系统流程图、物理元素、成本效益与进度",
+    "evidence": "三档成本方案、工程规模与进度对比",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.4,
+        "units": 0.4,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.4,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 18.3,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.3.1",
+    "parent": "4.3",
+    "name": "形成推荐方案与决策理由",
+    "duration": 0.125,
+    "start": "2026-10-26T14:00:00",
+    "finish": "2026-10-26T15:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.2.2"
+    ],
+    "budget": 13.73,
+    "accept": "推荐理由、被否方案与风险明确",
+    "evidence": "推荐方案与决策记录",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.3,
+        "units": 0.3,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.3,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 13.73,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.3.2",
+    "parent": "4.3",
+    "name": "记录被否方案与主要风险",
+    "duration": 0.125,
+    "start": "2026-10-26T15:00:00",
+    "finish": "2026-10-26T16:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.3.1"
+    ],
+    "budget": 13.73,
+    "accept": "推荐理由、被否方案与风险明确",
+    "evidence": "推荐方案与决策记录",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.3,
+        "units": 0.3,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.3,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 13.73,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.4.1",
+    "parent": "4.4",
+    "name": "依据数据流图分解功能层次",
+    "duration": 0.125,
+    "start": "2026-10-26T16:00:00",
+    "finish": "2026-10-26T17:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.3.2"
+    ],
+    "budget": 18.3,
+    "accept": "52项FR全部映射到模块，无遗漏",
+    "evidence": "功能层次图HIER01、功能与模块对应",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.4,
+        "units": 0.4,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.4,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 18.3,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.4.2",
+    "parent": "4.4",
+    "name": "建立功能与模块对应关系",
+    "duration": 0.125,
+    "start": "2026-10-26T17:00:00",
+    "finish": "2026-10-26T18:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.4.1"
+    ],
+    "budget": 18.3,
+    "accept": "52项FR全部映射到模块，无遗漏",
+    "evidence": "功能层次图HIER01、功能与模块对应",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.4,
+        "units": 0.4,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.4,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 18.3,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.5.1",
+    "parent": "4.5",
+    "name": "绘制层次图与结构图",
+    "duration": 0.125,
+    "start": "2026-10-27T09:00:00",
+    "finish": "2026-10-27T10:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.4.2"
+    ],
+    "budget": 27.46,
+    "accept": "模块独立、单入口单出口、接口简单",
+    "evidence": "层次图、结构图、扇入扇出与耦合内聚检查",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.6,
+        "units": 0.6,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.6,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 27.46,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.5.2",
+    "parent": "4.5",
+    "name": "检查扇入扇出、耦合与内聚",
+    "duration": 0.125,
+    "start": "2026-10-27T10:00:00",
+    "finish": "2026-10-27T11:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.5.1"
+    ],
+    "budget": 27.46,
+    "accept": "模块独立、单入口单出口、接口简单",
+    "evidence": "层次图、结构图、扇入扇出与耦合内聚检查",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.6,
+        "units": 0.6,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.6,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 27.46,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.6.1",
+    "parent": "4.6",
+    "name": "由ER图导出表结构与约束",
+    "duration": 0.125,
+    "start": "2026-10-27T11:00:00",
+    "finish": "2026-10-27T12:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.5.2"
+    ],
+    "budget": 22.88,
+    "accept": "27实体134字段落地，约束与索引一致",
+    "evidence": "ER与表结构、约束、索引和迁移脚本",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.5,
+        "units": 0.5,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.5,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 22.88,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.6.2",
+    "parent": "4.6",
+    "name": "核对索引、迁移与数据字典",
+    "duration": 0.125,
+    "start": "2026-10-27T12:00:00",
+    "finish": "2026-10-27T13:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.6.1"
+    ],
+    "budget": 22.88,
+    "accept": "27实体134字段落地，约束与索引一致",
+    "evidence": "ER与表结构、约束、索引和迁移脚本",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.5,
+        "units": 0.5,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.5,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 22.88,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.7.1",
+    "parent": "4.7",
+    "name": "确定测试策略、范围与环境",
+    "duration": 0.125,
+    "start": "2026-10-27T14:00:00",
+    "finish": "2026-10-27T15:00:00",
+    "owner": "刘景浩",
+    "coordinator": "刘景浩",
+    "reviewer": "王晨",
+    "preds": [
+      "4.6.2"
+    ],
+    "budget": 20.59,
+    "accept": "覆盖单元、集成与系统测试，与NFR对应",
+    "evidence": "测试策略、范围、环境与进度",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "刘景浩",
+        "workHours": 0.45,
+        "units": 0.45,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.45,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 20.59,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.7.2",
+    "parent": "4.7",
+    "name": "编排测试进度与资源",
+    "duration": 0.125,
+    "start": "2026-10-27T15:00:00",
+    "finish": "2026-10-27T16:00:00",
+    "owner": "刘景浩",
+    "coordinator": "刘景浩",
+    "reviewer": "王晨",
+    "preds": [
+      "4.7.1"
+    ],
+    "budget": 20.59,
+    "accept": "覆盖单元、集成与系统测试，与NFR对应",
+    "evidence": "测试策略、范围、环境与进度",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "刘景浩",
+        "workHours": 0.45,
+        "units": 0.45,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.45,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 20.59,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.8.1",
+    "parent": "4.8",
+    "name": "编写总体设计报告正文",
+    "duration": 0.125,
+    "start": "2026-10-27T16:00:00",
+    "finish": "2026-10-27T17:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.7.2"
+    ],
+    "budget": 20.59,
+    "accept": "含结构图、接口清单、数据库设计与测试计划",
+    "evidence": "总体设计报告初稿、结构图与接口清单",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.45,
+        "units": 0.45,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.45,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 20.59,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.8.2",
+    "parent": "4.8",
+    "name": "整理结构图、接口与数据库设计",
+    "duration": 0.125,
+    "start": "2026-10-27T17:00:00",
+    "finish": "2026-10-27T18:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.8.1"
+    ],
+    "budget": 20.59,
+    "accept": "含结构图、接口清单、数据库设计与测试计划",
+    "evidence": "总体设计报告初稿、结构图与接口清单",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.45,
+        "units": 0.45,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.45,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 20.59,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.9.1",
+    "parent": "4.9",
+    "name": "技术审查并登记设计问题",
+    "duration": 0.5,
+    "start": "2026-11-05T09:00:00",
+    "finish": "2026-11-05T13:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.11.2",
+      "4.12.2",
+      "4.13.2",
+      "3.5.2"
+    ],
+    "budget": 36.61,
+    "accept": "关键问题关闭，形成内部设计基线",
+    "evidence": "技术审查问题表、管理复审记录与设计基线",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 0.8,
+        "units": 0.2,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 0.8,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 36.61,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.9.2",
+    "parent": "4.9",
+    "name": "管理复审并确认内部设计基线",
+    "duration": 0.5,
+    "start": "2026-11-05T14:00:00",
+    "finish": "2026-11-05T18:00:00",
+    "owner": "刘景浩",
+    "coordinator": "刘景浩",
+    "reviewer": "王晨",
+    "preds": [
+      "4.9.1"
+    ],
+    "budget": 68.64,
+    "accept": "关键问题关闭，形成内部设计基线",
+    "evidence": "技术审查问题表、管理复审记录与设计基线",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "刘景浩",
+        "workHours": 1.5,
+        "units": 0.375,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 1.5,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 68.64,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.10.1",
+    "parent": "4.10",
+    "name": "细化认证、文章与治理状态",
+    "duration": 0.5,
+    "start": "2026-10-29T09:00:00",
+    "finish": "2026-10-29T13:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.8.2"
+    ],
+    "budget": 114.4,
+    "accept": "验证码失效、越权、版本冲突、重复请求、下架及申诉均有规则",
+    "evidence": "状态图、事务与失败处理设计",
+    "summary": false,
+    "level": 3,
+    "resourceAssignments": [
+      {
+        "resource": "王晨",
+        "workHours": 2.5,
+        "units": 0.625,
+        "role": "主负责人／原共同任务"
+      }
+    ],
+    "planWorkHours": 2.5,
+    "taskType": "fixedDuration",
+    "effortDriven": false,
+    "laborBudget": 114.4,
+    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
+  },
+  {
+    "code": "4.10.2",
+    "parent": "4.10",
+    "name": "细化币事务、隐私与异常处理",
+    "duration": 0.5,
+    "start": "2026-10-30T09:00:00",
+    "finish": "2026-10-30T13:00:00",
+    "owner": "王晨",
+    "coordinator": "王晨",
+    "reviewer": "刘景浩",
+    "preds": [
+      "4.10.1"
+    ],
     "budget": 91.52,
-    "accept": "验证码失效、越权、版本冲突、重复请求、下架及申诉均有处理规则",
-    "evidence": "状态图；事务和失败处理设计",
+    "accept": "验证码失效、越权、版本冲突、重复请求、下架及申诉均有规则",
+    "evidence": "状态图、事务与失败处理设计",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
       {
         "resource": "王晨",
         "workHours": 2.0,
-        "units": 0.25,
+        "units": 0.5,
         "role": "主负责人／原共同任务"
       }
     ],
@@ -3763,21 +4278,21 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.3.1",
-    "parent": "4.3",
+    "code": "4.11.1",
+    "parent": "4.11",
     "name": "设计网页Markdown与移动图文",
-    "duration": 1,
+    "duration": 1.0,
     "start": "2026-10-29T09:00:00",
     "finish": "2026-10-29T18:00:00",
     "owner": "刘景浩",
     "coordinator": "刘景浩",
     "reviewer": "王晨",
     "preds": [
-      "4.1.2"
+      "4.8.2"
     ],
     "budget": 114.4,
-    "accept": "复杂正文不能被移动端静默覆盖；上传失败保留正文；编辑冲突可识别",
-    "evidence": "页面状态图；编辑与上传详细设计",
+    "accept": "复杂正文不被移动端静默覆盖；上传失败保留正文",
+    "evidence": "页面状态图、编辑与上传详细设计",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -3795,21 +4310,21 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.3.2",
-    "parent": "4.3",
-    "name": "设计图片、草稿和跨端编辑流程",
-    "duration": 2,
+    "code": "4.11.2",
+    "parent": "4.11",
+    "name": "设计图片、草稿与跨端编辑流程",
+    "duration": 2.0,
     "start": "2026-10-30T09:00:00",
     "finish": "2026-11-02T18:00:00",
     "owner": "刘景浩",
     "coordinator": "刘景浩",
     "reviewer": "王晨",
     "preds": [
-      "4.3.1"
+      "4.11.1"
     ],
     "budget": 91.52,
-    "accept": "复杂正文不能被移动端静默覆盖；上传失败保留正文；编辑冲突可识别",
-    "evidence": "页面状态图；编辑与上传详细设计",
+    "accept": "复杂正文不被移动端静默覆盖；上传失败保留正文",
+    "evidence": "页面状态图、编辑与上传详细设计",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -3827,21 +4342,21 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.4.1",
-    "parent": "4.4",
+    "code": "4.12.1",
+    "parent": "4.12",
     "name": "定义运维接口、鉴权与白名单",
-    "duration": 1,
+    "duration": 1.0,
     "start": "2026-11-02T09:00:00",
     "finish": "2026-11-02T18:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
-      "4.2.2"
+      "4.10.2"
     ],
     "budget": 114.4,
-    "accept": "执行器独立于业务进程；固定目标；任务互斥；恢复前保护现有数据",
-    "evidence": "运维执行协议；备份恢复流程",
+    "accept": "执行器独立于业务进程；固定目标；恢复前保护数据",
+    "evidence": "运维执行协议、备份恢复流程",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -3859,21 +4374,21 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.4.2",
-    "parent": "4.4",
+    "code": "4.12.2",
+    "parent": "4.12",
     "name": "设计备份一致性、恢复与失败保护",
-    "duration": 1,
+    "duration": 1.0,
     "start": "2026-11-03T09:00:00",
     "finish": "2026-11-03T18:00:00",
     "owner": "王晨",
     "coordinator": "王晨",
     "reviewer": "刘景浩",
     "preds": [
-      "4.4.1"
+      "4.12.1"
     ],
     "budget": 91.52,
-    "accept": "执行器独立于业务进程；固定目标；任务互斥；恢复前保护现有数据",
-    "evidence": "运维执行协议；备份恢复流程",
+    "accept": "执行器独立于业务进程；固定目标；恢复前保护数据",
+    "evidence": "运维执行协议、备份恢复流程",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -3891,87 +4406,8 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.5.1",
-    "parent": "4.5",
-    "name": "共同核对总体与详细设计",
-    "duration": 0.5,
-    "start": "2026-11-05T09:00:00",
-    "finish": "2026-11-05T13:00:00",
-    "owner": "王晨、刘景浩",
-    "coordinator": "王晨",
-    "reviewer": "共同确认",
-    "preds": [
-      "4.3.2",
-      "4.4.2",
-      "4.6.2",
-      "3.5.2"
-    ],
-    "budget": 109.824,
-    "accept": "关键设计问题关闭；SRS、接口、数据、流程和测试条件一致",
-    "evidence": "总体及详细设计；评审记录与基线",
-    "summary": false,
-    "level": 3,
-    "resourceAssignments": [
-      {
-        "resource": "王晨",
-        "workHours": 1.2,
-        "units": 0.3,
-        "role": "主负责人／原共同任务"
-      },
-      {
-        "resource": "刘景浩",
-        "workHours": 1.2,
-        "units": 0.3,
-        "role": "主负责人／原共同任务"
-      }
-    ],
-    "planWorkHours": 2.4,
-    "taskType": "fixedDuration",
-    "effortDriven": false,
-    "laborBudget": 109.824,
-    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
-  },
-  {
-    "code": "4.5.2",
-    "parent": "4.5",
-    "name": "共同评审并确认内部设计基线",
-    "duration": 0.5,
-    "start": "2026-11-05T14:00:00",
-    "finish": "2026-11-05T18:00:00",
-    "owner": "王晨、刘景浩",
-    "coordinator": "王晨",
-    "reviewer": "共同确认",
-    "preds": [
-      "4.5.1"
-    ],
-    "budget": 109.824,
-    "accept": "关键设计问题关闭；SRS、接口、数据、流程和测试条件一致",
-    "evidence": "总体及详细设计；评审记录与基线",
-    "summary": false,
-    "level": 3,
-    "resourceAssignments": [
-      {
-        "resource": "王晨",
-        "workHours": 1.2,
-        "units": 0.3,
-        "role": "主负责人／原共同任务"
-      },
-      {
-        "resource": "刘景浩",
-        "workHours": 1.2,
-        "units": 0.3,
-        "role": "主负责人／原共同任务"
-      }
-    ],
-    "planWorkHours": 2.4,
-    "taskType": "fixedDuration",
-    "effortDriven": false,
-    "laborBudget": 109.824,
-    "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
-  },
-  {
-    "code": "4.6.1",
-    "parent": "4.6",
+    "code": "4.13.1",
+    "parent": "4.13",
     "name": "编制核心与异常验收用例",
     "duration": 0.5,
     "start": "2026-11-03T09:00:00",
@@ -3980,12 +4416,12 @@
     "coordinator": "刘景浩",
     "reviewer": "王晨",
     "preds": [
-      "4.3.2",
-      "4.2.2"
+      "4.11.2",
+      "4.10.2"
     ],
     "budget": 114.4,
-    "accept": "覆盖五类角色、双端、账本、恢复、性能压力与稳定性；数据不含真实隐私",
-    "evidence": "TC用例、REQ追踪；合成数据及脚本方案",
+    "accept": "覆盖五类角色、双端、账本、恢复与性能",
+    "evidence": "TC用例、REQ追踪、合成数据与脚本方案",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -4003,21 +4439,21 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.6.2",
-    "parent": "4.6",
-    "name": "准备合成数据和性能脚本方案",
+    "code": "4.13.2",
+    "parent": "4.13",
+    "name": "准备合成数据与性能脚本方案",
     "duration": 0.5,
     "start": "2026-11-03T14:00:00",
     "finish": "2026-11-03T18:00:00",
-    "owner": "刘景浩",
+    "owner": "刘景浩、王晨",
     "coordinator": "刘景浩",
     "reviewer": "王晨",
     "preds": [
-      "4.6.1"
+      "4.13.1"
     ],
     "budget": 91.52,
-    "accept": "覆盖五类角色、双端、账本、恢复、性能压力与稳定性；数据不含真实隐私",
-    "evidence": "TC用例、REQ追踪；合成数据及脚本方案",
+    "accept": "覆盖五类角色、双端、账本、恢复与性能",
+    "evidence": "TC用例、REQ追踪、合成数据与脚本方案",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -4025,13 +4461,13 @@
         "resource": "刘景浩",
         "workHours": 1.25,
         "units": 0.3125,
-        "role": "主负责人／原共同任务"
+        "role": "共同承担"
       },
       {
         "resource": "王晨",
         "workHours": 0.75,
         "units": 0.1875,
-        "role": "本次增加协作"
+        "role": "共同承担"
       }
     ],
     "planWorkHours": 2.0,
@@ -4041,22 +4477,22 @@
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.7.1",
-    "parent": "4.7",
+    "code": "4.14.1",
+    "parent": "4.14",
     "name": "共同登记课堂设计意见",
     "duration": 0.5,
     "start": "2026-11-26T09:00:00",
     "finish": "2026-11-26T13:00:00",
-    "owner": "王晨、刘景浩",
+    "owner": "刘景浩、王晨",
     "coordinator": "王晨",
-    "reviewer": "共同确认",
+    "reviewer": "王晨",
     "preds": [
       "5.8.2",
       "5.11.2"
     ],
-    "budget": 109.824,
-    "accept": "11月25日意见同步至需求、设计、接口和实现；大改经影响评估排期",
-    "evidence": "设计变更；模块修订与复核记录",
+    "budget": 109.82,
+    "accept": "课堂意见同步至需求、设计、接口与实现",
+    "evidence": "设计变更、模块修订与复核记录",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -4064,37 +4500,37 @@
         "resource": "王晨",
         "workHours": 1.2,
         "units": 0.3,
-        "role": "主负责人／原共同任务"
+        "role": "共同承担"
       },
       {
         "resource": "刘景浩",
         "workHours": 1.2,
         "units": 0.3,
-        "role": "主负责人／原共同任务"
+        "role": "共同承担"
       }
     ],
     "planWorkHours": 2.4,
     "taskType": "fixedDuration",
     "effortDriven": false,
-    "laborBudget": 109.824,
+    "laborBudget": 109.82,
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
-    "code": "4.7.2",
-    "parent": "4.7",
+    "code": "4.14.2",
+    "parent": "4.14",
     "name": "分别调整模块并共同复核",
     "duration": 0.5,
     "start": "2026-11-26T14:00:00",
     "finish": "2026-11-26T18:00:00",
-    "owner": "王晨、刘景浩",
+    "owner": "刘景浩、王晨",
     "coordinator": "王晨",
-    "reviewer": "共同确认",
+    "reviewer": "王晨",
     "preds": [
-      "4.7.1"
+      "4.14.1"
     ],
-    "budget": 109.824,
-    "accept": "11月25日意见同步至需求、设计、接口和实现；大改经影响评估排期",
-    "evidence": "设计变更；模块修订与复核记录",
+    "budget": 109.82,
+    "accept": "课堂意见同步至需求、设计、接口与实现",
+    "evidence": "设计变更、模块修订与复核记录",
     "summary": false,
     "level": 3,
     "resourceAssignments": [
@@ -4102,19 +4538,19 @@
         "resource": "王晨",
         "workHours": 1.2,
         "units": 0.3,
-        "role": "主负责人／原共同任务"
+        "role": "共同承担"
       },
       {
         "resource": "刘景浩",
         "workHours": 1.2,
         "units": 0.3,
-        "role": "主负责人／原共同任务"
+        "role": "共同承担"
       }
     ],
     "planWorkHours": 2.4,
     "taskType": "fixedDuration",
     "effortDriven": false,
-    "laborBudget": 109.824,
+    "laborBudget": 109.82,
     "budgetBasis": "任务计划人时×45.76元/人时，非实际发薪"
   },
   {
