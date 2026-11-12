@@ -1,0 +1,49 @@
+{
+  "revision": "G04-SDP-20261112-01",
+  "schedule": "G04-BL-20261112-DT",
+  "parent": "G04-BL-20261104-PROCESS",
+  "previousProjectPlan": {
+    "version": "V1.7",
+    "sha256": "2045be5a13f1d75dce9aeeedbd4e5a6a4a55d68f892f21bd0d4f73dfc40a43de",
+    "hours": 226.55
+  },
+  "inputs": [
+    {
+      "file": "城院帮软件需求规格说明书G04.md",
+      "version": "V1.5.1",
+      "sha256": "615fc9cf989b664e5a87823944e02dede1c7a6aa77e024673cd77eb2a2e97069"
+    },
+    {
+      "file": "城院帮总体设计报告G04.md",
+      "version": "V1.2",
+      "sha256": "70b890394cfa2621dfd57d38d8335b64d03236ae6b4258ffe466f5c65f265785"
+    },
+    {
+      "file": "课程课件 第5章 总体设计",
+      "pages": 62
+    },
+    {
+      "file": "课程课件 第6章 详细设计",
+      "pages": 58
+    },
+    {
+      "file": "课程项目评审表 实现阶段",
+      "items": 20
+    },
+    {
+      "file": "项目计划 V1.7 附录C 计划阶段评审对照",
+      "items": 16
+    }
+  ],
+  "newArtifactHashes": {
+    "mpp": "4bb08c7abce96e89fc57b66579e5ac219b885186c2b82acf5ac84f9416775e4b",
+    "msProjectXml": "b1b7787802d893fc011a9343fa4e8d57beb7843cf615bb23cf8715844bf0c9d0"
+  },
+  "courseAlignment": {
+    "date": "2026-11-13",
+    "source": "软件工程课程计划第18页",
+    "first": "2026-09-16",
+    "last": "2027-01-06",
+    "classroomDates": 16
+  }
+}

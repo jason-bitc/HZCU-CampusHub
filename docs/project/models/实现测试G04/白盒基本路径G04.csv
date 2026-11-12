@@ -1,0 +1,18 @@
+﻿片段,路径号,源码定位,节点,边,环形复杂度,路径,条件,预期,已有入口,状态
+WB01,1,WritingService.java 第 35 行,5,5,2,S D1 X T,当前修订 2，期望 1,返回修订冲突，保留草稿和公开版,AuthoringMySqlIT，independentIncompleteDraftsCreationRetriesAndConcurrentSaves,计划用例
+WB01,2,WritingService.java 第 35 行,5,5,2,S D1 C T,当前修订 2，期望 2,通过修订检查，继续处理,AuthoringMySqlIT，independentIncompleteDraftsCreationRetriesAndConcurrentSaves,计划用例
+WB02,1,CoinService.java 第 28 行,11,16,7,S D1 N T,无回执,返回空，调用方继续原流程,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,2,CoinService.java 第 28 行,11,16,7,S D1 D2 D3 X T,同键投币，文章不同,拒绝，钱包和账本保持,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,3,CoinService.java 第 28 行,11,16,7,S D1 D2 D3 D4 X T,同键同篇，金额不同,拒绝，钱包和账本保持,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,4,CoinService.java 第 28 行,11,16,7,S D1 D2 D3 D4 D5 C T,同键、同篇、同金额,返回原回执，只产生一次扣币,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,5,CoinService.java 第 28 行,11,16,7,S D1 D2 D5 D6 X T,阅读奖励回执对应另一会话,拒绝重复使用请求编号,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,6,CoinService.java 第 28 行,11,16,7,S D1 D2 D5 D6 C T,同一阅读会话,返回原奖励回执,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB02,7,CoinService.java 第 28 行,11,16,7,S D1 D2 D5 C T,同一登录奖励回执,返回原回执,CoinsMySqlIT，onePlusOneAndDirectTwoRespectLifetimeLimitAndReplayFingerprint,计划用例
+WB03,1,GovernanceService.java 第 82 行,7,8,3,S D1 R T,重复同语义请求,返回已有回执，无第二条事件,GovernanceMySqlIT；TC-M03 复查管理会话、旧修订与审计,计划用例
+WB03,2,GovernanceService.java 第 82 行,7,8,3,S D1 D2 X T,无回执，目标修订变化,拒绝处置，旧目标状态保持,GovernanceMySqlIT；TC-M03 复查管理会话、旧修订与审计,计划用例
+WB03,3,GovernanceService.java 第 82 行,7,8,3,S D1 D2 C T,无回执，修订匹配,继续校验处置状态,GovernanceMySqlIT；TC-M03 复查管理会话、旧修订与审计,计划用例
+WB04,1,OpsJobs.java 第 39 行,8,11,5,S D1 X T,未取得确认,拒绝受理，无任务,OpsControlTest，confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable,计划用例
+WB04,2,OpsJobs.java 第 39 行,8,11,5,S D1 D2 X T,确认已过期,拒绝，重新确认后再操作,OpsControlTest，confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable,计划用例
+WB04,3,OpsJobs.java 第 39 行,8,11,5,S D1 D2 D3 X T,确认后更改所选版本或备份,拒绝受理，保持运行状态,OpsControlTest，confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable,计划用例
+WB04,4,OpsJobs.java 第 39 行,8,11,5,S D1 D2 D3 D4 X T,用另一运维测试会话提交,拒绝受理，无任务,OpsControlTest，confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable,计划用例
+WB04,5,OpsJobs.java 第 39 行,8,11,5,S D1 D2 D3 D4 C T,确认、任务和会话一致,建立任务并返回排队状态,OpsControlTest，confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable,计划用例

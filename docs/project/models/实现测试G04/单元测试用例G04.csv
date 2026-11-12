@@ -1,0 +1,9 @@
+﻿编号,需求简称,对象,数据,预期断言,已有测试类,负责人
+UT01,A02,校园邮箱规范化,合成校园邮箱、大小写和空白；不同域后缀,匹配校园域后规范化，其他域拒绝,AuthInputTest,王晨
+UT02,R02、R04,检索解析及排序参数,分类 ID、合法页码和错误参数,返回查询对象；错误参数返回校验失败,ArticleQueryTest,王晨
+UT03,C02、C04,正文与图片引用,含图片和代码的合成 Markdown，附无效引用,解析有效引用，失败项有可解释结果,MarkdownReferencesTest、MediaStoreTest,刘景浩
+UT04,I01,评论输入,正文、图片和回复对象组合,合规字段入模，非法字段返回明确拒绝,CommentInputTest,刘景浩
+UT05,G02、G03,投币请求输入,缺少字段、类型错误、合法请求键与金额,合法输入被解析，其他输入由校验拒绝,CoinInputTest,王晨
+UT06,M01,反馈和举报入参,合成反馈、举报与关联对象,仅符合契约的类型与字段进入处理,CommunityInputTest,刘景浩
+UT07,O02、O07,任务确认与状态互斥,隔离任务状态和两个会话，比较确认绑定,会话和动作一致时才可受理，持久状态可查,OpsControlTest,刘景浩
+UT08,NFR10、NFR11,诊断与关联标识,debug／release 两种设置、合成隐私值,诊断信息按模式写出且私密字段保持脱敏,RunModeTest、RequestTraceTest、SafeFileLogsTest,王晨

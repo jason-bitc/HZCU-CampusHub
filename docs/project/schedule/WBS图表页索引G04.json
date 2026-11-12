@@ -1,102 +1,227 @@
 [
   {
     "page": 1,
-    "title": "WBS 项目工作分解总览",
-    "pdfPage": 2
+    "title": "城院帮 G04 WBS 总览",
+    "pdfPage": 1
   },
   {
     "page": 2,
-    "title": "WBS 可行性研究八步骤",
-    "pdfPage": 3
+    "title": "工作分解  项目计划与评审",
+    "pdfPage": 2
   },
   {
     "page": 3,
-    "title": "WBS 需求分析工作包",
-    "pdfPage": 4
+    "title": "工作分解  可行性研究",
+    "pdfPage": 3
   },
   {
     "page": 4,
-    "title": "WBS 末级任务分解 1",
-    "pdfPage": 5
+    "title": "工作分解  需求分析",
+    "pdfPage": 4
   },
   {
     "page": 5,
-    "title": "WBS 末级任务分解 2",
-    "pdfPage": 6
+    "title": "工作分解  总体与详细设计",
+    "pdfPage": 5
   },
   {
     "page": 6,
-    "title": "WBS 末级任务分解 3",
-    "pdfPage": 7
+    "title": "工作分解  4.1 设想供选择的方案",
+    "pdfPage": 6
   },
   {
     "page": 7,
-    "title": "WBS 末级任务分解 4",
-    "pdfPage": 8
+    "title": "工作分解  4.2 选取合理的方案",
+    "pdfPage": 7
   },
   {
     "page": 8,
-    "title": "WBS 末级任务分解 5",
-    "pdfPage": 9
+    "title": "工作分解  4.3 推荐最佳方案",
+    "pdfPage": 8
   },
   {
     "page": 9,
-    "title": "WBS 末级任务分解 6",
-    "pdfPage": 10
+    "title": "工作分解  4.4 按DFD分解功能与过程",
+    "pdfPage": 9
   },
   {
     "page": 10,
-    "title": "WBS 末级任务分解 7",
-    "pdfPage": 11
+    "title": "工作分解  4.5 按数据流五步设计软件结构",
+    "pdfPage": 10
   },
   {
     "page": 11,
-    "title": "WBS 末级任务分解 8",
-    "pdfPage": 12
+    "title": "工作分解  4.6 设计并核对数据库",
+    "pdfPage": 11
   },
   {
     "page": 12,
-    "title": "WBS 末级任务分解 9",
-    "pdfPage": 13
+    "title": "工作分解  4.7 制定三级测试计划",
+    "pdfPage": 12
   },
   {
     "page": 13,
-    "title": "WBS 末级任务分解 10",
-    "pdfPage": 14
+    "title": "工作分解  4.8 汇编总体设计与五份配套文档",
+    "pdfPage": 13
   },
   {
     "page": 14,
-    "title": "WBS 末级任务分解 11",
-    "pdfPage": 15
+    "title": "工作分解  4.9 技术审查与管理复审",
+    "pdfPage": 14
   },
   {
     "page": 15,
-    "title": "WBS 末级任务分解 12",
-    "pdfPage": 16
+    "title": "工作分解  4.10 业务过程、判定和复杂度设计",
+    "pdfPage": 15
   },
   {
     "page": 16,
-    "title": "WBS 末级任务分解 13",
-    "pdfPage": 17
+    "title": "工作分解  4.11 双端人机界面与交互详细设计",
+    "pdfPage": 16
   },
   {
     "page": 17,
-    "title": "WBS 末级任务分解 14",
-    "pdfPage": 18
+    "title": "工作分解  4.12 独立运维与备份恢复详细设计",
+    "pdfPage": 17
   },
   {
     "page": 18,
-    "title": "WBS 末级任务分解 15",
-    "pdfPage": 19
+    "title": "工作分解  4.13 三级用例、数据和详细设计复核",
+    "pdfPage": 18
   },
   {
     "page": 19,
-    "title": "WBS 末级任务分解 16",
-    "pdfPage": 20
+    "title": "工作分解  4.14 设计评审反馈与修订交接",
+    "pdfPage": 19
   },
   {
     "page": 20,
-    "title": "WBS 末级任务分解 17",
+    "title": "工作分解  编码与单元测试",
+    "pdfPage": 20
+  },
+  {
+    "page": 21,
+    "title": "工作分解  5.1 项目骨架、配置与接口约定",
     "pdfPage": 21
+  },
+  {
+    "page": 22,
+    "title": "工作分解  5.2 登录、邮箱与材料认证",
+    "pdfPage": 22
+  },
+  {
+    "page": 23,
+    "title": "工作分解  5.3 文章存储、岗位检索与筛选接口",
+    "pdfPage": 23
+  },
+  {
+    "page": 24,
+    "title": "工作分解  5.4 小程序与网页阅读页面",
+    "pdfPage": 24
+  },
+  {
+    "page": 25,
+    "title": "工作分解  5.5 网页Markdown创作与草稿",
+    "pdfPage": 25
+  },
+  {
+    "page": 26,
+    "title": "工作分解  5.6 小程序文字与图片创作",
+    "pdfPage": 26
+  },
+  {
+    "page": 27,
+    "title": "工作分解  5.7 双端草稿、发布与文章管理",
+    "pdfPage": 27
+  },
+  {
+    "page": 28,
+    "title": "工作分解  5.8 评论、点赞、投币、收藏与荣誉",
+    "pdfPage": 28
+  },
+  {
+    "page": 29,
+    "title": "工作分解  5.9 社区审核、反馈与举报网页",
+    "pdfPage": 29
+  },
+  {
+    "page": 30,
+    "title": "工作分解  5.10 独立运维执行与备份服务",
+    "pdfPage": 30
+  },
+  {
+    "page": 31,
+    "title": "工作分解  5.11 运维网页、状态与操作记录",
+    "pdfPage": 31
+  },
+  {
+    "page": 32,
+    "title": "工作分解  5.12 联调、代码用例证据与候选版本",
+    "pdfPage": 32
+  },
+  {
+    "page": 33,
+    "title": "工作分解  综合测试",
+    "pdfPage": 33
+  },
+  {
+    "page": 34,
+    "title": "工作分解  6.1 核心系统及真实MySQL集成测试",
+    "pdfPage": 34
+  },
+  {
+    "page": 35,
+    "title": "工作分解  6.2 正常负载与性能指标",
+    "pdfPage": 35
+  },
+  {
+    "page": 36,
+    "title": "工作分解  6.3 压力、稳定性及降载恢复",
+    "pdfPage": 36
+  },
+  {
+    "page": 37,
+    "title": "工作分解  6.4 权限、双端兼容及目标环境",
+    "pdfPage": 37
+  },
+  {
+    "page": 38,
+    "title": "工作分解  6.5 部署、停机与备份恢复",
+    "pdfPage": 38
+  },
+  {
+    "page": 39,
+    "title": "工作分解  6.6 缺陷处理、复测和回归",
+    "pdfPage": 39
+  },
+  {
+    "page": 40,
+    "title": "工作分解  6.7 用户走查、内部验收及报告封版",
+    "pdfPage": 40
+  },
+  {
+    "page": 41,
+    "title": "工作分解  6.8 测试报告复核及课堂说明",
+    "pdfPage": 41
+  },
+  {
+    "page": 42,
+    "title": "工作分解  部署与维护",
+    "pdfPage": 42
+  },
+  {
+    "page": 43,
+    "title": "工作分解  总结与收尾",
+    "pdfPage": 43
+  },
+  {
+    "page": 44,
+    "title": "工作分解  持续项目管理与交叉复核",
+    "pdfPage": 44
+  },
+  {
+    "page": 45,
+    "title": "工作分解  课程里程碑",
+    "pdfPage": 45
   }
 ]

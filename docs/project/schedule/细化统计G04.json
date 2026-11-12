@@ -1,21 +1,24 @@
 {
-  "workPackages": 52,
+  "workPackages": 59,
   "oldCoreSubtasks": 103,
-  "coreLeafTasks": 167,
-  "projectEntries": 322,
-  "projectLeafTasks": 228,
+  "coreLeafTasks": 192,
+  "projectEntries": 358,
+  "projectLeafTasks": 257,
   "feasibilitySteps": 8,
   "feasibilityLeafTasks": 44,
   "requirementsLeafTasks": 44,
-  "teamHours": 226.55,
+  "teamHours": 275.85,
   "hoursByPerson": {
-    "王晨": 120.35,
-    "刘景浩": 106.2
+    "王晨": 146.3,
+    "刘景浩": 129.55
   },
-  "laborBudget": 10366.93,
+  "laborBudget": 12622.9,
   "rate": 45.76,
-  "sourceBaseline": "G04-BL-20261028-01",
-  "revision": "G04-BL-20261104-PROCESS",
-  "plannedDates": "沿用原工作包计划窗口；实际执行按日志登记",
-  "feedback": "FS04进一步定义问题与FS05方案比较并行迭代，FS06综合双方结果"
+  "sourceBaseline": "G04-BL-20261104-PROCESS",
+  "revision": "G04-BL-20261112-DT",
+  "plannedDates": "固定课程节点，更新设计与测试任务计划；实际结果依执行记录。",
+  "feedback": "FS04进一步定义问题与FS05方案比较并行迭代，FS06综合双方结果",
+  "courseMilestones": 16,
+  "courseStart": "2026-09-16",
+  "courseFinish": "2027-01-06"
 }

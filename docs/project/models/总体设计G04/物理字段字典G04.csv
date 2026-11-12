@@ -1,0 +1,321 @@
+﻿物理表,字段,迁移,类型,定义与缺省
+article,id,V1,BIGINT,NOT NULL PRIMARY KEY
+article,state,V1,VARCHAR(24),NOT NULL
+article,public_version_id,V1,BIGINT,NULL
+article,effective_coins,V1,BIGINT,NOT NULL DEFAULT 0
+article,effective_likes,V1,BIGINT,NOT NULL DEFAULT 0
+article,count_origin,V1,VARCHAR(24),NOT NULL DEFAULT 'DEMO'
+article,created_at,V1,DATETIME(6),NOT NULL
+article,owner_user_id,V4,BIGINT,NULL
+article,first_published_at,V4,DATETIME(6),NULL
+article,updated_at,V4,DATETIME(6),NULL
+article,governance_revision,V10,BIGINT,NOT NULL DEFAULT 0
+article_version,id,V1,BIGINT,NOT NULL PRIMARY KEY
+article_version,article_id,V1,BIGINT,NOT NULL
+article_version,version_number,V1,INT,NOT NULL
+article_version,title,V1,VARCHAR(200),NOT NULL
+article_version,summary,V1,VARCHAR(1000),NOT NULL
+article_version,body,V1,MEDIUMTEXT,NOT NULL
+article_version,body_format,V1,VARCHAR(24),NOT NULL DEFAULT 'MARKDOWN'
+article_version,experience_stage,V1,VARCHAR(64),NOT NULL
+article_version,source_type,V1,VARCHAR(24),NOT NULL
+article_version,source_note,V1,VARCHAR(2000),NOT NULL
+article_version,published_at,V1,DATETIME(6),NULL
+article_version,created_at,V1,DATETIME(6),NOT NULL
+article_version,updated_at,V4,DATETIME(6),NULL
+category,id,V1,BIGINT,NOT NULL PRIMARY KEY
+category,kind,V1,VARCHAR(24),NOT NULL
+category,name,V1,VARCHAR(100),NOT NULL
+category,enabled,V1,BOOLEAN,NOT NULL DEFAULT TRUE
+category,display_order,V1,INT,NOT NULL DEFAULT 0
+category,revision,V10,BIGINT,NOT NULL DEFAULT 0
+article_version_category,version_id,V1,BIGINT,NOT NULL
+article_version_category,category_id,V1,BIGINT,NOT NULL
+article_source_link,id,V1,BIGINT,NOT NULL PRIMARY KEY
+article_source_link,version_id,V1,BIGINT,NOT NULL
+article_source_link,label,V1,VARCHAR(200),NOT NULL
+article_source_link,url,V1,VARCHAR(2000),NOT NULL
+article_source_link,display_order,V1,INT,NOT NULL DEFAULT 0
+platform_user,id,V3,BIGINT,NOT NULL AUTO_INCREMENT PRIMARY KEY
+platform_user,email,V3,VARCHAR(254),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+platform_user,password_hash,V3,VARCHAR(100),NOT NULL
+platform_user,account_state,V3,VARCHAR(24),NOT NULL DEFAULT 'ACTIVE'
+platform_user,role,V3,VARCHAR(24),NOT NULL DEFAULT 'USER'
+platform_user,created_at,V3,DATETIME(6),NOT NULL
+platform_user,password_changed_at,V3,DATETIME(6),NOT NULL
+campus_certification,user_id,V3,BIGINT,NOT NULL PRIMARY KEY
+campus_certification,method,V3,VARCHAR(24),NOT NULL DEFAULT 'CAMPUS_EMAIL'
+campus_certification,state,V3,VARCHAR(24),NOT NULL DEFAULT 'VALID'
+campus_certification,verified_at,V3,DATETIME(6),NOT NULL
+auth_session,id,V3,BIGINT,NOT NULL AUTO_INCREMENT PRIMARY KEY
+auth_session,user_id,V3,BIGINT,NOT NULL
+auth_session,token_digest,V3,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+auth_session,created_at,V3,DATETIME(6),NOT NULL
+auth_session,expires_at,V3,DATETIME(6),NOT NULL
+auth_session,revoked_at,V3,DATETIME(6),NULL
+auth_email_gate,email,V3,VARCHAR(254),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+auth_email_gate,purpose,V3,VARCHAR(24),NOT NULL
+auth_email_gate,last_attempt_at,V3,DATETIME(6),NULL
+email_challenge,id,V3,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL PRIMARY KEY
+email_challenge,email,V3,VARCHAR(254),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+email_challenge,purpose,V3,VARCHAR(24),NOT NULL
+email_challenge,code_digest,V3,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+email_challenge,status,V3,VARCHAR(24),NOT NULL
+email_challenge,failed_attempts,V3,INT,NOT NULL DEFAULT 0
+email_challenge,created_at,V3,DATETIME(6),NOT NULL
+email_challenge,expires_at,V3,DATETIME(6),NOT NULL
+email_challenge,consumed_at,V3,DATETIME(6),NULL
+email_challenge,reset_user_id,V3,BIGINT,NULL
+authoring_sequence,name,V4,VARCHAR(24),PRIMARY KEY
+authoring_sequence,next_value,V4,BIGINT,NOT NULL
+author_profile,user_id,V4,BIGINT,PRIMARY KEY
+author_profile,revision,V4,BIGINT,NOT NULL DEFAULT 0
+author_profile,nickname,V4,VARCHAR(40),NOT NULL DEFAULT '城院同学'
+author_profile,major_id,V4,BIGINT,NULL
+author_profile,current_stage,V4,VARCHAR(24),NOT NULL DEFAULT 'UNSET'
+author_profile,bio,V4,VARCHAR(1000),NOT NULL DEFAULT ''
+article_draft,article_id,V4,BIGINT,PRIMARY KEY
+article_draft,revision,V4,BIGINT,NOT NULL DEFAULT 0
+article_draft,title,V4,VARCHAR(200),NOT NULL DEFAULT ''
+article_draft,summary,V4,VARCHAR(1000),NOT NULL DEFAULT ''
+article_draft,body,V4,MEDIUMTEXT,NOT NULL
+article_draft,experience_stage,V4,VARCHAR(64),NOT NULL DEFAULT ''
+article_draft,source_type,V4,VARCHAR(24),NULL
+article_draft,source_note,V4,VARCHAR(2000),NOT NULL DEFAULT ''
+article_draft_category,article_id,V4,BIGINT,NOT NULL
+article_draft_category,category_id,V4,BIGINT,NOT NULL
+article_draft_source_link,article_id,V4,BIGINT,NOT NULL
+article_draft_source_link,link_order,V4,INT,NOT NULL
+article_draft_source_link,label,V4,VARCHAR(200),NOT NULL
+article_draft_source_link,url,V4,VARCHAR(2000),NOT NULL
+author_create_request,user_id,V4,BIGINT,NOT NULL
+author_create_request,request_id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+author_create_request,article_id,V4,BIGINT,NOT NULL
+article_publish_request,article_id,V4,BIGINT,NOT NULL
+article_publish_request,request_id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+article_publish_request,expected_revision,V4,BIGINT,NOT NULL
+article_publish_request,result_revision,V4,BIGINT,NOT NULL
+article_publish_request,version_id,V4,BIGINT,NOT NULL
+media_image,id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY
+media_image,article_id,V4,BIGINT,NOT NULL
+media_image,request_id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+media_image,content_digest,V4,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+media_image,mime_type,V4,VARCHAR(24),NOT NULL
+media_image,size_bytes,V4,BIGINT,NOT NULL
+media_image,width,V4,INT,NOT NULL
+media_image,height,V4,INT,NOT NULL
+media_image,created_at,V4,DATETIME(6),NOT NULL
+article_draft_image,article_id,V4,BIGINT,NOT NULL
+article_draft_image,image_id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+article_version_image,article_id,V4,BIGINT,NOT NULL
+article_version_image,version_id,V4,BIGINT,NOT NULL
+article_version_image,image_id,V4,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+author_contact_setting,user_id,V5,BIGINT,PRIMARY KEY
+author_contact_setting,revision,V5,BIGINT,NOT NULL
+author_contact_setting,enabled,V5,BOOLEAN,NOT NULL
+author_contact_setting,contact_type,V5,VARCHAR(16),NULL
+author_contact_setting,contact_value,V5,VARCHAR(2000),NULL
+business_audit,event_id,V5,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY
+business_audit,occurred_at,V5,DATETIME(6),NOT NULL
+business_audit,trace_id,V5,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+business_audit,actor_id,V5,BIGINT,NOT NULL
+business_audit,action,V5,VARCHAR(32),NOT NULL
+business_audit,object_type,V5,VARCHAR(16),NOT NULL
+business_audit,object_id,V5,BIGINT,NOT NULL
+business_audit,before_revision,V5,BIGINT,NOT NULL
+business_audit,after_revision,V5,BIGINT,NOT NULL
+business_audit,before_state,V5,VARCHAR(24),NULL
+business_audit,after_state,V5,VARCHAR(24),NULL
+business_audit,result,V5,VARCHAR(16),NOT NULL DEFAULT 'SUCCESS'
+business_audit,actor_domain,V9,VARCHAR(24),NOT NULL DEFAULT 'USER'
+discussion_comment,id,V6,BIGINT,PRIMARY KEY
+discussion_comment,article_id,V6,BIGINT,NOT NULL
+discussion_comment,user_id,V6,BIGINT,NOT NULL
+discussion_comment,root_comment_id,V6,BIGINT,NULL
+discussion_comment,reply_to_comment_id,V6,BIGINT,NULL
+discussion_comment,state,V6,VARCHAR(24),NOT NULL DEFAULT 'VISIBLE'
+discussion_comment,revision,V6,BIGINT,NOT NULL DEFAULT 1
+discussion_comment,body,V6,MEDIUMTEXT,NOT NULL
+discussion_comment,created_at,V6,DATETIME(6),NOT NULL
+comment_create_receipt,user_id,V6,BIGINT,NOT NULL
+comment_create_receipt,request_id,V6,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+comment_create_receipt,article_id,V6,BIGINT,NOT NULL
+comment_create_receipt,comment_id,V6,BIGINT,NOT NULL
+comment_create_receipt,content_digest,V6,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+comment_image,id,V6,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY
+comment_image,article_id,V6,BIGINT,NOT NULL
+comment_image,user_id,V6,BIGINT,NOT NULL
+comment_image,request_id,V6,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+comment_image,content_digest,V6,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+comment_image,mime_type,V6,VARCHAR(24),NOT NULL
+comment_image,size_bytes,V6,BIGINT,NOT NULL
+comment_image,width,V6,INT,NOT NULL
+comment_image,height,V6,INT,NOT NULL
+comment_image,created_at,V6,DATETIME(6),NOT NULL
+comment_image,comment_id,V6,BIGINT,NULL
+comment_image,image_order,V6,INT,NULL
+article_like,user_id,V7,BIGINT,NOT NULL
+article_like,article_id,V7,BIGINT,NOT NULL
+article_like,active,V7,BOOLEAN,NOT NULL
+article_like,revision,V7,BIGINT,NOT NULL
+article_like,activated_at,V7,DATETIME(6),NOT NULL
+article_like,updated_at,V7,DATETIME(6),NOT NULL
+article_favorite,user_id,V7,BIGINT,NOT NULL
+article_favorite,article_id,V7,BIGINT,NOT NULL
+article_favorite,active,V7,BOOLEAN,NOT NULL
+article_favorite,revision,V7,BIGINT,NOT NULL
+article_favorite,activated_at,V7,DATETIME(6),NOT NULL
+article_favorite,updated_at,V7,DATETIME(6),NOT NULL
+coin_wallet,user_id,V8,BIGINT,PRIMARY KEY
+coin_wallet,balance,V8,BIGINT,NOT NULL DEFAULT 0
+coin_wallet,revision,V8,BIGINT,NOT NULL DEFAULT 0
+coin_reading_session,id,V8,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY
+coin_reading_session,user_id,V8,BIGINT,NOT NULL
+coin_reading_session,article_id,V8,BIGINT,NOT NULL
+coin_reading_session,business_date,V8,DATE,NOT NULL
+coin_reading_session,started_at,V8,DATETIME(6),NOT NULL
+coin_reading_session,required_seconds,V8,INT,NOT NULL
+coin_event,sequence_id,V8,BIGINT,NOT NULL AUTO_INCREMENT PRIMARY KEY
+coin_event,event_id,V8,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+coin_event,user_id,V8,BIGINT,NOT NULL
+coin_event,action,V8,VARCHAR(24),NOT NULL
+coin_event,request_id,V8,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+coin_event,business_date,V8,DATE,NOT NULL
+coin_event,reward_date,V8,DATE,NULL
+coin_event,article_id,V8,BIGINT,NULL
+coin_event,author_id,V8,BIGINT,NULL
+coin_event,reading_session_id,V8,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NULL
+coin_event,delta,V8,BIGINT,NOT NULL
+coin_event,balance_after,V8,BIGINT,NOT NULL
+coin_event,wallet_revision,V8,BIGINT,NOT NULL
+coin_event,occurred_at,V8,DATETIME(6),NOT NULL
+coin_event,login_reward,V8,INT,NOT NULL
+coin_event,reading_reward,V8,INT,NOT NULL
+coin_event,reading_seconds,V8,INT,NOT NULL
+coin_event,article_limit,V8,INT,NOT NULL
+coin_event,rule_version,V8,VARCHAR(80),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+coin_event,effective,V8,BOOLEAN,NOT NULL DEFAULT TRUE
+community_admin,id,V9,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_admin,login_name,V9,VARCHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE
+community_admin,password_hash,V9,VARCHAR(100),NOT NULL
+community_admin,enabled,V9,BOOLEAN,NOT NULL DEFAULT TRUE
+community_admin,created_at,V9,DATETIME(6),NOT NULL
+community_admin_session,id,V9,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_admin_session,admin_id,V9,BIGINT,NOT NULL
+community_admin_session,token_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE
+community_admin_session,created_at,V9,DATETIME(6),NOT NULL
+community_admin_session,expires_at,V9,DATETIME(6),NOT NULL
+community_admin_session,revoked_at,V9,DATETIME(6),NULL
+community_admin_login_gate,name_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY
+community_admin_login_gate,failures,V9,INT,NOT NULL DEFAULT 0
+community_admin_login_gate,window_started,V9,DATETIME(6),NOT NULL
+community_case,id,V9,BIGINT,PRIMARY KEY
+community_case,user_id,V9,BIGINT,NOT NULL
+community_case,request_id,V9,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case,content_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case,kind,V9,VARCHAR(16),NOT NULL
+community_case,category,V9,VARCHAR(32),NOT NULL
+community_case,target_type,V9,VARCHAR(16),NULL
+community_case,article_id,V9,BIGINT,NULL
+community_case,comment_id,V9,BIGINT,NULL
+community_case,article_version_id,V9,BIGINT,NULL
+community_case,description,V9,MEDIUMTEXT,NOT NULL
+community_case,state,V9,VARCHAR(24),NOT NULL DEFAULT 'OPEN'
+community_case,revision,V9,BIGINT,NOT NULL DEFAULT 1
+community_case,assignee_id,V9,BIGINT,NULL
+community_case,created_at,V9,DATETIME(6),NOT NULL
+community_case,updated_at,V9,DATETIME(6),NOT NULL
+community_case_history,sequence_id,V9,BIGINT,PRIMARY KEY
+community_case_history,case_id,V9,BIGINT,NOT NULL
+community_case_history,revision,V9,BIGINT,NOT NULL
+community_case_history,actor_domain,V9,VARCHAR(24),NOT NULL
+community_case_history,actor_id,V9,BIGINT,NOT NULL
+community_case_history,action,V9,VARCHAR(24),NOT NULL
+community_case_history,state,V9,VARCHAR(24),NOT NULL
+community_case_history,assignee_id,V9,BIGINT,NULL
+community_case_history,outcome,V9,VARCHAR(32),NULL
+community_case_history,public_reply,V9,MEDIUMTEXT,NOT NULL
+community_case_history,internal_note,V9,MEDIUMTEXT,NOT NULL
+community_case_history,reason,V9,MEDIUMTEXT,NOT NULL
+community_case_history,occurred_at,V9,DATETIME(6),NOT NULL
+community_admin_receipt,admin_id,V9,BIGINT,NOT NULL
+community_admin_receipt,request_id,V9,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_admin_receipt,case_id,V9,BIGINT,NOT NULL
+community_admin_receipt,content_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_admin_receipt,revision,V9,BIGINT,NOT NULL
+community_admin_receipt,state,V9,VARCHAR(24),NOT NULL
+community_case_image,sequence_id,V9,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_case_image,id,V9,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE
+community_case_image,user_id,V9,BIGINT,NOT NULL
+community_case_image,request_id,V9,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case_image,content_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case_image,mime_type,V9,VARCHAR(24),NOT NULL
+community_case_image,size_bytes,V9,BIGINT,NOT NULL
+community_case_image,width,V9,INT,NOT NULL
+community_case_image,height,V9,INT,NOT NULL
+community_case_image,created_at,V9,DATETIME(6),NOT NULL
+community_case_image,case_id,V9,BIGINT,NULL
+community_case_image,image_order,V9,INT,NULL
+community_case_comment,case_id,V9,BIGINT,NOT NULL
+community_case_comment,context_role,V9,VARCHAR(16),NOT NULL
+community_case_comment,comment_id,V9,BIGINT,NOT NULL
+community_case_comment,available,V9,BOOLEAN,NOT NULL
+community_case_comment,body,V9,MEDIUMTEXT,NULL
+community_case_comment,created_at,V9,DATETIME(6),NULL
+community_case_media,case_id,V9,BIGINT,NOT NULL
+community_case_media,image_id,V9,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case_media,source_kind,V9,VARCHAR(24),NOT NULL
+community_case_media,content_digest,V9,CHAR(64),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_case_media,mime_type,V9,VARCHAR(24),NOT NULL
+community_case_media,size_bytes,V9,BIGINT,NOT NULL
+governance_event,id,V10,BIGINT,AUTO_INCREMENT PRIMARY KEY
+governance_event,admin_id,V10,BIGINT,NOT NULL
+governance_event,request_id,V10,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+governance_event,content_digest,V10,CHAR(64),NOT NULL
+governance_event,target_type,V10,VARCHAR(16),NOT NULL
+governance_event,target_id,V10,BIGINT,NOT NULL
+governance_event,action,V10,VARCHAR(24),NOT NULL
+governance_event,before_state,V10,VARCHAR(24),NOT NULL
+governance_event,after_state,V10,VARCHAR(24),NOT NULL
+governance_event,revision,V10,BIGINT,NOT NULL
+governance_event,reason,V10,VARCHAR(2000),NOT NULL
+governance_event,occurred_at,V10,DATETIME(6),NOT NULL
+governance_article_hold,article_id,V10,BIGINT,PRIMARY KEY
+governance_article_hold,previous_state,V10,VARCHAR(24),NOT NULL
+community_restriction,id,V11,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_restriction,user_id,V11,BIGINT,NOT NULL
+community_restriction,scope,V11,VARCHAR(16),NOT NULL
+community_restriction,enabled,V11,BOOLEAN,NOT NULL
+community_restriction,revision,V11,BIGINT,NOT NULL
+community_restriction,reason,V11,VARCHAR(2000),NOT NULL
+community_restriction,admin_id,V11,BIGINT,NOT NULL
+community_restriction,updated_at,V11,DATETIME(6),NOT NULL
+community_restriction_event,id,V11,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_restriction_event,admin_id,V11,BIGINT,NOT NULL
+community_restriction_event,request_id,V11,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_restriction_event,digest,V11,CHAR(64),NOT NULL
+community_restriction_event,restriction_id,V11,BIGINT,NOT NULL
+community_restriction_event,before_enabled,V11,BOOLEAN,NOT NULL
+community_restriction_event,enabled,V11,BOOLEAN,NOT NULL
+community_restriction_event,revision,V11,BIGINT,NOT NULL
+community_restriction_event,reason,V11,VARCHAR(2000),NOT NULL
+community_restriction_event,occurred_at,V11,DATETIME(6),NOT NULL
+community_appeal,id,V11,BIGINT,AUTO_INCREMENT PRIMARY KEY
+community_appeal,user_id,V11,BIGINT,NOT NULL
+community_appeal,request_id,V11,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_appeal,digest,V11,CHAR(64),NOT NULL
+community_appeal,restriction_id,V11,BIGINT,NOT NULL
+community_appeal,restriction_revision,V11,BIGINT,NOT NULL
+community_appeal,reason,V11,VARCHAR(2000),NOT NULL
+community_appeal,state,V11,VARCHAR(16),NOT NULL DEFAULT 'OPEN'
+community_appeal,revision,V11,BIGINT,NOT NULL DEFAULT 1
+community_appeal,reply,V11,VARCHAR(2000),NOT NULL DEFAULT ''
+community_appeal,decided_by,V11,BIGINT,NULL
+community_appeal,created_at,V11,DATETIME(6),NOT NULL
+community_appeal,updated_at,V11,DATETIME(6),NOT NULL
+community_appeal_receipt,admin_id,V11,BIGINT,NOT NULL
+community_appeal_receipt,request_id,V11,CHAR(36),CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+community_appeal_receipt,digest,V11,CHAR(64),NOT NULL
+community_appeal_receipt,appeal_id,V11,BIGINT,NOT NULL
+community_appeal_receipt,revision,V11,BIGINT,NOT NULL
+community_appeal_receipt,state,V11,VARCHAR(16),NOT NULL
