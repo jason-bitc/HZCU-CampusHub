@@ -111,6 +111,47 @@ class AuthoringMySqlIT {
         assertThat(call("GET","/api/v1/me/articles?page=1&size=1",null,one).data.path("items").size()).isEqualTo(1);
         assertThat(call("GET","/api/v1/me/articles?size=101",null,one).status).isEqualTo(400);
     }
+    @Test @Order(3) void workspaceFiltersBeforePagingAndShowsActionsForEachOwnerState() throws Exception {
+        String path = "/api/v1/me/articles";
+        long initialDrafts = call("GET", path + "?state=DRAFT", null, one).data.path("total").asLong();
+        long initialTotal = call("GET", path, null, one).data.path("total").asLong();
+        long draft = create(one);
+        long foreign = create(two);
+        long published = create(one);
+        assertThat(save(published, 0, "工作区测试", "正文", one).status).isEqualTo(200);
+        assertThat(publish(published, 1, key(), one).status).isEqualTo(200);
+        long deleted = create(one);
+        assertThat(call("DELETE", path + "/" + deleted + "?expectedRevision=0", null, one).status).isEqualTo(200);
+
+        var draftPage = call("GET", path + "?state=DRAFT&size=1", null, one);
+        assertThat(draftPage.status).isEqualTo(200);
+        assertThat(draftPage.data.path("total").asLong()).isEqualTo(initialDrafts + 1);
+        assertThat(draftPage.data.path("items").get(0).path("articleId").asLong()).isEqualTo(draft);
+        assertThat(call("GET", path + "?state=DRAFT&page=" + (initialDrafts + 2) + "&size=1", null, one)
+                .data.path("items").isEmpty()).isTrue();
+        assertThat(call("GET", path + "?state=DRAFT", null, two).data.path("items").get(0)
+                .path("articleId").asLong()).isEqualTo(foreign);
+        assertThat(call("GET", path + "/" + draft + "/draft", null, two).status).isEqualTo(404);
+
+        var live = call("GET", path + "?state=PUBLISHED", null, one).data;
+        assertThat(live.path("total").asLong()).isEqualTo(1);
+        assertThat(live.path("items").get(0).path("allowedActions").toString())
+                .contains("VIEW_PUBLIC", "UNPUBLISH").doesNotContain("RESTORE");
+        assertThat(call("POST", path + "/" + published + "/unpublish", Map.of("expectedRevision", 2), one).status)
+                .isEqualTo(200);
+        assertThat(call("GET", path + "?state=PUBLISHED", null, one).data.path("total").asLong()).isZero();
+        var offline = call("GET", path + "?state=AUTHOR_OFFLINE", null, one).data.path("items").get(0);
+        assertThat(offline.path("articleId").asLong()).isEqualTo(published);
+        assertThat(offline.path("allowedActions").toString()).contains("RESTORE").doesNotContain("VIEW_PUBLIC");
+        assertThat(call("GET", path + "?state=DELETED", null, one).data.path("items").get(0)
+                .path("allowedActions").isEmpty()).isTrue();
+        assertThat(call("GET", path, null, one).data.path("total").asLong()).isEqualTo(initialTotal + 3);
+
+        for (String query : List.of("?state=", "?state=hidden", "?state=DRAFT&state=DRAFT", "?ownerUserId=1")) {
+            assertThat(call("GET", path + query, null, one).status).isEqualTo(400);
+        }
+        assertThat(call("GET", path + "?state=DRAFT", null, null).status).isEqualTo(401);
+    }
     @Test @Order(3) void privateUploadsRetryKeysAndForeignAssociations()throws Exception{
         long id=create(one);String request=key();var uploaded=upload(id,request,"fixture.png","image/png",png,one);assertThat(uploaded.status).isEqualTo(200);String image=uploaded.data.path("imageId").asString();
         assertThat(upload(id,request,"fixture.png","image/png",png,one).data.path("imageId").asString()).isEqualTo(image);

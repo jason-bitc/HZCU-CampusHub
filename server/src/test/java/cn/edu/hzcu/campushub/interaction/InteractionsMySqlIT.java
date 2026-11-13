@@ -142,7 +142,11 @@ class InteractionsMySqlIT {
         var paged=new ArrayList<Long>();for(int page=1;page<=4;page++)paged.addAll(ids(get("/api/v1/articles?size=2&page="+page,-1),"id"));assertThat(paged).containsExactlyElementsOf(ids(get("/api/v1/articles",-1),"id"));
         var liveExamples=new ArrayList<Map<String,Object>>();for(long id:List.of(a,1001L,1004L,1006L)){var detail=get("/api/v1/articles/"+id,-1);assertLive(detail.data,id);assertThat(detail.raw).doesNotContain("liked","favorited","userId","actorId");assertThat(detail.data.path("sourceType").asString()).isEqualTo("DEMO");liveExamples.add(Map.of("articleId",id,"effectiveCoins",detail.data.path("counts").path("effectiveCoins").asLong(),"effectiveLikes",detail.data.path("counts").path("effectiveLikes").asLong(),"factLikes",likes(id),"origin",detail.data.path("counts").path("origin").asString(),"sourceType",detail.data.path("sourceType").asString()));}Files.writeString(Path.of("target/batch7-live-count-examples.json"),JSON.writeValueAsString(liveExamples));
         for(var summary:get("/api/v1/authors/"+users.getFirst()+"/articles",1).data.path("items"))assertLive(summary,summary.path("id").asLong());assertLive(item(favorites(2),1001).path("article"),1001);
-        assertThat(db.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes,count_origin FROM article WHERE id IN (1001,1002,1003,1004,1005,1006,2001,2002,2003,2004) ORDER BY id")).isEqualTo(originalArticles);
+        var seededIds = Set.of(1001L, 1002L, 1003L, 1004L, 1005L, 1006L, 2001L, 2002L, 2003L, 2004L);
+        var seededBaseline = originalArticles.stream()
+                .filter(row -> seededIds.contains(((Number) row.get("id")).longValue())).toList();
+        assertThat(db.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes,count_origin FROM article WHERE id IN (1001,1002,1003,1004,1005,1006,2001,2002,2003,2004) ORDER BY id"))
+                .isEqualTo(seededBaseline);
     }
     static void assertLive(JsonNode article,long id){assertThat(article.path("counts").path("origin").asString()).isEqualTo("LIVE");assertThat(article.path("counts").path("effectiveCoins").asLong()).isEqualTo(db.queryForObject("SELECT COALESCE(SUM(-delta),0) FROM coin_event WHERE article_id=? AND action='ARTICLE_COIN' AND effective=TRUE",Long.class,id));assertThat(article.path("counts").path("effectiveLikes").asLong()).isEqualTo(likes(id));}
     interface Checked {Reply run()throws Exception;}

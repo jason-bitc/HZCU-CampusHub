@@ -8,6 +8,7 @@ import cn.edu.hzcu.campushub.common.*;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +23,23 @@ public class WritingController {
     @PutMapping("/me/profile") public ApiResponse<Profile> profile(@RequestAttribute("campushub.identity") Identity identity,@RequestBody JsonNode body){return ApiResponse.success(service.updateProfile(identity.me().userId(),WritingInput.profile(body)));}
     @PostMapping("/me/articles") @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<Created> create(@RequestAttribute("campushub.identity") Identity identity,@RequestBody JsonNode body){fields(body,"requestId");return ApiResponse.success(service.create(identity.me().userId(),requestId(body)));}
-    @GetMapping("/me/articles") public ApiResponse<OwnedPage> list(@RequestAttribute("campushub.identity") Identity identity,@RequestParam MultiValueMap<String,String> params){
-        if(params.keySet().stream().anyMatch(k->!Set.of("page","size").contains(k)))throw ApiException.invalid();var q=ArticleQuery.parse(params);return ApiResponse.success(service.list(identity.me().userId(),q.page(),q.size()));
+    @GetMapping("/me/articles")
+    public ApiResponse<OwnedPage> list(@RequestAttribute("campushub.identity") Identity identity,
+            @RequestParam MultiValueMap<String, String> params) {
+        if (!Set.of("page", "size", "state").containsAll(params.keySet())) throw ApiException.invalid();
+        var pageParams = new LinkedMultiValueMap<>(params);
+        var states = pageParams.remove("state");
+        var page = ArticleQuery.parse(pageParams);
+        ArticleState state = null;
+        if (states != null) {
+            if (states.size() != 1) throw ApiException.invalid();
+            try {
+                state = ArticleState.valueOf(states.getFirst());
+            } catch (IllegalArgumentException invalid) {
+                throw ApiException.invalid();
+            }
+        }
+        return ApiResponse.success(service.list(identity.me().userId(), state, page.page(), page.size()));
     }
     @GetMapping("/me/articles/{id}/draft") public ApiResponse<Draft> draft(@RequestAttribute("campushub.identity") Identity identity,@PathVariable String id){return ApiResponse.success(service.draft(identity.me().userId(),ArticleQuery.requiredId(id)));}
     @PutMapping("/me/articles/{id}/draft") public ApiResponse<Draft> save(@RequestAttribute("campushub.identity") Identity identity,@PathVariable String id,@RequestBody JsonNode body){return ApiResponse.success(service.save(identity.me().userId(),ArticleQuery.requiredId(id),revision(body),content(body)));}

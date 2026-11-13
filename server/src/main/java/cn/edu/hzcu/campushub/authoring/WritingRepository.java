@@ -21,7 +21,17 @@ public class WritingRepository {
     static Timestamp time(Instant t){return Timestamp.from(t);}
     public long allocate(String name){long next=jdbc.queryForObject("SELECT next_value FROM authoring_sequence WHERE name=:name FOR UPDATE",p("name",name),Long.class);jdbc.update("UPDATE authoring_sequence SET next_value=next_value+1 WHERE name=:name",p("name",name));return next;}
     public void lockUser(long id){if(jdbc.query("SELECT id FROM platform_user WHERE id=:id FOR UPDATE",p("id",id),(r,n)->r.getLong(1)).isEmpty())throw ApiException.notFound();}
-    public void assertAllowed(long user,String scope){lockUser(user);if(jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",p("user",user).addValue("scope",scope),Long.class)>0)throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN,"BEHAVIOR_RESTRICTED","此行为已受限制，可在本人处理记录中查看理由并申诉");}
+    private boolean restricted(long user, String scope) {
+        return jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",
+                p("user", user).addValue("scope", scope), Long.class) > 0;
+    }
+    public void assertAllowed(long user, String scope) {
+        lockUser(user);
+        if (restricted(user, scope)) {
+            throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN, "BEHAVIOR_RESTRICTED",
+                    "此行为已受限制，可在本人处理记录中查看理由并申诉");
+        }
+    }
     public Profile profile(long user){return jdbc.query("SELECT * FROM author_profile WHERE user_id=:id",p("id",user),(r,n)->new Profile(r.getLong("revision"),r.getString("nickname"),r.getObject("major_id",Long.class),r.getString("current_stage"),r.getString("bio"))).stream().findFirst().orElse(new Profile(0,"城院同学",null,"UNSET",""));}
     public void profile(long user,Profile profile){jdbc.update("INSERT INTO author_profile(user_id,revision,nickname,major_id,current_stage,bio) VALUES(:user,:rev,:name,:major,:stage,:bio) ON DUPLICATE KEY UPDATE revision=:rev,nickname=:name,major_id=:major,current_stage=:stage,bio=:bio",p("user",user).addValue("rev",profile.revision()).addValue("name",profile.nickname()).addValue("major",profile.majorId()).addValue("stage",profile.currentStage()).addValue("bio",profile.bio()));}
     public void categories(List<Long> ids,String kind){
@@ -38,10 +48,30 @@ public class WritingRepository {
         jdbc.update("INSERT INTO author_create_request(user_id,request_id,article_id) VALUES(:user,:request,:id)",params);
     }
     public Article owned(long user,long id,boolean lock){stage(TARGET);var article=jdbc.query("SELECT a.id,a.state,d.revision,a.first_published_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.id=:id AND a.owner_user_id=:user"+(lock?" FOR UPDATE":""),p("id",id).addValue("user",user),(r,n)->new Article(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getTimestamp("first_published_at")==null?null:r.getTimestamp("first_published_at").toInstant())).stream().findFirst().orElseThrow(ApiException::notFound);RequestTrace.article(article.id());return article;}
-    public OwnedPage list(long user,int page,int size){
-        var params=p("user",user).addValue("size",size).addValue("offset",((long)page-1)*size);
-        long total=jdbc.queryForObject("SELECT COUNT(*) FROM article WHERE owner_user_id=:user",params,Long.class);
-        var rows=jdbc.query("SELECT a.id,a.state,d.revision,d.title,a.updated_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.owner_user_id=:user ORDER BY a.updated_at DESC,a.id DESC LIMIT :size OFFSET :offset",params,(r,n)->new OwnedArticle(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getString("title"),r.getTimestamp("updated_at").toInstant()));return new OwnedPage(rows,total,page,size);
+    public OwnedPage list(long user, ArticleState state, int page, int size) {
+        var params = p("user", user).addValue("size", size).addValue("offset", ((long) page - 1) * size);
+        String from = """
+                 FROM article a JOIN article_draft d ON d.article_id=a.id
+                 LEFT JOIN article_version v ON v.id=a.public_version_id AND v.article_id=a.id
+                     AND v.published_at IS NOT NULL
+                 WHERE a.owner_user_id=:user
+                """;
+        if (state != null) {
+            from += " AND a.state=:state";
+            params.addValue("state", state.name());
+            if (state == ArticleState.PUBLISHED) from += " AND v.id IS NOT NULL";
+        }
+        long total = jdbc.queryForObject("SELECT COUNT(*)" + from, params, Long.class);
+        boolean canPublish = !restricted(user, "PUBLISH");
+        var rows = jdbc.query("""
+                SELECT a.id,a.state,d.revision,d.title,a.updated_at,v.id IS NOT NULL has_public_version
+                """ + from + " ORDER BY a.updated_at DESC,a.id DESC LIMIT :size OFFSET :offset", params, (r, n) -> {
+            var current = ArticleState.valueOf(r.getString("state"));
+            return new OwnedArticle(r.getLong("id"), current, r.getLong("revision"), r.getString("title"),
+                    r.getTimestamp("updated_at").toInstant(),
+                    WorkspaceAction.allowed(current, r.getBoolean("has_public_version"), canPublish));
+        });
+        return new OwnedPage(rows, total, page, size, !canPublish);
     }
     public Content content(long id){return jdbc.query("SELECT * FROM article_draft WHERE article_id=:id",p("id",id),(r,n)->new Content(r.getString("title"),r.getString("summary"),r.getString("body"),tags(id),r.getString("experience_stage"),r.getString("source_type"),r.getString("source_note"),links(id))).getFirst();}
     private Tags tags(long id){var groups=new HashMap<String,List<Long>>();jdbc.query("SELECT c.kind,c.id FROM article_draft_category d JOIN category c ON c.id=d.category_id WHERE d.article_id=:id ORDER BY c.id",p("id",id),r->{groups.computeIfAbsent(r.getString(1),k->new ArrayList<>()).add(r.getLong(2));});return new Tags(groups.getOrDefault("JOB",List.of()),groups.getOrDefault("MAJOR",List.of()),groups.getOrDefault("COMPANY",List.of()),groups.getOrDefault("TOPIC",List.of()));}

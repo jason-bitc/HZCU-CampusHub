@@ -48,6 +48,12 @@ class GovernanceMySqlIT {
     @Test @Order(2) void hidingAndRestoringArticlesChangesPublicVisibilityWithDurableIdempotency()throws Exception {
         String request=key(),path="/admin/articles/"+article+"/moderation";var body=command("HIDE",0,request);var hidden=call("POST",path,body,token);assertThat(hidden.status).isEqualTo(200);assertThat(hidden.data.path("state").asString()).isEqualTo("ADMIN_HIDDEN");
         assertThat(call("GET","/articles/"+article,null,null).status).isEqualTo(404);assertThat(call("POST",path,body,token).data).isEqualTo(hidden.data);
+        var workspace = call("GET", "/me/articles?state=ADMIN_HIDDEN", null, userToken).data;
+        assertThat(workspace.path("total").asLong()).isEqualTo(1);
+        var hiddenItem = workspace.path("items").get(0);
+        assertThat(hiddenItem.path("articleId").asLong()).isEqualTo(article);
+        assertThat(hiddenItem.path("allowedActions").toString()).isEqualTo("[\"VIEW_DRAFT\",\"DELETE\"]");
+        assertThat(call("GET", "/me/articles?state=PUBLISHED", null, userToken).data.path("total").asLong()).isZero();
         assertThat(call("POST",path,command("RESTORE",0,request),token).code).isEqualTo("REQUEST_KEY_REUSED");assertThat(call("POST",path,command("RESTORE",0,key()),token).code).isEqualTo("REVISION_CONFLICT");
         assertThat(call("POST",path,command("RESTORE",1,key()),token).data.path("state").asString()).isEqualTo("PUBLISHED");assertThat(call("GET","/articles/"+article,null,null).status).isEqualTo(200);
         // An author-offline article must return to author-offline, never be republished by moderation.
@@ -79,6 +85,10 @@ class GovernanceMySqlIT {
         assertThat(call("POST","/articles/"+article+"/comments",commentBody,userToken).status).isEqualTo(201);
         assertThat(call("POST","/admin/users/"+user+"/restrictions",Map.of("scope","PUBLISH","enabled",true,"expectedRevision",0,"requestId",key(),"reason","publication restriction"),token).status).isEqualTo(200);
         assertThat(call("POST","/me/articles/"+article+"/publish",Map.of("expectedRevision",0,"requestId",key()),userToken).code).isEqualTo("BEHAVIOR_RESTRICTED");assertThat(call("GET","/admin/users?size=2",null,token).status).isEqualTo(200);
+        var workspace = call("GET", "/me/articles?state=PUBLISHED", null, userToken).data;
+        assertThat(workspace.path("publishingRestricted").asBoolean()).isTrue();
+        assertThat(workspace.path("items").get(0).path("allowedActions").toString())
+                .contains("EDIT_DRAFT", "UNPUBLISH").doesNotContain("\"PUBLISH\"", "RESTORE");
     }
     @Test @Order(7) void confirmedGovernanceCannotCloseAReportWithoutAnActualLinkedAction()throws Exception {
         CLOCK.advance(java.time.Duration.ofSeconds(1));var report=call("POST","/me/cases",Map.of("requestId",key(),"kind","REPORT","category","OTHER","targetType","ARTICLE","targetId",article,"description","controlled report","imageIds",List.of()),userToken);assertThat(report.status).isEqualTo(200);long id=report.data.path("caseId").asLong();
