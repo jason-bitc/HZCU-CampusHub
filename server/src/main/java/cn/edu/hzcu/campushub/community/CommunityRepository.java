@@ -18,7 +18,17 @@ public class CommunityRepository {
     private static Timestamp time(Instant t){return Timestamp.from(t);}
     private static Case row(ResultSet r)throws SQLException{return new Case(r.getLong("id"),r.getLong("user_id"),r.getString("kind"),r.getString("category"),r.getString("target_type"),r.getObject("article_id",Long.class),r.getObject("comment_id",Long.class),r.getObject("article_version_id",Long.class),r.getString("description"),r.getString("state"),r.getLong("revision"),r.getObject("assignee_id",Long.class),r.getString("content_digest"),r.getTimestamp("created_at").toInstant(),r.getTimestamp("updated_at").toInstant());}
     public Case row(long id,boolean lock){RequestTrace.caseId(id);RequestTrace.stage(RequestTrace.Stage.TARGET);return db.query("SELECT * FROM community_case WHERE id=:id"+(lock?" FOR UPDATE":""),p("id",id),(r,n)->row(r)).stream().findFirst().orElseThrow(ApiException::notFound);}
-    public boolean governanceRecorded(Case c){return c.targetType()!=null&&db.queryForObject("SELECT COUNT(*) FROM governance_event WHERE target_type=:type AND target_id=:target AND action='HIDE' AND occurred_at>=:created",p("type",c.targetType()).addValue("target",c.targetType().equals("ARTICLE")?c.article():c.comment()).addValue("created",time(c.created())),Long.class)>0;}
+    public boolean governanceRecorded(Case c) {
+        if (c.targetType() == null) return false;
+        var params = p("caseId", c.id()).addValue("type", c.targetType())
+                .addValue("target", c.targetType().equals("ARTICLE") ? c.article() : c.comment())
+                .addValue("created", time(c.created()));
+        return Boolean.TRUE.equals(db.queryForObject("""
+                SELECT EXISTS(SELECT 1 FROM governance_event
+                    WHERE target_type=:type AND target_id=:target AND action='HIDE' AND occurred_at>=:created)
+                    OR EXISTS(SELECT 1 FROM contribution_invalidation WHERE case_id=:caseId)
+                """, params, Boolean.class));
+    }
     public Optional<Previous> previous(long user,String key){RequestTrace.stage(RequestTrace.Stage.RECEIPT);return db.query("SELECT id,content_digest FROM community_case WHERE user_id=:user AND request_id=:key",p("user",user).addValue("key",key),(r,n)->new Previous(r.getString(2),new Receipt(r.getLong(1),1,"OPEN"))).stream().findFirst();}
     public Target target(String type,Long id){
         if(type==null)return new Target(null,null,null);RequestTrace.stage(RequestTrace.Stage.TARGET);long article=id;
