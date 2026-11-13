@@ -6,7 +6,7 @@
 
 ## 作者入口和主页
 
-GET `/articles/{articleId}/author`返回`{authorId,nickname}`，articleId为正整数。文章须仍PUBLISHED且指向有效公开版本，作者须真实关联并为当前ACTIVE/VALID/USER。原演示没有真实作者关联，返回404；不将其绑定给任何真实用户。该接口不接受查询参数。
+GET `/articles/{articleId}/author`返回基础字段 `{authorId,nickname}`，articleId为正整数。文章须仍PUBLISHED且指向有效公开版本，作者须真实关联并为当前ACTIVE/VALID/USER。原演示没有真实作者关联，返回404；不将其绑定给任何真实用户。该接口不接受查询参数。
 
 GET `/authors/{authorId}`不接受查询参数，返回：
 
@@ -22,13 +22,15 @@ GET `/authors/{authorId}`不接受查询参数，返回：
 }
 ```
 
-未填写资料时默认昵称城院同学、major=null、currentStage=UNSET、bio为空。当前阶段沿用UNSET/ENROLLED/GRADUATED，校园认证仅代表校园关联，不代表履历核验。主页不含联系值、邮箱、认证时间、密码、角色、完整用户对象、头像或荣誉。返回的专业标签是当前基础资料，不替代各篇文章自己的经历背景。
+未填写资料时默认昵称城院同学、major=null、currentStage=UNSET、bio为空。当前阶段沿用UNSET/ENROLLED/GRADUATED，校园认证仅代表校园关联，不代表履历核验。主页不含联系值、邮箱、认证时间、密码、角色、完整用户对象或头像。返回的专业标签是当前基础资料，不替代各篇文章自己的经历背景。
 
 作者必须ACTIVE、VALID、USER，并至少有一篇当前公开文章；未知、无公开文章、受限或认证失效一律404。最后一篇下架/隐藏/删除后，新请求不能继续读取主页、作者文章或联系入口；本人仍通过原/me/profile和/me/contact-settings管理设置。目标作者不可见不改变原免费文章读取合同。
 
+作者入口和主页在达成已启用的门槛时可返回 `honor`。字段、权限及默认关闭行为见[荣誉说明](COINS_API.md#作者荣誉)。
+
 GET `/authors/{authorId}/articles?page=1&size=20`返回原文章列表结构`{items,total,page,size}`，列表字段与[文章读取API](API.md)一致。只列该作者当前PUBLISHED公开版本，按首次publishedAt、文章id降序；恢复和修改草稿不刷新首发排序。默认20、最大100，page从1至1000000。只接受page/size，每参数一次；未知参数、sort、分类筛选、重复参数或非法值400。末页后items为空但total不变。单次读取在REPEATABLE_READ内保持目标可见性、数量和内容快照一致；跨请求offset分页不承诺固定快照。
 
-游客原`GET /articles`及`/articles/{id}`的结构保持，不随Authorization返回作者资料，游客图片权限沿用第三阶段。第七阶段当前统计为[LIVE真实点赞](LIVE_COUNTS.md)，旧DEMO/NONE存储值保留；本批作者文章摘要沿用当前计数合同，没有投币或阅读奖励。
+游客原`GET /articles`及`/articles/{id}`的结构保持，不随Authorization返回作者资料，游客图片权限沿用第三阶段。作者文章列表使用现行[LIVE计数契约](LIVE_COUNTS.md)，旧DEMO/NONE存储值保留。
 
 ## 本人独立联系设置
 
