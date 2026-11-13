@@ -41,4 +41,29 @@ GET与阅读开始均不支持正文，表中未列的查询参数拒绝。写JS
 | 409 INSUFFICIENT_COINS | 钱包不足，本次未扣款 |
 | 503 SERVICE_UNAVAILABLE | 必要数据库或审计写入失败，事务回滚 |
 
-没有撤回／返币／改余额接口。投币者名单和他人账本不公开。旧DEMO的固定币数不混入当前LIVE。荣誉、治理返还、页面对接另行推进。Postman集合只保存占位符，按已授权目标逐条执行。
+没有撤回／返币／改余额接口。投币者名单和他人账本不公开。旧DEMO的固定币数不混入当前LIVE。治理返还和页面对接另行推进。Postman集合只保存占位符，按已授权目标逐条执行。
+
+## 作者荣誉
+
+认证后的 GET /me/coins、GET /articles/{articleId}/author、GET /authors/{authorId} 在符合门槛时返回同一结构的可选字段 honor，例如：
+
+~~~json
+{"ruleId":"test-one","title":"测试荣誉","badge":"test-icon"}
+~~~
+
+未启用规则或未达门槛时省略 honor。作者接口只返回荣誉，不公开钱包或收到的币数。访客读取公开正文时不会取得该字段。荣誉采用已生效投币的作者贡献合计，取满足门槛的最高已启用规则。本人花币不改变收到的贡献。读取荣誉不创建钱包、奖励或新的账本记录。
+
+服务启动时读取 campushub.honors.rules。每条规则提供 id、title、正整数 threshold、可选 badge 标识和 enabled。id 与 threshold 各自唯一，id 和 badge 使用小写字母、数字和连字符。badge 由客户端映射到图案资源。仓库默认没有启用规则，正式配置须采用已确认的称号和门槛。以下仅供隔离验证：
+
+~~~yaml
+campushub:
+  honors:
+    rules:
+      - id: test-one
+        title: 测试荣誉
+        threshold: 10
+        badge: test-icon
+        enabled: true
+~~~
+
+贡献失效的治理写入和审计由 FR-G06 处理。已有账本事件的有效标记变化后，荣誉读取按有效贡献重新计算。

@@ -15,11 +15,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class CoinService {
     private final CoinRepository db;
     private final CoinRules rules;
+    private final HonorRules honors;
     private final BusinessAudit audit;
     private final Clock clock;
     private final TransactionTemplate read,write;
-    public CoinService(CoinRepository db,CoinRules rules,BusinessAudit audit,Clock clock,PlatformTransactionManager manager){
-        this.db=db;this.rules=rules;this.audit=audit;this.clock=clock;
+    public CoinService(CoinRepository db,CoinRules rules,BusinessAudit audit,Clock clock,PlatformTransactionManager manager,HonorRules honors){
+        this.db=db;this.rules=rules;this.audit=audit;this.clock=clock;this.honors=honors;
         read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
         write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
@@ -30,7 +31,14 @@ public class CoinService {
         if((action==Kind.ARTICLE_COIN&&(!Objects.equals(article,r.articleId())||-r.delta()!=amount))||(action==Kind.READING_REWARD&&!Objects.equals(reading,r.sessionId())))throw conflict("REQUEST_KEY_REUSED","该请求编号已用于其他内容");
         audit.unchanged(Action.valueOf(action.name()),ObjectType.WALLET);return r;
     }
-    public Balance balance(long user){return read.execute(tx->{RequestTrace.stage(RequestTrace.Stage.READ);return new Balance(db.wallet(user,false).balance(),db.contribution(user));});}
+    public Balance balance(long user) {
+        return read.execute(tx -> {
+            RequestTrace.stage(RequestTrace.Stage.READ);
+            long receivedContribution = db.contribution(user);
+            return new Balance(db.wallet(user, false).balance(), receivedContribution,
+                    honors.current(receivedContribution));
+        });
+    }
     public Ledger ledger(long user,int page,int size,Long snapshot){return read.execute(tx->{RequestTrace.stage(RequestTrace.Stage.READ);return db.ledger(user,page,size,snapshot);});}
     public Rewards rewards(long user){return read.execute(tx->{
         RequestTrace.stage(RequestTrace.Stage.READ);Instant now=clock.instant();LocalDate date=day(now);boolean login=db.claimed(user,Kind.LOGIN_REWARD,date),reading=db.claimed(user,Kind.READING_REWARD,date);

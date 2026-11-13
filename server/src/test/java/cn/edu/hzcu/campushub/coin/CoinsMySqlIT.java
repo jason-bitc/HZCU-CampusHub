@@ -40,14 +40,22 @@ class CoinsMySqlIT {
     static String secret(){String s="b8-private-"+key();secrets.add(s);return s;}
     static Path runtime(){return root.resolve("logs/campushub-runtime.log");}
     static Path diagnostic(){return root.resolve("logs/campushub-diagnostic.log");}
-    static void boot(String selected){
+    static void boot(String selected) {
+        boot(selected, Map.of());
+    }
+
+    static void boot(String selected, Map<String, Object> honorProperties) {
         mode=selected;var app=AuthTestSupport.application(MAIL,CLOCK);
         app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("coin-test",Map.of("campushub.run-mode",selected,"campushub.logs.enabled",true,"campushub.logs.root",root.resolve("logs").toString(),"campushub.logs.max-bytes",10*1024*1024,"campushub.media.root",root.resolve("media").toString(),"server.tomcat.threads.max",8,"server.tomcat.threads.min-spare",1))));
+        if (!honorProperties.isEmpty()) {
+            app.addInitializers(ctx -> ctx.getEnvironment().getPropertySources()
+                    .addFirst(new MapPropertySource("honors-test", honorProperties)));
+        }
         context=app.run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");db=context.getBean(JdbcTemplate.class);
     }
     @BeforeAll static void start()throws Exception{
         boot("debug");assertThat(db.queryForObject("SELECT DATABASE()",String.class)).isEqualTo("campushub_test");
-        originalArticles=db.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes,count_origin FROM article ORDER BY id");originalVersions=db.queryForList("SELECT id,title,summary,body,source_type,source_note FROM article_version ORDER BY id");originalCoins=db.queryForList("SELECT id,effective_coins,effective_likes,count_origin FROM article ORDER BY id");baseline=new LinkedHashMap<>();
+        originalArticles=db.queryForList("SELECT id,state,public_version_id,effective_coins,effective_likes,count_origin FROM article ORDER BY id");originalVersions=db.queryForList("SELECT id,title,summary,body,source_type,source_note FROM article_version ORDER BY id");originalCoins=db.queryForList("SELECT id,effective_coins,effective_likes,count_origin FROM article WHERE owner_user_id IS NULL ORDER BY id");baseline=new LinkedHashMap<>();
         for(String table:List.of("coin_wallet","coin_event","coin_reading_session","business_audit","article_like","article_favorite","discussion_comment","media_image"))baseline.put(table,count(table));
         password=secret();for(int i=0;i<5;i++){
             String email="b8"+key().replace("-","")+"@stu.hzcu.edu.cn";emails.add(email);secrets.add(email);var auth=context.getBean(AuthService.class);var challenge=auth.requestCode(email,AuthModels.Purpose.REGISTER);String code=MAIL.code(email,"REGISTER");secrets.add(code);users.add(auth.register(email,password,challenge.challengeId(),code).userId());tokens.add(login(i));
@@ -206,7 +214,7 @@ class CoinsMySqlIT {
         }finally{release.countDown();}reconcile(1);
     }
     @Test @Order(18) void changedConfigurationNeverRewritesReceiptOrReopensClaimedDay()throws Exception{
-        String request=key();nextDay(1);var receipt=reward(1,request);assertThat(receipt.status).isEqualTo(200);var changed=new CoinService(context.getBean(CoinRepository.class),new CoinRules(3,2,200,3),context.getBean(cn.edu.hzcu.campushub.audit.BusinessAudit.class),CLOCK,context.getBean(org.springframework.transaction.PlatformTransactionManager.class));
+        String request=key();nextDay(1);var receipt=reward(1,request);assertThat(receipt.status).isEqualTo(200);var changed=new CoinService(context.getBean(CoinRepository.class),new CoinRules(3,2,200,3),context.getBean(cn.edu.hzcu.campushub.audit.BusinessAudit.class),CLOCK,context.getBean(org.springframework.transaction.PlatformTransactionManager.class),context.getBean(HonorRules.class));
         var replay=changed.login(users.get(1),request);assertThat(replay.delta()).isEqualTo(2);assertThat(replay.rules().loginReward()).isEqualTo(2);assertThat(replay.eventId()).isEqualTo(receipt.data.path("eventId").asString());assertThatThrownBy(()->changed.login(users.get(1),key())).isInstanceOfSatisfying(cn.edu.hzcu.campushub.common.ApiException.class,e->assertThat(e.code()).isEqualTo("REWARD_ALREADY_CLAIMED"));reconcile(1);
         var reconciled=new ArrayList<Map<String,Object>>();for(long user:users){
             long delta=db.queryForObject("SELECT COALESCE(SUM(delta),0) FROM coin_event WHERE user_id=?",Long.class,user),balance=db.queryForObject("SELECT COALESCE((SELECT balance FROM coin_wallet WHERE user_id=?),0)",Long.class,user),events=db.queryForObject("SELECT COUNT(*) FROM coin_event WHERE user_id=?",Long.class,user),audits=db.queryForObject("SELECT COUNT(*) FROM business_audit WHERE actor_domain='USER' AND actor_id=? AND action IN ('LOGIN_REWARD','READING_REWARD','ARTICLE_COIN')",Long.class,user);
@@ -215,6 +223,76 @@ class CoinsMySqlIT {
         String run=Files.readString(runtime()),diag=Files.readString(diagnostic()),audit=JSON.writeValueAsString(context.getBean(NamedParameterJdbcTemplate.class).queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id IN (:users) AND action IN ('LOGIN_REWARD','READING_REWARD','ARTICLE_COIN','READING_START') ORDER BY occurred_at,event_id",new MapSqlParameterSource("users",users)));for(String s:secrets){assertThat(run).doesNotContain(s);assertThat(diag).doesNotContain(s);assertThat(audit).doesNotContain(s);}Files.writeString(Path.of("target/batch8-runtime-sample.txt"),run);Files.writeString(Path.of("target/batch8-diagnostic-sample.txt"),diag);Files.writeString(Path.of("target/batch8-audit-sample.json"),audit);
         Files.writeString(Path.of("target/batch8-route-coverage.json"),JSON.writeValueAsString(coverage));
     }
+    @Test @Order(19)
+    void honorIsTheSameOnThreeCertifiedReadsAndTracksOnlyEffectiveContribution() throws Exception {
+        nextDay(0, 1, 2, 4);
+        long target = article(4);
+        String entry = "/articles/" + target + "/author";
+        String home = "/authors/" + users.get(4);
+        assertThat(get(home, 0).data.has("honor")).isFalse();
+        assertThat(get(entry, 0).data.has("honor")).isFalse();
+        assertThat(get("/me/coins", 4).data.has("honor")).isFalse();
+
+        var settings = new HashMap<String, Object>();
+        String[] titles = {"测试荣誉一", "测试荣誉二", "停用测试荣誉"};
+        for (int i = 0; i < titles.length; i++) {
+            String rule = "campushub.honors.rules[" + i + "].";
+            settings.put(rule + "id", "test-" + (i + 1));
+            settings.put(rule + "title", titles[i]);
+            settings.put(rule + "threshold", i + 1);
+            settings.put(rule + "badge", "test-badge-" + (i + 1));
+            settings.put(rule + "enabled", i != 2);
+        }
+        context.close();
+        boot("release", settings);
+
+        assertThat(get(entry, -1).status).isEqualTo(401);
+        assertThat(get(home, -1).status).isEqualTo(401);
+        assertThat(get("/me/coins", -1).status).isEqualTo(401);
+        assertThat(get("/articles/" + target, -1).data.has("honor")).isFalse();
+        assertThat(get(home, 0).data.has("honor")).isFalse();
+
+        assertThat(reward(1, key()).status).isEqualTo(200);
+        var first = spend(target, 1, 1, key());
+        assertThat(first.status).isEqualTo(200);
+        assertHonor(entry, home, "test-1");
+
+        assertThat(reward(2, key()).status).isEqualTo(200);
+        assertThat(spend(target, 2, 2, key()).status).isEqualTo(200);
+        assertHonor(entry, home, "test-2");
+
+        assertThat(reward(4, key()).status).isEqualTo(200);
+        long other = article(0);
+        assertThat(spend(other, 1, 4, key()).status).isEqualTo(200);
+        assertHonor(entry, home, "test-2");
+
+        long donorBalance = balance(2);
+        // Simulate the effective flag that a separate governance workflow will update.
+        assertThat(db.update("UPDATE coin_event SET effective=FALSE WHERE article_id=? AND user_id=? AND action='ARTICLE_COIN'",
+                target, users.get(2))).isEqualTo(1);
+        assertThat(balance(2)).isEqualTo(donorBalance);
+        assertThat(get("/me/coins", 4).data.path("receivedContribution").asLong()).isEqualTo(1);
+        assertHonor(entry, home, "test-1");
+        assertThat(get("/articles/" + target, -1).data.path("counts").path("effectiveCoins").asLong()).isEqualTo(1);
+    }
+
+    private static void assertHonor(String entry, String home, String ruleId) throws Exception {
+        var own = get("/me/coins", 4);
+        var onArticle = get(entry, 0);
+        var onProfile = get(home, 0);
+        assertThat(own.status).isEqualTo(200);
+        assertThat(onArticle.status).isEqualTo(200);
+        assertThat(onProfile.status).isEqualTo(200);
+        var honor = own.data.path("honor");
+        assertThat(honor.path("ruleId").asString()).isEqualTo(ruleId);
+        assertThat(honor.path("title").asString())
+                .isEqualTo(ruleId.equals("test-1") ? "测试荣誉一" : "测试荣誉二");
+        assertThat(honor.path("badge").asString()).isEqualTo("test-badge-" + ruleId.substring(5));
+        assertThat(onArticle.data.path("honor")).isEqualTo(honor);
+        assertThat(onProfile.data.path("honor")).isEqualTo(honor);
+        assertThat(onProfile.data.has("receivedContribution")).isFalse();
+    }
+
     @AfterAll static void cleanup()throws Exception{
         if(context==null)return;try{
             var named=context.getBean(NamedParameterJdbcTemplate.class);var p=new MapSqlParameterSource("users",users).addValue("emails",emails);if(!users.isEmpty()){

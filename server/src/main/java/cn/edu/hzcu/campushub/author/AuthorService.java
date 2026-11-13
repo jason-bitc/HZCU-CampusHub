@@ -8,6 +8,8 @@ import cn.edu.hzcu.campushub.audit.BusinessAudit.*;
 import cn.edu.hzcu.campushub.common.RequestTrace;
 import static cn.edu.hzcu.campushub.common.RequestTrace.stage;
 import static cn.edu.hzcu.campushub.common.RequestTrace.Stage.*;
+import cn.edu.hzcu.campushub.coin.CoinRepository;
+import cn.edu.hzcu.campushub.coin.HonorRules;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.*;
@@ -19,15 +21,54 @@ public class AuthorService {
     private final ArticleRepository articles;
     private final WritingRepository writing;
     private final BusinessAudit audit;
+    private final CoinRepository coins;
+    private final HonorRules honors;
     private final TransactionTemplate read,write,contactRead;
-    public AuthorService(AuthorRepository authors,ArticleRepository articles,WritingRepository writing,BusinessAudit audit,PlatformTransactionManager manager){
-        this.authors=authors;this.articles=articles;this.writing=writing;this.audit=audit;
-        read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-        contactRead=new TransactionTemplate(manager);contactRead.setReadOnly(true);contactRead.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+
+    public AuthorService(AuthorRepository authors, ArticleRepository articles, WritingRepository writing,
+            BusinessAudit audit, PlatformTransactionManager manager, CoinRepository coins, HonorRules honors) {
+        this.authors = authors;
+        this.articles = articles;
+        this.writing = writing;
+        this.audit = audit;
+        this.coins = coins;
+        this.honors = honors;
+        read = new TransactionTemplate(manager);
+        read.setReadOnly(true);
+        read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+        contactRead = new TransactionTemplate(manager);
+        contactRead.setReadOnly(true);
+        contactRead.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        write = new TransactionTemplate(manager);
+        write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
-    public Entry entry(long id){return read.execute(tx->{stage(TARGET);var entry=authors.entry(id);RequestTrace.article(id);RequestTrace.author(entry.authorId());return entry;});}
-    public Home home(long id){return read.execute(tx->{stage(TARGET);var home=authors.home(id);RequestTrace.author(home.authorId());return home;});}
+
+    public Entry entry(long id) {
+        return read.execute(tx -> {
+            stage(TARGET);
+            var entry = authors.entry(id);
+            RequestTrace.article(id);
+            RequestTrace.author(entry.authorId());
+            var honor = honorFor(entry.authorId());
+            return honor == null ? entry : new Entry(entry.authorId(), entry.nickname(), honor);
+        });
+    }
+    public Home home(long id) {
+        return read.execute(tx -> {
+            stage(TARGET);
+            var home = authors.home(id);
+            RequestTrace.author(home.authorId());
+            var honor = honorFor(home.authorId());
+            return honor == null ? home : new Home(home.authorId(), home.nickname(), home.major(),
+                    home.currentStage(), home.bio(), home.campusCertification(), home.publicArticleCount(), honor);
+        });
+    }
+
+    private HonorRules.Honor honorFor(long authorId) {
+        if (!honors.hasEnabledRules()) return null;
+        stage(READ);
+        return honors.current(coins.contribution(authorId));
+    }
     public ArticleModels.Page articles(long id,int page,int size){return read.execute(tx->{stage(TARGET);authors.home(id);RequestTrace.author(id);stage(READ);return articles.byAuthor(id,page,size);});}
     public Contact ownContact(long user){return contactRead.execute(tx->{stage(READ);return authors.contact(user);});}
     public Map<String,Object> contact(long author){return contactRead.execute(tx->{stage(TARGET);var contact=authors.publicContact(author);RequestTrace.author(author);return contact;});}
