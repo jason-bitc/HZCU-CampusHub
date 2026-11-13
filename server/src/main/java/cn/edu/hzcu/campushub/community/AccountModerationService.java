@@ -2,6 +2,7 @@ package cn.edu.hzcu.campushub.community;
 
 import cn.edu.hzcu.campushub.auth.AuthCrypto;
 import cn.edu.hzcu.campushub.common.*;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.util.*;
@@ -14,7 +15,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class AccountModerationService {
     private final JdbcTemplate db;private final AdminAuthService auth;private final Clock clock;private final TransactionTemplate tx;
-    public AccountModerationService(JdbcTemplate db,AdminAuthService auth,Clock clock,PlatformTransactionManager manager){this.db=db;this.auth=auth;this.clock=clock;tx=new TransactionTemplate(manager);tx.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);}
+    private final NotificationService notifications;
+    public AccountModerationService(JdbcTemplate db,AdminAuthService auth,Clock clock,PlatformTransactionManager manager,NotificationService notifications){this.db=db;this.auth=auth;this.clock=clock;this.notifications=notifications;tx=new TransactionTemplate(manager);tx.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);}
     private static ApiException conflict(String code){return new ApiException(HttpStatus.CONFLICT,code,"状态已经变化，请刷新后确认");}
     private void user(long id){if(db.queryForList("SELECT id FROM platform_user WHERE id=? FOR UPDATE",id).isEmpty())throw ApiException.notFound();}
     private Map<String,Object> restriction(long id){return db.queryForList("SELECT * FROM community_restriction WHERE id=?",id).stream().findFirst().orElseThrow(ApiException::notFound);}
@@ -28,7 +30,13 @@ public class AccountModerationService {
             if(!old.isEmpty()){var row=new LinkedHashMap<>(old.getFirst());if(!digest.equals(row.remove("digest")))throw conflict("REQUEST_KEY_REUSED");return row;}
             var found=db.queryForList("SELECT * FROM community_restriction WHERE user_id=? AND scope=?",user,scope);long revision=found.isEmpty()?0:number(found.getFirst(),"revision");boolean before=!found.isEmpty()&&Boolean.TRUE.equals(found.getFirst().get("enabled"));if(revision!=expected)throw conflict("REVISION_CONFLICT");
             db.update("INSERT INTO community_restriction(user_id,scope,enabled,revision,reason,admin_id,updated_at) VALUES(?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE enabled=?,revision=?,reason=?,admin_id=?,updated_at=?",user,scope,enabled,revision+1,reason,admin,Timestamp.from(clock.instant()),enabled,revision+1,reason,admin,Timestamp.from(clock.instant()));
-            long id=db.queryForObject("SELECT id FROM community_restriction WHERE user_id=? AND scope=?",Long.class,user,scope);history(admin,key,digest,id,before,enabled,revision+1,reason);return Map.of("restrictionId",id,"revision",revision+1,"enabled",enabled);
+            long id=db.queryForObject("SELECT id FROM community_restriction WHERE user_id=? AND scope=?",Long.class,user,scope);
+            history(admin,key,digest,id,before,enabled,revision+1,reason);
+            if (before != enabled) {
+                notifications.record(user, NotificationService.Kind.RESTRICTION_CHANGED, id, revision + 1,
+                        enabled ? NotificationService.Outcome.ENABLED : NotificationService.Outcome.DISABLED);
+            }
+            return Map.of("restrictionId",id,"revision",revision+1,"enabled",enabled);
         });
     }
     private void history(long admin,String key,String digest,long id,boolean before,boolean after,long revision,String reason){db.update("INSERT INTO community_restriction_event(admin_id,request_id,digest,restriction_id,before_enabled,enabled,revision,reason,occurred_at) VALUES(?,?,?,?,?,?,?,?,?)",admin,key,digest,id,before,after,revision,reason,Timestamp.from(clock.instant()));}
@@ -50,7 +58,10 @@ public class AccountModerationService {
             var row=db.queryForMap("SELECT * FROM community_appeal WHERE id=? FOR UPDATE",id);if(number(row,"revision")!=expected)throw conflict("REVISION_CONFLICT");if(!row.get("state").equals("OPEN"))throw conflict("APPEAL_CLOSED");
             if(outcome.equals("ACCEPTED")){long restriction=number(row,"restriction_id");var r=restriction(restriction);if(number(r,"revision")!=number(row,"restriction_revision")||!Boolean.TRUE.equals(r.get("enabled")))throw conflict("REVISION_CONFLICT");long revision=number(r,"revision")+1;db.update("UPDATE community_restriction SET enabled=FALSE,revision=?,reason=?,admin_id=?,updated_at=? WHERE id=?",revision,reply,admin,Timestamp.from(clock.instant()),restriction);history(admin,key,AuthCrypto.tokenDigest("APPEAL\n"+digest),restriction,true,false,revision,reply);}
             db.update("UPDATE community_appeal SET state=?,revision=revision+1,reply=?,decided_by=?,updated_at=? WHERE id=?",outcome,reply,admin,Timestamp.from(clock.instant()),id);
-            db.update("INSERT INTO community_appeal_receipt(admin_id,request_id,digest,appeal_id,revision,state) VALUES(?,?,?,?,?,?)",admin,key,digest,id,expected+1,outcome);return Map.of("id",id,"revision",expected+1,"state",outcome);
+            db.update("INSERT INTO community_appeal_receipt(admin_id,request_id,digest,appeal_id,revision,state) VALUES(?,?,?,?,?,?)",admin,key,digest,id,expected+1,outcome);
+            notifications.record(number(row,"user_id"), NotificationService.Kind.APPEAL_DECIDED, id,
+                    expected + 1, NotificationService.Outcome.valueOf(outcome));
+            return Map.of("id",id,"revision",expected+1,"state",outcome);
         });
     }
 }

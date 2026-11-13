@@ -4,6 +4,7 @@ import cn.edu.hzcu.campushub.audit.BusinessAudit;
 import cn.edu.hzcu.campushub.auth.AuthCrypto;
 import cn.edu.hzcu.campushub.common.ApiException;
 import cn.edu.hzcu.campushub.common.RequestTrace;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Instant;
@@ -23,23 +24,25 @@ public class ContributionGovernanceService {
     public record Page(List<Item> items, long total, int page, int size) {}
     public record Receipt(long caseId, String eventId, boolean effective) {}
 
-    private record Contribution(long sequenceId, boolean effective) {}
+    private record Contribution(long sequenceId, long authorId, boolean effective) {}
 
     private final JdbcTemplate db;
     private final CommunityRepository cases;
     private final AdminAuthService admins;
     private final BusinessAudit audit;
     private final Clock clock;
+    private final NotificationService notifications;
     private final TransactionTemplate read;
     private final TransactionTemplate write;
 
     public ContributionGovernanceService(JdbcTemplate db, CommunityRepository cases, AdminAuthService admins,
-            BusinessAudit audit, Clock clock, PlatformTransactionManager manager) {
+            BusinessAudit audit, Clock clock, PlatformTransactionManager manager, NotificationService notifications) {
         this.db = db;
         this.cases = cases;
         this.admins = admins;
         this.audit = audit;
         this.clock = clock;
+        this.notifications = notifications;
         read = new TransactionTemplate(manager);
         read.setReadOnly(true);
         read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -111,9 +114,9 @@ public class ContributionGovernanceService {
             }
             RequestTrace.stage(RequestTrace.Stage.TARGET);
             var contribution = db.query("""
-                    SELECT sequence_id,effective FROM coin_event
+                    SELECT sequence_id,author_id,effective FROM coin_event
                     WHERE event_id=? AND article_id=? AND action='ARTICLE_COIN' FOR UPDATE
-                    """, (r, n) -> new Contribution(r.getLong(1), r.getBoolean(2)), eventId, article)
+                    """, (r, n) -> new Contribution(r.getLong(1), r.getLong(2), r.getBoolean(3)), eventId, article)
                     .stream().findFirst().orElseThrow(ApiException::notFound);
             if (!contribution.effective()) {
                 throw conflict("CONTRIBUTION_ALREADY_INVALID", "这笔贡献已失效");
@@ -126,6 +129,8 @@ public class ContributionGovernanceService {
                     VALUES (?,?,?,?,?,?,?)
                     """, contribution.sequenceId(), caseId, admin, requestId, digest, reason,
                     Timestamp.from(clock.instant()));
+            notifications.record(contribution.authorId(), NotificationService.Kind.CONTRIBUTION_INVALIDATED,
+                    contribution.sequenceId(), 1, NotificationService.Outcome.INVALIDATED);
             audit.changed(RequestTrace.Domain.COMMUNITY_ADMIN, admin, BusinessAudit.Action.CONTRIBUTION_INVALIDATE,
                     BusinessAudit.ObjectType.CONTRIBUTION, contribution.sequenceId(), 0, 1,
                     BusinessAudit.State.ENABLED, BusinessAudit.State.DISABLED);

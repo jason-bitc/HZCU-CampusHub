@@ -217,9 +217,60 @@ class CommentsMySqlIT {
         context.close();diagnostics=false;boot();String before=Files.readString(diagnostic);auditFailure(()->assertThat(create(articleA,key(),text(),List.of(),null,readerToken).status).isEqualTo(503));assertThat(Files.readString(diagnostic)).isEqualTo(before);
         runtime=Files.readString(log);for(String action:List.of("COMMENT_LIST","COMMENT_CREATE","COMMENT_DELETE","COMMENT_REPLIES","COMMENT_IMAGE_UPLOAD","COMMENT_IMAGE_READ"))assertThat(runtime).contains("action="+action);for(String secret:secrets){assertThat(runtime.contains(secret)).isFalse();assertThat(before.contains(secret)).isFalse();}
     }
-    @Test @Order(14) void restartRetainsRepliesImagesTerminalsAuditAndNoSensitiveExports()throws Exception{
+    @Test @Order(14) void replyNotificationsRespectOwnershipVisibilityAndIdempotentRead() throws Exception {
+        long article = article();
+        long parent = post(article, ownerToken, null);
+        String request = key();
+        String body = text();
+        String inbox = "/api/v1/me/notifications";
+        long initialUnread = get(inbox, ownerToken).data.path("unreadCount").asLong();
+        auditFailure(() -> assertThat(create(article, request, body, List.of(), parent, readerToken).status)
+                .isEqualTo(503));
+        assertThat(get(inbox, ownerToken).data.path("unreadCount").asLong()).isEqualTo(initialUnread);
+        var original = create(article, request, body, List.of(), parent, readerToken);
+        assertThat(original.status).isEqualTo(201);
+        long reply = original.data.path("commentId").asLong();
+        assertThat(create(article, request, body, List.of(), parent, readerToken).data).isEqualTo(original.data);
+        post(article, ownerToken, parent);
+        var page = get(inbox + "?size=1", ownerToken);
+        var item = page.data.path("items").get(0);
+        assertThat(item.path("kind").asString()).isEqualTo("COMMENT_REPLY");
+        assertThat(item.path("target").path("id").asLong()).isEqualTo(reply);
+        assertThat(item.path("target").path("articleId").asLong()).isEqualTo(article);
+        assertThat(item.path("target").path("rootCommentId").asLong()).isEqualTo(parent);
+        assertThat(item.path("readAt").isNull()).isTrue();
+        assertThat(page.raw).doesNotContain(body);
+        assertThat(page.data.path("unreadCount").asLong()).isEqualTo(initialUnread + 1);
+        String mark = inbox + "/" + item.path("id").asLong() + "/read";
+        assertThat(call("PUT", mark, null, thirdToken).status).isEqualTo(404);
+        assertThat(call("PUT", mark, null, null).status).isEqualTo(401);
+        assertThat(call("PUT", mark, Map.of("read", true), ownerToken).status).isEqualTo(400);
+        assertThat(get(inbox + "?size=1&size=2", ownerToken).status).isEqualTo(400);
+        var receipt = call("PUT", mark, null, ownerToken);
+        assertThat(receipt.status).isEqualTo(200);
+        CLOCK.advance(Duration.ofSeconds(1));
+        assertThat(call("PUT", mark, null, ownerToken).data).isEqualTo(receipt.data);
+        assertThat(get(inbox, ownerToken).data.path("unreadCount").asLong()).isEqualTo(initialUnread);
+
+        db.update("UPDATE campus_certification SET state='REVOKED' WHERE user_id=?", owner);
+        try {
+            assertThat(get(inbox + "?size=1", ownerToken).data.path("items").get(0).path("target").isNull()).isTrue();
+            assertThat(roots(article, ownerToken).status).isEqualTo(403);
+        } finally {
+            db.update("UPDATE campus_certification SET state='VALID' WHERE user_id=?", owner);
+        }
+        assertThat(delete(reply, readerToken).status).isEqualTo(200);
+        var unavailable = get(inbox + "?size=1", ownerToken).data.path("items").get(0);
+        assertThat(unavailable.path("target").isNull()).isTrue();
+        assertThat(unavailable.path("readAt")).isEqualTo(receipt.data.path("readAt"));
+        context.close();
+        boot();
+        assertThat(call("PUT", mark, null, ownerToken).data).isEqualTo(receipt.data);
+    }
+
+    @Test @Order(15) void restartRetainsRepliesImagesTerminalsAuditAndNoSensitiveExports()throws Exception{
         var rows=db.queryForList("SELECT id,state,revision,body,root_comment_id,reply_to_comment_id FROM discussion_comment WHERE user_id IN (?,?,?) ORDER BY id",owner,reader,third);long audits=count("business_audit");String runtimeBefore=Files.readString(root.resolve("logs/campushub-runtime.log"));context.close();boot();assertThat(db.queryForList("SELECT id,state,revision,body,root_comment_id,reply_to_comment_id FROM discussion_comment WHERE user_id IN (?,?,?) ORDER BY id",owner,reader,third)).isEqualTo(rows);assertThat(count("business_audit")).isEqualTo(audits);assertThat(item(roots(articleA,thirdToken),lastingComment).path("available").asBoolean()).isTrue();assertThat(image(lastingImage,thirdToken).body()).isEqualTo(png);assertThat(Files.readString(root.resolve("logs/campushub-runtime.log"))).startsWith(runtimeBefore);
-        CLOCK.advance(Duration.ofDays(7));assertThat(roots(articleA,readerToken).status).isEqualTo(401);assertThat(image(lastingImage,readerToken).statusCode()).isEqualTo(401);assertThat(get("/api/v1/articles/1001",null).status).isEqualTo(200);assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12");
+        CLOCK.advance(Duration.ofDays(7));assertThat(roots(articleA,readerToken).status).isEqualTo(401);assertThat(image(lastingImage,readerToken).statusCode()).isEqualTo(401);assertThat(get("/api/v1/articles/1001",null).status).isEqualTo(200);assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12","13");
         String runtime=Files.readString(root.resolve("logs/campushub-runtime.log")),diagnostic=Files.readString(root.resolve("logs/campushub-diagnostic.log"));String audit=JSON.writeValueAsString(db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id IN (?,?,?) ORDER BY occurred_at,event_id",owner,reader,third));for(String secret:secrets){assertThat(runtime.contains(secret)).isFalse();assertThat(diagnostic.contains(secret)).isFalse();assertThat(audit.contains(secret)).isFalse();}Files.writeString(Path.of("target","batch5-runtime-sample.txt"),runtime);Files.writeString(Path.of("target","batch5-diagnostic-sample.txt"),diagnostic);Files.writeString(Path.of("target","batch5-audit-sample.json"),audit+"\n");
     }
 }

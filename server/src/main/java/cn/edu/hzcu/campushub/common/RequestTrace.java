@@ -64,6 +64,7 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String module(String action){
         if(action.startsWith("ADMIN_"))return "COMMUNITY_ADMIN";
         if(action.startsWith("CASE_"))return "COMMUNITY";
+        if(action.startsWith("NOTIFICATION_"))return "NOTIFICATION";
         if(java.util.Set.of("COIN_BALANCE","COIN_LEDGER","REWARDS_READ","LOGIN_REWARD","READING_START","READING_REWARD","COIN_STATE","ARTICLE_COIN").contains(action))return "COIN";
         if(action.startsWith("LIKE_")||action.startsWith("FAVORITE")||action.equals("INTERACTION_READ"))return "INTERACTION";
         if(action.startsWith("AUTH_")||action.equals("IDENTITY_READ"))return "AUTH";
@@ -76,6 +77,8 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/me/notifications"))return "NOTIFICATION_LIST";
+        if(path.matches("/api/v1/me/notifications/[^/]+/read"))return "NOTIFICATION_MARK_READ";
         if(path.equals("/api/v1/me/cases"))return method.equals("POST")?"CASE_SUBMIT":"CASE_LIST";
         if(path.startsWith("/api/v1/me/cases/"))return "CASE_DETAIL";
         if(path.equals("/api/v1/me/case-images"))return "CASE_IMAGE_UPLOAD";

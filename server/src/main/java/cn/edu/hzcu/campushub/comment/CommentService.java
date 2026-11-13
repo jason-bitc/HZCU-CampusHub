@@ -5,6 +5,7 @@ import cn.edu.hzcu.campushub.audit.BusinessAudit;
 import cn.edu.hzcu.campushub.audit.BusinessAudit.*;
 import cn.edu.hzcu.campushub.authoring.*;
 import cn.edu.hzcu.campushub.common.*;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import java.time.Clock;
 import java.util.*;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class CommentService {
     private final WritingRepository writing;
     private final MediaStore files;
     private final BusinessAudit audit;
+    private final NotificationService notifications;
     private final Clock clock;
     private final TransactionTemplate read,write;
-    public CommentService(CommentRepository comments,WritingRepository writing,MediaStore files,BusinessAudit audit,Clock clock,PlatformTransactionManager manager){
+    public CommentService(CommentRepository comments,WritingRepository writing,MediaStore files,BusinessAudit audit,Clock clock,PlatformTransactionManager manager,NotificationService notifications){
         this.comments=comments;this.writing=writing;this.files=files;this.audit=audit;this.clock=clock;
+        this.notifications=notifications;
         read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
         write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
@@ -59,14 +62,17 @@ public class CommentService {
             if(!previous.get().digest().equals(digest))throw WritingService.conflict("REQUEST_KEY_REUSED");
             audit.unchanged(Action.COMMENT_CREATE,ObjectType.COMMENT);return comments.row(previous.get().comment()).receipt();
         }
-        writing.assertAllowed(user,"COMMENT");Long root=null;
-        if(input.replyToCommentId()!=null){Row parent=comments.row(input.replyToCommentId());if(parent.article()!=article||!parent.state().equals("VISIBLE"))throw ApiException.notFound();root=parent.rootId();}
+        writing.assertAllowed(user,"COMMENT");Long root=null;Row parent=null;
+        if(input.replyToCommentId()!=null){parent=comments.row(input.replyToCommentId());if(parent.article()!=article||!parent.state().equals("VISIBLE"))throw ApiException.notFound();root=parent.rootId();}
         RequestTrace.stage(RequestTrace.Stage.ATTACHMENT);var images=comments.pictures(input.imageIds());if(images.size()!=input.imageIds().size())throw ApiException.notFound();
         for(Picture image:images){
             if(image.owner()!=user||image.article()!=article)throw ApiException.notFound();
             if(image.comment()!=null)throw WritingService.conflict("IMAGE_ALREADY_USED");RequestTrace.stage(RequestTrace.Stage.STORAGE);files.read(image.id(),image.size(),image.digest());
         }
         RequestTrace.stage(RequestTrace.Stage.PERSIST);long id=writing.allocate("comment");comments.create(id,article,user,root,input,digest,clock.instant());RequestTrace.comment(id);comments.attach(article,user,id,input.imageIds());
+        if (parent != null && parent.owner() != user) {
+            notifications.record(parent.owner(), NotificationService.Kind.COMMENT_REPLY, id, 1, null);
+        }
         audit.changed(user,Action.COMMENT_CREATE,ObjectType.COMMENT,id,0,1,null,State.VISIBLE);return comments.row(id).receipt();
     });}
     public Deleted delete(long user,long id){return cn.edu.hzcu.campushub.common.RequestTrace.write(write,tx->{
