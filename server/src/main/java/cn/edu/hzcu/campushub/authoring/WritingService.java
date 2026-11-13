@@ -43,7 +43,13 @@ public class WritingService {
         audit.changed(user,Action.PROFILE_UPDATE,ObjectType.PROFILE,user,previous.revision(),saved.revision(),null,null);return saved;
     });}
     public Created create(long user,String request){return RequestTrace.write(write,tx->{stage(TARGET);repository.lockUser(user);stage(RECEIPT);Long previous=repository.created(user,request);if(previous!=null){RequestTrace.article(previous);return new Created(previous);}stage(PERSIST);long id=repository.allocate("article");repository.create(id,user,request,clock.instant());RequestTrace.article(id);return new Created(id);});}
-    public OwnedPage list(long user,int page,int size){if(page<1||page>1_000_000||size<1||size>100)throw ApiException.invalid();return read.execute(tx->{stage(READ);return repository.list(user,page,size);});}
+    public OwnedPage list(long user, ArticleState state, int page, int size) {
+        if (page < 1 || page > 1_000_000 || size < 1 || size > 100) throw ApiException.invalid();
+        return read.execute(tx -> {
+            stage(READ);
+            return repository.list(user, state, page, size);
+        });
+    }
     public Draft draft(long user,long id){return read.execute(tx->{Article a=repository.owned(user,id,false);if(a.state().equals("DELETED"))throw ApiException.notFound();return view(a);});}
     private Draft view(Article a){return new Draft(a.id(),a.state(),a.revision(),repository.content(a.id()),repository.images(a.id()),repository.referenced(a.id()));}
     public Draft save(long user,long id,long expected,Content content){

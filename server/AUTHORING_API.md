@@ -20,7 +20,19 @@ PUT `/me/profile`完整替换以下字段：
 
 POST `/me/articles`，正文`{"requestId":"小写UUID"}`。成功201返回`{articleId}`；同一用户同一创建标识的重试返回同一文章ID，即使文章后来删除也不会重新创建。不同标识创建多篇独立空草稿。创建标识、上传标识、发布标识分别使用新的小写UUID（例如客户端生成的随机UUID），不要为不同操作复用一个标识。
 
-GET `/me/articles?page=1&size=20`：默认20、最大100，page从1开始且不超过1000000。只接受page/size，每个参数一次。返回`{items:[{articleId,state,revision,title,updatedAt}],total,page,size}`，按草稿更新时间、文章ID降序。包含软删除状态记录便于确认操作结果，不含其他人的文章或原先owner为空的演示文章。
+GET `/me/articles?page=1&size=20&state=DRAFT` 支持本人工作区按状态分页。默认每页20、最大100，page从1开始且不超过1000000。接受 `page`、`size` 和可选 `state`，每个参数一次。可用状态为 `DRAFT`、`PUBLISHED`、`AUTHOR_OFFLINE`、`ADMIN_HIDDEN`、`DELETED`。省略 `state` 时返回原有混合列表，包含软删除记录。指定 `PUBLISHED` 时要求文章当前有有效公开版本。
+
+返回 `{items,total,page,size,publishingRestricted}`。每项保留 `articleId`、`state`、`revision`、`title`、`updatedAt`，新增 `allowedActions`。按文章更新时间、文章ID降序，`total` 为本人符合当前筛选的总数。本人列表中的 `title` 来自草稿，查看公开正文使用 `GET /articles/{id}`。
+
+| 状态 | 可显示的操作 |
+| --- | --- |
+| DRAFT | VIEW_DRAFT、EDIT_DRAFT、PUBLISH、DELETE |
+| PUBLISHED | VIEW_DRAFT、EDIT_DRAFT、VIEW_PUBLIC、PUBLISH、UNPUBLISH、DELETE |
+| AUTHOR_OFFLINE | VIEW_DRAFT、EDIT_DRAFT、PUBLISH、RESTORE、DELETE |
+| ADMIN_HIDDEN | VIEW_DRAFT、DELETE |
+| DELETED | 空列表 |
+
+`publishingRestricted=true` 时隐藏 `PUBLISH` 和 `RESTORE`，限制记录可通过 `GET /me/restrictions` 查看。公开阅读与恢复入口要求存在有效发布版本。提交操作仍按当前修订号、状态、权限和必填内容校验。收藏入口继续使用 [本人收藏列表](INTERACTIONS_API.md#本人收藏分页)，不可用收藏只返回占位。
 
 GET `/me/articles/{id}/draft`返回`{articleId,state,revision,content,images,referencedImageIds}`。content包含title/summary/body/tags/experienceStage/sourceType/sourceNote/sourceLinks；tags包含四组分类ID数组。images为该文章已上传图片元数据，referencedImageIds仅为Markdown实际图片引用。删除文章草稿404。管理员隐藏文章可由本人读取，但不能修改或发布。
 
