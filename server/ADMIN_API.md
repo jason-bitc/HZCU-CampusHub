@@ -71,7 +71,7 @@
 
 ## 案件闭环
 
-原有OPEN、PROCESSING、NEEDS_ACTION、CLOSED及认领规则保持。举报决定增加 `GOVERNANCE_COMPLETED`：只有该案件目标在提交后已有真实HIDE治理事件，才允许闭案；否则409 `GOVERNANCE_NOT_RECORDED`。仅点击“需治理”仍不等于隐藏完成。此结论不表示已返币、调整作者荣誉或封停账号。
+案件沿用 OPEN、PROCESSING、NEEDS_ACTION、CLOSED 及认领规则。举报以 `GOVERNANCE_COMPLETED` 闭案时，须已有针对目标且发生于举报后的 HIDE 事件，或已有直接关联本案的贡献失效记录。缺少处置依据时返回 409 `GOVERNANCE_NOT_RECORDED`。贡献失效在提交时更新有效贡献，闭案只记录案件结果。
 
 ## 幂等、失败与安全
 
