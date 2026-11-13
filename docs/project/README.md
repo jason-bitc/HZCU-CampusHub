@@ -27,6 +27,13 @@
 - [DFD 处理分解](models/总体设计G04/DFD处理与程序分解G04.csv)、[详细实现任务与交接](models/总体设计G04/详细实现任务与交接G04.csv)。
 - [物理字段字典](models/总体设计G04/物理字段字典G04.csv)、[物理键约束和索引](models/总体设计G04/物理键约束和索引G04.csv)。
 
+## 详细设计阶段
+
+[详细设计报告 V1.0 PDF](reports/城院帮详细设计报告G04.pdf) · [Word](reports/城院帮详细设计报告G04.docx) · [Markdown](reports/城院帮详细设计报告G04.md)
+
+- [可编辑设计图](models/详细设计G04/城院帮详细设计图G04.drawio) · [第 6 章课件覆盖与页码](models/详细设计G04/课件覆盖与页码G04.csv)
+- [需求与设计追踪](models/详细设计G04/需求与设计追踪G04.csv) · [构件反向追踪](models/详细设计G04/构件反向追踪G04.csv) · [基本路径复核](models/详细设计G04/基本路径复核G04.csv) · [修订登记](models/详细设计G04/详细设计修订记录G04.csv)
+
 ## V1.8 项目计划与实现阶段
 
 [项目计划 PDF](reports/城院帮项目计划G04.pdf) · [Word](reports/城院帮项目计划G04.docx) · [Markdown](reports/城院帮项目计划G04.md)
