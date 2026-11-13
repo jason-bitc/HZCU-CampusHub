@@ -184,7 +184,7 @@ class InteractionsMySqlIT {
         CLOCK.advance(Duration.ofDays(7));for(String method:List.of("PUT","DELETE"))for(String kind:List.of("like","favorite"))assertThat(call(method,"/api/v1/articles/"+a+"/"+kind,null,tokens.getFirst()).status).isEqualTo(401);assertThat(state(a,0).status).isEqualTo(401);assertThat(favorites(0).status).isEqualTo(401);assertLive(get("/api/v1/articles/1001",-1).data,1001);
         String runtime=Files.readString(runtime()),diagnostic=Files.readString(diagnostic());String audit=JSON.writeValueAsString(db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id IN (?,?,?) ORDER BY occurred_at,event_id",users.get(0),users.get(1),users.get(2)));for(String secret:secrets){assertThat(runtime).doesNotContain(secret);assertThat(diagnostic).doesNotContain(secret);assertThat(audit).doesNotContain(secret);}
         Files.writeString(Path.of("target/batch7-runtime-sample.txt"),runtime);Files.writeString(Path.of("target/batch7-diagnostic-sample.txt"),diagnostic);Files.writeString(Path.of("target/batch7-audit-sample.json"),audit);Files.writeString(Path.of("target/batch7-route-coverage.json"),JSON.writeValueAsString(coverage));
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12","13");
     }
     @AfterAll static void cleanup()throws Exception{
         if(context==null)return;

@@ -78,8 +78,14 @@ class AuthMySqlIT {
         String first=login(email,password),second=login(email,password);assertThat(first.equals(second)).isFalse();assertThat(first.matches("[A-Za-z0-9_-]{43}")).isTrue();
         assertThat(db.queryForObject("SELECT COUNT(*) FROM auth_session WHERE token_digest=?",Long.class,first)).isZero();
         assertThat(call("GET","/api/v1/me",null,first).status).isEqualTo(200);
+        var notices=call("GET","/api/v1/me/notifications",null,second);
+        assertThat(notices.status).isEqualTo(200);
+        assertThat(notices.data.path("unreadCount").asLong()).isEqualTo(1);
+        assertThat(notices.data.path("items").get(0).path("kind").asString()).isEqualTo("CAMPUS_VERIFIED");
+        assertThat(notices.data.toString()).doesNotContain(email);
         assertThat(call("POST","/api/v1/auth/logout",null,first).status).isEqualTo(200);
         assertThat(call("GET","/api/v1/me",null,first).status).isEqualTo(401);assertThat(call("GET","/api/v1/me",null,second).status).isEqualTo(200);
+        assertThat(call("GET","/api/v1/me/notifications",null,first).status).isEqualTo(401);
         assertThat(register(email,password,id,MAIL.code(email,"REGISTER")).status).isEqualTo(400);
     }
     @Test @Order(2) void invalidDomainPasswordPayloadAndNoPrivilegeEscalation()throws Exception{
@@ -171,6 +177,6 @@ class AuthMySqlIT {
             try(var stream=AuthMySqlIT.class.getClassLoader().getResourceAsStream(entry.getKey())){var hash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(stream.readAllBytes()));assertThat(hash.toUpperCase(Locale.ROOT)).isEqualTo(entry.getValue());}
         }
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article WHERE state='PUBLISHED'",Long.class)).isEqualTo(6);
-        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(12);
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(13);
     }
 }

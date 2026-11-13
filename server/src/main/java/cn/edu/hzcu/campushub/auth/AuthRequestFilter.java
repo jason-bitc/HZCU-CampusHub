@@ -26,6 +26,8 @@ public class AuthRequestFilter extends OncePerRequestFilter {
         String path=request.getServletPath();
         boolean casePath=path.equals("/api/v1/me/cases")||path.startsWith("/api/v1/me/cases/")||path.equals("/api/v1/me/case-images")||path.startsWith("/api/v1/media/case-images");
         boolean writingPath=path.startsWith("/api/v1/me/");
+        boolean notificationPath=(request.getMethod().equals("GET")&&path.equals("/api/v1/me/notifications"))
+                ||(request.getMethod().equals("PUT")&&path.matches("/api/v1/me/notifications/[^/]+/read"));
         boolean coinPath=path.matches("/api/v1/me/(coins|coin-ledger|rewards)(?:/.*)?")||path.matches("/api/v1/articles/[^/]+/(coins|coin-state|reading-session)(?:/.*)?");
         boolean interactionPath=path.matches("/api/v1/articles/[^/]+/(like|favorite|interaction-state)(?:/.*)?");
         boolean commentPath=path.equals("/api/v1/comments")||path.startsWith("/api/v1/comments/")||path.equals("/api/v1/media/comment-images")||path.startsWith("/api/v1/media/comment-images/")||path.matches("/api/v1/articles/[^/]+/(comments|comment-images)(?:/.*)?");
@@ -36,7 +38,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
             if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath||readerPath){
                 var headers=Collections.list(request.getHeaders("Authorization"));
                 if(headers.size()!=1||!headers.getFirst().startsWith("Bearer "))throw AuthService.unauthorized();
-                var identity=auth.authenticate(headers.getFirst().substring(7));if(writingPath||readerPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
+                var identity=auth.authenticate(headers.getFirst().substring(7));if((writingPath||readerPath)&&!notificationPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
             cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.VALIDATION);
             if((interactionPath||path.equals("/api/v1/me/favorites"))&&(request.getContentLengthLong()>0||request.getInputStream().read()!=-1))throw ApiException.invalid();
