@@ -7,11 +7,12 @@ import java.util.Set;
 import tools.jackson.databind.JsonNode;
 
 public final class AuthInput {
+    public static final String CAMPUS_EMAIL_DOMAIN = "stu.hzcu.edu.cn";
     private AuthInput() {}
     public static String email(String value) {
         if (value == null) throw ApiException.invalid();
         String email = value.strip().toLowerCase(Locale.ROOT);
-        if (!email.matches("[a-z0-9](?:[a-z0-9._+%\\-]{0,62}[a-z0-9])?@stu\\.hzcu\\.edu\\.cn")
+        if (!email.matches("[a-z0-9](?:[a-z0-9._+%\\-]{0,62}[a-z0-9])?@" + java.util.regex.Pattern.quote(CAMPUS_EMAIL_DOMAIN))
                 || email.contains("..")) throw ApiException.invalid();
         return email;
     }

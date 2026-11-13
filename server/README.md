@@ -14,6 +14,7 @@
 | 点赞与收藏 | [INTERACTIONS_API.md](INTERACTIONS_API.md) |
 | 奖励、币与账本 | [COINS_API.md](COINS_API.md) |
 | 本人通知和已读状态 | [NOTIFICATIONS_API.md](NOTIFICATIONS_API.md) |
+| 双端规则说明与可选写作提示 | [USER_GUIDANCE_API.md](USER_GUIDANCE_API.md) |
 | 私人举报反馈及基础案件 | [COMMUNITY_API.md](COMMUNITY_API.md) |
 | 社区管理员网页与治理 | [ADMIN_API.md](ADMIN_API.md) |
 | 独立运维网页与实际执行 | [OPS_API.md](OPS_API.md) |
