@@ -1,5 +1,6 @@
 package cn.edu.hzcu.campushub.coin;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.*;
 import java.util.List;
 
@@ -7,7 +8,8 @@ public final class CoinModels {
     private CoinModels(){}
     public enum Kind { LOGIN_REWARD,READING_REWARD,ARTICLE_COIN }
     public record Wallet(long balance,long revision){}
-    public record Balance(long balance,long receivedContribution){}
+    public record Balance(long balance, long receivedContribution,
+                          @JsonInclude(JsonInclude.Include.NON_NULL) HonorRules.Honor honor) {}
     public record Rules(String version,String timezone,int loginReward,int readingReward,int readingSeconds,int articleLimit,int dailyMaximum,boolean readerCanWithdraw){}
     public record Reading(String sessionId,long articleId,LocalDate businessDate,Instant startedAt,Instant claimableAt,int requiredSeconds){}
     public record Receipt(String eventId,Kind action,LocalDate businessDate,Long articleId,String sessionId,long delta,long balanceAfter,long walletRevision,Instant occurredAt,Rules rules){}
