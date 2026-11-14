@@ -1,6 +1,7 @@
 package cn.edu.hzcu.campushub.coin;
 
 import cn.edu.hzcu.campushub.auth.*;
+import cn.edu.hzcu.campushub.community.AdminAuthService;
 import java.net.*;
 import java.net.http.*;
 import java.nio.file.*;
@@ -14,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import static org.assertj.core.api.Assertions.*;
@@ -27,6 +29,8 @@ class CoinsMySqlIT {
     static final HttpClient HTTP=HttpClient.newHttpClient();
     static final JsonMapper JSON=JsonMapper.builder().build();
     static final List<Long> users=new ArrayList<>();
+    static final Map<Long, String> governanceAdmins = new LinkedHashMap<>();
+    static final List<Long> reports = new ArrayList<>();
     static final List<String> emails=new ArrayList<>(),tokens=new ArrayList<>(),secrets=new CopyOnWriteArrayList<>();
     static final List<Map<String,Object>> coverage=new CopyOnWriteArrayList<>();
     static ConfigurableApplicationContext context;
@@ -89,7 +93,16 @@ class CoinsMySqlIT {
     static Reply spend(long article,int amount,int who,String request)throws Exception{return call("POST","/articles/"+article+"/coins",Map.of("amount",amount,"requestId",request),who);}
     static Map<String,Object> content(long revision){return Map.ofEntries(Map.entry("expectedRevision",revision),Map.entry("title",secret()),Map.entry("summary",secret()),Map.entry("body",secret()),Map.entry("jobIds",List.of(1)),Map.entry("majorIds",List.of(11)),Map.entry("companyIds",List.of(21)),Map.entry("topicIds",List.of(31)),Map.entry("experienceStage","DEMO"),Map.entry("sourceType","DEMO"),Map.entry("sourceNote",secret()),Map.entry("sourceLinks",List.of()));}
     static long article(int who)throws Exception{
-        long id=call("POST","/me/articles",Map.of("requestId",key()),who).data.path("articleId").asLong();assertThat(call("PUT","/me/articles/"+id+"/draft",content(0),who).status).isEqualTo(200);assertThat(call("POST","/me/articles/"+id+"/publish",Map.of("expectedRevision",1,"requestId",key()),who).status).isEqualTo(200);return id;
+        return article(who, secret());
+    }
+    static long article(int who, String title) throws Exception {
+        var draft = new HashMap<>(content(0));
+        draft.put("title", title);
+        long id = call("POST", "/me/articles", Map.of("requestId", key()), who).data.path("articleId").asLong();
+        assertThat(call("PUT", "/me/articles/" + id + "/draft", draft, who).status).isEqualTo(200);
+        assertThat(call("POST", "/me/articles/" + id + "/publish",
+                Map.of("expectedRevision", 1, "requestId", key()), who).status).isEqualTo(200);
+        return id;
     }
     static long fact(long article){return db.queryForObject("SELECT COALESCE(SUM(-delta),0) FROM coin_event WHERE article_id=? AND action='ARTICLE_COIN' AND effective=TRUE",Long.class,article);}
     interface Checked {Reply run()throws Exception;}
@@ -202,7 +215,7 @@ class CoinsMySqlIT {
         assertThat(db.queryForList("SELECT * FROM coin_wallet ORDER BY user_id")).isEqualTo(wallet);assertThat(db.queryForList("SELECT * FROM coin_event ORDER BY sequence_id")).isEqualTo(events);assertThat(db.queryForList("SELECT * FROM coin_reading_session ORDER BY id")).isEqualTo(sessions);assertThat(read(target,1).data.path("sessionId").asString()).isEqualTo(reading);assertThat(spend(target,1,1,request).data).isEqualTo(receipt.data);
         CLOCK.advance(Duration.ofDays(1));assertThat(spend(target,1,1,request).data).isEqualTo(receipt.data);for(int i:new int[]{0,1,2,3,4}){tokens.set(i,login(i));reconcile(i);}CLOCK.advance(Duration.ofDays(7));assertThat(get("/me/coins",1).status).isEqualTo(401);assertThat(spend(a,1,1,key()).status).isEqualTo(401);
         String runtime=Files.readString(runtime()),diagnostic=Files.readString(diagnostic());for(String secret:secrets){assertThat(runtime).doesNotContain(secret);assertThat(diagnostic).doesNotContain(secret);}Files.writeString(Path.of("target/batch8-runtime-sample.txt"),runtime);Files.writeString(Path.of("target/batch8-diagnostic-sample.txt"),diagnostic);Files.writeString(Path.of("target/batch8-route-coverage.json"),JSON.writeValueAsString(coverage));
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12");
     }
     @Test @Order(17) void retryWaitingBehindWithdrawalStillReturnsConcurrentCommittedReceipt()throws Exception{
         nextDay(1);reward(1,key());tokens.set(0,login(0));long target=article(0);String request=key();var source=context.getBean(DataSource.class);var withdrawn=new CountDownLatch(1);var release=new CountDownLatch(1);
@@ -226,7 +239,8 @@ class CoinsMySqlIT {
     @Test @Order(19)
     void honorIsTheSameOnThreeCertifiedReadsAndTracksOnlyEffectiveContribution() throws Exception {
         nextDay(0, 1, 2, 4);
-        long target = article(4);
+        String keyword = secret();
+        long target = article(4, keyword + " target");
         String entry = "/articles/" + target + "/author";
         String home = "/authors/" + users.get(4);
         assertThat(get(home, 0).data.has("honor")).isFalse();
@@ -258,7 +272,8 @@ class CoinsMySqlIT {
         assertHonor(entry, home, "test-1");
 
         assertThat(reward(2, key()).status).isEqualTo(200);
-        assertThat(spend(target, 2, 2, key()).status).isEqualTo(200);
+        var second = spend(target, 2, 2, key());
+        assertThat(second.status).isEqualTo(200);
         assertHonor(entry, home, "test-2");
 
         assertThat(reward(4, key()).status).isEqualTo(200);
@@ -266,14 +281,121 @@ class CoinsMySqlIT {
         assertThat(spend(other, 1, 4, key()).status).isEqualTo(200);
         assertHonor(entry, home, "test-2");
 
-        long donorBalance = balance(2);
-        // Simulate the effective flag that a separate governance workflow will update.
-        assertThat(db.update("UPDATE coin_event SET effective=FALSE WHERE article_id=? AND user_id=? AND action='ARTICLE_COIN'",
-                target, users.get(2))).isEqualTo(1);
-        assertThat(balance(2)).isEqualTo(donorBalance);
+        assertThat(reward(0, key()).status).isEqualTo(200);
+        long comparator = article(1, keyword + " comparator");
+        var comparison = spend(comparator, 2, 0, key());
+        assertThat(comparison.status).isEqualTo(200);
+        String ranked = "/articles?sort=recognized&keyword=" + keyword;
+        assertThat(get(ranked, -1).data.path("items").get(0).path("id").asLong()).isEqualTo(target);
+        invalidateFromReport(target, second.data.path("eventId").asString(),
+                comparison.data.path("eventId").asString());
+        assertThat(get(ranked, -1).data.path("items").get(0).path("id").asLong()).isEqualTo(comparator);
         assertThat(get("/me/coins", 4).data.path("receivedContribution").asLong()).isEqualTo(1);
         assertHonor(entry, home, "test-1");
         assertThat(get("/articles/" + target, -1).data.path("counts").path("effectiveCoins").asLong()).isEqualTo(1);
+    }
+
+    private record TestAdmin(long id, String token) {}
+
+    private static TestAdmin createAdmin() {
+        String name = "g06" + key().replace("-", "");
+        String password = secret();
+        db.update("INSERT INTO community_admin(login_name,password_hash,created_at) VALUES(?,?,NOW(6))", name,
+                context.getBean(PasswordEncoder.class).encode(password));
+        long id = db.queryForObject("SELECT id FROM community_admin WHERE login_name=?", Long.class, name);
+        governanceAdmins.put(id, name);
+        String token = context.getBean(AdminAuthService.class).login(name, password).accessToken();
+        secrets.add(token);
+        return new TestAdmin(id, token);
+    }
+
+    private static long reportArticle(long target) throws Exception {
+        var report = call("POST", "/me/cases", Map.of("requestId", key(), "kind", "REPORT", "category", "OTHER",
+                "targetType", "ARTICLE", "targetId", target, "description", "test contribution", "imageIds", List.of()), 1);
+        assertThat(report.status).isEqualTo(200);
+        long id = report.data.path("caseId").asLong();
+        reports.add(id);
+        return id;
+    }
+
+    private static Reply adminCall(String method, String path, Object body, TestAdmin admin) throws Exception {
+        return raw(method, path, body, admin.token(), "application/json");
+    }
+
+    private static void invalidateFromReport(long target, String eventId, String unrelatedEvent)
+            throws Exception {
+        var admin = createAdmin();
+        var otherAdmin = createAdmin();
+        long caseId = reportArticle(target);
+        long otherCase = reportArticle(target);
+        String casePath = "/admin/cases/" + caseId;
+        String list = casePath + "/contributions";
+        String path = list + "/" + eventId + "/invalidation";
+        String reason = secret();
+        var body = Map.of("expectedRevision", 2, "requestId", key(), "reason", reason);
+        assertThat(get(list, -1).status).isEqualTo(401);
+        assertThat(get(list, 0).status).isEqualTo(401);
+        assertThat(call("POST", path, body, 0).status).isEqualTo(401);
+        assertThat(adminCall("GET", list + "?size=1", null, admin).data.path("total").asLong()).isEqualTo(2);
+        assertThat(adminCall("POST", casePath + "/claim",
+                Map.of("expectedRevision", 1, "requestId", key()), admin).status).isEqualTo(200);
+        assertThat(adminCall("POST", path, body, otherAdmin).code).isEqualTo("CASE_NOT_ASSIGNEE");
+        assertThat(adminCall("POST", path, Map.of("expectedRevision", 1, "requestId", key(), "reason", reason), admin)
+                .code).isEqualTo("REVISION_CONFLICT");
+        assertThat(adminCall("POST", path, Map.of("expectedRevision", 2, "requestId", key(), "reason", "  "), admin)
+                .status).isEqualTo(400);
+        assertThat(adminCall("POST", list + "/" + unrelatedEvent + "/invalidation", body, admin).status)
+                .isEqualTo(404);
+
+        var wallet = get("/me/coins", 2).data;
+        var ledger = get("/me/coin-ledger", 2).data;
+        var before = db.queryForMap("SELECT * FROM coin_event WHERE event_id=?", eventId);
+        var rejected = fault("business_audit", "INSERT",
+                "NEW.actor_id=" + admin.id() + " AND NEW.action='CONTRIBUTION_INVALIDATE'",
+                () -> adminCall("POST", path, body, admin));
+        assertThat(rejected.status).isEqualTo(503);
+        assertThat(db.queryForMap("SELECT * FROM coin_event WHERE event_id=?", eventId)).isEqualTo(before);
+        assertThat(count("contribution_invalidation WHERE case_id=" + caseId)).isZero();
+
+        var replies = race(3, () -> adminCall("POST", path, body, admin));
+        assertThat(replies).allSatisfy(reply -> {
+            assertThat(reply.status).isEqualTo(200);
+            assertThat(reply.data).isEqualTo(replies.getFirst().data);
+            assertThat(reply.data.path("effective").asBoolean()).isFalse();
+        });
+        assertThat(adminCall("POST", path, Map.of("expectedRevision", 2, "requestId", key(), "reason", reason), admin)
+                .code).isEqualTo("CONTRIBUTION_ALREADY_INVALID");
+        assertThat(adminCall("POST", path, Map.of("expectedRevision", 2, "requestId", body.get("requestId"),
+                "reason", "changed"), admin).code).isEqualTo("REQUEST_KEY_REUSED");
+        assertThat(count("contribution_invalidation WHERE case_id=" + caseId)).isEqualTo(1);
+        assertThat(count("business_audit WHERE actor_domain='COMMUNITY_ADMIN' AND actor_id=" + admin.id()
+                + " AND action='CONTRIBUTION_INVALIDATE' AND object_type='CONTRIBUTION' AND object_id="
+                + before.get("sequence_id"))).isEqualTo(1);
+        before.put("effective", false);
+        assertThat(db.queryForMap("SELECT * FROM coin_event WHERE event_id=?", eventId)).isEqualTo(before);
+        assertThat(get("/me/coins", 2).data).isEqualTo(wallet);
+        assertThat(get("/me/coin-ledger", 2).data).isEqualTo(ledger);
+        assertThat(get("/articles/" + target + "/coin-state", 2).data.path("remaining").asLong()).isZero();
+
+        var invalidated = adminCall("GET", list, null, admin).data.path("items").get(0);
+        assertThat(invalidated.path("eventId").asString()).isEqualTo(eventId);
+        assertThat(invalidated.path("invalidation").path("caseId").asLong()).isEqualTo(caseId);
+        assertThat(invalidated.path("invalidation").path("adminId").asLong()).isEqualTo(admin.id());
+        assertThat(invalidated.path("invalidation").path("reason").asString()).isEqualTo(reason);
+        assertThat(invalidated.path("invalidation").path("occurredAt").asString()).isNotBlank();
+        assertThat(invalidated.has("userId")).isFalse();
+        assertThat(invalidated.has("balanceAfter")).isFalse();
+
+        var decision = Map.of("outcome", "GOVERNANCE_COMPLETED", "expectedRevision", 2, "requestId", key(),
+                "reply", "Contribution reviewed", "internalNote", "");
+        assertThat(adminCall("POST", "/admin/cases/" + otherCase + "/claim",
+                Map.of("expectedRevision", 1, "requestId", key()), admin).status).isEqualTo(200);
+        assertThat(adminCall("POST", "/admin/cases/" + otherCase + "/decisions", decision, admin).code)
+                .isEqualTo("GOVERNANCE_NOT_RECORDED");
+        assertThat(adminCall("POST", casePath + "/decisions", decision, admin).data.path("state").asString())
+                .isEqualTo("CLOSED");
+        assertThat(adminCall("POST", path, body, admin).data).isEqualTo(replies.getFirst().data);
+        assertThat(Files.readString(runtime())).doesNotContain(reason);
     }
 
     private static void assertHonor(String entry, String home, String ruleId) throws Exception {
@@ -295,6 +417,19 @@ class CoinsMySqlIT {
 
     @AfterAll static void cleanup()throws Exception{
         if(context==null)return;try{
+            for (long report : reports) {
+                for (String table : List.of("contribution_invalidation", "community_admin_receipt",
+                        "community_case_history", "community_case_comment", "community_case_media")) {
+                    db.update("DELETE FROM " + table + " WHERE case_id=?", report);
+                }
+                db.update("DELETE FROM community_case WHERE id=?", report);
+            }
+            for (var admin : governanceAdmins.entrySet()) {
+                db.update("DELETE FROM business_audit WHERE actor_domain='COMMUNITY_ADMIN' AND actor_id=?", admin.getKey());
+                db.update("DELETE FROM community_admin_session WHERE admin_id=?", admin.getKey());
+                db.update("DELETE FROM community_admin WHERE id=?", admin.getKey());
+                db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?", AuthCrypto.tokenDigest(admin.getValue()));
+            }
             var named=context.getBean(NamedParameterJdbcTemplate.class);var p=new MapSqlParameterSource("users",users).addValue("emails",emails);if(!users.isEmpty()){
                 for(String table:List.of("coin_event","coin_reading_session","coin_wallet","article_like","article_favorite"))named.update("DELETE FROM "+table+" WHERE user_id IN (:users)",p);named.update("DELETE FROM business_audit WHERE actor_domain='USER' AND actor_id IN (:users)",p);
                 var articles=named.queryForList("SELECT id FROM article WHERE owner_user_id IN (:users)",p,Long.class);if(!articles.isEmpty()){

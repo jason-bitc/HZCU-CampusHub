@@ -1,6 +1,6 @@
 # 社区管理员网页对接说明
 
-2026-11-06。业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。当前接口基线为迁移 V1—V11。
+业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。当前接口基线为迁移 V1—V12。
 
 响应沿用 `code/data/traceId`；失败使用真实 HTTP 状态及 `code/message/traceId`，不返回 `data`。管理响应 `Cache-Control: no-store`。管理令牌通过 `Authorization: Bearer …` 传递，禁止放在URL。
 
@@ -16,13 +16,14 @@
 | 文章巡查 | `GET /admin/articles`、`GET /admin/articles/{id}` | 仅已有公开版本的文章；可检查当前下架状态 |
 | 评论巡查 | `GET /admin/articles/{id}/comments` | 该文章的评论，含当前状态和修订号 |
 | 内容治理 | `POST /admin/articles/{id}/moderation`、`POST /admin/comments/{id}/moderation` | HIDE或RESTORE，有真实状态变更与事务审计 |
+| 贡献治理 | `GET /admin/cases/{id}/contributions`、`POST /admin/cases/{id}/contributions/{eventId}/invalidation` | 在文章举报下定位投币、提交失效原因及查询审计。字段与错误见[贡献失效与追溯](COMMUNITY_API.md#贡献失效与追溯) |
 | 分类维护 | `GET/POST /admin/categories`、`PUT /admin/categories/{id}` | 岗位、专业、公司、主题；创建、改名、排序、启停 |
 | 治理记录 | `GET /admin/governance-events` | 对象、理由、操作者、前后状态、修订和时间 |
 | 用户限制 | `GET /admin/users`、`GET/POST /admin/users/{id}/restrictions` | PUBLISH和COMMENT两类行为分别设置；不封锁阅读和本人申诉 |
 | 申诉处理 | `GET /admin/appeals`、`POST /admin/appeals/{id}/decisions` | ACCEPTED或REJECTED；接受申诉只解除对应版本的限制 |
 | 用户查看结果 | `GET /me/restrictions`、`GET/POST /me/appeals` | 仅本人限制和申诉，不公开他人信息 |
 
-`/admin/me` 返回能力 `CASE_READ`、`CASE_HANDLE`、`CONTENT_MODERATE`、`CATEGORY_MANAGE`、`GOVERNANCE_READ`、`USER_RESTRICT`、`APPEAL_HANDLE`。本期社区管理员共享这些社区能力，运维能力单独授权。
+`/admin/me` 返回能力 `CASE_READ`、`CASE_HANDLE`、`CONTENT_MODERATE`、`CATEGORY_MANAGE`、`GOVERNANCE_READ`、`USER_RESTRICT`、`APPEAL_HANDLE`、`CONTRIBUTION_INVALIDATE`。社区管理员共享这些社区能力，贡献处置由案件认领人执行，运维能力单独授权。
 
 ## 参数及返回结构
 
@@ -70,7 +71,7 @@
 
 ## 案件闭环
 
-原有OPEN、PROCESSING、NEEDS_ACTION、CLOSED及认领规则保持。举报决定增加 `GOVERNANCE_COMPLETED`：只有该案件目标在提交后已有真实HIDE治理事件，才允许闭案；否则409 `GOVERNANCE_NOT_RECORDED`。仅点击“需治理”仍不等于隐藏完成。此结论不表示已返币、调整作者荣誉或封停账号。
+案件沿用 OPEN、PROCESSING、NEEDS_ACTION、CLOSED 及认领规则。举报以 `GOVERNANCE_COMPLETED` 闭案时，须已有针对目标且发生于举报后的 HIDE 事件，或已有直接关联本案的贡献失效记录。缺少处置依据时返回 409 `GOVERNANCE_NOT_RECORDED`。贡献失效在提交时更新有效贡献，闭案只记录案件结果。
 
 ## 幂等、失败与安全
 
