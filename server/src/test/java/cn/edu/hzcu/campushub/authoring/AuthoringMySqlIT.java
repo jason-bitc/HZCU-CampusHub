@@ -251,7 +251,66 @@ class AuthoringMySqlIT {
         assertThat(call("POST","/api/v1/auth/logout",null,two).status).isEqualTo(200);assertThat(call("GET","/api/v1/me/articles",null,two).status).isEqualTo(401);
         assertThat(call("GET","/api/v1/articles",null,null).status).isEqualTo(200);
     }
-    @Test @Order(12) void rebootKeepsIndependentDraftsProfilesAndPublicVersions()throws Exception{
+    @Test @Order(12) void newDraftDefaultsToTheCurrentEnabledMajorOnlyOnce() throws Exception {
+        String path = "/api/v1/me/articles";
+        var profile = call("GET", "/api/v1/me/profile", null, one).data;
+        assertThat(profile.path("majorId").asLong()).isEqualTo(12);
+        String request = key();
+        var command = Map.of("requestId", request);
+        var created = call("POST", path, command, one);
+        assertThat(created.status).isEqualTo(201);
+        long original = created.data.path("articleId").asLong();
+        var initial = call("GET", path + "/" + original + "/draft", null, one).data;
+        assertThat(initial.path("revision").asLong()).isZero();
+        assertThat(initial.path("content").path("tags").path("majorIds").toString()).isEqualTo("[12]");
+        assertThat(initial.path("content").path("experienceStage").asString()).isEmpty();
+        assertThat(initial.path("content").path("tags").path("companyIds").isEmpty()).isTrue();
+
+        var update = new LinkedHashMap<String, Object>();
+        update.put("expectedRevision", profile.path("revision").asLong());
+        update.put("nickname", profile.path("nickname").asString());
+        update.put("majorId", 11);
+        update.put("currentStage", profile.path("currentStage").asString());
+        update.put("bio", profile.path("bio").asString());
+        var updated = call("PUT", "/api/v1/me/profile", update, one);
+        assertThat(updated.status).isEqualTo(200);
+        assertThat(call("POST", path, command, one).data).isEqualTo(created.data);
+        assertThat(call("GET", path + "/" + original + "/draft", null, one).data).isEqualTo(initial);
+        long current = create(one);
+        assertThat(call("GET", path + "/" + current + "/draft", null, one).data
+                .at("/content/tags/majorIds").toString()).isEqualTo("[11]");
+
+        var cleared = draft(0, "专业由作者确认", "正文");
+        cleared.put("majorIds", List.of());
+        var saved = call("PUT", path + "/" + original + "/draft", cleared, one);
+        assertThat(saved.status).isEqualTo(200);
+        assertThat(saved.data.at("/content/tags/majorIds").isEmpty()).isTrue();
+        assertThat(call("POST", path, command, one).data).isEqualTo(created.data);
+        assertThat(call("GET", path + "/" + original + "/draft", null, one).data.at("/content/tags/majorIds").isEmpty())
+                .isTrue();
+        var incomplete = publish(original, 1, key(), one);
+        assertThat(incomplete.code).isEqualTo("PUBLISH_INCOMPLETE");
+        assertThat(incomplete.raw).contains("majorIds");
+
+        db.update("UPDATE category SET enabled=FALSE WHERE id=11");
+        try {
+            long disabled = create(one);
+            assertThat(call("GET", path + "/" + disabled + "/draft", null, one).data.at("/content/tags/majorIds")
+                    .isEmpty()).isTrue();
+            assertThat(call("GET", path + "/" + current + "/draft", null, one).data
+                    .at("/content/tags/majorIds").toString()).isEqualTo("[11]");
+        } finally {
+            db.update("UPDATE category SET enabled=TRUE WHERE id=11");
+        }
+        update.put("expectedRevision", updated.data.path("revision").asLong());
+        update.put("majorId", null);
+        assertThat(call("PUT", "/api/v1/me/profile", update, one).status).isEqualTo(200);
+        long noMajor = create(one);
+        assertThat(call("GET", path + "/" + noMajor + "/draft", null, one).data.at("/content/tags/majorIds").isEmpty())
+                .isTrue();
+    }
+
+    @Test @Order(13) void rebootKeepsIndependentDraftsProfilesAndPublicVersions()throws Exception{
         long id=create(one);String body="# 重启保留\n\n复杂Markdown `a < b` 与中文。";save(id,0,"恢复草稿",body,one);var before=call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data;
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data).isEqualTo(before);assertThat(call("GET","/api/v1/me/profile",null,one).data.path("nickname").asString()).isEqualTo("G04测试昵称");assertThat(call("GET","/api/v1/articles/"+edited,null,null).status).isEqualTo(200);
