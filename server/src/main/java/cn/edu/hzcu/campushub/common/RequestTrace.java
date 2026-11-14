@@ -131,6 +131,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.matches("/api/v1/me/articles/[^/]+/draft"))return method.equals("PUT")?"DRAFT_SAVE":"DRAFT_READ";
         if(path.matches("/api/v1/me/articles/[^/]+/images"))return "ARTICLE_IMAGE_UPLOAD";
         if(path.matches("/api/v1/me/articles/[^/]+/publish"))return "WRITING_PUBLISH";
+        if(path.matches("/api/v1/me/articles/[^/]+/preview"))return "WRITING_PREVIEW";
         if(path.matches("/api/v1/me/articles/[^/]+/unpublish"))return "WRITING_UNPUBLISH";
         if(path.matches("/api/v1/me/articles/[^/]+/restore"))return "WRITING_RESTORE";
         if(path.matches("/api/v1/me/articles/[^/]+")&&method.equals("DELETE"))return "WRITING_DELETE";

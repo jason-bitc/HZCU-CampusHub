@@ -42,6 +42,24 @@ public class WritingController {
         return ApiResponse.success(service.list(identity.me().userId(), state, page.page(), page.size()));
     }
     @GetMapping("/me/articles/{id}/draft") public ApiResponse<Draft> draft(@RequestAttribute("campushub.identity") Identity identity,@PathVariable String id){return ApiResponse.success(service.draft(identity.me().userId(),ArticleQuery.requiredId(id)));}
+    @GetMapping("/me/articles/{id}/preview")
+    public ApiResponse<PublishPreview> preview(@RequestAttribute("campushub.identity") Identity identity,
+            @PathVariable String id, @RequestParam MultiValueMap<String, String> params, HttpServletRequest request)
+            throws java.io.IOException {
+        var revisions = params.get("expectedRevision");
+        if (params.size() != 1 || revisions == null || revisions.size() != 1
+                || !revisions.getFirst().matches("[0-9]{1,19}")
+                || request.getContentLengthLong() > 0 || request.getInputStream().read() != -1) {
+            throw ApiException.invalid();
+        }
+        long expected;
+        try {
+            expected = Long.parseLong(revisions.getFirst());
+        } catch (NumberFormatException invalid) {
+            throw ApiException.invalid();
+        }
+        return ApiResponse.success(service.preview(identity.me().userId(), ArticleQuery.requiredId(id), expected));
+    }
     @PutMapping("/me/articles/{id}/draft") public ApiResponse<Draft> save(@RequestAttribute("campushub.identity") Identity identity,@PathVariable String id,@RequestBody JsonNode body){return ApiResponse.success(service.save(identity.me().userId(),ArticleQuery.requiredId(id),revision(body),content(body)));}
     @PostMapping("/me/articles/{id}/publish") public ApiResponse<Published> publish(@RequestAttribute("campushub.identity") Identity identity,@PathVariable String id,@RequestBody JsonNode body){fields(body,"expectedRevision","requestId");return ApiResponse.success(service.publish(identity.me().userId(),ArticleQuery.requiredId(id),revision(body),requestId(body)));}
     @PostMapping({"/me/articles/{id}/unpublish","/me/articles/{id}/restore"})
