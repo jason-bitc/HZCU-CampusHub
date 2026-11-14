@@ -3,6 +3,7 @@ package cn.edu.hzcu.campushub.auth;
 import static cn.edu.hzcu.campushub.auth.AuthModels.*;
 import cn.edu.hzcu.campushub.common.ApiException;
 import cn.edu.hzcu.campushub.common.RequestTrace;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import static cn.edu.hzcu.campushub.common.RequestTrace.stage;
 import static cn.edu.hzcu.campushub.common.RequestTrace.Stage.*;
 
@@ -24,10 +25,12 @@ public class AuthService {
     private final PasswordEncoder passwords;
     private final CodeMailer mailer;
     private final Clock clock;
+    private final NotificationService notifications;
     private final TransactionTemplate transaction;
     private final String dummyHash;
-    public AuthService(AuthRepository repository,AuthCrypto crypto,PasswordEncoder passwords,CodeMailer mailer,Clock clock,PlatformTransactionManager manager){
+    public AuthService(AuthRepository repository,AuthCrypto crypto,PasswordEncoder passwords,CodeMailer mailer,Clock clock,PlatformTransactionManager manager,NotificationService notifications){
         this.repository=repository;this.crypto=crypto;this.passwords=passwords;this.mailer=mailer;this.clock=clock;
+        this.notifications=notifications;
         transaction=new TransactionTemplate(manager);transaction.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         dummyHash=passwords.encode(crypto.token());
     }
@@ -73,10 +76,14 @@ public class AuthService {
             Instant now=clock.instant(); var verified=verify(id,canonical,Purpose.REGISTER,digits,now);
             if(verified.error()!=null)return fail(verified.error());
             if(repository.user(canonical,false).isPresent())return fail(error(HttpStatus.CONFLICT,"ACCOUNT_EXISTS","该邮箱账号已经注册，请登录或找回密码"));
+            long user;
             try{
-                stage(PERSIST);long user=repository.createUser(canonical,passwords.encode(raw),now);repository.consume(id,now);RequestTrace.actor(user);
-                return ok(repository.user(user,false).orElseThrow().me());
+                stage(PERSIST);user=repository.createUser(canonical,passwords.encode(raw),now);
             }catch(DuplicateKeyException duplicate){return fail(error(HttpStatus.CONFLICT,"ACCOUNT_EXISTS","该邮箱账号已经注册，请登录或找回密码"));}
+            repository.consume(id,now);
+            RequestTrace.actor(user);
+            notifications.record(user, NotificationService.Kind.CAMPUS_VERIFIED, user, 1, null);
+            return ok(repository.user(user,false).orElseThrow().me());
         }));
     }
     public Login login(String email,String password){

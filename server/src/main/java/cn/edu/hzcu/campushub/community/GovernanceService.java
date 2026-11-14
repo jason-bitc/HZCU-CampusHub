@@ -2,6 +2,7 @@ package cn.edu.hzcu.campushub.community;
 
 import cn.edu.hzcu.campushub.auth.AuthCrypto;
 import cn.edu.hzcu.campushub.common.*;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.util.*;
@@ -17,8 +18,11 @@ public class GovernanceService {
     private final AdminAuthService auth;
     private final TransactionTemplate tx;
     private final Clock clock;
-    public GovernanceService(JdbcTemplate db, AdminAuthService auth, PlatformTransactionManager manager, Clock clock) {
+    private final NotificationService notifications;
+    public GovernanceService(JdbcTemplate db, AdminAuthService auth, PlatformTransactionManager manager, Clock clock,
+            NotificationService notifications) {
         this.db=db; this.auth=auth; this.tx=new TransactionTemplate(manager); this.clock=clock;
+        this.notifications=notifications;
     }
     public Map<String,Object> overview(long admin) {
         auth.active(admin,false);
@@ -77,8 +81,8 @@ public class GovernanceService {
             // Same lock order as existing comment/authoring writes: article -> comment -> admin.
             long article=id;
             if(type.equals("COMMENT"))article=db.queryForList("SELECT article_id FROM discussion_comment WHERE id=?",id).stream().map(r->((Number)r.get("article_id")).longValue()).findFirst().orElseThrow(ApiException::notFound);
-            var a=db.queryForList("SELECT state,public_version_id,governance_revision FROM article WHERE id=? FOR UPDATE",article).stream().findFirst().orElseThrow(ApiException::notFound);
-            Map<String,Object> c=type.equals("COMMENT")?db.queryForList("SELECT state,revision FROM discussion_comment WHERE id=? FOR UPDATE",id).getFirst():a;
+            var a=db.queryForList("SELECT state,public_version_id,governance_revision,owner_user_id FROM article WHERE id=? FOR UPDATE",article).stream().findFirst().orElseThrow(ApiException::notFound);
+            Map<String,Object> c=type.equals("COMMENT")?db.queryForList("SELECT state,revision,user_id owner_user_id FROM discussion_comment WHERE id=? FOR UPDATE",id).getFirst():a;
             auth.active(admin,true);var previous=replay(admin,key,digest);if(previous!=null)return previous;
             String before=(String)c.get("state");long revision=((Number)c.get(type.equals("ARTICLE")?"governance_revision":"revision")).longValue();
             if(revision!=expected)throw conflict("REVISION_CONFLICT");
@@ -97,6 +101,13 @@ public class GovernanceService {
             }
             if(type.equals("ARTICLE"))db.update("UPDATE article SET state=?,governance_revision=governance_revision+1,updated_at=? WHERE id=?",after,Timestamp.from(clock.instant()),id);
             else db.update("UPDATE discussion_comment SET state=?,revision=revision+1 WHERE id=?",after,id);
+            if (c.get("owner_user_id") instanceof Number owner) {
+                var kind = type.equals("ARTICLE") ? NotificationService.Kind.ARTICLE_MODERATION
+                        : NotificationService.Kind.COMMENT_MODERATION;
+                var outcome = action.equals("HIDE") ? NotificationService.Outcome.HIDDEN
+                        : NotificationService.Outcome.RESTORED;
+                notifications.record(owner.longValue(), kind, id, revision + 1, outcome);
+            }
             return event(admin,key,digest,type,id,action,before,after,revision+1,reason);
         });
     }

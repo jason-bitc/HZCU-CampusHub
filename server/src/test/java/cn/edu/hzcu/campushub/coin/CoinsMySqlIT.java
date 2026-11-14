@@ -215,7 +215,7 @@ class CoinsMySqlIT {
         assertThat(db.queryForList("SELECT * FROM coin_wallet ORDER BY user_id")).isEqualTo(wallet);assertThat(db.queryForList("SELECT * FROM coin_event ORDER BY sequence_id")).isEqualTo(events);assertThat(db.queryForList("SELECT * FROM coin_reading_session ORDER BY id")).isEqualTo(sessions);assertThat(read(target,1).data.path("sessionId").asString()).isEqualTo(reading);assertThat(spend(target,1,1,request).data).isEqualTo(receipt.data);
         CLOCK.advance(Duration.ofDays(1));assertThat(spend(target,1,1,request).data).isEqualTo(receipt.data);for(int i:new int[]{0,1,2,3,4}){tokens.set(i,login(i));reconcile(i);}CLOCK.advance(Duration.ofDays(7));assertThat(get("/me/coins",1).status).isEqualTo(401);assertThat(spend(a,1,1,key()).status).isEqualTo(401);
         String runtime=Files.readString(runtime()),diagnostic=Files.readString(diagnostic());for(String secret:secrets){assertThat(runtime).doesNotContain(secret);assertThat(diagnostic).doesNotContain(secret);}Files.writeString(Path.of("target/batch8-runtime-sample.txt"),runtime);Files.writeString(Path.of("target/batch8-diagnostic-sample.txt"),diagnostic);Files.writeString(Path.of("target/batch8-route-coverage.json"),JSON.writeValueAsString(coverage));
-        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12");
+        assertThat(db.queryForList("SELECT version FROM flyway_schema_history WHERE success=TRUE ORDER BY installed_rank",String.class)).containsExactly("1","2","3","4","5","6","7","8","9","10","11","12","13");
     }
     @Test @Order(17) void retryWaitingBehindWithdrawalStillReturnsConcurrentCommittedReceipt()throws Exception{
         nextDay(1);reward(1,key());tokens.set(0,login(0));long target=article(0);String request=key();var source=context.getBean(DataSource.class);var withdrawn=new CountDownLatch(1);var release=new CountDownLatch(1);
@@ -293,6 +293,11 @@ class CoinsMySqlIT {
         assertThat(get("/me/coins", 4).data.path("receivedContribution").asLong()).isEqualTo(1);
         assertHonor(entry, home, "test-1");
         assertThat(get("/articles/" + target, -1).data.path("counts").path("effectiveCoins").asLong()).isEqualTo(1);
+        var notices = get("/me/notifications", 4).data.path("items");
+        assertThat(notices.get(0).path("kind").asString()).isEqualTo("CONTRIBUTION_INVALIDATED");
+        assertThat(notices.get(0).path("outcome").asString()).isEqualTo("INVALIDATED");
+        assertThat(notices.get(0).path("target").path("id").asLong()).isEqualTo(target);
+        assertThat(notices.size()).isEqualTo(2);
     }
 
     private record TestAdmin(long id, String token) {}
