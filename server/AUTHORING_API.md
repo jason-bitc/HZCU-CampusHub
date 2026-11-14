@@ -72,6 +72,14 @@ GET `/media/images/{imageId}`成功返回实际图片二进制，带正确Conten
 
 ## 发布和文章状态
 
+GET `/me/articles/{id}/preview?expectedRevision=1` 读取当前已保存草稿并检查发布条件。只接受一个非负整数修订号，使用有效作者会话和本人文章 ID。返回 `articleId`、`state`、`revision`、`content`、`images`、`summary`、`publicationAudience`、`missingFields`、`blockedBy` 和 `canPublish`。
+
+- `content` 保留 Markdown 正文、来源链接与说明。双端沿用各自的安全 Markdown 渲染。 `images` 仅包含正文引用的本平台图片元数据，未发布图片继续通过携带作者令牌的图片接口读取。
+- `summary` 是此次发布会使用的摘要，`publicationAudience=PUBLIC` 表示确认发布后公开可读。预览本身仅作者可访问，不保存、发布或改变草稿版本。
+- 缺项以 `missingFields` 返回。管理员隐藏、行为限制分别通过 `blockedBy=STATE_CONFLICT` 或 `BEHAVIOR_RESTRICTED` 表示。满足发布条件的草稿仍会检查分类和图片完整性。修订不符返回 409 `REVISION_CONFLICT`，他人或已删除草稿返回 404，图片存储失败返回 503 `STORAGE_UNAVAILABLE`。
+
+前端保存成功后再按返回修订号读取预览。确认时以该修订调用现有发布接口，服务端重新校验当前状态和数据。
+
 POST `/me/articles/{id}/publish`：`{"expectedRevision":1,"requestId":"小写UUID"}`，成功200返回`{articleId,versionId,revision,publishedAt,updatedAt}`，revision递增。要求非空标题、可读正文或同文章有效上传图、至少一个岗位和专业、明确经历阶段、来源FIRST_HAND/CURATED/DEMO；CURATED还须来源说明。缺项422 PUBLISH_INCOMPLETE，message列明缺项；无最低字数要求。摘要留空时按正文可读文字生成最多1000码点摘要（纯图片可为空）。
 
 发布在事务内建立不可变公开版本、分类、来源链接、图片引用、首发/更新信息及重试回执，然后更新公开指针。同请求标识与原期望修订重试返回原版本回执；该标识配不同期望修订409。并发相同请求仅一个版本，并发不同请求使用旧revision产生409。下架/隐藏/删除后旧发布回执不用于恢复公开状态。再次编辑和发布同文章会创建新版本，旧版本不对游客提供访问入口。

@@ -44,7 +44,7 @@ class AuthoringMySqlIT {
         c=auth.requestCode(emailTwo,AuthModels.Purpose.REGISTER);userTwo=auth.register(emailTwo,password,c.challengeId(),MAIL.code(emailTwo,"REGISTER")).userId();two=auth.login(emailTwo,password).accessToken();
         png=MediaStoreTest.png(16,16);
     }
-    static void boot(){var app=AuthTestSupport.application(MAIL,CLOCK);app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("writing-test-storage",Map.of("campushub.media.root",root.toString()))));context=app.run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");}
+    static void boot(){var app=AuthTestSupport.application(MAIL,CLOCK);app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("writing-test-storage",Map.of("campushub.media.root",root.toString(),"campushub.logs.enabled",true,"campushub.logs.root",root.resolve("logs").toString()))));context=app.run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");}
     @AfterAll static void stop(){
         if(context==null)return;
         try{
@@ -154,6 +154,7 @@ class AuthoringMySqlIT {
     }
     @Test @Order(3) void privateUploadsRetryKeysAndForeignAssociations()throws Exception{
         long id=create(one);String request=key();var uploaded=upload(id,request,"fixture.png","image/png",png,one);assertThat(uploaded.status).isEqualTo(200);String image=uploaded.data.path("imageId").asString();
+        assertThat(call("GET","/api/v1/me/articles/"+id+"/preview?expectedRevision=0",null,two).status).isEqualTo(404);
         assertThat(upload(id,request,"fixture.png","image/png",png,one).data.path("imageId").asString()).isEqualTo(image);
         assertThat(upload(id,request,"other.png","image/png",MediaStoreTest.png(8,8),one).status).isEqualTo(409);
         assertThat(image(image,null).statusCode()).isEqualTo(404);assertThat(image(image,two).statusCode()).isEqualTo(404);assertThat(image(image,one).body()).isEqualTo(png);
@@ -238,6 +239,8 @@ class AuthoringMySqlIT {
         long pointer=db.queryForObject("SELECT public_version_id FROM article WHERE id=?",Long.class,id);Path stored=root.resolve("objects").resolve(second);byte[] backup=Files.readAllBytes(stored);String request=key();
         Files.write(stored,new byte[]{1});
         try{
+            assertThat(call("GET", "/api/v1/me/articles/" + id + "/preview?expectedRevision=3", null, one).code)
+                    .isEqualTo("STORAGE_UNAVAILABLE");
             assertThat(publish(id,3,request,one).status).isEqualTo(503);assertThat(image(second,one).statusCode()).isEqualTo(503);
             assertThat(db.queryForObject("SELECT public_version_id FROM article WHERE id=?",Long.class,id)).isEqualTo(pointer);
             assertThat(call("GET","/api/v1/articles/"+id,null,null).data.path("body").asString()).isEqualTo(initial);assertThat(image(first,null).statusCode()).isEqualTo(200);assertThat(rev(id,one)).isEqualTo(3);
@@ -310,7 +313,53 @@ class AuthoringMySqlIT {
                 .isTrue();
     }
 
-    @Test @Order(13) void rebootKeepsIndependentDraftsProfilesAndPublicVersions()throws Exception{
+    @Test @Order(13) void previewChecksSavedRevisionAndMatchesPublicationWithoutWriting() throws Exception {
+        long id = create(one);
+        String own = "/api/v1/me/articles/" + id;
+        String preview = own + "/preview?expectedRevision=";
+        var incomplete = call("GET", preview + "0", null, one);
+        assertThat(incomplete.status).isEqualTo(200);
+        assertThat(incomplete.data.path("canPublish").asBoolean()).isFalse();
+        assertThat(incomplete.data.path("missingFields").toString()).contains("title", "jobIds", "experienceStage");
+        assertThat(call("GET", preview + "0", null, null).status).isEqualTo(401);
+        assertThat(call("GET", preview + "0&expectedRevision=0", null, one).status).isEqualTo(400);
+        assertThat(call("GET", preview + "9223372036854775808", null, one).status).isEqualTo(400);
+        assertThat(call("GET", preview + "0", "{}", one).status).isEqualTo(400);
+
+        var uploaded = upload(id, key(), "preview.png", "image/png", png, one);
+        assertThat(uploaded.status).isEqualTo(200);
+        String image = uploaded.data.path("imageId").asString();
+        assertThat(upload(id, key(), "unreferenced.png", "image/png", png, one).status).isEqualTo(200);
+        String marker = "preview-private-" + key();
+        String body = "# 复盘\n\n准备 **过程**。" + marker + "\n\n![图](/api/v1/media/images/" + image + ")";
+        var saved = save(id, 0, "发布前检查", body, one);
+        assertThat(saved.status).isEqualTo(200);
+        assertThat(call("GET", preview + "0", null, one).code).isEqualTo("REVISION_CONFLICT");
+
+        long auditBefore = db.queryForObject("SELECT COUNT(*) FROM business_audit", Long.class);
+        var ready = call("GET", preview + "1", null, one);
+        assertThat(ready.status).isEqualTo(200);
+        assertThat(ready.data.path("canPublish").asBoolean()).isTrue();
+        assertThat(ready.data.path("publicationAudience").asString()).isEqualTo("PUBLIC");
+        assertThat(ready.data.path("content")).isEqualTo(saved.data.path("content"));
+        assertThat(ready.data.path("images").size()).isEqualTo(1);
+        assertThat(ready.data.path("images").get(0).path("imageId").asString()).isEqualTo(image);
+        assertThat(ready.data.path("summary").asString()).contains("复盘", "准备");
+        assertThat(call("GET", "/api/v1/articles/" + id, null, null).status).isEqualTo(404);
+        assertThat(rev(id, one)).isEqualTo(1);
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM article_version WHERE article_id=?", Long.class, id)).isZero();
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM business_audit", Long.class)).isEqualTo(auditBefore);
+        String runtimeLog = Files.readString(root.resolve("logs/campushub-runtime.log"));
+        assertThat(runtimeLog).contains("traceId=" + JSON.readTree(ready.raw).path("traceId").asString()
+                + " event=REQUEST action=WRITING_PREVIEW").doesNotContain(marker);
+
+        assertThat(publish(id, 1, key(), one).status).isEqualTo(200);
+        var published = call("GET", "/api/v1/articles/" + id, null, null);
+        assertThat(published.data.path("summary")).isEqualTo(ready.data.path("summary"));
+        assertThat(published.data.path("body").asString()).isEqualTo(body);
+    }
+
+    @Test @Order(14) void rebootKeepsIndependentDraftsProfilesAndPublicVersions()throws Exception{
         long id=create(one);String body="# 重启保留\n\n复杂Markdown `a < b` 与中文。";save(id,0,"恢复草稿",body,one);var before=call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data;
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(call("GET","/api/v1/me/articles/"+id+"/draft",null,one).data).isEqualTo(before);assertThat(call("GET","/api/v1/me/profile",null,one).data.path("nickname").asString()).isEqualTo("G04测试昵称");assertThat(call("GET","/api/v1/articles/"+edited,null,null).status).isEqualTo(200);

@@ -21,7 +21,7 @@ public class WritingRepository {
     static Timestamp time(Instant t){return Timestamp.from(t);}
     public long allocate(String name){long next=jdbc.queryForObject("SELECT next_value FROM authoring_sequence WHERE name=:name FOR UPDATE",p("name",name),Long.class);jdbc.update("UPDATE authoring_sequence SET next_value=next_value+1 WHERE name=:name",p("name",name));return next;}
     public void lockUser(long id){if(jdbc.query("SELECT id FROM platform_user WHERE id=:id FOR UPDATE",p("id",id),(r,n)->r.getLong(1)).isEmpty())throw ApiException.notFound();}
-    private boolean restricted(long user, String scope) {
+    boolean restricted(long user, String scope) {
         return jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",
                 p("user", user).addValue("scope", scope), Long.class) > 0;
     }

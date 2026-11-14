@@ -53,6 +53,9 @@ class GovernanceMySqlIT {
         var hiddenItem = workspace.path("items").get(0);
         assertThat(hiddenItem.path("articleId").asLong()).isEqualTo(article);
         assertThat(hiddenItem.path("allowedActions").toString()).isEqualTo("[\"VIEW_DRAFT\",\"DELETE\"]");
+        var hiddenPreview = call("GET", "/me/articles/" + article + "/preview?expectedRevision=0", null, userToken).data;
+        assertThat(hiddenPreview.path("blockedBy").asString()).isEqualTo("STATE_CONFLICT");
+        assertThat(hiddenPreview.path("canPublish").asBoolean()).isFalse();
         assertThat(call("GET", "/me/articles?state=PUBLISHED", null, userToken).data.path("total").asLong()).isZero();
         assertThat(call("POST",path,command("RESTORE",0,request),token).code).isEqualTo("REQUEST_KEY_REUSED");assertThat(call("POST",path,command("RESTORE",0,key()),token).code).isEqualTo("REVISION_CONFLICT");
         assertThat(call("POST",path,command("RESTORE",1,key()),token).data.path("state").asString()).isEqualTo("PUBLISHED");assertThat(call("GET","/articles/"+article,null,null).status).isEqualTo(200);
@@ -87,6 +90,9 @@ class GovernanceMySqlIT {
         assertThat(call("POST","/me/articles/"+article+"/publish",Map.of("expectedRevision",0,"requestId",key()),userToken).code).isEqualTo("BEHAVIOR_RESTRICTED");assertThat(call("GET","/admin/users?size=2",null,token).status).isEqualTo(200);
         var workspace = call("GET", "/me/articles?state=PUBLISHED", null, userToken).data;
         assertThat(workspace.path("publishingRestricted").asBoolean()).isTrue();
+        var restrictedPreview = call("GET", "/me/articles/" + article + "/preview?expectedRevision=0", null, userToken).data;
+        assertThat(restrictedPreview.path("blockedBy").asString()).isEqualTo("BEHAVIOR_RESTRICTED");
+        assertThat(restrictedPreview.path("canPublish").asBoolean()).isFalse();
         assertThat(workspace.path("items").get(0).path("allowedActions").toString())
                 .contains("EDIT_DRAFT", "UNPUBLISH").doesNotContain("\"PUBLISH\"", "RESTORE");
     }
