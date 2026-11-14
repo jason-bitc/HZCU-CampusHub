@@ -32,12 +32,6 @@ public class ArticleRepository {
     public Page list(ArticleQuery query) {
         return list(query,null);
     }
-    public Optional<Long> enabledMajorOf(long reader) {
-        return jdbc.query("""
-                SELECT c.id FROM author_profile p JOIN category c ON c.id=p.major_id
-                WHERE p.user_id=:reader AND c.kind='MAJOR' AND c.enabled=TRUE
-                """, Map.of("reader", reader), (rs, row) -> rs.getLong(1)).stream().findFirst();
-    }
     public Page byAuthor(long author,int page,int size){return list(new ArticleQuery(null,null,null,null,null,"latest",page,size),author);}
     private Page list(ArticleQuery query,Long author) {
         MapSqlParameterSource params = new MapSqlParameterSource();
