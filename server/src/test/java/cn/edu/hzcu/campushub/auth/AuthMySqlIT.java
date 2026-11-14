@@ -168,7 +168,85 @@ class AuthMySqlIT {
         assertThat(call("POST","/api/v1/auth/password-resets",Map.of("email",unknown,"password",updated,"challengeId",absent.data.path("challengeId").asString(),"code","000000"),null).status).isEqualTo(400);
         assertThat(db.queryForObject("SELECT COUNT(*) FROM platform_user WHERE email=?",Long.class,unknown)).isZero();
     }
-    @Test @Order(8) void sessionAbsoluteExpiryPersistenceAndOldArticleMigrationsPreserved()throws Exception{
+    @Test @Order(8) void reverificationRestoresOnlyTheOriginalAccountAndRevokesOldSessions() throws Exception {
+        String route = "/api/v1/me/certification";
+        String email = email(), password = password(), otherEmail = email(), otherPassword = password();
+        registered(email, password);
+        registered(otherEmail, otherPassword);
+        String oldSession = login(email, password), otherSession = login(otherEmail, otherPassword);
+        long user = db.queryForObject("SELECT id FROM platform_user WHERE email=?", Long.class, email);
+        assertThat(call("POST", route + "/reverification-codes", null, oldSession).code)
+                .isEqualTo("CERTIFICATION_ALREADY_VALID");
+        db.update("UPDATE campus_certification SET state='REVOKED' WHERE user_id=?", user);
+        String recoverySession = login(email, password);
+        assertThat(call("GET", route, null, null).status).isEqualTo(401);
+        var certification = call("GET", route, null, recoverySession);
+        assertThat(certification.data.path("state").asString()).isEqualTo("REVOKED");
+        assertThat(certification.data.path("canReverify").asBoolean()).isTrue();
+        assertThat(certification.data.toString()).doesNotContain(email);
+        assertThat(call("GET", "/api/v1/me/notifications", null, recoverySession).status).isEqualTo(200);
+        assertThat(call("GET", "/api/v1/me/articles", null, recoverySession).status).isEqualTo(403);
+        assertThat(call("POST", route + "/reverification-codes", Map.of("email", otherEmail), recoverySession).status)
+                .isEqualTo(400);
+        var issue = call("POST", route + "/reverification-codes", null, recoverySession);
+        assertThat(issue.status).isEqualTo(202);
+        assertThat(call("POST", route + "/reverification-codes", null, recoverySession).status).isEqualTo(429);
+        String id = issue.data.path("challengeId").asString();
+        String digits = MAIL.code(email, "CAMPUS_REVERIFY");
+        assertThat(digits).matches("[0-9]{6}");
+        assertThat(MAIL.code(otherEmail, "CAMPUS_REVERIFY")).isNull();
+        var input = Map.of("challengeId", id, "code", digits);
+        assertThat(call("POST", route + "/reverification", input, otherSession).code).isEqualTo("CODE_INVALID");
+        assertThat(call("POST", route + "/reverification", input, oldSession).code).isEqualTo("CODE_INVALID");
+        assertThat(call("POST", "/api/v1/auth/password-resets", Map.of("email", email,
+                "password", password(), "challengeId", id, "code", digits), null).code).isEqualTo("CODE_INVALID");
+        String wrong = digits.equals("000000") ? "111111" : "000000";
+        assertThat(call("POST", route + "/reverification", Map.of("challengeId", id, "code", wrong), recoverySession)
+                .code).isEqualTo("CODE_INVALID");
+        assertThat(db.queryForObject("SELECT failed_attempts FROM email_challenge WHERE id=?", Integer.class, id))
+                .isEqualTo(1);
+
+        String trigger = "g04_reverify_" + UUID.randomUUID().toString().replace("-", "");
+        db.execute("CREATE TRIGGER " + trigger + " BEFORE INSERT ON business_audit FOR EACH ROW "
+                + "BEGIN IF NEW.actor_id=" + user + " AND NEW.action='CAMPUS_REVERIFY' "
+                + "THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='controlled audit test'; END IF; END");
+        try {
+            assertThat(call("POST", route + "/reverification", input, recoverySession).status).isEqualTo(503);
+            assertThat(call("GET", route, null, recoverySession).data.path("state").asString()).isEqualTo("REVOKED");
+            assertThat(db.queryForObject("SELECT status FROM email_challenge WHERE id=?", String.class, id))
+                    .isEqualTo("SENT");
+            assertThat(db.queryForObject("SELECT COUNT(*) FROM personal_notification WHERE recipient_id=?", Long.class,
+                    user)).isEqualTo(1);
+        } finally {
+            db.execute("DROP TRIGGER " + trigger);
+        }
+
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            var requests = executor.invokeAll(List.<Callable<Integer>>of(
+                    () -> call("POST", route + "/reverification", input, recoverySession).status,
+                    () -> call("POST", route + "/reverification", input, recoverySession).status));
+            var statuses = new ArrayList<Integer>();
+            for (var request : requests) statuses.add(request.get());
+            assertThat(statuses).contains(200).allMatch(status -> status == 200 || status == 400 || status == 401);
+            assertThat(Collections.frequency(statuses, 200)).isEqualTo(1);
+        }
+        assertThat(call("GET", route, null, oldSession).status).isEqualTo(401);
+        assertThat(call("GET", route, null, recoverySession).status).isEqualTo(401);
+        String fresh = login(email, password);
+        var recovered = call("GET", route, null, fresh);
+        assertThat(recovered.data.path("state").asString()).isEqualTo("VALID");
+        assertThat(recovered.data.path("canReverify").asBoolean()).isFalse();
+        assertThat(call("GET", "/api/v1/me", null, fresh).data.path("userId").asLong()).isEqualTo(user);
+        assertThat(call("GET", "/api/v1/me/articles", null, fresh).status).isEqualTo(200);
+        assertThat(call("POST", route + "/reverification", input, fresh).code).isEqualTo("CODE_INVALID");
+        assertThat(db.queryForObject("""
+                SELECT COUNT(*) FROM business_audit WHERE object_id=? AND action='CAMPUS_REVERIFY'
+                AND before_state='REVOKED' AND after_state='VALID'
+                """, Long.class, user)).isEqualTo(1);
+        assertThat(call("GET", "/api/v1/me/notifications", null, fresh).data.path("total").asLong()).isEqualTo(2);
+    }
+
+    @Test @Order(9) void sessionAbsoluteExpiryPersistenceAndOldArticleMigrationsPreserved()throws Exception{
         String email=email(),password=password();registered(email,password);String token=login(email,password);
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(call("GET","/api/v1/me",null,token).status).isEqualTo(200);
@@ -177,6 +255,6 @@ class AuthMySqlIT {
             try(var stream=AuthMySqlIT.class.getClassLoader().getResourceAsStream(entry.getKey())){var hash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(stream.readAllBytes()));assertThat(hash.toUpperCase(Locale.ROOT)).isEqualTo(entry.getValue());}
         }
         assertThat(db.queryForObject("SELECT COUNT(*) FROM article WHERE state='PUBLISHED'",Long.class)).isEqualTo(6);
-        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(13);
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE",Long.class)).isEqualTo(14);
     }
 }

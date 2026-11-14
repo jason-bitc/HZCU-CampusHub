@@ -78,6 +78,9 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/me/certification"))return "AUTH_CERTIFICATION_READ";
+        if(path.equals("/api/v1/me/certification/reverification-codes"))return "AUTH_REVERIFY_CODE";
+        if(path.equals("/api/v1/me/certification/reverification"))return "AUTH_REVERIFY";
         if(path.equals("/api/v1/rules"))return "RULES_READ";
         if(path.equals("/api/v1/me/writing-prompts"))return "WRITING_PROMPTS_READ";
         if(path.equals("/api/v1/me/notifications"))return "NOTIFICATION_LIST";
