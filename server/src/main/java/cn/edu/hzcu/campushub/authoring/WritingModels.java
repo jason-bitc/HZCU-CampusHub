@@ -11,6 +11,9 @@ public final class WritingModels {
     public record Tags(List<Long> jobIds,List<Long> majorIds,List<Long> companyIds,List<Long> topicIds) {}
     public record Content(String title,String summary,String body,Tags tags,String experienceStage,String sourceType,String sourceNote,List<SourceLink> sourceLinks) {}
     public record Draft(long articleId,String state,long revision,Content content,List<Image> images,List<String> referencedImageIds) {}
+    public record PublishPreview(long articleId, String state, long revision, Content content,
+                                 List<Image> images, String summary, String publicationAudience,
+                                 List<String> missingFields, String blockedBy, boolean canPublish) {}
     public enum ArticleState { DRAFT, PUBLISHED, AUTHOR_OFFLINE, ADMIN_HIDDEN, DELETED }
     public enum WorkspaceAction {
         VIEW_DRAFT, EDIT_DRAFT, VIEW_PUBLIC, PUBLISH, UNPUBLISH, RESTORE, DELETE;

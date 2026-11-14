@@ -57,11 +57,17 @@ class AuthorContactMySqlIT {
     static String login(String email){String token=context.getBean(AuthService.class).login(email,password).accessToken();secrets.add(token);return token;}
     static String key(){return UUID.randomUUID().toString();}
     static Reply call(String method,String path,Object body,String token)throws Exception{
-        var builder=HttpRequest.newBuilder(URI.create(base+path)).timeout(Duration.ofSeconds(20)).header("X-Trace-Id","untrusted-supplied-trace");
+        var uri=URI.create(base+path);
+        var builder=HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(20)).header("X-Trace-Id","untrusted-supplied-trace");
         if(token!=null)builder.header("Authorization","Bearer "+token);if(body!=null)builder.header("Content-Type","application/json");
         var response=HTTP.send(builder.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body instanceof String s?s:JSON.writeValueAsString(body),StandardCharsets.UTF_8)).build(),HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         var json=JSON.readTree(response.body());String trace=json.path("traceId").asString();assertThat(trace).matches("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}");assertThat(response.headers().firstValue("X-Trace-Id")).contains(trace);
-        if(path.startsWith("/api/v1/authors/")||path.startsWith("/api/v1/me/")||path.matches("/api/v1/articles/[^/]+/author.*"))assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("no-store");
+        boolean sameMajor = uri.getPath().equals("/api/v1/articles") && uri.getRawQuery() != null
+                && Arrays.stream(uri.getRawQuery().split("&")).filter(part -> part.startsWith("sameMajor="))
+                        .toList().equals(List.of("sameMajor=true"));
+        if(path.startsWith("/api/v1/authors/")||path.startsWith("/api/v1/me/")||path.matches("/api/v1/articles/[^/]+/author.*")
+                ||sameMajor)
+            assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("no-store");
         if(response.statusCode()>=400){assertThat(json.has("data")).isFalse();for(String secret:secrets)assertThat(response.body().contains(secret)).isFalse();}
         return new Reply(response.statusCode(),json.path("data"),trace,response.body());
     }
@@ -201,7 +207,74 @@ class AuthorContactMySqlIT {
         finally{Files.delete(current);Files.move(backup,current);}
         get("/api/v1/me/contact-settings",writerToken);assertThat(logs.healthy()).isTrue();assertThat(Files.readString(current)).startsWith(original);
     }
-    @Test @Order(11) void restartRetainsProfilesContactAuditsAndExpiredSessionsRemainRejected()throws Exception{
+    @Test @Order(11) void sameMajorUsesCurrentReaderProfileAndIntersectsPublicArticleTags() throws Exception {
+        String basePath = "/api/v1/articles";
+        String shortcut = basePath + "?sameMajor=true";
+        assertThat(get(shortcut, null).status).isEqualTo(401);
+        assertThat(get(shortcut, "invalid-token").status).isEqualTo(401);
+        var missing = get(shortcut, readerToken);
+        assertThat(missing.status).isEqualTo(409);
+        assertThat(missing.raw).contains("SAME_MAJOR_UNAVAILABLE");
+
+        String marker = "same-major-" + key();
+        long match = publishSameMajorFixture(marker, 11, List.of(21));
+        long alternate = publishSameMajorFixture(marker, 12, List.of(21));
+        publishSameMajorFixture(marker, 11, List.of());
+        String conditions = "&keyword=" + marker + "&jobId=1&companyId=21&topicId=31&sort=latest&size=1";
+        assertThat(get(basePath + "?sameMajor=false" + conditions, null).data.path("total").asLong()).isEqualTo(2);
+        assertThat(get(basePath + "?majorId=11" + conditions, null).data.path("total").asLong()).isEqualTo(1);
+
+        assertThat(call("PUT", "/api/v1/me/profile",
+                Map.of("expectedRevision", 0, "nickname", "筛选测试", "majorId", 11, "currentStage", "ENROLLED", "bio", ""),
+                readerToken).status).isEqualTo(200);
+        var first = get(shortcut + conditions, readerToken);
+        assertThat(first.status).isEqualTo(200);
+        assertThat(first.data.path("total").asLong()).isEqualTo(1);
+        assertThat(first.data.path("items").get(0).path("id").asLong()).isEqualTo(match);
+        assertThat(first.raw).doesNotContain(readerEmail, writerEmail, "authorId", "nickname");
+        assertThat(get(shortcut + "&keyword=" + marker + "&companyId=999999", readerToken)
+                .data.path("total").asLong()).isZero();
+        assertThat(get(shortcut + conditions + "&page=2", readerToken).data.path("items").isEmpty()).isTrue();
+        assertThat(get(shortcut + "&majorId=11", readerToken).status).isEqualTo(400);
+        assertThat(get(basePath + "?sameMajor=TRUE", null).status).isEqualTo(400);
+        assertThat(get(basePath + "?sameMajor=true&sameMajor=false", readerToken).status).isEqualTo(400);
+        assertThat(get(shortcut, otherToken).status).isEqualTo(409);
+
+        assertThat(call("PUT", "/api/v1/me/profile",
+                Map.of("expectedRevision", 1, "nickname", "筛选测试", "majorId", 12, "currentStage", "ENROLLED", "bio", ""),
+                readerToken).status).isEqualTo(200);
+        assertThat(get(shortcut + conditions, readerToken).data.path("items").get(0).path("id").asLong())
+                .isEqualTo(alternate);
+        db.update("UPDATE category SET enabled=FALSE WHERE id=12");
+        try {
+            assertThat(get(shortcut, readerToken).raw).contains("SAME_MAJOR_UNAVAILABLE");
+            assertThat(get(basePath + "?majorId=12" + conditions, null).data.path("total").asLong()).isEqualTo(1);
+        } finally {
+            db.update("UPDATE category SET enabled=TRUE WHERE id=12");
+        }
+        db.update("UPDATE campus_certification SET state='REVOKED' WHERE user_id=?", reader);
+        try {
+            assertThat(get(shortcut, readerToken).status).isEqualTo(403);
+            assertThat(get(basePath + "?sameMajor=false" + conditions, readerToken).status).isEqualTo(200);
+        } finally {
+            db.update("UPDATE campus_certification SET state='VALID' WHERE user_id=?", reader);
+        }
+    }
+
+    private static long publishSameMajorFixture(String marker, long major, List<Integer> companies) throws Exception {
+        long id = create(writerToken);
+        var content = draft(0);
+        content.put("title", marker);
+        content.put("majorIds", List.of(major));
+        content.put("companyIds", companies);
+        content.put("topicIds", List.of(31));
+        assertThat(call("PUT", "/api/v1/me/articles/" + id + "/draft", content, writerToken).status).isEqualTo(200);
+        assertThat(call("POST", "/api/v1/me/articles/" + id + "/publish",
+                Map.of("expectedRevision", 1, "requestId", key()), writerToken).status).isEqualTo(200);
+        return id;
+    }
+
+    @Test @Order(12) void restartRetainsProfilesContactAuditsAndExpiredSessionsRemainRejected()throws Exception{
         var settings=get("/api/v1/me/contact-settings",writerToken).data;var profile=get("/api/v1/me/profile",writerToken).data;var audits=db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id=? ORDER BY occurred_at,event_id",writer);String logBefore=Files.readString(root.resolve("logs/campushub-runtime.log"));
         context.close();boot();db=context.getBean(JdbcTemplate.class);
         assertThat(get("/api/v1/me/contact-settings",writerToken).data).isEqualTo(settings);assertThat(get("/api/v1/me/profile",writerToken).data).isEqualTo(profile);assertThat(db.queryForList("SELECT * FROM business_audit WHERE actor_domain='USER' AND actor_id=? ORDER BY occurred_at,event_id",writer)).isEqualTo(audits);assertThat(Files.readString(root.resolve("logs/campushub-runtime.log"))).startsWith(logBefore);assertThat(get("/api/v1/authors/"+writer,readerToken).status).isEqualTo(200);

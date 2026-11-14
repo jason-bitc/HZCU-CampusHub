@@ -24,6 +24,9 @@ public class AuthRequestFilter extends OncePerRequestFilter {
     public AuthRequestFilter(AuthService auth,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptions,@org.springframework.beans.factory.annotation.Value("${campushub.authoring.json-max-bytes}") int writingJsonLimit,@org.springframework.beans.factory.annotation.Value("${spring.servlet.multipart.max-request-size}") org.springframework.util.unit.DataSize multipartLimit,@org.springframework.beans.factory.annotation.Value("${campushub.comments.json-max-bytes}") int commentJsonLimit,@org.springframework.beans.factory.annotation.Value("${campushub.community.json-max-bytes:2097152}") int caseJsonLimit){this.caseJsonLimit=caseJsonLimit;this.auth=auth;this.exceptions=exceptions;if(caseJsonLimit<1024||caseJsonLimit>32*1024*1024||writingJsonLimit<1||writingJsonLimit>32*1024*1024||multipartLimit.toBytes()<1||commentJsonLimit<1||commentJsonLimit>4*1024*1024)throw new IllegalArgumentException("Invalid request limit");this.writingJsonLimit=writingJsonLimit;this.multipartLimit=multipartLimit.toBytes();this.commentJsonLimit=commentJsonLimit;}
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException {
         String path=request.getServletPath();
+        boolean sameMajorPath = path.equals("/api/v1/articles")
+                && (request.getMethod().equals("GET") || request.getMethod().equals("HEAD"))
+                && java.util.Arrays.equals(request.getParameterValues("sameMajor"), new String[]{"true"});
         boolean casePath=path.equals("/api/v1/me/cases")||path.startsWith("/api/v1/me/cases/")||path.equals("/api/v1/me/case-images")||path.startsWith("/api/v1/media/case-images");
         boolean writingPath=path.startsWith("/api/v1/me/");
         boolean notificationPath=(request.getMethod().equals("GET")&&path.equals("/api/v1/me/notifications"))
@@ -31,7 +34,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
         boolean coinPath=path.matches("/api/v1/me/(coins|coin-ledger|rewards)(?:/.*)?")||path.matches("/api/v1/articles/[^/]+/(coins|coin-state|reading-session)(?:/.*)?");
         boolean interactionPath=path.matches("/api/v1/articles/[^/]+/(like|favorite|interaction-state)(?:/.*)?");
         boolean commentPath=path.equals("/api/v1/comments")||path.startsWith("/api/v1/comments/")||path.equals("/api/v1/media/comment-images")||path.startsWith("/api/v1/media/comment-images/")||path.matches("/api/v1/articles/[^/]+/(comments|comment-images)(?:/.*)?");
-        boolean readerPath=casePath||coinPath||interactionPath||commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
+        boolean readerPath=sameMajorPath||casePath||coinPath||interactionPath||commentPath||path.equals("/api/v1/authors")||path.startsWith("/api/v1/authors/")||path.matches("/api/v1/articles/[^/]+/author(?:/.*)?");
         boolean authPath=path.startsWith("/api/v1/auth/")||path.equals("/api/v1/me")||writingPath||readerPath;
         if(authPath||path.startsWith("/api/v1/media/images/")){response.setHeader("Cache-Control","no-store");response.setHeader("Pragma","no-cache");}
         try{
