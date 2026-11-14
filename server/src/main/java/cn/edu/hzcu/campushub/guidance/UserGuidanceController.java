@@ -31,6 +31,7 @@ public class UserGuidanceController {
             Map.entry("NETWORK_ERROR", new Hint("暂时无法连接，请检查网络后重试", "RETRY")),
             Map.entry("UNAUTHORIZED", new Hint("登录后可继续操作", "LOGIN")),
             Map.entry("ACCESS_RESTRICTED", new Hint("请检查本人账号和校园认证状态", "CHECK_ACCOUNT")),
+            Map.entry("SAME_MAJOR_UNAVAILABLE", new Hint("请先完善个人资料中的专业，或手动选择专业筛选", "CHOOSE_MAJOR")),
             Map.entry("BEHAVIOR_RESTRICTED", new Hint("该操作受限，可查看本人处理记录", "VIEW_RESTRICTIONS")),
             Map.entry("NOT_FOUND", new Hint("相关内容暂不可查看", "RETURN_TO_LIST")),
             Map.entry("SERVICE_UNAVAILABLE", new Hint("服务暂时不可用，请保留输入并稍后重试", "RETRY")),

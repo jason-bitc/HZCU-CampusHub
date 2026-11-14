@@ -18,7 +18,9 @@ PUT `/me/profile`完整替换以下字段：
 
 ## 创建、列表与草稿
 
-POST `/me/articles`，正文`{"requestId":"小写UUID"}`。成功201返回`{articleId}`；同一用户同一创建标识的重试返回同一文章ID，即使文章后来删除也不会重新创建。不同标识创建多篇独立空草稿。创建标识、上传标识、发布标识分别使用新的小写UUID（例如客户端生成的随机UUID），不要为不同操作复用一个标识。
+POST `/me/articles`，正文`{"requestId":"小写UUID"}`。成功201返回`{articleId}`；同一用户同一创建标识的重试返回同一文章ID，即使文章后来删除也不会重新创建。不同标识创建多篇独立草稿。创建标识、上传标识、发布标识分别使用新的小写UUID（例如客户端生成的随机UUID），不要为不同操作复用一个标识。
+
+创建时将本人资料中当前启用的专业预填到草稿的 `content.tags.majorIds`。资料无专业或专业已停用时，该数组为空。新草稿的正文、经历阶段和其他分类留空。双端拿到 `articleId` 后读取草稿，再让作者确认或更换专业。专业预填只发生在首次创建，同一请求重试或后续修改个人资料均不会重填已有草稿。
 
 GET `/me/articles?page=1&size=20&state=DRAFT` 支持本人工作区按状态分页。默认每页20、最大100，page从1开始且不超过1000000。接受 `page`、`size` 和可选 `state`，每个参数一次。可用状态为 `DRAFT`、`PUBLISHED`、`AUTHOR_OFFLINE`、`ADMIN_HIDDEN`、`DELETED`。省略 `state` 时返回原有混合列表，包含软删除记录。指定 `PUBLISHED` 时要求文章当前有有效公开版本。
 
@@ -69,6 +71,14 @@ GET `/media/images/{imageId}`成功返回实际图片二进制，带正确Conten
 前端私有预览应使用携带Bearer的下载请求生成Blob/临时显示资源；普通img标签不能附加Authorization，不可把令牌放进图片URL。状态变化后重新核查显示资源；服务器no-store不能删除已经下载到用户电脑的图片。Markdown安全HTML渲染、外链和外部图片策略仍需前端实现。
 
 ## 发布和文章状态
+
+GET `/me/articles/{id}/preview?expectedRevision=1` 读取当前已保存草稿并检查发布条件。只接受一个非负整数修订号，使用有效作者会话和本人文章 ID。返回 `articleId`、`state`、`revision`、`content`、`images`、`summary`、`publicationAudience`、`missingFields`、`blockedBy` 和 `canPublish`。
+
+- `content` 保留 Markdown 正文、来源链接与说明。双端沿用各自的安全 Markdown 渲染。 `images` 仅包含正文引用的本平台图片元数据，未发布图片继续通过携带作者令牌的图片接口读取。
+- `summary` 是此次发布会使用的摘要，`publicationAudience=PUBLIC` 表示确认发布后公开可读。预览本身仅作者可访问，不保存、发布或改变草稿版本。
+- 缺项以 `missingFields` 返回。管理员隐藏、行为限制分别通过 `blockedBy=STATE_CONFLICT` 或 `BEHAVIOR_RESTRICTED` 表示。满足发布条件的草稿仍会检查分类和图片完整性。修订不符返回 409 `REVISION_CONFLICT`，他人或已删除草稿返回 404，图片存储失败返回 503 `STORAGE_UNAVAILABLE`。
+
+前端保存成功后再按返回修订号读取预览。确认时以该修订调用现有发布接口，服务端重新校验当前状态和数据。
 
 POST `/me/articles/{id}/publish`：`{"expectedRevision":1,"requestId":"小写UUID"}`，成功200返回`{articleId,versionId,revision,publishedAt,updatedAt}`，revision递增。要求非空标题、可读正文或同文章有效上传图、至少一个岗位和专业、明确经历阶段、来源FIRST_HAND/CURATED/DEMO；CURATED还须来源说明。缺项422 PUBLISH_INCOMPLETE，message列明缺项；无最低字数要求。摘要留空时按正文可读文字生成最多1000码点摘要（纯图片可为空）。
 

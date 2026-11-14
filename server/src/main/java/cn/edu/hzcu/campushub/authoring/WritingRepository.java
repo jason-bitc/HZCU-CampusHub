@@ -21,7 +21,7 @@ public class WritingRepository {
     static Timestamp time(Instant t){return Timestamp.from(t);}
     public long allocate(String name){long next=jdbc.queryForObject("SELECT next_value FROM authoring_sequence WHERE name=:name FOR UPDATE",p("name",name),Long.class);jdbc.update("UPDATE authoring_sequence SET next_value=next_value+1 WHERE name=:name",p("name",name));return next;}
     public void lockUser(long id){if(jdbc.query("SELECT id FROM platform_user WHERE id=:id FOR UPDATE",p("id",id),(r,n)->r.getLong(1)).isEmpty())throw ApiException.notFound();}
-    private boolean restricted(long user, String scope) {
+    boolean restricted(long user, String scope) {
         return jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",
                 p("user", user).addValue("scope", scope), Long.class) > 0;
     }
@@ -34,6 +34,12 @@ public class WritingRepository {
     }
     public Profile profile(long user){return jdbc.query("SELECT * FROM author_profile WHERE user_id=:id",p("id",user),(r,n)->new Profile(r.getLong("revision"),r.getString("nickname"),r.getObject("major_id",Long.class),r.getString("current_stage"),r.getString("bio"))).stream().findFirst().orElse(new Profile(0,"城院同学",null,"UNSET",""));}
     public void profile(long user,Profile profile){jdbc.update("INSERT INTO author_profile(user_id,revision,nickname,major_id,current_stage,bio) VALUES(:user,:rev,:name,:major,:stage,:bio) ON DUPLICATE KEY UPDATE revision=:rev,nickname=:name,major_id=:major,current_stage=:stage,bio=:bio",p("user",user).addValue("rev",profile.revision()).addValue("name",profile.nickname()).addValue("major",profile.majorId()).addValue("stage",profile.currentStage()).addValue("bio",profile.bio()));}
+    public Optional<Long> enabledMajorOf(long user) {
+        return jdbc.query("""
+                SELECT c.id FROM author_profile p JOIN category c ON c.id=p.major_id
+                WHERE p.user_id=:user AND c.kind='MAJOR' AND c.enabled=TRUE
+                """, Map.of("user", user), (rs, row) -> rs.getLong(1)).stream().findFirst();
+    }
     public void categories(List<Long> ids,String kind){
         if(ids.isEmpty())return;
         long available=jdbc.queryForObject("SELECT COUNT(*) FROM category WHERE kind=:kind AND enabled=TRUE",p("kind",kind),Long.class);
@@ -45,7 +51,12 @@ public class WritingRepository {
         var params=p("id",id).addValue("user",user).addValue("request",request).addValue("now",time(now));
         jdbc.update("INSERT INTO article(id,state,owner_user_id,count_origin,created_at,updated_at) VALUES(:id,'DRAFT',:user,'NONE',:now,:now)",params);
         jdbc.update("INSERT INTO article_draft(article_id,body) VALUES(:id,'')",params);
+        enabledMajorOf(user).ifPresent(major -> addDraftCategory(id, major));
         jdbc.update("INSERT INTO author_create_request(user_id,request_id,article_id) VALUES(:user,:request,:id)",params);
+    }
+    private void addDraftCategory(long article, long category) {
+        jdbc.update("INSERT INTO article_draft_category(article_id,category_id) VALUES(:id,:category)",
+                p("id", article).addValue("category", category));
     }
     public Article owned(long user,long id,boolean lock){stage(TARGET);var article=jdbc.query("SELECT a.id,a.state,d.revision,a.first_published_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.id=:id AND a.owner_user_id=:user"+(lock?" FOR UPDATE":""),p("id",id).addValue("user",user),(r,n)->new Article(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getTimestamp("first_published_at")==null?null:r.getTimestamp("first_published_at").toInstant())).stream().findFirst().orElseThrow(ApiException::notFound);RequestTrace.article(article.id());return article;}
     public OwnedPage list(long user, ArticleState state, int page, int size) {
@@ -87,7 +98,7 @@ public class WritingRepository {
         var params=p("id",id).addValue("title",c.title()).addValue("summary",c.summary()).addValue("body",c.body()).addValue("stage",c.experienceStage()).addValue("source",c.sourceType()).addValue("note",c.sourceNote());
         jdbc.update("UPDATE article_draft SET title=:title,summary=:summary,body=:body,experience_stage=:stage,source_type=:source,source_note=:note WHERE article_id=:id",params);
         jdbc.update("DELETE FROM article_draft_category WHERE article_id=:id",params);
-        for(var ids:List.of(c.tags().jobIds(),c.tags().majorIds(),c.tags().companyIds(),c.tags().topicIds()))for(long category:ids)jdbc.update("INSERT INTO article_draft_category VALUES(:id,:category)",p("id",id).addValue("category",category));
+        for(var ids:List.of(c.tags().jobIds(),c.tags().majorIds(),c.tags().companyIds(),c.tags().topicIds()))for(long category:ids)addDraftCategory(id,category);
         jdbc.update("DELETE FROM article_draft_source_link WHERE article_id=:id",params);int order=0;
         for(SourceLink link:c.sourceLinks())jdbc.update("INSERT INTO article_draft_source_link VALUES(:id,:ord,:label,:url)",p("id",id).addValue("ord",order++).addValue("label",link.label()).addValue("url",link.url()));
         jdbc.update("DELETE FROM article_draft_image WHERE article_id=:id",params);for(String image:images)jdbc.update("INSERT INTO article_draft_image VALUES(:id,:image)",p("id",id).addValue("image",image));bump(id,now);
