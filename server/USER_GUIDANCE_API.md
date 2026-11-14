@@ -21,6 +21,7 @@
 | 请求未取得服务器响应 | NETWORK_ERROR | 保留当前输入与条件，提供重试 |
 | 登录会话无效 | UNAUTHORIZED | 提供登录入口 |
 | 账号或认证状态受限 | ACCESS_RESTRICTED | 引导查看本人账号或校园认证状态 |
+| 本人专业未填写或已停用 | SAME_MAJOR_UNAVAILABLE | 引导完善本人资料，或改用手动专业筛选 |
 | 发布或评论受限 | BEHAVIOR_RESTRICTED | 引导查看本人处理记录 |
 | 内容不可用或不可访问 | NOT_FOUND | 提示不可用并返回列表 |
 | 数据库、存储或邮件暂不可用 | SERVICE_UNAVAILABLE、STORAGE_UNAVAILABLE、MAIL_UNAVAILABLE | 保留输入，按接口约定重试 |
