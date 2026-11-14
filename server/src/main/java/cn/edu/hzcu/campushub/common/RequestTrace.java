@@ -62,6 +62,7 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String safeCode(String code){return code!=null&&code.matches("[A-Z][A-Z0-9_]{1,47}")?code:"INTERNAL_ERROR";}
     public static void errorCode(String code){if(current()!=null)MDC.put("errorCode",safeCode(code));}
     public static String module(String action){
+        if(action.equals("RULES_READ")||action.equals("WRITING_PROMPTS_READ"))return "GUIDANCE";
         if(action.startsWith("ADMIN_"))return "COMMUNITY_ADMIN";
         if(action.startsWith("CASE_"))return "COMMUNITY";
         if(action.startsWith("NOTIFICATION_"))return "NOTIFICATION";
@@ -77,6 +78,8 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/rules"))return "RULES_READ";
+        if(path.equals("/api/v1/me/writing-prompts"))return "WRITING_PROMPTS_READ";
         if(path.equals("/api/v1/me/notifications"))return "NOTIFICATION_LIST";
         if(path.matches("/api/v1/me/notifications/[^/]+/read"))return "NOTIFICATION_MARK_READ";
         if(path.equals("/api/v1/me/cases"))return method.equals("POST")?"CASE_SUBMIT":"CASE_LIST";
@@ -128,6 +131,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.matches("/api/v1/me/articles/[^/]+/draft"))return method.equals("PUT")?"DRAFT_SAVE":"DRAFT_READ";
         if(path.matches("/api/v1/me/articles/[^/]+/images"))return "ARTICLE_IMAGE_UPLOAD";
         if(path.matches("/api/v1/me/articles/[^/]+/publish"))return "WRITING_PUBLISH";
+        if(path.matches("/api/v1/me/articles/[^/]+/preview"))return "WRITING_PREVIEW";
         if(path.matches("/api/v1/me/articles/[^/]+/unpublish"))return "WRITING_UNPUBLISH";
         if(path.matches("/api/v1/me/articles/[^/]+/restore"))return "WRITING_RESTORE";
         if(path.matches("/api/v1/me/articles/[^/]+")&&method.equals("DELETE"))return "WRITING_DELETE";

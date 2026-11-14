@@ -48,12 +48,12 @@ class CoinsMySqlIT {
         boot(selected, Map.of());
     }
 
-    static void boot(String selected, Map<String, Object> honorProperties) {
+    static void boot(String selected, Map<String, Object> overrides) {
         mode=selected;var app=AuthTestSupport.application(MAIL,CLOCK);
         app.addInitializers(ctx->ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("coin-test",Map.of("campushub.run-mode",selected,"campushub.logs.enabled",true,"campushub.logs.root",root.resolve("logs").toString(),"campushub.logs.max-bytes",10*1024*1024,"campushub.media.root",root.resolve("media").toString(),"server.tomcat.threads.max",8,"server.tomcat.threads.min-spare",1))));
-        if (!honorProperties.isEmpty()) {
+        if (!overrides.isEmpty()) {
             app.addInitializers(ctx -> ctx.getEnvironment().getPropertySources()
-                    .addFirst(new MapPropertySource("honors-test", honorProperties)));
+                    .addFirst(new MapPropertySource("coin-test-overrides", overrides)));
         }
         context=app.run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");db=context.getBean(JdbcTemplate.class);
     }
@@ -401,6 +401,49 @@ class CoinsMySqlIT {
                 .isEqualTo("CLOSED");
         assertThat(adminCall("POST", path, body, admin).data).isEqualTo(replies.getFirst().data);
         assertThat(Files.readString(runtime())).doesNotContain(reason);
+    }
+
+    @Test @Order(20)
+    void sharedGuidanceUsesLiveRulesAndKeepsWritingPromptsOptional() throws Exception {
+        String absentKeyword = key();
+        var noResults = get("/articles?keyword=" + absentKeyword, -1);
+        assertThat(noResults.status).isEqualTo(200);
+        assertThat(noResults.data.path("items").isEmpty()).isTrue();
+        assertThat(get("/rules?email=" + absentKeyword, -1).status).isEqualTo(400);
+        var response = get("/rules", -1);
+        assertThat(response.status).isEqualTo(200);
+        assertThat(response.data.path("reading").path("free").asBoolean()).isTrue();
+        assertThat(response.data.path("certification").path("emailDomain").asString()).isEqualTo("stu.hzcu.edu.cn");
+        assertThat(response.data.path("coins").path("valueType").asString()).isEqualTo("NON_CASH");
+        assertThat(response.data.path("contact").path("voluntary").asBoolean()).isTrue();
+        assertThat(response.data.path("contact").path("external").asBoolean()).isTrue();
+        assertThat(response.data.path("hints").path("NO_ARTICLE_RESULTS").path("nextAction").asString())
+                .isEqualTo("ADJUST_FILTERS");
+        assertThat(response.data.path("hints").path("NETWORK_ERROR").path("nextAction").asString()).isEqualTo("RETRY");
+        assertThat(requestLine(response.trace)).contains("action=RULES_READ", "module=GUIDANCE");
+        assertThat(get("/me/writing-prompts", -1).status).isEqualTo(401);
+        var prompts = get("/me/writing-prompts", 0);
+        assertThat(prompts.status).isEqualTo(200);
+        assertThat(prompts.data.path("optional").asBoolean()).isTrue();
+        assertThat(prompts.data.path("items").size()).isEqualTo(5);
+        assertThat(requestLine(prompts.trace)).contains("action=WRITING_PROMPTS_READ", "module=GUIDANCE");
+        assertThat(get("/me/writing-prompts?articleId=1", 0).status).isEqualTo(400);
+        db.update("UPDATE campus_certification SET state='REVOKED' WHERE user_id=?", users.get(0));
+        try {
+            assertThat(get("/me/writing-prompts", 0).status).isEqualTo(403);
+        } finally {
+            db.update("UPDATE campus_certification SET state='VALID' WHERE user_id=?", users.get(0));
+        }
+        assertThat(article(0)).isPositive();
+        assertThat(Files.readString(runtime())).doesNotContain(absentKeyword);
+
+        context.close();
+        boot("release", Map.of("campushub.coins.login-reward", 4, "campushub.coins.reading-reward", 2,
+                "campushub.coins.reading-seconds", 240, "campushub.coins.article-limit", 3));
+        var configured = get("/rules", -1).data.path("coins").path("rules");
+        assertThat(configured.path("dailyMaximum").asInt()).isEqualTo(6);
+        assertThat(configured.path("readingSeconds").asInt()).isEqualTo(240);
+        assertThat(configured).isEqualTo(get("/me/rewards", 0).data.path("rules"));
     }
 
     private static void assertHonor(String entry, String home, String ruleId) throws Exception {

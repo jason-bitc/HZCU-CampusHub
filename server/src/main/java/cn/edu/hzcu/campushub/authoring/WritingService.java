@@ -43,9 +43,37 @@ public class WritingService {
         audit.changed(user,Action.PROFILE_UPDATE,ObjectType.PROFILE,user,previous.revision(),saved.revision(),null,null);return saved;
     });}
     public Created create(long user,String request){return RequestTrace.write(write,tx->{stage(TARGET);repository.lockUser(user);stage(RECEIPT);Long previous=repository.created(user,request);if(previous!=null){RequestTrace.article(previous);return new Created(previous);}stage(PERSIST);long id=repository.allocate("article");repository.create(id,user,request,clock.instant());RequestTrace.article(id);return new Created(id);});}
-    public OwnedPage list(long user,int page,int size){if(page<1||page>1_000_000||size<1||size>100)throw ApiException.invalid();return read.execute(tx->{stage(READ);return repository.list(user,page,size);});}
+    public OwnedPage list(long user, ArticleState state, int page, int size) {
+        if (page < 1 || page > 1_000_000 || size < 1 || size > 100) throw ApiException.invalid();
+        return read.execute(tx -> {
+            stage(READ);
+            return repository.list(user, state, page, size);
+        });
+    }
     public Draft draft(long user,long id){return read.execute(tx->{Article a=repository.owned(user,id,false);if(a.state().equals("DELETED"))throw ApiException.notFound();return view(a);});}
     private Draft view(Article a){return new Draft(a.id(),a.state(),a.revision(),repository.content(a.id()),repository.images(a.id()),repository.referenced(a.id()));}
+    public PublishPreview preview(long user, long id, long expected) {
+        return read.execute(tx -> {
+            Article article = repository.owned(user, id, false);
+            if (article.state().equals("DELETED")) throw ApiException.notFound();
+            revision(article, expected);
+            Content content = repository.content(id);
+            var refs = markdown.inspect(content.body());
+            var images = publicationImages(id, refs);
+            var missing = missingFields(content, refs);
+            String blocker = null;
+            if (article.state().equals("ADMIN_HIDDEN")) blocker = "STATE_CONFLICT";
+            else if (repository.restricted(user, "PUBLISH")) blocker = "BEHAVIOR_RESTRICTED";
+            boolean canPublish = blocker == null && missing.isEmpty();
+            if (canPublish) {
+                categories(content);
+                verifyPublicationImages(images);
+            }
+            return new PublishPreview(id, article.state(), article.revision(), content,
+                    images.stream().map(ImageRow::view).toList(), publicationSummary(content, refs),
+                    "PUBLIC", missing, blocker, canPublish);
+        });
+    }
     public Draft save(long user,long id,long expected,Content content){
         var references=markdown.inspect(content.body());
         return RequestTrace.write(write,tx->{Article a=repository.owned(user,id,true);editable(a);revision(a,expected);categories(content);stage(ATTACHMENT);repository.imageReferences(id,references.imageIds());stage(PERSIST);repository.save(id,content,references.imageIds(),clock.instant());return view(repository.owned(user,id,false));});
@@ -53,15 +81,38 @@ public class WritingService {
     public Published publish(long user,long id,long expected,String request){return RequestTrace.write(write,tx->{
         Article a=repository.owned(user,id,true);editable(a);
         stage(RECEIPT);Published previous=repository.published(id,request,expected);if(previous!=null){if(!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");audit.unchanged(Action.ARTICLE_PUBLISH,ObjectType.ARTICLE);return previous;}
-        repository.assertAllowed(user,"PUBLISH");revision(a,expected);Content c=repository.content(id);var refs=markdown.inspect(c.body());categories(c);stage(ATTACHMENT);repository.imageReferences(id,refs.imageIds());
-        var missing=new ArrayList<String>();if(c.title().isBlank())missing.add("title");if(c.tags().jobIds().isEmpty())missing.add("jobIds");if(c.tags().majorIds().isEmpty())missing.add("majorIds");
-        if(c.experienceStage().isBlank())missing.add("experienceStage");if(c.sourceType()==null)missing.add("sourceType");
-        if(refs.readableText().isBlank()&&refs.imageIds().isEmpty())missing.add("body或有效上传图片");if("CURATED".equals(c.sourceType())&&c.sourceNote().isBlank())missing.add("sourceNote");
+        repository.assertAllowed(user,"PUBLISH");revision(a,expected);Content c=repository.content(id);var refs=markdown.inspect(c.body());categories(c);
+        var images = publicationImages(id, refs);
+        var missing = missingFields(c, refs);
         if(!missing.isEmpty())throw new ApiException(HttpStatus.valueOf(422),"PUBLISH_INCOMPLETE","发布前请补充："+String.join("、",missing));
-        for(String image:refs.imageIds()){ImageRow row=repository.image(image).orElseThrow(ApiException::notFound);files.read(row.id(),row.size(),row.digest());}
-        stage(PERSIST);Published published=repository.publish(a,c,c.summary().isBlank()?MarkdownReferences.summary(refs.readableText()):c.summary(),request,clock.instant());
+        verifyPublicationImages(images);
+        stage(PERSIST);Published published=repository.publish(a,c,publicationSummary(c, refs),request,clock.instant());
         audit.changed(user,Action.ARTICLE_PUBLISH,ObjectType.ARTICLE,id,a.revision(),published.revision(),State.valueOf(a.state()),State.PUBLISHED);return published;
     });}
+    private List<ImageRow> publicationImages(long article, MarkdownReferences.References refs) {
+        stage(ATTACHMENT);
+        return refs.imageIds().stream().map(id -> repository.image(id)
+                .filter(image -> image.articleId() == article).orElseThrow(ApiException::notFound)).toList();
+    }
+    private void verifyPublicationImages(List<ImageRow> images) {
+        if (images.isEmpty()) return;
+        stage(STORAGE);
+        for (ImageRow image : images) files.read(image.id(), image.size(), image.digest());
+    }
+    private static List<String> missingFields(Content content, MarkdownReferences.References refs) {
+        var missing = new ArrayList<String>();
+        if (content.title().isBlank()) missing.add("title");
+        if (content.tags().jobIds().isEmpty()) missing.add("jobIds");
+        if (content.tags().majorIds().isEmpty()) missing.add("majorIds");
+        if (content.experienceStage().isBlank()) missing.add("experienceStage");
+        if (content.sourceType() == null) missing.add("sourceType");
+        if (refs.readableText().isBlank() && refs.imageIds().isEmpty()) missing.add("body或有效上传图片");
+        if ("CURATED".equals(content.sourceType()) && content.sourceNote().isBlank()) missing.add("sourceNote");
+        return List.copyOf(missing);
+    }
+    private static String publicationSummary(Content content, MarkdownReferences.References refs) {
+        return content.summary().isBlank() ? MarkdownReferences.summary(refs.readableText()) : content.summary();
+    }
     public StateResult changeState(long user,long id,long expected,String action){return RequestTrace.write(write,tx->{
         Article a=repository.owned(user,id,true);String target=action.equals("unpublish")?"AUTHOR_OFFLINE":action.equals("restore")?"PUBLISHED":"DELETED";
         Action operation=action.equals("unpublish")?Action.ARTICLE_UNPUBLISH:action.equals("restore")?Action.ARTICLE_RESTORE:Action.ARTICLE_DELETE;
