@@ -109,6 +109,15 @@ public final class OpsApplication implements AutoCloseable {
     }
     public void close()throws IOException {server.stop(1);requests.shutdownNow();if(dailyBackup!=null)dailyBackup.close();jobs.close();store.close();}
     public static void main(String[] args)throws Exception {
+        if (args.length == 4 && args[0].equals("--export-backup")) {
+            var config = OpsConfig.load(Path.of(args[1]));
+            System.out.println(OpsStore.JSON.writeValueAsString(OpsBackupExport.export(config, args[2], Path.of(args[3]))));
+            return;
+        }
+        if (args.length == 3 && args[0].equals("--verify-backup-export")) {
+            System.out.println(OpsStore.JSON.writeValueAsString(OpsBackupExport.verify(Path.of(args[1]), args[2])));
+            return;
+        }
         if(args.length==4&&args[0].equals("--register")){var config=OpsConfig.load(Path.of(args[1]));try(var store=new OpsStore(config.controlRoot())){new OpsRunner(config).register(args[2],Path.of(args[3]));}System.out.println("OPS_ARTIFACT_REGISTERED");return;}
         if(args.length==2&&args[0].equals("--reconcile")){
             var config=OpsConfig.load(Path.of(args[1]));var console=System.console();if(console==null)throw new IOException("OPS_RECONCILE_REQUIRES_CONSOLE");
@@ -117,7 +126,8 @@ public final class OpsApplication implements AutoCloseable {
                 store.change(n->n.put("recoveryRequired",false).put("manualReconciliationAt",Instant.now().toString()));}return;
         }
         if(args.length==2&&args[0].equals("--init")){OpsAuth.initialize(Path.of(args[1]));System.out.println("OPS_SETUP_COMPLETED");return;}
-        if(args.length!=2||!args[0].equals("--config"))throw new IllegalArgumentException("Use --config <local-json> or --init <control-root>");
+        if(args.length!=2||!args[0].equals("--config"))throw new IllegalArgumentException(
+                "Use --config <local-json>, --init <control-root>, --export-backup <local-json> <backup-id> <destination>, or --verify-backup-export <copy-directory> <manifest-sha256>");
         var config=OpsConfig.load(Path.of(args[1]));var app=new OpsApplication(config);Runtime.getRuntime().addShutdownHook(new Thread(()->{try{app.close();}catch(IOException ignored){}}));app.start();System.out.println("OPS_READY port="+config.port());
     }
 }

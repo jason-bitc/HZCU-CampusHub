@@ -18,6 +18,10 @@ final class OpsRunner implements OpsJobs.Executor {
     record RestorePreview(String backupId,String backupCreatedAt,String backupReleaseId,
                           List<String> affectedComponents,int verifiedFileCount,long mediaFileCount) {}
     record RestorePlan(String manifestSha256,RestorePreview preview) {}
+    record BackupManifest(JsonNode data, String sha256, Instant createdAt) {}
+    record BackupEntry(String id, String createdAt, boolean complete, String schemaFingerprint,
+                       boolean withinRetentionWindow) {}
+    private static final int RETAIN_RECENT_BACKUPS = 7;
     final OpsConfig config;
     private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1)).build();
     OpsRunner(OpsConfig config){this.config=config;}
@@ -27,7 +31,8 @@ final class OpsRunner implements OpsJobs.Executor {
         catch (NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
     }
     static String sha(Path file)throws IOException {var digest=sha256();try(var in=Files.newInputStream(file)){byte[] buffer=new byte[65536];int length;while((length=in.read(buffer))>0)digest.update(buffer,0,length);}return HexFormat.of().formatHex(digest.digest());}
-    private static Path child(Path root,String id)throws IOException {if(!id.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}"))throw failure("INVALID_PARAMETER");Path path=root.resolve(id).normalize();OpsStore.rejectLinks(path);if(!path.getParent().equals(root))throw failure("INVALID_PARAMETER");return path;}
+    private static boolean validId(String id) { return id.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}"); }
+    static Path child(Path root,String id)throws IOException {if(!validId(id))throw failure("INVALID_PARAMETER");Path path=root.resolve(id).normalize();OpsStore.rejectLinks(path);if(!path.getParent().equals(root))throw failure("INVALID_PARAMETER");return path;}
     boolean healthy(){try{var response=http.send(HttpRequest.newBuilder(URI.create(config.healthUrl())).timeout(Duration.ofSeconds(2)).GET().build(),HttpResponse.BodyHandlers.ofString());var n=OpsStore.JSON.readTree(response.body());return response.statusCode()==200&&(n.path("status").asString().equals("UP")||n.path("data").path("status").asString().equals("UP"));}catch(Exception e){return false;}}
     private Optional<ProcessHandle> managed()throws IOException {
         Path pid=config.runtimeRoot().resolve("pid.json");if(!Files.exists(pid))return Optional.empty();
@@ -92,7 +97,20 @@ final class OpsRunner implements OpsJobs.Executor {
 
     private RestorePlan validateBackup(String id,String confirmedHash) throws Exception {
         Path root=child(config.backupRoot(),id);
+        var manifest = readBackupManifest(root, id, confirmedHash);
+        if (!manifest.data().path("database").asString().equals(config.databaseName())
+                || !manifest.data().path("schemaFingerprint").asString().equals(schema())) {
+            throw failure("OPS_BACKUP_INCOMPATIBLE");
+        }
+        return verifyBackupFiles(root, id, manifest);
+    }
+
+    static BackupManifest readBackupManifest(Path root, String id, String confirmedHash) throws IOException {
+        OpsStore.rejectLinks(root);
         if (Files.notExists(root)) throw new OpsApplication.Failure(404,"OPS_BACKUP_NOT_FOUND");
+        if (!Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS) || !root.toRealPath().equals(root)) {
+            throw failure("OPS_BACKUP_INVALID");
+        }
         Path manifest=root.resolve("manifest.json");
         if (!Files.isRegularFile(manifest,LinkOption.NOFOLLOW_LINKS)) throw failure("OPS_BACKUP_INVALID");
         byte[] bytes=Files.readAllBytes(manifest);
@@ -101,17 +119,26 @@ final class OpsRunner implements OpsJobs.Executor {
         var n=backupJson(bytes);
         var files=n.path("files");
         if (!n.path("complete").isBoolean()||!n.path("complete").asBoolean()||!n.path("id").asString().equals(id)
-                ||!files.isObject()||!files.has("database.sql")||!Files.isDirectory(root.resolve("media"),LinkOption.NOFOLLOW_LINKS)) {
+                ||!n.path("schemaFingerprint").asString().matches("[0-9a-f]{64}")
+                ||!files.isObject()||!files.has("database.sql")) {
             throw failure("OPS_BACKUP_INVALID");
         }
-        String fingerprint=n.path("schemaFingerprint").asString();
-        if (!n.path("database").asString().equals(config.databaseName())||!fingerprint.equals(schema())) {
-            throw failure("OPS_BACKUP_INCOMPATIBLE");
-        }
+        try { return new BackupManifest(n, hash, Instant.parse(n.path("createdAt").asString())); }
+        catch (DateTimeException invalid) { throw failure("OPS_BACKUP_INVALID"); }
+    }
+
+    static RestorePlan verifyBackupFiles(Path root, String id, BackupManifest backup) throws IOException {
+        if (!Files.isDirectory(root.resolve("media"), LinkOption.NOFOLLOW_LINKS)) throw failure("OPS_BACKUP_INVALID");
+        Path manifest = root.resolve("manifest.json");
+        var files = backup.data().path("files");
+        String fingerprint = backup.data().path("schemaFingerprint").asString();
         var actual=new TreeSet<String>();
         try(var walk=Files.walk(root)){
             for(Path file:walk.toList()){
                 OpsStore.rejectLinks(file);
+                if (!file.toRealPath().equals(file) || !(Files.isRegularFile(file) || Files.isDirectory(file))) {
+                    throw failure("OPS_BACKUP_INVALID");
+                }
                 if(Files.isRegularFile(file)&&!file.equals(manifest))actual.add(root.relativize(file).toString().replace('\\','/'));
             }
         }
@@ -121,6 +148,7 @@ final class OpsRunner implements OpsJobs.Executor {
             Path path=root.resolve(name).normalize();
             if (!path.startsWith(root)||!sha(path).equals(files.path(name).asString())) throw failure("OPS_BACKUP_INVALID");
         }
+        if (!sha(manifest).equals(backup.sha256())) throw failure("OPS_BACKUP_CHANGED");
         String releaseId=null;
         if (expected.contains("application.jar")!=expected.contains("release.json")) throw failure("OPS_BACKUP_INVALID");
         if (expected.contains("release.json")) {
@@ -130,11 +158,8 @@ final class OpsRunner implements OpsJobs.Executor {
                     ||!release.path("sha256").asString().equals(files.path("application.jar").asString())
                     ||!release.path("schemaFingerprint").asString().equals(fingerprint)) throw failure("OPS_BACKUP_INVALID");
         }
-        String timestamp;
-        try { timestamp=Instant.parse(n.path("createdAt").asString()).toString(); }
-        catch (DateTimeException invalid) { throw failure("OPS_BACKUP_INVALID"); }
         var components=releaseId==null?List.of("DATABASE","MEDIA"):List.of("DATABASE","MEDIA","RELEASE");
-        return new RestorePlan(hash,new RestorePreview(id,timestamp,releaseId,components,expected.size(),
+        return new RestorePlan(backup.sha256(),new RestorePreview(id,backup.createdAt().toString(),releaseId,components,expected.size(),
                 expected.stream().filter(name->name.startsWith("media/")).count()));
     }
 
@@ -182,7 +207,30 @@ final class OpsRunner implements OpsJobs.Executor {
             return false;
         }
     }
-    List<Object> backups(){var out=new ArrayList<>();try(var dirs=Files.list(config.backupRoot())){for(Path path:dirs.sorted(Comparator.reverseOrder()).limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"createdAt",n.path("createdAt").asString(),"complete",n.path("complete").asBoolean(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
+    List<BackupEntry> backups() throws IOException {
+        var manifests = new ArrayList<BackupManifest>();
+        try (var paths = Files.list(config.backupRoot())) {
+            for (Path path : paths.toList()) {
+                String id = path.getFileName().toString();
+                if (!validId(id)) continue;
+                try {
+                    var manifest = readBackupManifest(path, id, null);
+                    if (manifest.data().path("database").asString().equals(config.databaseName())) manifests.add(manifest);
+                } catch (IOException | OpsApplication.Failure invalid) {
+                    // Incomplete snapshots and unrelated entries are excluded from the retention window.
+                }
+            }
+        }
+        manifests.sort(Comparator.comparing(BackupManifest::createdAt).reversed()
+                .thenComparing(manifest -> manifest.data().path("id").asString()));
+        var entries = new ArrayList<BackupEntry>();
+        for (int i = 0; i < Math.min(100, manifests.size()); i++) {
+            var manifest = manifests.get(i);
+            entries.add(new BackupEntry(manifest.data().path("id").asString(), manifest.createdAt().toString(), true,
+                    manifest.data().path("schemaFingerprint").asString(), i < RETAIN_RECENT_BACKUPS));
+        }
+        return entries;
+    }
     List<Object> artifacts(){var out=new ArrayList<>();try(var dirs=Files.list(config.artifactRoot())){for(Path path:dirs.sorted().limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"sha256",n.path("sha256").asString(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
     void register(String id,Path source)throws Exception {
         Path root=child(config.artifactRoot(),id);if(Files.exists(root))throw failure("OPS_ARTIFACT_EXISTS");Files.createDirectory(root);
