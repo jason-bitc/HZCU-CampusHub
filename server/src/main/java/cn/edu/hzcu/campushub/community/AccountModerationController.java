@@ -19,8 +19,28 @@ public class AccountModerationController {
     @GetMapping("/admin/users/{id}/restrictions") public ApiResponse<?> restrictions(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam Map<String,String> p){empty(p);return ApiResponse.success(Map.of("items",service.restrictions(ArticleQuery.requiredId(id))));}
     @GetMapping("/me/restrictions") public ApiResponse<?> own(@RequestAttribute("campushub.identity") AuthModels.Identity me,@RequestParam Map<String,String> p){empty(p);return ApiResponse.success(Map.of("items",service.restrictions(me.me().userId())));}
     @PostMapping(value="/admin/users/{id}/restrictions",consumes="application/json") public ApiResponse<?> set(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam Map<String,String> p,@RequestBody String raw){empty(p);var n=CoinInput.parse(raw,"scope","enabled","expectedRevision","requestId","reason");if(!n.path("enabled").isBoolean())throw ApiException.invalid();return ApiResponse.success(service.set(me.adminId(),ArticleQuery.requiredId(id),WritingInput.text(n,"scope",16),n.path("enabled").asBoolean(),WritingInput.number(n.path("expectedRevision")),CoinInput.key(n),reason(n,"reason")));}
-    @PostMapping(value="/me/appeals",consumes="application/json") public ApiResponse<?> appeal(@RequestAttribute("campushub.identity") AuthModels.Identity me,@RequestParam Map<String,String> p,@RequestBody String raw){empty(p);var n=CoinInput.parse(raw,"restrictionId","requestId","reason");long id=WritingInput.number(n.path("restrictionId"));if(id<1)throw ApiException.invalid();return ApiResponse.success(service.appeal(me.me().userId(),id,CoinInput.key(n),reason(n,"reason")));}
+    @PostMapping(value = "/me/appeals", consumes = "application/json")
+    public ApiResponse<?> appeal(@RequestAttribute("campushub.identity") AuthModels.Identity me,
+            @RequestParam Map<String, String> params, @RequestBody String body) {
+        empty(params);
+        var input = CoinInput.parseObject(body);
+        boolean certification = input.has("certificationRevision");
+        String target = certification ? "certificationRevision" : "restrictionId";
+        WritingInput.fields(input, target, "requestId", "reason");
+        long reference = WritingInput.number(input.path(target));
+        if (reference < 1) throw ApiException.invalid();
+        var subject = certification ? AccountModerationService.AppealSubject.CAMPUS_CERTIFICATION
+                : AccountModerationService.AppealSubject.BEHAVIOR_RESTRICTION;
+        return ApiResponse.success(service.appeal(me, subject, reference, CoinInput.key(input), reason(input, "reason")));
+    }
     @GetMapping("/me/appeals") public ApiResponse<?> appeals(@RequestAttribute("campushub.identity") AuthModels.Identity me,@RequestParam org.springframework.util.MultiValueMap<String,String> p){var page=CommunityPage.parse(p,false);if(p.keySet().stream().anyMatch(k->!Set.of("page","size").contains(k)))throw ApiException.invalid();return ApiResponse.success(service.appeals(me.me().userId(),page.page(),page.size()));}
     @GetMapping("/admin/appeals") public ApiResponse<?> queue(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@RequestParam org.springframework.util.MultiValueMap<String,String> p){var page=CommunityPage.parse(p,false);if(p.keySet().stream().anyMatch(k->!Set.of("page","size").contains(k)))throw ApiException.invalid();return ApiResponse.success(service.appeals(null,page.page(),page.size()));}
-    @PostMapping(value="/admin/appeals/{id}/decisions",consumes="application/json") public ApiResponse<?> decide(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam Map<String,String> p,@RequestBody String raw){empty(p);var n=CoinInput.parse(raw,"outcome","expectedRevision","requestId","reply");return ApiResponse.success(service.decide(me.adminId(),ArticleQuery.requiredId(id),WritingInput.number(n.path("expectedRevision")),WritingInput.text(n,"outcome",16),CoinInput.key(n),reason(n,"reply")));}
+    @GetMapping("/me/appeals/{id}")
+    public ApiResponse<?> ownAppeal(@RequestAttribute("campushub.identity") AuthModels.Identity me,
+            @PathVariable String id, @RequestParam Map<String, String> params) {
+        empty(params);
+        return ApiResponse.success(service.ownAppeal(me.me().userId(), ArticleQuery.requiredId(id)));
+    }
+
+    @PostMapping(value="/admin/appeals/{id}/decisions",consumes="application/json") public ApiResponse<?> decide(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam Map<String,String> p,@RequestBody String raw){empty(p);var n=CoinInput.parse(raw,"outcome","expectedRevision","requestId","reply");return ApiResponse.success(service.decide(me,ArticleQuery.requiredId(id),WritingInput.number(n.path("expectedRevision")),WritingInput.text(n,"outcome",16),CoinInput.key(n),reason(n,"reply")));}
 }

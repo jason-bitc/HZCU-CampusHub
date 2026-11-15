@@ -1,6 +1,6 @@
 # 社区管理员网页对接说明
 
-业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。校园认证管理使用 V15 数据库迁移。
+业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。校园认证撤销和申诉分别使用 V15、V16 数据库迁移。
 
 响应沿用 `code/data/traceId`；失败使用真实 HTTP 状态及 `code/message/traceId`，不返回 `data`。管理响应 `Cache-Control: no-store`。管理令牌通过 `Authorization: Bearer …` 传递，禁止放在URL。
 
@@ -21,8 +21,8 @@
 | 治理记录 | `GET /admin/governance-events` | 对象、理由、操作者、前后状态、修订和时间 |
 | 用户限制 | `GET /admin/users`、`GET/POST /admin/users/{id}/restrictions` | PUBLISH和COMMENT两类行为分别设置；不封锁阅读和本人申诉 |
 | 校园认证 | `GET /admin/users/{id}/certification`、`POST /admin/users/{id}/certification/revocation` | 查看认证状态、修订号和最近撤销记录，提交撤销理由 |
-| 申诉处理 | `GET /admin/appeals`、`POST /admin/appeals/{id}/decisions` | ACCEPTED或REJECTED；接受申诉只解除对应版本的限制 |
-| 用户查看结果 | `GET /me/restrictions`、`GET/POST /me/appeals` | 仅本人限制和申诉，不公开他人信息 |
+| 申诉处理 | `GET /admin/appeals`、`POST /admin/appeals/{id}/decisions` | 处理行为限制与校园认证两类申诉，记录结论及答复 |
+| 用户查看结果 | `GET /me/restrictions`、`GET/POST /me/appeals`、`GET /me/appeals/{id}` | 有效会话可查看本人的限制、申诉和复核答复 |
 
 `/admin/me` 返回能力 `CASE_READ`、`CASE_HANDLE`、`CONTENT_MODERATE`、`CATEGORY_MANAGE`、`GOVERNANCE_READ`、`USER_RESTRICT`、`CERTIFICATION_REVOKE`、`APPEAL_HANDLE`、`CONTRIBUTION_INVALIDATE`。社区管理员共享这些社区能力，贡献处置由案件认领人执行，运维能力单独授权。
 
@@ -68,7 +68,19 @@
 {"outcome":"ACCEPTED","expectedRevision":1,"requestId":"00000000-0000-4000-8000-000000000005","reply":"已复核并解除该项限制"}
 ```
 
-同一限制版本不能有两个OPEN申诉。接受申诉时校验原限制版本，不能解除后来新设的限制。当前申诉用于上述行为限制；未来人工认证材料申诉不在本轮实现范围。
+同一行为限制版本只可同时存在一条待处理申诉。接受后校验原限制版本并解除对应限制。
+
+## 校园认证申诉
+
+用户先获取 `GET /me/certification`。当返回 `canAppeal=true` 时，将响应中的 `revision` 作为 `certificationRevision` 提交至 `POST /me/appeals`。
+
+```json
+{"certificationRevision":2,"requestId":"00000000-0000-4000-8000-000000000007","reason":"校园邮箱仍可使用，申请复核本次撤销"}
+```
+
+请求包含一种申诉对象，校园认证用 `certificationRevision`，行为限制用 `restrictionId`。首次提交返回 `id/revision/state`，初始状态为 `OPEN`。相同请求编号和内容重试时返回该申诉的当前状态。变更原请求内容返回 409 `REQUEST_KEY_REUSED`。认证有效、认证修订过期或该撤销版本已有申诉时，分别返回 409 `CERTIFICATION_NOT_REVOKED`、`REVISION_CONFLICT`、`CERTIFICATION_APPEAL_EXISTS`。
+
+管理员在同一申诉列表处理两类申诉，通过 `subject` 区分 `CAMPUS_CERTIFICATION` 和 `BEHAVIOR_RESTRICTION`。认证申诉显示绑定的认证修订，以及有记录时的 `certificationRevocationReason/certificationRevokedAt`。管理列表另返回 `userId/decidedBy`。认证复核的 `ACCEPTED` 或 `REJECTED` 及 `reply` 随原申诉保存，更新本人通知。复核和邮箱验证可独立完成，恢复认证权限须经本人重新认证。已完成的申诉可继续查询。
 
 ## 校园认证撤销
 

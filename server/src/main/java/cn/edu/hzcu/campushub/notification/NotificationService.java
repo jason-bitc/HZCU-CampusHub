@@ -133,7 +133,7 @@ public class NotificationService {
         if (kind == Kind.CAMPUS_VERIFIED || kind == Kind.CAMPUS_REVOKED) {
             return new Target("CERTIFICATION", null, null, null);
         }
-        if (!r.getBoolean("certified")) return null;
+        if (!r.getBoolean("certified") && kind != Kind.RESTRICTION_CHANGED && kind != Kind.APPEAL_DECIDED) return null;
         return switch (kind) {
             case COMMENT_REPLY, COMMENT_MODERATION -> {
                 Long article = r.getObject("visible_article", Long.class);

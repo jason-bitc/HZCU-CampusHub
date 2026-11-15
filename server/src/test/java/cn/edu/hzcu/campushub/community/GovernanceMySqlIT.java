@@ -217,5 +217,117 @@ class GovernanceMySqlIT {
         assertThat(db.queryForObject("SELECT state FROM article WHERE id=?", String.class, article))
                 .isEqualTo("ADMIN_HIDDEN");
     }
+    @Test @Order(9) void revokedUsersCanPrivatelyAppealOneRevisionAndReadTheReview() throws Exception {
+        var auth = context.getBean(AuthService.class);
+        String session = auth.login(email, password).accessToken();
+        var prior = call("GET", "/me/certification", null, session).data;
+        long validRevision = prior.path("revision").asLong();
+        var premature = Map.of("certificationRevision", validRevision, "requestId", key(), "reason", "请复核");
+        assertThat(call("POST", "/me/appeals", premature, session).code).isEqualTo("CERTIFICATION_NOT_REVOKED");
+        String revocationReason = "本次校园邮箱有效性需要复核";
+        var revoked = call("POST", "/admin/users/" + user + "/certification/revocation",
+                Map.of("expectedRevision", validRevision, "requestId", key(), "reason", revocationReason), token);
+        assertThat(revoked.status).isEqualTo(200);
+        long revision = revoked.data.path("revision").asLong();
+        var certification = call("GET", "/me/certification", null, session).data;
+        assertThat(certification.path("canAppeal").asBoolean()).isTrue();
+        assertThat(certification.path("revision").asLong()).isEqualTo(revision);
+        assertThat(call("GET", "/me/restrictions", null, session).status).isEqualTo(200);
+        assertThat(call("GET", "/me/articles", null, session).code).isEqualTo("ACCESS_RESTRICTED");
+        assertThat(call("POST", "/me/appeals", premature, session).code).isEqualTo("REVISION_CONFLICT");
+
+        String appealReason = "仍在校，申请复核这次撤销";
+        var command = Map.of("certificationRevision", revision, "requestId", key(), "reason", appealReason);
+        assertThat(call("POST", "/me/appeals", command, null).status).isEqualTo(401);
+        assertThat(call("POST", "/me/appeals", command, token).status).isEqualTo(401);
+        assertThat(call("POST", "/me/appeals", Map.of("certificationRevision", revision,
+                "restrictionId", 1, "requestId", key(), "reason", appealReason), session).status).isEqualTo(400);
+        long appeal;
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var replies = pool.invokeAll(List.<Callable<Reply>>of(() -> call("POST", "/me/appeals", command, session),
+                    () -> call("POST", "/me/appeals", command, session)), 15, java.util.concurrent.TimeUnit.SECONDS);
+            var first = replies.get(0).get();
+            var second = replies.get(1).get();
+            assertThat(first.status).isEqualTo(200);
+            assertThat(second.status).isEqualTo(200);
+            appeal = first.data.path("id").asLong();
+            assertThat(second.data.path("id").asLong()).isEqualTo(appeal);
+        }
+        assertThat(call("POST", "/me/appeals", Map.of("certificationRevision", revision, "requestId", key(),
+                "reason", appealReason), session).code).isEqualTo("CERTIFICATION_APPEAL_EXISTS");
+        assertThat(call("GET", "/me/certification", null, session).data.path("appealId").asLong()).isEqualTo(appeal);
+        assertThat(call("GET", "/me/certification", null, session).data.path("canAppeal").asBoolean()).isFalse();
+        String own = "/me/appeals/" + appeal;
+        var details = call("GET", own, null, session).data;
+        assertThat(details.path("subject").asString()).isEqualTo("CAMPUS_CERTIFICATION");
+        assertThat(details.path("reason").asString()).isEqualTo(appealReason);
+        assertThat(details.path("certificationRevocationReason").asString()).isEqualTo(revocationReason);
+        assertThat(details.has("decidedBy")).isFalse();
+        assertThat(call("GET", "/admin/appeals", null, session).status).isEqualTo(401);
+
+        String otherEmail = "g04" + key().replace("-", "") + "@stu.hzcu.edu.cn";
+        var code = auth.requestCode(otherEmail, AuthModels.Purpose.REGISTER);
+        long other = auth.register(otherEmail, password, code.challengeId(), MAILER.code(otherEmail, "REGISTER")).userId();
+        try {
+            String otherSession = auth.login(otherEmail, password).accessToken();
+            assertThat(call("GET", own, null, otherSession).status).isEqualTo(404);
+            assertThat(call("GET", "/me/appeals", null, otherSession).data.path("total").asLong()).isZero();
+            assertThat(call("POST", "/me/appeals", command, otherSession).code).isEqualTo("CERTIFICATION_NOT_REVOKED");
+        } finally {
+            db.update("DELETE FROM auth_session WHERE user_id=?", other);
+            db.update("DELETE FROM campus_certification WHERE user_id=?", other);
+            db.update("DELETE FROM email_challenge WHERE email=?", otherEmail);
+            db.update("DELETE FROM auth_email_gate WHERE email=?", otherEmail);
+            db.update("DELETE FROM platform_user WHERE id=?", other);
+        }
+
+        String reply = "复核完成，请通过原校园邮箱确认身份";
+        String adminAction = "/admin/appeals/" + appeal + "/decisions";
+        var decision = Map.of("expectedRevision", 1, "requestId", key(), "outcome", "ACCEPTED", "reply", reply);
+        assertThat(call("POST", adminAction, decision, session).status).isEqualTo(401);
+        String trigger = "g04_appeal_" + key().replace("-", "");
+        db.execute("CREATE TRIGGER " + trigger + " BEFORE INSERT ON personal_notification FOR EACH ROW "
+                + "BEGIN IF NEW.kind='APPEAL_DECIDED' AND NEW.source_id=" + appeal
+                + " THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='controlled'; END IF; END");
+        try {
+            assertThat(call("POST", adminAction, decision, token).status).isEqualTo(503);
+            assertThat(call("GET", own, null, session).data.path("state").asString()).isEqualTo("OPEN");
+            assertThat(db.queryForObject("SELECT COUNT(*) FROM community_appeal_receipt WHERE appeal_id=?",
+                    Long.class, appeal)).isZero();
+        } finally {
+            db.execute("DROP TRIGGER " + trigger);
+        }
+        assertThat(call("POST", adminAction, decision, token).data.path("state").asString()).isEqualTo("ACCEPTED");
+        assertThat(call("POST", adminAction, decision, token).status).isEqualTo(200);
+        assertThat(call("GET", own, null, session).data.path("reply").asString()).isEqualTo(reply);
+        List<JsonNode> queue = new ArrayList<>();
+        call("GET", "/admin/appeals?size=100", null, token).data.path("items").forEach(queue::add);
+        assertThat(queue).filteredOn(item -> item.path("id").asLong() == appeal).singleElement()
+                .satisfies(item -> {
+                    assertThat(item.path("decidedBy").asLong()).isEqualTo(admin);
+                    assertThat(item.path("userId").asLong()).isEqualTo(user);
+                    assertThat(item.path("certificationRevision").asLong()).isEqualTo(revision);
+                });
+        List<JsonNode> inbox = new ArrayList<>();
+        call("GET", "/me/notifications?size=100", null, session).data.path("items").forEach(inbox::add);
+        assertThat(inbox).filteredOn(item -> "APPEAL_DECIDED".equals(item.path("kind").asString())
+                && item.path("target").path("id").asLong() == appeal).singleElement()
+                .satisfies(item -> assertThat(item.path("outcome").asString()).isEqualTo("ACCEPTED"));
+        assertThat(call("GET", "/me/certification", null, session).data.path("state").asString()).isEqualTo("REVOKED");
+        assertThat(call("GET", "/me/articles", null, session).status).isEqualTo(403);
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=? AND enabled=TRUE",
+                Long.class, user)).isEqualTo(1);
+
+        CLOCK.advance(java.time.Duration.ofMinutes(2));
+        var issue = call("POST", "/me/certification/reverification-codes", null, session);
+        assertThat(issue.status).isEqualTo(202);
+        assertThat(call("POST", "/me/certification/reverification", Map.of(
+                "challengeId", issue.data.path("challengeId").asString(), "code", MAILER.code(email, "CAMPUS_REVERIFY")),
+                session).status).isEqualTo(200);
+        assertThat(call("GET", own, null, session).status).isEqualTo(401);
+        var fresh = auth.login(email, password).accessToken();
+        assertThat(call("GET", own, null, fresh).data.path("state").asString()).isEqualTo("ACCEPTED");
+    }
+
     @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
 }
