@@ -125,10 +125,10 @@ public class ContributionGovernanceService {
             db.update("UPDATE coin_event SET effective=FALSE WHERE sequence_id=?", contribution.sequenceId());
             db.update("""
                     INSERT INTO contribution_invalidation
-                      (coin_sequence_id,case_id,admin_id,request_id,content_digest,reason,occurred_at)
-                    VALUES (?,?,?,?,?,?,?)
+                      (coin_sequence_id,case_id,admin_id,request_id,content_digest,reason,occurred_at,case_revision)
+                    VALUES (?,?,?,?,?,?,?,?)
                     """, contribution.sequenceId(), caseId, admin, requestId, digest, reason,
-                    Timestamp.from(clock.instant()));
+                    Timestamp.from(clock.instant()), report.revision());
             notifications.record(contribution.authorId(), NotificationService.Kind.CONTRIBUTION_INVALIDATED,
                     contribution.sequenceId(), 1, NotificationService.Outcome.INVALIDATED);
             audit.changed(RequestTrace.Domain.COMMUNITY_ADMIN, admin, BusinessAudit.Action.CONTRIBUTION_INVALIDATE,

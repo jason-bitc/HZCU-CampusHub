@@ -103,9 +103,51 @@ class GovernanceMySqlIT {
     @Test @Order(7) void confirmedGovernanceCannotCloseAReportWithoutAnActualLinkedAction()throws Exception {
         CLOCK.advance(java.time.Duration.ofSeconds(1));var report=call("POST","/me/cases",Map.of("requestId",key(),"kind","REPORT","category","OTHER","targetType","ARTICLE","targetId",article,"description","controlled report","imageIds",List.of()),userToken);assertThat(report.status).isEqualTo(200);long id=report.data.path("caseId").asLong();
         assertThat(call("POST","/admin/cases/"+id+"/claim",Map.of("expectedRevision",1,"requestId",key()),token).status).isEqualTo(200);var decision=new LinkedHashMap<String,Object>(Map.of("outcome","GOVERNANCE_COMPLETED","expectedRevision",2,"requestId",key(),"reply","content processed","internalNote",""));
-        assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).code).isEqualTo("GOVERNANCE_NOT_RECORDED");assertThat(call("POST","/admin/articles/"+article+"/moderation",command("HIDE",6,key()),token).status).isEqualTo(200);
+        assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).code).isEqualTo("GOVERNANCE_NOT_RECORDED");
+        String moderationRoute = "/admin/articles/"+article+"/moderation";
+        var linked = new LinkedHashMap<>(command("HIDE",6,key()));
+        linked.put("caseId", id);
+        assertThat(call("POST",moderationRoute,linked,token).status).isEqualTo(400);
+        linked.put("expectedCaseRevision",1);
+        assertThat(call("POST",moderationRoute,linked,token).code).isEqualTo("REVISION_CONFLICT");
+        linked.put("expectedCaseRevision",2);
+        assertThat(call("POST","/admin/comments/"+comment+"/moderation",linked,token).status).isEqualTo(404);
+        var sameTarget = call("POST", "/me/cases", Map.of("requestId",key(),"kind","REPORT","category","OTHER",
+                "targetType","ARTICLE","targetId",article,"description","another report","imageIds",List.of()), userToken);
+        assertThat(sameTarget.status).isEqualTo(200);
+        long other = sameTarget.data.path("caseId").asLong();
+        assertThat(call("POST","/admin/cases/"+other+"/claim",Map.of("expectedRevision",1,"requestId",key()),token).status)
+                .isEqualTo(200);
+        var moderation = call("POST",moderationRoute,linked,token);
+        assertThat(moderation.status).isEqualTo(200);
+        assertThat(moderation.data.path("caseId").asLong()).isEqualTo(id);
+        var otherDecision = new LinkedHashMap<>(decision);
+        otherDecision.put("requestId",key());
+        assertThat(call("POST","/admin/cases/"+other+"/decisions",otherDecision,token).code)
+                .isEqualTo("GOVERNANCE_NOT_RECORDED");
         assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).data.path("state").asString()).isEqualTo("CLOSED");
         assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).status).isEqualTo(200);
+        assertThat(call("POST",moderationRoute,linked,token).data).isEqualTo(moderation.data);
+        String audit = "/admin/cases/"+id+"/audit";
+        assertThat(call("GET",audit,null,userToken).status).isEqualTo(401);
+        assertThat(call("GET","/me/cases/"+id+"/audit",null,userToken).status).isEqualTo(404);
+        assertThat(call("GET",audit+"?size=2&size=3",null,token).status).isEqualTo(400);
+        var firstPage = call("GET",audit+"?size=2",null,token).data;
+        assertThat(firstPage.path("total").asLong()).isEqualTo(4);
+        assertThat(firstPage.path("state").asString()).isEqualTo("CLOSED");
+        assertThat(firstPage.path("items").get(0).path("beforeState").isNull()).isTrue();
+        assertThat(firstPage.path("items").get(1).path("beforeState").asString()).isEqualTo("OPEN");
+        var secondPage = call("GET",audit+"?size=2&page=2",null,token).data.path("items");
+        var event = secondPage.get(0);
+        assertThat(event.path("source").asString()).isEqualTo("CONTENT");
+        assertThat(event.path("targetId").asLong()).isEqualTo(article);
+        assertThat(event.path("beforeState").asString()).isEqualTo("PUBLISHED");
+        assertThat(event.path("afterState").asString()).isEqualTo("ADMIN_HIDDEN");
+        assertThat(event.path("caseRevision").asLong()).isEqualTo(2);
+        assertThat(secondPage.get(1).path("outcome").asString()).isEqualTo("GOVERNANCE_COMPLETED");
+        assertThat(call("GET","/admin/cases/"+other+"/audit",null,token).data.path("total").asLong()).isEqualTo(2);
+        var requesterView = call("GET","/me/cases/"+id,null,userToken).data;
+        assertThat(requesterView.toString()).contains("content processed").doesNotContain("actorId","internalNote","ADMIN_HIDDEN");
         var inbox = call("GET", "/me/notifications?size=100", null, userToken);
         assertThat(inbox.status).isEqualTo(200);
         List<JsonNode> items = new ArrayList<>();
@@ -407,5 +449,5 @@ class GovernanceMySqlIT {
                 "expectedCanonicalRevision", targetRevision, "requestId", key, "reason", "合并同义专业标签");
     }
 
-    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM author_profile WHERE user_id=?",user);db.update("DELETE FROM article_version_category WHERE version_id=?",version);for(long id:MERGE_CATEGORIES)db.update("UPDATE category SET canonical_id=NULL WHERE id=?",id);for(long id:MERGE_CATEGORIES)db.update("DELETE FROM category WHERE id=?",id);db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
+    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM author_profile WHERE user_id=?",user);db.update("DELETE FROM article_version_category WHERE version_id=?",version);for(long id:MERGE_CATEGORIES)db.update("UPDATE category SET canonical_id=NULL WHERE id=?",id);for(long id:MERGE_CATEGORIES)db.update("DELETE FROM category WHERE id=?",id);db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
 }

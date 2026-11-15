@@ -26,8 +26,21 @@ public class GovernanceController {
     @GetMapping("/articles/{id}") public ApiResponse<?> article(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam MultiValueMap<String,String> p){only(p);return ApiResponse.success(service.article(me.adminId(),ArticleQuery.requiredId(id)));}
     @GetMapping("/articles/{id}/comments") public ApiResponse<?> comments(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam MultiValueMap<String,String> p){only(p,"page","size");return ApiResponse.success(service.comments(me.adminId(),ArticleQuery.requiredId(id),num(p,"page",1,1000000),num(p,"size",20,100)));}
     @PostMapping(value="/{collection:articles|comments}/{id}/moderation",consumes="application/json") public ApiResponse<?> moderate(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String collection,@PathVariable String id,@RequestParam MultiValueMap<String,String> p,@RequestBody String raw){
-        only(p);var n=CoinInput.parse(raw,"action","expectedRevision","requestId","reason");String reason=WritingInput.text(n,"reason",2000);if(reason.isBlank())throw ApiException.invalid();
-        return ApiResponse.success(service.moderate(me.adminId(),collection.equals("articles")?"ARTICLE":"COMMENT",ArticleQuery.requiredId(id),WritingInput.text(n,"action",16),WritingInput.number(n.path("expectedRevision")),CoinInput.key(n),reason));
+        only(p);
+        var n=CoinInput.parseObject(raw);
+        GovernanceService.CaseLink link=null;
+        if(n.has("caseId")||n.has("expectedCaseRevision")){
+            WritingInput.fields(n,"action","expectedRevision","requestId","reason","caseId","expectedCaseRevision");
+            long caseId=WritingInput.number(n.path("caseId")), revision=WritingInput.number(n.path("expectedCaseRevision"));
+            if(caseId==0||revision==0)throw ApiException.invalid();
+            link=new GovernanceService.CaseLink(caseId,revision);
+        } else {
+            WritingInput.fields(n,"action","expectedRevision","requestId","reason");
+        }
+        String reason=WritingInput.text(n,"reason",2000);
+        if(reason.isBlank())throw ApiException.invalid();
+        return ApiResponse.success(service.moderate(me,collection.equals("articles")?"ARTICLE":"COMMENT",
+                ArticleQuery.requiredId(id),WritingInput.text(n,"action",16),WritingInput.revision(n),CoinInput.key(n),reason,link));
     }
     @GetMapping("/categories") public ApiResponse<?> categories(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@RequestParam MultiValueMap<String,String> p){only(p,"page","size","kind");return ApiResponse.success(service.categories(me.adminId(),param(p,"kind"),num(p,"page",1,1000000),num(p,"size",20,100)));}
     @GetMapping("/governance-events") public ApiResponse<?> events(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@RequestParam MultiValueMap<String,String> p){only(p,"page","size");return ApiResponse.success(service.events(me.adminId(),num(p,"page",1,1000000),num(p,"size",20,100)));}
