@@ -10,6 +10,7 @@
 |[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
 |[meetings-research](meetings-research)|10月31日与11月5日会议、91.2／91.3综合评价、11月5日分项初评、反馈记录和网络调研来源|
 |[presentations](presentations)|需求汇报PPT、PDF、讲稿及豆包调整提示词|
+|[演示文章调研计划](meetings-research/演示文章/README.md)|首批完整求职文章选题、豆包提示词、收录格式及双端演示场景|
 
 ## 更新约定
 
