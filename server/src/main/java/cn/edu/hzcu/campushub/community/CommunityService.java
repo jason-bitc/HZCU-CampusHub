@@ -39,6 +39,16 @@ public class CommunityService {
     public WritingService.BinaryImage image(long user,String id){return read.execute(tx->{var image=db.image(WritingInput.requestId(id)).filter(i->i.user()==user).orElseThrow(ApiException::notFound);return new WritingService.BinaryImage(files.read(image.id(),image.size(),image.digest()),image.mime());});}
     public Page page(long actor,boolean admin,CommunityPage page){return read.execute(tx->{RequestTrace.stage(RequestTrace.Stage.READ);return db.page(actor,admin,page);});}
     public Map<String,Object> detail(long actor,long id,boolean admin){return read.execute(tx->{Case c=db.row(id,false);if(!admin&&c.user()!=actor)throw ApiException.notFound();RequestTrace.stage(RequestTrace.Stage.READ);return db.detail(c,admin);});}
+    public CaseAudit audit(long admin, long id, int page, int size) {
+        return read.execute(tx -> {
+            admins.active(admin, false);
+            Case result = db.row(id, false);
+            RequestTrace.stage(RequestTrace.Stage.READ);
+            var timeline = db.audit(result, page, size);
+            LOG.info("case access actorId={} caseId={} objectType={}", admin, id, "AUDIT");
+            return timeline;
+        });
+    }
     public Map<String,Object> context(long admin,long id){return read.execute(tx->{Case c=db.row(id,false);RequestTrace.stage(RequestTrace.Stage.READ);var result=db.context(c);LOG.info("case access actorId={} caseId={} objectType={}",admin,id,"CONTEXT");return result;});}
     public WritingService.BinaryImage adminImage(long admin,long id,String imageId){return read.execute(tx->{db.row(id,false);String image=WritingInput.requestId(imageId);var evidence=db.image(image).filter(i->Objects.equals(i.caseId(),id));byte[] bytes;String mime;
         if(evidence.isPresent()){var i=evidence.get();bytes=files.read(i.id(),i.size(),i.digest());mime=i.mime();}else{var metadata=db.contextMedia(id,image);bytes=files.read(image,((Number)metadata.get("size")).longValue(),(String)metadata.get("digest"));mime=(String)metadata.get("mime");}

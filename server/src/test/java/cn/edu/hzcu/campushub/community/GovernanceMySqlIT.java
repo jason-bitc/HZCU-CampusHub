@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 class GovernanceMySqlIT {
     static ConfigurableApplicationContext context;static JdbcTemplate db;static String base,token,userToken,login,password,email;
     static long admin,user,article,version,comment;static Long category;
+    static final List<Long> MERGE_CATEGORIES = new ArrayList<>();
     static final JsonMapper JSON=JsonMapper.builder().build();static final HttpClient HTTP=HttpClient.newHttpClient();
     static final AuthTestSupport.MutableClock CLOCK=new AuthTestSupport.MutableClock();
     static final AuthTestSupport.ControlledMailer MAILER = new AuthTestSupport.ControlledMailer();
@@ -102,9 +103,51 @@ class GovernanceMySqlIT {
     @Test @Order(7) void confirmedGovernanceCannotCloseAReportWithoutAnActualLinkedAction()throws Exception {
         CLOCK.advance(java.time.Duration.ofSeconds(1));var report=call("POST","/me/cases",Map.of("requestId",key(),"kind","REPORT","category","OTHER","targetType","ARTICLE","targetId",article,"description","controlled report","imageIds",List.of()),userToken);assertThat(report.status).isEqualTo(200);long id=report.data.path("caseId").asLong();
         assertThat(call("POST","/admin/cases/"+id+"/claim",Map.of("expectedRevision",1,"requestId",key()),token).status).isEqualTo(200);var decision=new LinkedHashMap<String,Object>(Map.of("outcome","GOVERNANCE_COMPLETED","expectedRevision",2,"requestId",key(),"reply","content processed","internalNote",""));
-        assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).code).isEqualTo("GOVERNANCE_NOT_RECORDED");assertThat(call("POST","/admin/articles/"+article+"/moderation",command("HIDE",6,key()),token).status).isEqualTo(200);
+        assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).code).isEqualTo("GOVERNANCE_NOT_RECORDED");
+        String moderationRoute = "/admin/articles/"+article+"/moderation";
+        var linked = new LinkedHashMap<>(command("HIDE",6,key()));
+        linked.put("caseId", id);
+        assertThat(call("POST",moderationRoute,linked,token).status).isEqualTo(400);
+        linked.put("expectedCaseRevision",1);
+        assertThat(call("POST",moderationRoute,linked,token).code).isEqualTo("REVISION_CONFLICT");
+        linked.put("expectedCaseRevision",2);
+        assertThat(call("POST","/admin/comments/"+comment+"/moderation",linked,token).status).isEqualTo(404);
+        var sameTarget = call("POST", "/me/cases", Map.of("requestId",key(),"kind","REPORT","category","OTHER",
+                "targetType","ARTICLE","targetId",article,"description","another report","imageIds",List.of()), userToken);
+        assertThat(sameTarget.status).isEqualTo(200);
+        long other = sameTarget.data.path("caseId").asLong();
+        assertThat(call("POST","/admin/cases/"+other+"/claim",Map.of("expectedRevision",1,"requestId",key()),token).status)
+                .isEqualTo(200);
+        var moderation = call("POST",moderationRoute,linked,token);
+        assertThat(moderation.status).isEqualTo(200);
+        assertThat(moderation.data.path("caseId").asLong()).isEqualTo(id);
+        var otherDecision = new LinkedHashMap<>(decision);
+        otherDecision.put("requestId",key());
+        assertThat(call("POST","/admin/cases/"+other+"/decisions",otherDecision,token).code)
+                .isEqualTo("GOVERNANCE_NOT_RECORDED");
         assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).data.path("state").asString()).isEqualTo("CLOSED");
         assertThat(call("POST","/admin/cases/"+id+"/decisions",decision,token).status).isEqualTo(200);
+        assertThat(call("POST",moderationRoute,linked,token).data).isEqualTo(moderation.data);
+        String audit = "/admin/cases/"+id+"/audit";
+        assertThat(call("GET",audit,null,userToken).status).isEqualTo(401);
+        assertThat(call("GET","/me/cases/"+id+"/audit",null,userToken).status).isEqualTo(404);
+        assertThat(call("GET",audit+"?size=2&size=3",null,token).status).isEqualTo(400);
+        var firstPage = call("GET",audit+"?size=2",null,token).data;
+        assertThat(firstPage.path("total").asLong()).isEqualTo(4);
+        assertThat(firstPage.path("state").asString()).isEqualTo("CLOSED");
+        assertThat(firstPage.path("items").get(0).path("beforeState").isNull()).isTrue();
+        assertThat(firstPage.path("items").get(1).path("beforeState").asString()).isEqualTo("OPEN");
+        var secondPage = call("GET",audit+"?size=2&page=2",null,token).data.path("items");
+        var event = secondPage.get(0);
+        assertThat(event.path("source").asString()).isEqualTo("CONTENT");
+        assertThat(event.path("targetId").asLong()).isEqualTo(article);
+        assertThat(event.path("beforeState").asString()).isEqualTo("PUBLISHED");
+        assertThat(event.path("afterState").asString()).isEqualTo("ADMIN_HIDDEN");
+        assertThat(event.path("caseRevision").asLong()).isEqualTo(2);
+        assertThat(secondPage.get(1).path("outcome").asString()).isEqualTo("GOVERNANCE_COMPLETED");
+        assertThat(call("GET","/admin/cases/"+other+"/audit",null,token).data.path("total").asLong()).isEqualTo(2);
+        var requesterView = call("GET","/me/cases/"+id,null,userToken).data;
+        assertThat(requesterView.toString()).contains("content processed").doesNotContain("actorId","internalNote","ADMIN_HIDDEN");
         var inbox = call("GET", "/me/notifications?size=100", null, userToken);
         assertThat(inbox.status).isEqualTo(200);
         List<JsonNode> items = new ArrayList<>();
@@ -329,5 +372,82 @@ class GovernanceMySqlIT {
         assertThat(call("GET", own, null, fresh).data.path("state").asString()).isEqualTo("ACCEPTED");
     }
 
-    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
+    @Test @Order(10) void mergingCategoriesKeepsHistoricalLinksAndFiltersAliasesThroughRepeatedMerges() throws Exception {
+        long old = createMajor("曾用专业"), intermediate = createMajor("过渡专业"), canonical = createMajor("现用专业");
+        String session = context.getBean(AuthService.class).login(email, password).accessToken();
+        assertThat(call("PUT", "/me/profile", Map.of("expectedRevision", 0, "nickname", "测试用户",
+                "majorId", old, "currentStage", "ENROLLED", "bio", ""), session).status).isEqualTo(200);
+        long current = db.queryForObject("SELECT governance_revision FROM article WHERE id=?", Long.class, article);
+        assertThat(call("POST", "/admin/articles/" + article + "/moderation",
+                command("RESTORE", (int) current, key()), token).status).isEqualTo(200);
+        db.update("INSERT INTO article_version_category(version_id,category_id) VALUES (?,?),(?,?)",
+                version, old, version, intermediate);
+        assertThat(call("GET", "/articles?majorId=" + canonical, null, null).data.path("total").asLong()).isZero();
+
+        String route = "/admin/categories/" + old + "/merge";
+        String requestId = key();
+        var first = mergeCommand(intermediate, 1, 1, requestId);
+        assertThat(call("POST", route, first, session).status).isEqualTo(401);
+        assertThat(call("POST", route, mergeCommand(old, 1, 1, key()), token).status).isEqualTo(400);
+        assertThat(call("POST", route, mergeCommand(1, 1, 0, key()), token).status).isEqualTo(400);
+        assertThat(call("POST", route, mergeCommand(intermediate, 1, 0, key()), token).code)
+                .isEqualTo("REVISION_CONFLICT");
+        var receipt = call("POST", route, first, token);
+        assertThat(receipt.status).isEqualTo(200);
+        assertThat(receipt.data.path("canonicalId").asLong()).isEqualTo(intermediate);
+        assertThat(call("POST", route, first, token).data).isEqualTo(receipt.data);
+        assertThat(call("POST", route, mergeCommand(canonical, 1, 1, requestId), token).code)
+                .isEqualTo("REQUEST_KEY_REUSED");
+        assertThat(call("POST", "/admin/categories/" + canonical + "/merge", mergeCommand(old, 1, 2, key()), token).code)
+                .isEqualTo("CATEGORY_TARGET_UNAVAILABLE");
+
+        String nextRoute = "/admin/categories/" + intermediate + "/merge";
+        var next = mergeCommand(canonical, 1, 1, key());
+        String trigger = "g04_merge_" + key().replace("-", "");
+        db.execute("CREATE TRIGGER " + trigger + " BEFORE INSERT ON governance_event FOR EACH ROW "
+                + "BEGIN IF NEW.action='MERGE' AND NEW.target_id=" + intermediate
+                + " THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='controlled'; END IF; END");
+        try {
+            assertThat(call("POST", nextRoute, next, token).status).isEqualTo(503);
+            assertThat(db.queryForObject("SELECT canonical_id FROM category WHERE id=?", Long.class, old))
+                    .isEqualTo(intermediate);
+            assertThat(db.queryForObject("SELECT enabled FROM category WHERE id=?", Boolean.class, intermediate)).isTrue();
+        } finally {
+            db.execute("DROP TRIGGER " + trigger);
+        }
+        assertThat(call("POST", nextRoute, next, token).status).isEqualTo(200);
+        assertThat(call("POST", route, first, token).data).isEqualTo(receipt.data);
+        for (long id : List.of(old, intermediate, canonical)) {
+            var page = call("GET", "/articles?majorId=" + id, null, null).data;
+            assertThat(page.path("total").asLong()).isEqualTo(1);
+            assertThat(page.path("items").get(0).path("id").asLong()).isEqualTo(article);
+        }
+        assertThat(call("GET", "/articles?sameMajor=true", null, session).data.path("items").get(0)
+                .path("id").asLong()).isEqualTo(article);
+        assertThat(call("GET", "/articles?jobId=" + old, null, null).data.path("total").asLong()).isZero();
+        var catalog = call("GET", "/catalog", null, null).data.path("majors").toString();
+        assertThat(catalog).contains("现用专业").doesNotContain("曾用专业", "过渡专业");
+        assertThat(db.queryForList("SELECT category_id FROM article_version_category WHERE version_id=? ORDER BY category_id",
+                Long.class, version)).containsExactly(old, intermediate);
+        assertThat(call("GET", "/articles/" + article, null, null).data.path("categories").toString())
+                .contains("曾用专业", "过渡专业");
+        assertThat(call("GET", "/admin/governance-events?size=100", null, token).data.path("items").toString())
+                .contains("\"action\":\"MERGE\"", "\"canonicalId\":" + canonical);
+    }
+
+    private static long createMajor(String name) throws Exception {
+        var response = call("POST", "/admin/categories", Map.of("kind", "MAJOR", "name", name, "enabled", true,
+                "displayOrder", 1, "expectedRevision", 0, "requestId", key(), "reason", "分类归并测试"), token);
+        assertThat(response.status).isEqualTo(200);
+        long id = response.data.path("targetId").asLong();
+        MERGE_CATEGORIES.add(id);
+        return id;
+    }
+
+    private static Map<String, Object> mergeCommand(long canonical, long sourceRevision, long targetRevision, String key) {
+        return Map.of("canonicalId", canonical, "expectedRevision", sourceRevision,
+                "expectedCanonicalRevision", targetRevision, "requestId", key, "reason", "合并同义专业标签");
+    }
+
+    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM author_profile WHERE user_id=?",user);db.update("DELETE FROM article_version_category WHERE version_id=?",version);for(long id:MERGE_CATEGORIES)db.update("UPDATE category SET canonical_id=NULL WHERE id=?",id);for(long id:MERGE_CATEGORIES)db.update("DELETE FROM category WHERE id=?",id);db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
 }
