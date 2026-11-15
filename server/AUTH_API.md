@@ -46,7 +46,7 @@
 
 | 请求 | 返回 |
 | --- | --- |
-| GET /api/v1/me/certification | `state`、`verifiedAt`、`canReverify`、`revocationReason`、`revokedAt`，使用有效本人会话 |
+| GET /api/v1/me/certification | `state`、`verifiedAt`、`canReverify`、`revocationReason`、`revokedAt`、`revision`、`canAppeal`、`appealId`，使用有效本人会话 |
 | POST /api/v1/me/certification/reverification-codes | 无请求体，向账号的原校园邮箱发送验证码，202 返回 `challengeId`、`expiresAt`、`resendAt`、`notice` |
 | POST /api/v1/me/certification/reverification | JSON 仅含 `challengeId` 和 `code`，200 返回 `reverified:true`、`signInRequired:true` |
 
@@ -54,7 +54,7 @@
 
 认证恢复、时间和版本更新、验证码消费、撤销旧会话、本人通知及变更审计在同一事务完成。客户端收到成功结果后清除旧令牌，请用户重新登录。请求结果未知时，也可重新登录查询认证状态。原账号内容、账号限制以及发布、评论限制继续按现有规则处理。
 
-社区管理员可通过[管理接口](ADMIN_API.md#校园认证撤销)撤销认证。本人查询返回当前撤销的原因和时间，已恢复或没有历史撤销依据时，这两个字段为 `null`。`verifiedAt` 一直表示最近一次认证通过时间。现有部署须依次应用 V14、V15 数据库迁移。
+社区管理员可通过[管理接口](ADMIN_API.md#校园认证撤销)撤销认证。本人查询返回当前撤销的原因和时间，已恢复或没有历史撤销依据时，这两个字段为 `null`。`verifiedAt` 一直表示最近一次认证通过时间。认证撤销且当前修订还无申诉时，`canAppeal` 为 `true`。当前修订已有申诉时返回 `appealId`，可打开本人详情。现有部署须依次应用 V14 至 V16 数据库迁移。[申诉接口](ADMIN_API.md#校园认证申诉)
 
 ## POST /auth/password-reset-codes
 

@@ -94,6 +94,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.equals("/api/v1/admin/me"))return "ADMIN_ME";
         if(path.equals("/api/v1/admin/cases"))return "ADMIN_CASE_LIST";
         if(path.matches("/api/v1/admin/cases/[^/]+/context"))return "ADMIN_CASE_CONTEXT";
+        if(path.matches("/api/v1/admin/cases/[^/]+/audit"))return "ADMIN_CASE_AUDIT";
         if(path.matches("/api/v1/admin/cases/[^/]+/media/[^/]+"))return "ADMIN_CASE_MEDIA";
         if(path.matches("/api/v1/admin/cases/[^/]+/claim"))return "ADMIN_CASE_CLAIM";
         if(path.matches("/api/v1/admin/cases/[^/]+/release"))return "ADMIN_CASE_RELEASE";
@@ -107,7 +108,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.startsWith("/api/v1/admin/users"))return "ADMIN_RESTRICTION";
         if(path.startsWith("/api/v1/admin/appeals"))return "ADMIN_APPEAL";
         if(path.equals("/api/v1/me/restrictions"))return "RESTRICTION_READ";
-        if(path.equals("/api/v1/me/appeals"))return "APPEAL";
+        if(path.equals("/api/v1/me/appeals")||path.matches("/api/v1/me/appeals/[^/]+"))return "APPEAL";
         if(path.matches("/api/v1/admin/(articles|comments)/[^/]+/moderation"))return "ADMIN_MODERATION";
         if(path.startsWith("/api/v1/admin/articles"))return "ADMIN_PATROL";
         if(path.startsWith("/api/v1/admin/categories"))return "ADMIN_CATEGORY";

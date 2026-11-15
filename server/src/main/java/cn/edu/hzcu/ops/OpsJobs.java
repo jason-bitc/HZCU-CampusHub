@@ -32,17 +32,60 @@ final class OpsJobs implements AutoCloseable {
         if(!request.matches("[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}"))throw new OpsApplication.Failure(400,"INVALID_PARAMETER");
         String digest=digest(action,target,reference);var state=store.read();
         for(var job:state.path("jobs"))if(job.path("requestId").asString().equals(request)){
-            if(!job.path("digest").asString().equals(digest))throw new OpsApplication.Failure(409,"REQUEST_KEY_REUSED");return publicJob(job);
+            if(job.has("scheduledFor")||!job.path("digest").asString().equals(digest))throw new OpsApplication.Failure(409,"REQUEST_KEY_REUSED");return publicJob(job);
         }
-        if(unsafe||state.path("recoveryRequired").asBoolean())throw new OpsApplication.Failure(409,"OPS_RECOVERY_REQUIRED");
-        for(var job:state.path("jobs"))if(Set.of("QUEUED","RUNNING").contains(job.path("state").asString()))throw new OpsApplication.Failure(409,"OPS_TARGET_BUSY");
+        if(recoveryRequired(state))throw new OpsApplication.Failure(409,"OPS_RECOVERY_REQUIRED");
+        if(busy(state))throw new OpsApplication.Failure(409,"OPS_TARGET_BUSY");
         var prepared=confirmations.get(confirmation);
         if(prepared==null||!Instant.now().isBefore(prepared.expires)||!prepared.digest.equals(digest)||!prepared.session.equals(OpsAuth.digest(token)))throw new OpsApplication.Failure(409,"OPS_CONFIRMATION_INVALID");
-        String id=UUID.randomUUID().toString();var job=OpsStore.JSON.createObjectNode();job.put("id",id).put("requestId",request).put("digest",digest).put("action",action).put("target",target).put("referenceId",reference).put("state","QUEUED").put("createdAt",Instant.now().toString()).put("actorDomain","OPS_ADMIN");job.set("events",OpsStore.JSON.createArrayNode());
-        ((ArrayNode)state.get("jobs")).add(job);store.save(state);confirmations.remove(confirmation);
-        worker.submit(()->run(id,action,reference));return publicJob(job);
+        var job=enqueue(action,reference,request,digest,null);
+        confirmations.remove(confirmation);
+        return job;
     }
-    private void update(String id,Consumer<ObjectNode> update)throws IOException {store.change(state->{for(var job:state.path("jobs"))if(job.path("id").asString().equals(id))update.accept((ObjectNode)job);});}
+    synchronized boolean scheduleBackup(LocalDate date) throws IOException {
+        var state=store.read();
+        String previous=state.path("lastScheduledBackupDate").asString("");
+        if (!previous.isEmpty() && !date.isAfter(LocalDate.parse(previous))) return false;
+        if (recoveryRequired(state) || busy(state)) return false;
+        enqueue("BACKUP","",UUID.randomUUID().toString(),digest("BACKUP","business",""),date);
+        return true;
+    }
+
+    private boolean recoveryRequired(JsonNode state) {
+        return unsafe || state.path("recoveryRequired").asBoolean();
+    }
+
+    private static boolean busy(JsonNode state) {
+        for (var job:state.path("jobs")) {
+            if (Set.of("QUEUED","RUNNING").contains(job.path("state").asString())) return true;
+        }
+        return false;
+    }
+
+    private JsonNode enqueue(String action,String reference,String request,String digest,
+            LocalDate scheduledFor) throws IOException {
+        String id=UUID.randomUUID().toString();
+        var job=OpsStore.JSON.createObjectNode();
+        job.put("id",id).put("requestId",request).put("digest",digest).put("action",action)
+                .put("target","business").put("referenceId",reference).put("state","QUEUED")
+                .put("createdAt",Instant.now().toString()).put("actorDomain",scheduledFor==null?"OPS_ADMIN":"OPS_SCHEDULER");
+        if (scheduledFor!=null) job.put("scheduledFor",scheduledFor.toString());
+        job.set("events",OpsStore.JSON.createArrayNode());
+        store.change(state->{
+            ((ArrayNode)state.get("jobs")).add(job);
+            if (scheduledFor!=null) state.put("lastScheduledBackupDate",scheduledFor.toString());
+        });
+        worker.submit(()->run(id,action,reference));
+        return publicJob(job);
+    }
+
+    private synchronized void update(String id,Consumer<ObjectNode> mutation,boolean recoveryRequired)throws IOException {
+        store.change(state->{
+            for(var job:state.path("jobs"))if(job.path("id").asString().equals(id))mutation.accept((ObjectNode)job);
+            if(recoveryRequired)state.put("recoveryRequired",true);
+        });
+    }
+    private void update(String id,Consumer<ObjectNode> mutation)throws IOException {update(id,mutation,false);}
     private void phase(String id,String code){
         if(!code.matches("[A-Z_]{2,48}"))throw new IllegalArgumentException("Unsafe event code");
         try{update(id,job->{var event=OpsStore.JSON.createObjectNode();event.put("phase",code).put("occurredAt",Instant.now().toString());((ArrayNode)job.get("events")).add(event);});}
@@ -55,7 +98,7 @@ final class OpsJobs implements AutoCloseable {
         }catch(Exception e){
             String code=e instanceof OpsApplication.Failure f?f.code:e instanceof IOException?"OPS_IO_FAILED":"OPS_EXECUTION_FAILED";
             boolean recovery=unsafe||(e instanceof OpsApplication.Failure f&&f.code.equals("OPS_MANUAL_RECOVERY_REQUIRED"));
-            try{update(id,n->n.put("state","FAILED").put("errorCode",code).put("finishedAt",Instant.now().toString()));if(recovery)store.change(n->n.put("recoveryRequired",true));}
+            try{update(id,n->n.put("state","FAILED").put("errorCode",code).put("finishedAt",Instant.now().toString()),recovery);}
             catch(IOException failed){unsafe=true;}
         }
     }
