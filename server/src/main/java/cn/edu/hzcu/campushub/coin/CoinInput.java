@@ -10,7 +10,16 @@ public final class CoinInput {
     private CoinInput(){}
     private static final JsonMapper JSON=JsonMapper.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
     public static JsonNode parse(String raw,String... fields){
-        try{var n=JSON.readTree(raw);WritingInput.fields(n,fields);return n;}
+        var n = parseObject(raw);
+        WritingInput.fields(n, fields);
+        return n;
+    }
+    public static JsonNode parseObject(String raw){
+        try{
+            var n = JSON.readTree(raw);
+            if (!n.isObject()) throw ApiException.invalid();
+            return n;
+        }
         catch(RuntimeException failure){throw ApiException.invalid();}
     }
     public static String key(JsonNode n){return WritingInput.requestId(n);}

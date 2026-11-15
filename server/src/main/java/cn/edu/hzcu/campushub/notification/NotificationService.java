@@ -20,6 +20,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class NotificationService {
     public enum Kind {
         CAMPUS_VERIFIED("校园邮箱认证已通过"),
+        CAMPUS_REVOKED("校园认证已撤销，可查看本人处理结果"),
         COMMENT_REPLY("有人回复了你的评论"),
         CASE_DECISION("你提交的案件有处理结果"),
         ARTICLE_MODERATION("你的文章有治理结果"),
@@ -129,8 +130,10 @@ public class NotificationService {
     }
 
     private static Target target(Kind kind, ResultSet r) throws SQLException {
-        if (kind == Kind.CAMPUS_VERIFIED) return new Target("CERTIFICATION", null, null, null);
-        if (!r.getBoolean("certified")) return null;
+        if (kind == Kind.CAMPUS_VERIFIED || kind == Kind.CAMPUS_REVOKED) {
+            return new Target("CERTIFICATION", null, null, null);
+        }
+        if (!r.getBoolean("certified") && kind != Kind.RESTRICTION_CHANGED && kind != Kind.APPEAL_DECIDED) return null;
         return switch (kind) {
             case COMMENT_REPLY, COMMENT_MODERATION -> {
                 Long article = r.getObject("visible_article", Long.class);
@@ -142,7 +145,7 @@ public class NotificationService {
             case CASE_DECISION -> ownedTarget(r, "own_case", "CASE");
             case RESTRICTION_CHANGED -> ownedTarget(r, "own_restriction", "RESTRICTION");
             case APPEAL_DECIDED -> ownedTarget(r, "own_appeal", "APPEAL");
-            case CAMPUS_VERIFIED -> throw new IllegalStateException("Certification target handled above");
+            case CAMPUS_VERIFIED, CAMPUS_REVOKED -> throw new IllegalStateException("Certification target handled above");
         };
     }
 

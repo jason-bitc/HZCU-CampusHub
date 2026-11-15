@@ -53,6 +53,25 @@ public class AuthRepository {
     public void consume(String id,Instant now){jdbc.update("UPDATE email_challenge SET status='CONSUMED',consumed_at=:now WHERE id=:id",p("id",id).addValue("now",time(now)));}
     public void newSession(long user,String digest,Instant now,Instant expiry){jdbc.update("INSERT INTO auth_session(user_id,token_digest,created_at,expires_at) VALUES(:user,:digest,:now,:expiry)",p("user",user).addValue("digest",digest).addValue("now",time(now)).addValue("expiry",time(expiry)));}
     public Optional<Identity> identity(String digest,Instant now){return jdbc.query("SELECT s.id session_id,u.id,u.email,u.password_hash,u.account_state,u.role,c.state cert_state,c.verified_at,c.revision cert_revision FROM auth_session s JOIN platform_user u ON u.id=s.user_id JOIN campus_certification c ON c.user_id=u.id WHERE s.token_digest=:digest AND s.revoked_at IS NULL AND s.expires_at>:now",p("digest",digest).addValue("now",time(now)),(r,n)->new Identity(r.getLong("session_id"),user(r).me())).stream().findFirst();}
+    Optional<CertificationStatus> certification(long user) {
+        return jdbc.query("""
+                SELECT c.state,c.revision,c.verified_at,
+                       u.account_state='ACTIVE' AND u.role='USER' AND c.state='REVOKED' can_reverify,
+                       h.reason,h.occurred_at,a.id appeal_id
+                FROM campus_certification c JOIN platform_user u ON u.id=c.user_id
+                LEFT JOIN campus_certification_revocation h
+                  ON h.user_id=c.user_id AND h.revision=c.revision AND c.state='REVOKED'
+                LEFT JOIN community_appeal a ON a.user_id=c.user_id AND a.certification_revision=c.revision
+                WHERE c.user_id=:user
+                """, p("user", user), (r, n) -> {
+            Timestamp revokedAt = r.getTimestamp("occurred_at");
+            String state = r.getString("state");
+            Long appealId = r.getObject("appeal_id", Long.class);
+            return new CertificationStatus(state, r.getTimestamp("verified_at").toInstant(),
+                    r.getBoolean("can_reverify"), r.getString("reason"), revokedAt == null ? null : revokedAt.toInstant(),
+                    r.getLong("revision"), "REVOKED".equals(state) && appealId == null, appealId);
+        }).stream().findFirst();
+    }
     public void logout(long session,Instant now){jdbc.update("UPDATE auth_session SET revoked_at=:now WHERE id=:id AND revoked_at IS NULL",p("id",session).addValue("now",time(now)));}
     public boolean lockCurrentSession(long user, long session, Instant now) {
         return !jdbc.queryForList("""

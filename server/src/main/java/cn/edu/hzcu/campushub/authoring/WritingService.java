@@ -79,9 +79,9 @@ public class WritingService {
         return RequestTrace.write(write,tx->{Article a=repository.owned(user,id,true);editable(a);revision(a,expected);categories(content);stage(ATTACHMENT);repository.imageReferences(id,references.imageIds());stage(PERSIST);repository.save(id,content,references.imageIds(),clock.instant());return view(repository.owned(user,id,false));});
     }
     public Published publish(long user,long id,long expected,String request){return RequestTrace.write(write,tx->{
-        Article a=repository.owned(user,id,true);editable(a);
+        Article a=repository.owned(user,id,true);editable(a);repository.lockUser(user);
         stage(RECEIPT);Published previous=repository.published(id,request,expected);if(previous!=null){if(!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");audit.unchanged(Action.ARTICLE_PUBLISH,ObjectType.ARTICLE);return previous;}
-        repository.assertAllowed(user,"PUBLISH");revision(a,expected);Content c=repository.content(id);var refs=markdown.inspect(c.body());categories(c);
+        repository.assertUnrestricted(user,"PUBLISH");revision(a,expected);Content c=repository.content(id);var refs=markdown.inspect(c.body());categories(c);
         var images = publicationImages(id, refs);
         var missing = missingFields(c, refs);
         if(!missing.isEmpty())throw new ApiException(HttpStatus.valueOf(422),"PUBLISH_INCOMPLETE","发布前请补充："+String.join("、",missing));
@@ -116,13 +116,14 @@ public class WritingService {
     public StateResult changeState(long user,long id,long expected,String action){return RequestTrace.write(write,tx->{
         Article a=repository.owned(user,id,true);String target=action.equals("unpublish")?"AUTHOR_OFFLINE":action.equals("restore")?"PUBLISHED":"DELETED";
         Action operation=action.equals("unpublish")?Action.ARTICLE_UNPUBLISH:action.equals("restore")?Action.ARTICLE_RESTORE:Action.ARTICLE_DELETE;
+        if(target.equals("PUBLISHED"))repository.lockUser(user);
         if(a.state().equals(target)){audit.unchanged(operation,ObjectType.ARTICLE);return new StateResult(id,target,a.revision());}
         if(!target.equals("DELETED")){
             editable(a);
             if(action.equals("unpublish")&&!a.state().equals("PUBLISHED"))throw conflict("STATE_CONFLICT");
             if(action.equals("restore")&&!a.state().equals("AUTHOR_OFFLINE"))throw conflict("STATE_CONFLICT");
         }
-        if(target.equals("PUBLISHED"))repository.assertAllowed(user,"PUBLISH");revision(a,expected);stage(PERSIST);repository.state(id,target,clock.instant());
+        if(target.equals("PUBLISHED"))repository.assertUnrestricted(user,"PUBLISH");revision(a,expected);stage(PERSIST);repository.state(id,target,clock.instant());
         audit.changed(user,operation,ObjectType.ARTICLE,id,a.revision(),a.revision()+1,State.valueOf(a.state()),State.valueOf(target));return new StateResult(id,target,a.revision()+1);
     });}
     public Image upload(long user,long article,String request,MultipartFile multipart){

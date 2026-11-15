@@ -62,7 +62,7 @@ public class CommentService {
             if(!previous.get().digest().equals(digest))throw WritingService.conflict("REQUEST_KEY_REUSED");
             audit.unchanged(Action.COMMENT_CREATE,ObjectType.COMMENT);return comments.row(previous.get().comment()).receipt();
         }
-        writing.assertAllowed(user,"COMMENT");Long root=null;Row parent=null;
+        writing.assertUnrestricted(user,"COMMENT");Long root=null;Row parent=null;
         if(input.replyToCommentId()!=null){parent=comments.row(input.replyToCommentId());if(parent.article()!=article||!parent.state().equals("VISIBLE"))throw ApiException.notFound();root=parent.rootId();}
         RequestTrace.stage(RequestTrace.Stage.ATTACHMENT);var images=comments.pictures(input.imageIds());if(images.size()!=input.imageIds().size())throw ApiException.notFound();
         for(Picture image:images){
