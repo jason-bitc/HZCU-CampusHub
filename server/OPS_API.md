@@ -60,7 +60,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
 | 备份 | GET /backups | 最近100份清单的ID、时间、complete、模式指纹 |
-| 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响 |
+| 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响；恢复操作另返回预检结果 |
 | 创建任务 | POST /jobs | 原操作三字段、requestId、confirmationId；返回持久任务 |
 | 任务列表 | GET /jobs | 最近100个任务，最新在前 |
 | 任务详情 | GET /jobs/{id} | 状态、事件、结果或错误码、起止时间 |
@@ -86,6 +86,14 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 返回任务不代表执行完成。前端按id轮询，显示QUEUED、RUNNING、SUCCEEDED、FAILED或INTERRUPTED和阶段事件。同一requestId同语义重试返回原任务；改语义409。重复请求回执不要求重新确认；首次提交必须有有效确认。同一目标已有QUEUED/RUNNING时409 OPS_TARGET_BUSY。
 
 登录失败窗口持久保存，15分钟5次失败后429，运维重启不清除窗口。只允许配置的浏览器Origin；未配置来源403。任何未知命令、目标、目录、SQL和额外JSON字段均不接受。
+
+### 恢复预检
+
+选择备份后，先提交 `POST /confirmations`，动作传 `RESTORE`，`referenceId` 传备份 ID。服务端在发放确认前检查数据库和 Flyway 模式、文件集合、SHA-256，以及备份内应用包和版本清单是否配套。预检只读取数据。备份不存在时返回 404 `OPS_BACKUP_NOT_FOUND`，文件或清单损坏时返回 409 `OPS_BACKUP_INVALID`，数据库或模式不匹配时返回 409 `OPS_BACKUP_INCOMPATIBLE`。
+
+预检通过后，确认响应的 `restorePreview` 包含 `backupId/backupCreatedAt/backupReleaseId/affectedComponents/verifiedFileCount/mediaFileCount`。页面展示备份时间、备份版本和覆盖范围后，再由操作者确认提交。覆盖范围一定包含 `DATABASE`、`MEDIA`，带应用包时还包含 `RELEASE`，否则保持现有应用版本。
+
+恢复任务记录确认时的 `backupManifestSha256`。任务在停机前和导入前核对清单摘要及文件。确认后清单有变化时，原任务记录 `OPS_BACKUP_CHANGED`，需要重新预检和确认。文件预检结果和实际恢复任务结果分别查询。
 
 ## 4 实际执行策略
 

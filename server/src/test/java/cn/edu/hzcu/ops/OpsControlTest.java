@@ -20,24 +20,24 @@ class OpsControlTest {
     @TempDir Path root;
     @Test void confirmationsAreSessionBoundMutationsAreExclusiveAndKeysAreDurable()throws Exception {
         var calls=new AtomicInteger();var entered=new CountDownLatch(1);var release=new CountDownLatch(1);String key=UUID.randomUUID().toString(),id;
-        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,p)->{calls.incrementAndGet();entered.countDown();release.await();p.accept("VERIFIED");return Map.of("done",true);})){
-            String confirmation=(String)jobs.prepare("RESTART","business","","ops_test").get("confirmationId");
+        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,h,p)->{calls.incrementAndGet();entered.countDown();release.await();p.accept("VERIFIED");return Map.of("done",true);})){
+            String confirmation=(String)jobs.prepare("RESTART","business","","ops_test",null).get("confirmationId");
             assertThatThrownBy(()->jobs.submit("RESTART","business","",key,confirmation,"wrong")).isInstanceOf(OpsApplication.Failure.class);
             var first=jobs.submit("RESTART","business","",key,confirmation,"ops_test");id=first.path("id").asString();assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();
             assertThat(jobs.submit("RESTART","business","",key,"expired","other").path("id").asString()).isEqualTo(id);
             assertThatThrownBy(()->jobs.submit("BACKUP","business","",key,confirmation,"ops_test")).hasMessage("REQUEST_KEY_REUSED");
-            var second=(String)jobs.prepare("BACKUP","business","","ops_test").get("confirmationId");assertThatThrownBy(()->jobs.submit("BACKUP","business","",UUID.randomUUID().toString(),second,"ops_test")).hasMessage("OPS_TARGET_BUSY");
+            var second=(String)jobs.prepare("BACKUP","business","","ops_test",null).get("confirmationId");assertThatThrownBy(()->jobs.submit("BACKUP","business","",UUID.randomUUID().toString(),second,"ops_test")).hasMessage("OPS_TARGET_BUSY");
             release.countDown();for(int i=0;i<100&&!jobs.get(id).path("state").asString().equals("SUCCEEDED");i++)Thread.sleep(20);
             assertThat(jobs.get(id).path("state").asString()).isEqualTo("SUCCEEDED");assertThat(calls.get()).isEqualTo(1);
         }finally{release.countDown();}
-        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,p)->{throw new AssertionError("must not reexecute");})){
+        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,h,p)->{throw new AssertionError("must not reexecute");})){
             assertThat(jobs.submit("RESTART","business","",key,"none","none").path("id").asString()).isEqualTo(id);
         }
     }
     @Test void interruptedJournalRequiresManualReconciliationAndNeverBecomesSuccess()throws Exception {
         try(var store=new OpsStore(root)){store.change(n->{var j=OpsStore.JSON.createObjectNode();j.put("id","test").put("state","RUNNING");((tools.jackson.databind.node.ArrayNode)n.get("jobs")).add(j);});}
-        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,p)->Map.of())){
-            assertThat(jobs.get("test").path("state").asString()).isEqualTo("INTERRUPTED");String c=(String)jobs.prepare("RESTART","business","","token").get("confirmationId");
+        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,h,p)->Map.of())){
+            assertThat(jobs.get("test").path("state").asString()).isEqualTo("INTERRUPTED");String c=(String)jobs.prepare("RESTART","business","","token",null).get("confirmationId");
             assertThatThrownBy(()->jobs.submit("RESTART","business","",UUID.randomUUID().toString(),c,"token")).hasMessage("OPS_RECOVERY_REQUIRED");
         }
     }
@@ -67,7 +67,7 @@ class OpsControlTest {
         var clock = new MutableClock(); // 2030-01-01 08:00 in Asia/Shanghai
         var ready = new AtomicBoolean(false);
         var calls = new AtomicInteger();
-        OpsJobs.Executor backup = (action, reference, phase) -> {
+        OpsJobs.Executor backup = (action, reference, hash, phase) -> {
             assertThat(action).isEqualTo("BACKUP");
             calls.incrementAndGet();
             return Map.of("backupId", "controlled");
@@ -103,12 +103,12 @@ class OpsControlTest {
         var release = new CountDownLatch(1);
         var date = LocalDate.of(2030, 1, 1);
         try (var store = new OpsStore(root);
-                var jobs = new OpsJobs(store, (action, reference, phase) -> {
+                var jobs = new OpsJobs(store, (action, reference, hash, phase) -> {
                     entered.countDown();
                     release.await();
                     throw new OpsApplication.Failure(409, "OPS_MANUAL_RECOVERY_REQUIRED");
                 })) {
-            String confirmation = (String) jobs.prepare("RESTART","business","","token").get("confirmationId");
+            String confirmation = (String) jobs.prepare("RESTART","business","","token",null).get("confirmationId");
             try {
                 jobs.submit("RESTART","business","",UUID.randomUUID().toString(),confirmation,"token");
                 assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();
@@ -118,7 +118,7 @@ class OpsControlTest {
                 release.countDown();
             }
         }
-        try (var store = new OpsStore(root); var jobs = new OpsJobs(store, (action, reference, phase) -> Map.of())) {
+        try (var store = new OpsStore(root); var jobs = new OpsJobs(store, (action, reference, hash, phase) -> Map.of())) {
             assertThat(jobs.scheduleBackup(date)).isFalse();
             store.change(state -> state.put("recoveryRequired",false));
             assertThat(jobs.scheduleBackup(date)).isTrue();

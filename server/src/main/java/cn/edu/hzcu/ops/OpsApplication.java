@@ -58,7 +58,14 @@ public final class OpsApplication implements AutoCloseable {
         if(path.equals("/api/v1/ops/artifacts")){method(e,"GET");empty(e);return Map.of("items",runner.artifacts());}
         if(path.equals("/api/v1/ops/backups")){method(e,"GET");empty(e);return Map.of("items",runner.backups());}
         if(path.equals("/api/v1/ops/logs")){method(e,"GET");empty(e);return logs();}
-        if(path.equals("/api/v1/ops/confirmations")){method(e,"POST");var n=body(e,"action","target","referenceId");return jobs.prepare(text(n,"action"),text(n,"target"),text(n,"referenceId"),token);}
+        if(path.equals("/api/v1/ops/confirmations")){
+            method(e,"POST");
+            var n=body(e,"action","target","referenceId");
+            String action=text(n,"action"),target=text(n,"target"),reference=text(n,"referenceId");
+            OpsJobs.validate(action,target,reference);
+            var restore=action.equals("RESTORE")?runner.preflightRestore(reference):null;
+            return jobs.prepare(action,target,reference,token,restore);
+        }
         if(path.equals("/api/v1/ops/jobs")){
             if(e.getRequestMethod().equals("GET")){empty(e);return Map.of("items",jobs.list());}
             method(e,"POST");var n=body(e,"action","target","referenceId","requestId","confirmationId");return jobs.submit(text(n,"action"),text(n,"target"),text(n,"referenceId"),text(n,"requestId"),text(n,"confirmationId"),token);
