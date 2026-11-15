@@ -49,11 +49,18 @@ final class OpsRunner implements OpsJobs.Executor {
         String started=process.info().startInstant().orElseThrow().toString();OpsStore.atomic(config.runtimeRoot().resolve("pid.json"),OpsStore.JSON.writeValueAsBytes(Map.of("pid",process.pid(),"started",started)));
         for(int i=0;i<120&&process.isAlive();i++){if(healthy())return;Thread.sleep(500);}if(process.isAlive()){process.destroy();process.waitFor(30,TimeUnit.SECONDS);}throw failure("OPS_HEALTH_CHECK_FAILED");
     }
-    private String schema()throws Exception {
+    private Connection database()throws IOException,SQLException {
         var env=config.environment();String port=env.getOrDefault("CAMPUSHUB_DB_PORT","3306");if(!port.matches("[0-9]{1,5}"))throw failure("OPS_DATABASE_CONFIG_INVALID");
-        try(var connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:"+port+"/"+config.databaseName()+"?connectTimeout=3000&socketTimeout=5000",env.get("CAMPUSHUB_DB_USERNAME"),env.get("CAMPUSHUB_DB_PASSWORD"));var statement=connection.createStatement();var rows=statement.executeQuery("SELECT version,checksum FROM flyway_schema_history WHERE success=1 ORDER BY installed_rank")){
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:"+port+"/"+config.databaseName()+"?connectTimeout=3000&socketTimeout=5000",
+                env.get("CAMPUSHUB_DB_USERNAME"),env.get("CAMPUSHUB_DB_PASSWORD"));
+    }
+    private String schema()throws Exception {
+        try(var connection=database();var statement=connection.createStatement();var rows=statement.executeQuery("SELECT version,checksum FROM flyway_schema_history WHERE success=1 ORDER BY installed_rank")){
             StringBuilder fingerprint=new StringBuilder();while(rows.next())fingerprint.append(rows.getString(1)).append(':').append(rows.getString(2)).append('\n');if(fingerprint.isEmpty())throw failure("OPS_SCHEMA_MISSING");return OpsAuth.digest(fingerprint.toString());
         }
+    }
+    private long verifyMedia(Path mediaRoot)throws IOException,SQLException {
+        try(var connection=database()) { return OpsMediaIntegrity.verify(connection,mediaRoot); }
     }
     private void sql(Path file,boolean dump)throws Exception {
         var env=config.environment();String port=env.getOrDefault("CAMPUSHUB_DB_PORT","3306");if(!port.matches("[0-9]{1,5}"))throw failure("OPS_DATABASE_CONFIG_INVALID");
@@ -74,7 +81,9 @@ final class OpsRunner implements OpsJobs.Executor {
         if(Files.isRegularFile(config.runtimeRoot().resolve("current.jar")))Files.copy(config.runtimeRoot().resolve("current.jar"),root.resolve("application.jar"));
         if(Files.isRegularFile(config.runtimeRoot().resolve("release.json")))Files.copy(config.runtimeRoot().resolve("release.json"),root.resolve("release.json"));
         var hashes=new TreeMap<String,String>();try(var files=Files.walk(root)){for(Path file:files.filter(Files::isRegularFile).toList())hashes.put(root.relativize(file).toString().replace('\\','/'),sha(file));}
-        var manifest=Map.of("id",id,"database",config.databaseName(),"schemaFingerprint",schema,"createdAt",Instant.now().toString(),"files",hashes,"complete",true);
+        long checked=verifyMedia(root.resolve("media"));
+        var manifest=Map.of("id",id,"database",config.databaseName(),"schemaFingerprint",schema,"createdAt",Instant.now().toString(),
+                "files",hashes,"complete",true,"verifiedMediaReferences",checked);
         OpsStore.atomic(root.resolve("manifest.json"),OpsStore.JSON.writeValueAsBytes(manifest));return id;
     }
     RestorePlan preflightRestore(String id) throws Exception {
@@ -139,13 +148,16 @@ final class OpsRunner implements OpsJobs.Executor {
         throw failure("OPS_BACKUP_INVALID");
     }
 
-    private void restore(String id,String manifestHash)throws Exception {
+    private long restore(String id,String manifestHash,Consumer<String> phase)throws Exception {
         validateBackup(id,manifestHash);Path backup=child(config.backupRoot(),id),staged=config.runtimeRoot().resolve("media-"+UUID.randomUUID());copyTree(backup.resolve("media"),staged);
         sql(backup.resolve("database.sql"),false);
+        phase.accept("VERIFYING_MEDIA");
+        long checked=verifyMedia(staged);
         Path held=config.mediaRoot().resolveSibling(config.mediaRoot().getFileName()+"-held-"+UUID.randomUUID());Files.move(config.mediaRoot(),held,StandardCopyOption.ATOMIC_MOVE);
         Files.move(staged,config.mediaRoot(),StandardCopyOption.ATOMIC_MOVE);
         if(Files.exists(backup.resolve("application.jar")))install(backup.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));
         if(Files.exists(backup.resolve("release.json")))install(backup.resolve("release.json"),config.runtimeRoot().resolve("release.json"));
+        return checked;
     }
     private static void install(Path source,Path target)throws IOException {Path tmp=target.resolveSibling(target.getFileName()+".install");Files.copy(source,tmp,StandardCopyOption.REPLACE_EXISTING);Files.move(tmp,target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
     JsonNode artifact(String id)throws Exception {
@@ -190,12 +202,15 @@ final class OpsRunner implements OpsJobs.Executor {
             if(action.equals("RESTART")){phase.accept("STARTING");start();return Map.of("healthy",true);}
             phase.accept("PROTECTING");protection=backup();
             if(action.equals("BACKUP")){if(wasRunning){phase.accept("STARTING");start();}return Map.of("backupId",protection,"healthy",healthy());}
+            var result=new LinkedHashMap<String,Object>();
             if(action.equals("DEPLOY")){
                 phase.accept("INSTALLING");Path root=child(config.artifactRoot(),reference);artifact(reference);install(root.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));install(root.resolve("manifest.json"),config.runtimeRoot().resolve("release.json"));
-            }else{phase.accept("RESTORING");restore(reference,backupManifestSha256);}
-            phase.accept("STARTING");start();phase.accept("VERIFIED");return Map.of("healthy",true,"protectionBackupId",protection,"referenceId",reference);
+            }else{phase.accept("RESTORING");result.put("verifiedMediaReferences",restore(reference,backupManifestSha256,phase));}
+            phase.accept("STARTING");start();phase.accept("VERIFIED");
+            result.put("healthy",true);result.put("protectionBackupId",protection);result.put("referenceId",reference);
+            return result;
         }catch(Exception failed){
-            phase.accept("ROLLING_BACK");try{stop();if(protection!=null){restore(protection,null);if(Files.exists(config.runtimeRoot().resolve("current.jar")))start();}else if(wasRunning)start();phase.accept("ROLLBACK_VERIFIED");}
+            phase.accept("ROLLING_BACK");try{stop();if(protection!=null){restore(protection,null,phase);if(Files.exists(config.runtimeRoot().resolve("current.jar")))start();}else if(wasRunning)start();phase.accept("ROLLBACK_VERIFIED");}
             catch(Exception rollback){phase.accept("MANUAL_RECOVERY_REQUIRED");throw failure("OPS_MANUAL_RECOVERY_REQUIRED");}
             throw failed;
         }
