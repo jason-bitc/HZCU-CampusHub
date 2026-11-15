@@ -15,11 +15,18 @@ import tools.jackson.databind.JsonNode;
 
 /** No shell, arbitrary command, user path, or user SQL is accepted. */
 final class OpsRunner implements OpsJobs.Executor {
+    record RestorePreview(String backupId,String backupCreatedAt,String backupReleaseId,
+                          List<String> affectedComponents,int verifiedFileCount,long mediaFileCount) {}
+    record RestorePlan(String manifestSha256,RestorePreview preview) {}
     final OpsConfig config;
     private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1)).build();
     OpsRunner(OpsConfig config){this.config=config;}
     static OpsApplication.Failure failure(String code){return new OpsApplication.Failure(409,code);}
-    static String sha(Path file)throws IOException {try{var digest=MessageDigest.getInstance("SHA-256");try(var in=Files.newInputStream(file)){byte[] buffer=new byte[65536];int length;while((length=in.read(buffer))>0)digest.update(buffer,0,length);}return HexFormat.of().formatHex(digest.digest());}catch(NoSuchAlgorithmException e){throw new IllegalStateException(e);}}
+    private static MessageDigest sha256() {
+        try { return MessageDigest.getInstance("SHA-256"); }
+        catch (NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
+    }
+    static String sha(Path file)throws IOException {var digest=sha256();try(var in=Files.newInputStream(file)){byte[] buffer=new byte[65536];int length;while((length=in.read(buffer))>0)digest.update(buffer,0,length);}return HexFormat.of().formatHex(digest.digest());}
     private static Path child(Path root,String id)throws IOException {if(!id.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}"))throw failure("INVALID_PARAMETER");Path path=root.resolve(id).normalize();OpsStore.rejectLinks(path);if(!path.getParent().equals(root))throw failure("INVALID_PARAMETER");return path;}
     boolean healthy(){try{var response=http.send(HttpRequest.newBuilder(URI.create(config.healthUrl())).timeout(Duration.ofSeconds(2)).GET().build(),HttpResponse.BodyHandlers.ofString());var n=OpsStore.JSON.readTree(response.body());return response.statusCode()==200&&(n.path("status").asString().equals("UP")||n.path("data").path("status").asString().equals("UP"));}catch(Exception e){return false;}}
     private Optional<ProcessHandle> managed()throws IOException {
@@ -70,16 +77,70 @@ final class OpsRunner implements OpsJobs.Executor {
         var manifest=Map.of("id",id,"database",config.databaseName(),"schemaFingerprint",schema,"createdAt",Instant.now().toString(),"files",hashes,"complete",true);
         OpsStore.atomic(root.resolve("manifest.json"),OpsStore.JSON.writeValueAsBytes(manifest));return id;
     }
-    JsonNode validateBackup(String id)throws Exception {
-        Path root=child(config.backupRoot(),id);var n=OpsStore.JSON.readTree(Files.readString(root.resolve("manifest.json")));
-        if(!n.path("complete").asBoolean()||!n.path("id").asString().equals(id)||!n.path("database").asString().equals(config.databaseName())||!n.path("schemaFingerprint").asString().equals(schema())||!n.path("files").has("database.sql"))throw failure("OPS_BACKUP_INCOMPATIBLE");
-        Set<String> actual=new TreeSet<>();try(var files=Files.walk(root)){for(Path file:files.toList()){OpsStore.rejectLinks(file);if(Files.isRegularFile(file)&&!file.equals(root.resolve("manifest.json")))actual.add(root.relativize(file).toString().replace('\\','/'));}}
-        var expected=new TreeSet<String>();n.path("files").properties().forEach(entry->{expected.add(entry.getKey());});if(!actual.equals(expected))throw failure("OPS_BACKUP_INVALID");
-        for(String name:expected){Path path=root.resolve(name).normalize();if(!path.startsWith(root)||!sha(path).equals(n.path("files").path(name).asString()))throw failure("OPS_BACKUP_INVALID");}
-        if(!Files.isDirectory(root.resolve("media")))throw failure("OPS_BACKUP_INVALID");return n;
+    RestorePlan preflightRestore(String id) throws Exception {
+        return validateBackup(id,null);
     }
-    private void restore(String id)throws Exception {
-        validateBackup(id);Path backup=child(config.backupRoot(),id),staged=config.runtimeRoot().resolve("media-"+UUID.randomUUID());copyTree(backup.resolve("media"),staged);
+
+    private RestorePlan validateBackup(String id,String confirmedHash) throws Exception {
+        Path root=child(config.backupRoot(),id);
+        if (Files.notExists(root)) throw new OpsApplication.Failure(404,"OPS_BACKUP_NOT_FOUND");
+        Path manifest=root.resolve("manifest.json");
+        if (!Files.isRegularFile(manifest,LinkOption.NOFOLLOW_LINKS)) throw failure("OPS_BACKUP_INVALID");
+        byte[] bytes=Files.readAllBytes(manifest);
+        String hash=HexFormat.of().formatHex(sha256().digest(bytes));
+        if (confirmedHash!=null&&!confirmedHash.equals(hash)) throw failure("OPS_BACKUP_CHANGED");
+        var n=backupJson(bytes);
+        var files=n.path("files");
+        if (!n.path("complete").isBoolean()||!n.path("complete").asBoolean()||!n.path("id").asString().equals(id)
+                ||!files.isObject()||!files.has("database.sql")||!Files.isDirectory(root.resolve("media"),LinkOption.NOFOLLOW_LINKS)) {
+            throw failure("OPS_BACKUP_INVALID");
+        }
+        String fingerprint=n.path("schemaFingerprint").asString();
+        if (!n.path("database").asString().equals(config.databaseName())||!fingerprint.equals(schema())) {
+            throw failure("OPS_BACKUP_INCOMPATIBLE");
+        }
+        var actual=new TreeSet<String>();
+        try(var walk=Files.walk(root)){
+            for(Path file:walk.toList()){
+                OpsStore.rejectLinks(file);
+                if(Files.isRegularFile(file)&&!file.equals(manifest))actual.add(root.relativize(file).toString().replace('\\','/'));
+            }
+        }
+        var expected=new TreeSet<String>();files.properties().forEach(entry->expected.add(entry.getKey()));
+        if (!actual.equals(expected)) throw failure("OPS_BACKUP_INVALID");
+        for (String name:expected) {
+            Path path=root.resolve(name).normalize();
+            if (!path.startsWith(root)||!sha(path).equals(files.path(name).asString())) throw failure("OPS_BACKUP_INVALID");
+        }
+        String releaseId=null;
+        if (expected.contains("application.jar")!=expected.contains("release.json")) throw failure("OPS_BACKUP_INVALID");
+        if (expected.contains("release.json")) {
+            var release=backupJson(Files.readAllBytes(root.resolve("release.json")));
+            releaseId=release.path("id").asString();
+            if (!releaseId.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}")
+                    ||!release.path("sha256").asString().equals(files.path("application.jar").asString())
+                    ||!release.path("schemaFingerprint").asString().equals(fingerprint)) throw failure("OPS_BACKUP_INVALID");
+        }
+        String timestamp;
+        try { timestamp=Instant.parse(n.path("createdAt").asString()).toString(); }
+        catch (DateTimeException invalid) { throw failure("OPS_BACKUP_INVALID"); }
+        var components=releaseId==null?List.of("DATABASE","MEDIA"):List.of("DATABASE","MEDIA","RELEASE");
+        return new RestorePlan(hash,new RestorePreview(id,timestamp,releaseId,components,expected.size(),
+                expected.stream().filter(name->name.startsWith("media/")).count()));
+    }
+
+    private static JsonNode backupJson(byte[] data) {
+        try {
+            var parsed=OpsStore.JSON.readTree(data);
+            if (parsed!=null&&parsed.isObject()) return parsed;
+        } catch (RuntimeException invalid) {
+            throw failure("OPS_BACKUP_INVALID");
+        }
+        throw failure("OPS_BACKUP_INVALID");
+    }
+
+    private void restore(String id,String manifestHash)throws Exception {
+        validateBackup(id,manifestHash);Path backup=child(config.backupRoot(),id),staged=config.runtimeRoot().resolve("media-"+UUID.randomUUID());copyTree(backup.resolve("media"),staged);
         sql(backup.resolve("database.sql"),false);
         Path held=config.mediaRoot().resolveSibling(config.mediaRoot().getFileName()+"-held-"+UUID.randomUUID());Files.move(config.mediaRoot(),held,StandardCopyOption.ATOMIC_MOVE);
         Files.move(staged,config.mediaRoot(),StandardCopyOption.ATOMIC_MOVE);
@@ -117,9 +178,13 @@ final class OpsRunner implements OpsJobs.Executor {
         OpsStore.atomic(root.resolve("manifest.json"),OpsStore.JSON.writeValueAsBytes(Map.of("id",id,"sha256",sha(jar),"schemaFingerprint",schema(),"registeredAt",Instant.now().toString())));
         artifact(id);
     }
-    public Map<String,Object> execute(String action,String reference,Consumer<String> phase)throws Exception {
+    public Map<String,Object> execute(String action,String reference,String backupManifestSha256,Consumer<String> phase)throws Exception {
         OpsJobs.validate(action,"business",reference);phase.accept("PREFLIGHT");
-        if(action.equals("DEPLOY"))artifact(reference);if(action.equals("RESTORE"))validateBackup(reference);
+        if(action.equals("DEPLOY"))artifact(reference);
+        if(action.equals("RESTORE")){
+            if(backupManifestSha256==null)throw failure("OPS_CONFIRMATION_INVALID");
+            validateBackup(reference,backupManifestSha256);
+        }
         boolean wasRunning=managed().isPresent();phase.accept("STOPPING");stop();String protection=null;
         try{
             if(action.equals("RESTART")){phase.accept("STARTING");start();return Map.of("healthy",true);}
@@ -127,10 +192,10 @@ final class OpsRunner implements OpsJobs.Executor {
             if(action.equals("BACKUP")){if(wasRunning){phase.accept("STARTING");start();}return Map.of("backupId",protection,"healthy",healthy());}
             if(action.equals("DEPLOY")){
                 phase.accept("INSTALLING");Path root=child(config.artifactRoot(),reference);artifact(reference);install(root.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));install(root.resolve("manifest.json"),config.runtimeRoot().resolve("release.json"));
-            }else{phase.accept("RESTORING");restore(reference);}
+            }else{phase.accept("RESTORING");restore(reference,backupManifestSha256);}
             phase.accept("STARTING");start();phase.accept("VERIFIED");return Map.of("healthy",true,"protectionBackupId",protection,"referenceId",reference);
         }catch(Exception failed){
-            phase.accept("ROLLING_BACK");try{stop();if(protection!=null){restore(protection);if(Files.exists(config.runtimeRoot().resolve("current.jar")))start();}else if(wasRunning)start();phase.accept("ROLLBACK_VERIFIED");}
+            phase.accept("ROLLING_BACK");try{stop();if(protection!=null){restore(protection,null);if(Files.exists(config.runtimeRoot().resolve("current.jar")))start();}else if(wasRunning)start();phase.accept("ROLLBACK_VERIFIED");}
             catch(Exception rollback){phase.accept("MANUAL_RECOVERY_REQUIRED");throw failure("OPS_MANUAL_RECOVERY_REQUIRED");}
             throw failed;
         }

@@ -24,11 +24,18 @@ class OpsExecutionMySqlIT {
     final String mysqlPort = Integer.toString(Integer.parseInt(System.getenv().getOrDefault("CAMPUSHUB_DB_PORT", "3306")));
     Connection connection()throws Exception {return DriverManager.getConnection("jdbc:mysql://127.0.0.1:"+mysqlPort+"/campushub_test?connectTimeout=3000&socketTimeout=5000",username,password);}
     JsonNode request(String method,String path,Object body)throws Exception {
+        return response(method,path,body,200).path("data");
+    }
+    JsonNode response(String method,String path,Object body,int status)throws Exception {
         var q=HttpRequest.newBuilder(URI.create(base+path)).timeout(java.time.Duration.ofSeconds(10));if(token!=null)q.header("Authorization","Bearer "+token);if(body!=null)q.header("Content-Type","application/json");
-        var r=HTTP.send(q.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(OpsStore.JSON.writeValueAsString(body))).build(),HttpResponse.BodyHandlers.ofString());assertThat(r.statusCode()).as(path+" "+r.body()).isEqualTo(200);return OpsStore.JSON.readTree(r.body()).path("data");
+        var r=HTTP.send(q.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(OpsStore.JSON.writeValueAsString(body))).build(),HttpResponse.BodyHandlers.ofString());assertThat(r.statusCode()).as(path+" "+r.body()).isEqualTo(status);return OpsStore.JSON.readTree(r.body());
     }
     JsonNode job(String action,String reference)throws Exception {
-        var semantic=Map.of("action",action,"target","business","referenceId",reference);var confirmation=request("POST","/confirmations",semantic);var input=new LinkedHashMap<String,Object>(semantic);input.put("requestId",UUID.randomUUID().toString());input.put("confirmationId",confirmation.path("confirmationId").asString());String id=request("POST","/jobs",input).path("id").asString();
+        var semantic=Map.of("action",action,"target","business","referenceId",reference);
+        return submitConfirmed(semantic,request("POST","/confirmations",semantic));
+    }
+    JsonNode submitConfirmed(Map<String,String> semantic,JsonNode confirmation)throws Exception {
+        var input=new LinkedHashMap<String,Object>(semantic);input.put("requestId",UUID.randomUUID().toString());input.put("confirmationId",confirmation.path("confirmationId").asString());String id=request("POST","/jobs",input).path("id").asString();
         return awaitJob(id);
     }
     JsonNode awaitJob(String id)throws Exception {
@@ -61,9 +68,37 @@ class OpsExecutionMySqlIT {
             long pid=OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong();var restarted=job("RESTART","");assertThat(restarted.path("state").asString()).as(restarted.toString()).isEqualTo("SUCCEEDED");assertThat(OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong()).isNotEqualTo(pid);
             var backed=job("BACKUP","");assertThat(backed.path("state").asString()).as(backed.toString()).isEqualTo("SUCCEEDED");String backup=backed.path("result").path("backupId").asString();
             try(var c=connection();var q=c.prepareStatement("UPDATE category SET name=? WHERE id=?")){q.setString(1,"ops-after-"+fixture);q.setLong(2,fixture);q.executeUpdate();}Files.writeString(image,"changed-after-backup");
-            var restored=job("RESTORE",backup);assertThat(restored.path("state").asString()).as(restored.toString()).isEqualTo("SUCCEEDED");assertThat(Files.readAllBytes(image)).isEqualTo(original);
+            var restoreRequest=Map.of("action","RESTORE","target","business","referenceId",backup);
+            var confirmation=request("POST","/confirmations",restoreRequest);
+            var preview=confirmation.path("restorePreview");
+            assertThat(preview.path("backupId").asString()).isEqualTo(backup);
+            assertThat(preview.path("backupCreatedAt").asString()).isNotBlank();
+            assertThat(preview.path("backupReleaseId").asString()).isEqualTo("release-one");
+            assertThat(preview.path("affectedComponents").toString()).isEqualTo("[\"DATABASE\",\"MEDIA\",\"RELEASE\"]");
+            assertThat(preview.path("verifiedFileCount").asInt()).isEqualTo(4);
+            assertThat(preview.path("mediaFileCount").asInt()).isEqualTo(1);
+            assertThat(preview.toString()).doesNotContain(config.backupRoot().toString(),"database.sql");
+            var restored=submitConfirmed(restoreRequest,confirmation);
+            assertThat(restored.path("state").asString()).as(restored.toString()).isEqualTo("SUCCEEDED");
+            assertThat(Files.readAllBytes(image)).isEqualTo(original);
             try(var c=connection();var q=c.prepareStatement("SELECT name FROM category WHERE id=?")){q.setLong(1,fixture);try(var rows=q.executeQuery()){assertThat(rows.next()).isTrue();assertThat(rows.getString(1)).isEqualTo("ops-before-"+fixture);}}
-            Files.writeString(config.backupRoot().resolve(backup).resolve("database.sql"),"broken");var rejected=job("RESTORE",backup);assertThat(rejected.path("state").asString()).isEqualTo("FAILED");assertThat(rejected.path("errorCode").asString()).isEqualTo("OPS_BACKUP_INVALID");assertThat(request("GET","/status",null).path("healthy").asBoolean()).isTrue();
+            Path selected=config.backupRoot().resolve(backup),manifestPath=selected.resolve("manifest.json");
+            assertThat(restored.path("backupManifestSha256").asString()).isEqualTo(OpsRunner.sha(manifestPath));
+            var repeat=request("POST","/confirmations",restoreRequest);
+            long livePid=runningPid().path("pid").asLong();
+            String unchangedManifest=Files.readString(manifestPath);
+            Files.writeString(manifestPath,unchangedManifest+"\n");
+            var changed=submitConfirmed(restoreRequest,repeat);
+            assertThat(changed.path("state").asString()).isEqualTo("FAILED");
+            assertThat(changed.path("errorCode").asString()).isEqualTo("OPS_BACKUP_CHANGED");
+            assertThat(changed.path("events").toString()).doesNotContain("STOPPING");
+            Files.writeString(manifestPath,unchangedManifest);
+            Files.writeString(selected.resolve("database.sql"),"broken");
+            assertThat(response("POST","/confirmations",restoreRequest,409).path("code").asString()).isEqualTo("OPS_BACKUP_INVALID");
+            assertThat(response("POST","/confirmations",Map.of("action","RESTORE","target","business",
+                    "referenceId",UUID.randomUUID().toString()),404).path("code").asString()).isEqualTo("OPS_BACKUP_NOT_FOUND");
+            assertThat(runningPid().path("pid").asLong()).isEqualTo(livePid);
+            assertThat(request("GET","/status",null).path("healthy").asBoolean()).isTrue();
             assertThat(request("GET","/logs",null).has("taskEvents")).isTrue();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(5);
           }
           try(var app=new OpsApplication(opsConfig(env,opsPort,businessPort,LocalTime.of(5,30)),

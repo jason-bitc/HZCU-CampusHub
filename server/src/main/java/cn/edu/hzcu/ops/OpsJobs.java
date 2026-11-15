@@ -9,8 +9,8 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.*;
 
 final class OpsJobs implements AutoCloseable {
-    interface Executor {Map<String,Object> execute(String action,String reference,Consumer<String> phase)throws Exception;}
-    private record Confirmation(String digest,String session,Instant expires){}
+    interface Executor {Map<String,Object> execute(String action,String reference,String backupManifestSha256,Consumer<String> phase)throws Exception;}
+    private record Confirmation(String digest,String session,Instant expires,String backupManifestSha256){}
     private final Map<String,Confirmation> confirmations=new HashMap<>();
     private final OpsStore store;
     private final Executor executor;
@@ -22,11 +22,20 @@ final class OpsJobs implements AutoCloseable {
         if(!Set.of("DEPLOY","RESTART","BACKUP","RESTORE").contains(action)||!target.equals("business"))throw new OpsApplication.Failure(400,"INVALID_PARAMETER");
         if((Set.of("RESTART","BACKUP").contains(action)&&!reference.isEmpty())||(!reference.isEmpty()&&!reference.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}"))||(Set.of("DEPLOY","RESTORE").contains(action)&&reference.isEmpty()))throw new OpsApplication.Failure(400,"INVALID_PARAMETER");
     }
-    synchronized Map<String,Object> prepare(String action,String target,String reference,String token) {
-        String digest=digest(action,target,reference);Instant now=Instant.now();confirmations.entrySet().removeIf(e->now.isAfter(e.getValue().expires));
+    synchronized Map<String,Object> prepare(String action,String target,String reference,String token,OpsRunner.RestorePlan restore) {
+        String digest=digest(action,target,reference);
+        if(action.equals("RESTORE")?(restore==null||!reference.equals(restore.preview().backupId())):restore!=null){
+            throw new OpsApplication.Failure(400,"INVALID_PARAMETER");
+        }
+        Instant now=Instant.now();confirmations.entrySet().removeIf(e->now.isAfter(e.getValue().expires));
         if(confirmations.size()>=100)throw new OpsApplication.Failure(429,"OPS_CONFIRMATION_LIMIT");
-        String id=UUID.randomUUID().toString();Instant expiry=now.plusSeconds(300);confirmations.put(id,new Confirmation(digest,OpsAuth.digest(token),expiry));
-        return Map.of("confirmationId",id,"expiresAt",expiry.toString(),"action",action,"target",target,"referenceId",reference,"impact",action.equals("RESTORE")?"覆盖业务数据库和图片；执行前保存保护备份":"业务服务可能短暂停止；运维查询保持可用");
+        String id=UUID.randomUUID().toString();Instant expiry=now.plusSeconds(300);
+        confirmations.put(id,new Confirmation(digest,OpsAuth.digest(token),expiry,restore==null?null:restore.manifestSha256()));
+        var receipt=new LinkedHashMap<String,Object>(Map.of("confirmationId",id,"expiresAt",expiry.toString(),
+                "action",action,"target",target,"referenceId",reference,
+                "impact",restore==null?"业务服务可能短暂停止；运维查询保持可用":"覆盖业务数据库和图片；执行前保存保护备份"));
+        if(restore!=null)receipt.put("restorePreview",restore.preview());
+        return receipt;
     }
     synchronized JsonNode submit(String action,String target,String reference,String request,String confirmation,String token)throws IOException {
         if(!request.matches("[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}"))throw new OpsApplication.Failure(400,"INVALID_PARAMETER");
@@ -38,7 +47,7 @@ final class OpsJobs implements AutoCloseable {
         if(busy(state))throw new OpsApplication.Failure(409,"OPS_TARGET_BUSY");
         var prepared=confirmations.get(confirmation);
         if(prepared==null||!Instant.now().isBefore(prepared.expires)||!prepared.digest.equals(digest)||!prepared.session.equals(OpsAuth.digest(token)))throw new OpsApplication.Failure(409,"OPS_CONFIRMATION_INVALID");
-        var job=enqueue(action,reference,request,digest,null);
+        var job=enqueue(action,reference,request,digest,null,prepared.backupManifestSha256());
         confirmations.remove(confirmation);
         return job;
     }
@@ -47,7 +56,7 @@ final class OpsJobs implements AutoCloseable {
         String previous=state.path("lastScheduledBackupDate").asString("");
         if (!previous.isEmpty() && !date.isAfter(LocalDate.parse(previous))) return false;
         if (recoveryRequired(state) || busy(state)) return false;
-        enqueue("BACKUP","",UUID.randomUUID().toString(),digest("BACKUP","business",""),date);
+        enqueue("BACKUP","",UUID.randomUUID().toString(),digest("BACKUP","business",""),date,null);
         return true;
     }
 
@@ -63,19 +72,20 @@ final class OpsJobs implements AutoCloseable {
     }
 
     private JsonNode enqueue(String action,String reference,String request,String digest,
-            LocalDate scheduledFor) throws IOException {
+            LocalDate scheduledFor,String backupManifestSha256) throws IOException {
         String id=UUID.randomUUID().toString();
         var job=OpsStore.JSON.createObjectNode();
         job.put("id",id).put("requestId",request).put("digest",digest).put("action",action)
                 .put("target","business").put("referenceId",reference).put("state","QUEUED")
                 .put("createdAt",Instant.now().toString()).put("actorDomain",scheduledFor==null?"OPS_ADMIN":"OPS_SCHEDULER");
         if (scheduledFor!=null) job.put("scheduledFor",scheduledFor.toString());
+        if (backupManifestSha256!=null) job.put("backupManifestSha256",backupManifestSha256);
         job.set("events",OpsStore.JSON.createArrayNode());
         store.change(state->{
             ((ArrayNode)state.get("jobs")).add(job);
             if (scheduledFor!=null) state.put("lastScheduledBackupDate",scheduledFor.toString());
         });
-        worker.submit(()->run(id,action,reference));
+        worker.submit(()->run(id,action,reference,backupManifestSha256));
         return publicJob(job);
     }
 
@@ -91,9 +101,9 @@ final class OpsJobs implements AutoCloseable {
         try{update(id,job->{var event=OpsStore.JSON.createObjectNode();event.put("phase",code).put("occurredAt",Instant.now().toString());((ArrayNode)job.get("events")).add(event);});}
         catch(IOException e){unsafe=true;throw new java.io.UncheckedIOException(e);}
     }
-    private void run(String id,String action,String reference) {
+    private void run(String id,String action,String reference,String backupManifestSha256) {
         try{update(id,n->n.put("state","RUNNING").put("startedAt",Instant.now().toString()));
-            Map<String,Object> result=executor.execute(action,reference,code->phase(id,code));
+            Map<String,Object> result=executor.execute(action,reference,backupManifestSha256,code->phase(id,code));
             update(id,n->{n.put("state","SUCCEEDED").put("finishedAt",Instant.now().toString());n.set("result",OpsStore.JSON.valueToTree(result));});
         }catch(Exception e){
             String code=e instanceof OpsApplication.Failure f?f.code:e instanceof IOException?"OPS_IO_FAILED":"OPS_EXECUTION_FAILED";
