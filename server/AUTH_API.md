@@ -46,13 +46,15 @@
 
 | 请求 | 返回 |
 | --- | --- |
-| GET /api/v1/me/certification | `state`、`verifiedAt`、`canReverify`，使用有效本人会话 |
+| GET /api/v1/me/certification | `state`、`verifiedAt`、`canReverify`、`revocationReason`、`revokedAt`，使用有效本人会话 |
 | POST /api/v1/me/certification/reverification-codes | 无请求体，向账号的原校园邮箱发送验证码，202 返回 `challengeId`、`expiresAt`、`resendAt`、`notice` |
 | POST /api/v1/me/certification/reverification | JSON 仅含 `challengeId` 和 `code`，200 返回 `reverified:true`、`signInRequired:true` |
 
 三个接口均无查询参数。申请与提交使用同一登录会话。验证码与原邮箱、会话、认证版本及重新认证用途绑定，沿用五分钟有效期、单次消费、错误尝试和发送限额。申请要求账号 ACTIVE 且认证状态 REVOKED。账号受限返回 403，已认证返回 409 `CERTIFICATION_ALREADY_VALID`，无效挑战返回 400 `CODE_INVALID`。SMTP 发送结果表示服务器受理，收件以本人邮箱为准。
 
-认证恢复、时间和版本更新、验证码消费、撤销旧会话、本人通知及变更审计在同一事务完成。客户端收到成功结果后清除旧令牌，请用户重新登录。请求结果未知时，也可重新登录查询认证状态。原账号内容、账号限制以及发布、评论限制继续按现有规则处理。现有部署须应用 V14 数据库迁移。
+认证恢复、时间和版本更新、验证码消费、撤销旧会话、本人通知及变更审计在同一事务完成。客户端收到成功结果后清除旧令牌，请用户重新登录。请求结果未知时，也可重新登录查询认证状态。原账号内容、账号限制以及发布、评论限制继续按现有规则处理。
+
+社区管理员可通过[管理接口](ADMIN_API.md#校园认证撤销)撤销认证。本人查询返回当前撤销的原因和时间，已恢复或没有历史撤销依据时，这两个字段为 `null`。`verifiedAt` 一直表示最近一次认证通过时间。现有部署须依次应用 V14、V15 数据库迁移。
 
 ## POST /auth/password-reset-codes
 

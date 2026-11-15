@@ -127,10 +127,7 @@ public class AuthService {
     }
     public CertificationStatus certification(Identity identity) {
         stage(AUTHORIZATION);
-        var user = identity.me();
-        return new CertificationStatus(user.campusCertification(), user.verifiedAt(),
-                "ACTIVE".equals(user.accountState()) && "USER".equals(user.role())
-                        && "REVOKED".equals(user.campusCertification()));
+        return repository.certification(identity.me().userId()).orElseThrow(AuthService::unauthorized);
     }
 
     public CodeRequest requestReverification(Identity identity) {

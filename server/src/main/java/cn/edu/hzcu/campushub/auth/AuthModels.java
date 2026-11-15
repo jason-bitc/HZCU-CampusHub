@@ -7,7 +7,8 @@ public final class AuthModels {
     public enum Purpose { REGISTER, PASSWORD_RESET, CAMPUS_REVERIFY }
     public record CodeRequest(String challengeId, Instant expiresAt, Instant resendAt, String notice) {}
     public record Me(long userId,String email,String role,String accountState,String campusCertification,Instant verifiedAt) {}
-    public record CertificationStatus(String state, Instant verifiedAt, boolean canReverify) {}
+    public record CertificationStatus(String state, Instant verifiedAt, boolean canReverify,
+                                      String revocationReason, Instant revokedAt) {}
     public record Login(String tokenType,String accessToken,Instant expiresAt) {
         @Override public String toString(){return "Login[redacted]";}
     }

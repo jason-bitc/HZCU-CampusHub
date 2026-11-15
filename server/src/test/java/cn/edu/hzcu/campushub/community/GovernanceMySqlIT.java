@@ -5,6 +5,8 @@ import java.net.*;
 import java.net.http.*;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.*;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +21,7 @@ class GovernanceMySqlIT {
     static long admin,user,article,version,comment;static Long category;
     static final JsonMapper JSON=JsonMapper.builder().build();static final HttpClient HTTP=HttpClient.newHttpClient();
     static final AuthTestSupport.MutableClock CLOCK=new AuthTestSupport.MutableClock();
+    static final AuthTestSupport.ControlledMailer MAILER = new AuthTestSupport.ControlledMailer();
     static String key(){return UUID.randomUUID().toString();}
     record Reply(int status,JsonNode data,String code){}
     static Reply call(String method,String path,Object body,String bearer)throws Exception {
@@ -26,8 +29,8 @@ class GovernanceMySqlIT {
         var r=HTTP.send(request.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(JSON.writeValueAsString(body))).build(),HttpResponse.BodyHandlers.ofString());var n=JSON.readTree(r.body());return new Reply(r.statusCode(),n.path("data"),n.path("code").asString());
     }
     @BeforeAll static void start()throws Exception {
-        var mailer=new AuthTestSupport.ControlledMailer();context=AuthTestSupport.application(mailer,CLOCK).run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");db=context.getBean(JdbcTemplate.class);assertThat(db.queryForObject("SELECT DATABASE()",String.class)).isEqualTo("campushub_test");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");
-        password="g10-"+key();email="g10"+key().replace("-","")+"@stu.hzcu.edu.cn";var auth=context.getBean(AuthService.class);var code=auth.requestCode(email,AuthModels.Purpose.REGISTER);user=auth.register(email,password,code.challengeId(),mailer.code(email,"REGISTER")).userId();userToken=auth.login(email,password).accessToken();
+        context=AuthTestSupport.application(MAILER,CLOCK).run("--server.port=0","--server.address=127.0.0.1","--spring.profiles.active=demo");db=context.getBean(JdbcTemplate.class);assertThat(db.queryForObject("SELECT DATABASE()",String.class)).isEqualTo("campushub_test");base="http://127.0.0.1:"+context.getEnvironment().getProperty("local.server.port");
+        password="g10-"+key();email="g10"+key().replace("-","")+"@stu.hzcu.edu.cn";var auth=context.getBean(AuthService.class);var code=auth.requestCode(email,AuthModels.Purpose.REGISTER);user=auth.register(email,password,code.challengeId(),MAILER.code(email,"REGISTER")).userId();userToken=auth.login(email,password).accessToken();
         login="g10"+key().replace("-","");db.update("INSERT INTO community_admin(login_name,password_hash,created_at) VALUES(?,?,NOW(6))",login,context.getBean(PasswordEncoder.class).encode(password));admin=db.queryForObject("SELECT id FROM community_admin WHERE login_name=?",Long.class,login);token=context.getBean(AdminAuthService.class).login(login,password).accessToken();
         article=1_000_000_000_000L+new java.security.SecureRandom().nextLong(1_000_000_000L);version=article;comment=article;
         db.update("INSERT INTO article(id,state,owner_user_id,created_at) VALUES(?,'DRAFT',?,NOW(6))",article,user);
@@ -121,5 +124,98 @@ class GovernanceMySqlIT {
         assertThat(inbox.data.toString()).doesNotContain("confirmed test reason", "restriction lifted after review");
         assertThat(call("GET", "/me/notifications", null, token).status).isEqualTo(401);
     }
-    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
+
+    @Test @Order(8) void campusRevocationIsAuthorizedIdempotentAuditedAndRecoverable() throws Exception {
+        String adminRoute = "/admin/users/" + user + "/certification";
+        String ownRoute = "/me/certification";
+        String revoke = adminRoute + "/revocation";
+        String reason = "校园邮箱归属需重新核验";
+        String requestId = key();
+        var command = Map.of("expectedRevision", 1, "requestId", requestId, "reason", reason);
+        assertThat(call("GET", adminRoute, null, token).data.path("revision").asLong()).isEqualTo(1);
+        assertThat(call("GET", adminRoute, null, userToken).status).isEqualTo(401);
+        assertThat(call("POST", revoke, command, userToken).status).isEqualTo(401);
+        assertThat(call("POST", revoke, Map.of("expectedRevision", 1, "requestId", key(), "reason", " "), token).status)
+                .isEqualTo(400);
+        assertThat(call("POST", revoke, Map.of("expectedRevision", 0, "requestId", key(), "reason", reason), token).code)
+                .isEqualTo("REVISION_CONFLICT");
+
+        String trigger = "g04_revoke_" + key().replace("-", "");
+        db.execute("CREATE TRIGGER " + trigger + " BEFORE INSERT ON business_audit FOR EACH ROW "
+                + "BEGIN IF NEW.action='CAMPUS_REVOKE' AND NEW.object_id=" + user
+                + " THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='controlled'; END IF; END");
+        try {
+            assertThat(call("POST", revoke, command, token).status).isEqualTo(503);
+            assertThat(call("GET", ownRoute, null, userToken).data.path("state").asString()).isEqualTo("VALID");
+            assertThat(db.queryForObject("SELECT COUNT(*) FROM campus_certification_revocation WHERE user_id=?",
+                    Long.class, user)).isZero();
+            assertThat(db.queryForObject("SELECT COUNT(*) FROM personal_notification WHERE recipient_id=? AND kind='CAMPUS_REVOKED'",
+                    Long.class, user)).isZero();
+        } finally {
+            db.execute("DROP TRIGGER " + trigger);
+        }
+
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var replies = pool.invokeAll(List.<Callable<Reply>>of(
+                    () -> call("POST", revoke, command, token), () -> call("POST", revoke, command, token)),
+                    15, java.util.concurrent.TimeUnit.SECONDS);
+            for (var result : replies) {
+                var response = result.get();
+                assertThat(response.status).isEqualTo(200);
+                assertThat(response.data.path("revision").asLong()).isEqualTo(2);
+            }
+        }
+        assertThat(call("POST", revoke, Map.of("expectedRevision", 1, "requestId", requestId, "reason", "内容有变"),
+                token).code).isEqualTo("REQUEST_KEY_REUSED");
+        assertThat(call("POST", revoke, Map.of("expectedRevision", 2, "requestId", key(), "reason", reason),
+                token).code).isEqualTo("CERTIFICATION_ALREADY_REVOKED");
+        assertThat(db.queryForObject("""
+                SELECT COUNT(*) FROM business_audit WHERE action='CAMPUS_REVOKE' AND object_id=?
+                  AND actor_domain='COMMUNITY_ADMIN' AND actor_id=? AND before_revision=1 AND after_revision=2
+                  AND before_state='VALID' AND after_state='REVOKED'
+                """, Long.class, user, admin)).isEqualTo(1);
+
+        var status = call("GET", ownRoute, null, userToken).data;
+        assertThat(status.path("revocationReason").asString()).isEqualTo(reason);
+        assertThat(status.path("revokedAt").asString()).isNotBlank();
+        assertThat(status.path("canReverify").asBoolean()).isTrue();
+        var inbox = call("GET", "/me/notifications?size=100", null, userToken).data;
+        List<JsonNode> notifications = new ArrayList<>();
+        inbox.path("items").forEach(notifications::add);
+        assertThat(notifications).filteredOn(item -> "CAMPUS_REVOKED".equals(item.path("kind").asString()))
+                .singleElement().satisfies(item -> assertThat(item.path("target").path("type").asString())
+                        .isEqualTo("CERTIFICATION"));
+        assertThat(inbox.toString()).doesNotContain(reason);
+        var publication = Map.of("expectedRevision", 0, "requestId", key());
+        assertThat(call("POST", "/me/articles/" + article + "/publish", publication, userToken).code)
+                .isEqualTo("ACCESS_RESTRICTED");
+        var commentInput = new LinkedHashMap<String, Object>();
+        commentInput.put("requestId", key());
+        commentInput.put("body", "仍有登录会话但认证已撤销");
+        commentInput.put("imageIds", List.of());
+        commentInput.put("replyToCommentId", null);
+        assertThat(call("POST", "/articles/1001/comments", commentInput, userToken).code)
+                .isEqualTo("ACCESS_RESTRICTED");
+        assertThat(call("GET", "/articles/1001", null, userToken).status).isEqualTo(200);
+
+        var issue = call("POST", ownRoute + "/reverification-codes", null, userToken);
+        assertThat(issue.status).isEqualTo(202);
+        assertThat(call("POST", ownRoute + "/reverification", Map.of(
+                "challengeId", issue.data.path("challengeId").asString(),
+                "code", MAILER.code(email, "CAMPUS_REVERIFY")), userToken).status).isEqualTo(200);
+        assertThat(call("GET", ownRoute, null, userToken).status).isEqualTo(401);
+        String fresh = context.getBean(AuthService.class).login(email, password).accessToken();
+        assertThat(call("GET", ownRoute, null, fresh).data.path("state").asString()).isEqualTo("VALID");
+        assertThat(call("GET", ownRoute, null, fresh).data.path("revocationReason").isNull()).isTrue();
+        var latest = call("GET", adminRoute, null, token).data;
+        assertThat(latest.path("revision").asLong()).isEqualTo(3);
+        assertThat(latest.path("lastRevocation").path("reason").asString()).isEqualTo(reason);
+        assertThat(call("POST", revoke, command, token).data.path("revision").asLong()).isEqualTo(2);
+        assertThat(call("GET", adminRoute, null, token).data.path("state").asString()).isEqualTo("VALID");
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=? AND enabled=TRUE",
+                Long.class, user)).isEqualTo(1);
+        assertThat(db.queryForObject("SELECT state FROM article WHERE id=?", String.class, article))
+                .isEqualTo("ADMIN_HIDDEN");
+    }
+    @AfterAll static void cleanup(){if(context==null)return;try{db.update("DELETE FROM campus_certification_revocation WHERE user_id=?",user);db.update("DELETE FROM community_appeal_receipt WHERE admin_id=?",admin);db.update("DELETE FROM community_appeal WHERE user_id=?",user);db.update("DELETE FROM community_restriction_event WHERE admin_id=?",admin);db.update("DELETE FROM community_restriction WHERE user_id=?",user);for(String table:List.of("community_admin_receipt","community_case_history","community_case_comment","community_case_media"))db.update("DELETE FROM "+table+" WHERE case_id IN (SELECT id FROM community_case WHERE user_id=?)",user);db.update("DELETE FROM community_case WHERE user_id=?",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='USER'",user);db.update("DELETE FROM business_audit WHERE actor_id=? AND actor_domain='COMMUNITY_ADMIN'",admin);db.update("DELETE FROM comment_create_receipt WHERE user_id=?",user);db.update("DELETE FROM governance_event WHERE admin_id=?",admin);db.update("DELETE FROM governance_article_hold WHERE article_id=?",article);db.update("DELETE FROM discussion_comment WHERE article_id=?",article);db.update("DELETE FROM article_draft WHERE article_id=?",article);db.update("UPDATE article SET state='DELETED',public_version_id=NULL WHERE id=?",article);db.update("DELETE FROM article_version WHERE id=?",version);db.update("DELETE FROM article WHERE id=?",article);if(category!=null)db.update("DELETE FROM category WHERE id=?",category);db.update("DELETE FROM community_admin_session WHERE admin_id=?",admin);db.update("DELETE FROM community_admin WHERE id=?",admin);db.update("DELETE FROM community_admin_login_gate WHERE name_digest=?",AuthCrypto.tokenDigest(login));for(String table:List.of("auth_session","campus_certification"))db.update("DELETE FROM "+table+" WHERE user_id=?",user);for(String table:List.of("email_challenge","auth_email_gate"))db.update("DELETE FROM "+table+" WHERE email=?",email);db.update("DELETE FROM platform_user WHERE id=?",user);}finally{context.close();}}
 }

@@ -17,7 +17,8 @@ class OpsExecutionMySqlIT {
     static final HttpClient HTTP=HttpClient.newHttpClient();
     String base,token;OpsConfig config;long fixture;
     String username=System.getenv("CAMPUSHUB_TEST_DB_USERNAME"),password=System.getenv("CAMPUSHUB_TEST_DB_PASSWORD");
-    Connection connection()throws Exception {return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/campushub_test?connectTimeout=3000&socketTimeout=5000",username,password);}
+    final String mysqlPort = Integer.toString(Integer.parseInt(System.getenv().getOrDefault("CAMPUSHUB_DB_PORT", "3306")));
+    Connection connection()throws Exception {return DriverManager.getConnection("jdbc:mysql://127.0.0.1:"+mysqlPort+"/campushub_test?connectTimeout=3000&socketTimeout=5000",username,password);}
     JsonNode request(String method,String path,Object body)throws Exception {
         var q=HttpRequest.newBuilder(URI.create(base+path)).timeout(java.time.Duration.ofSeconds(10));if(token!=null)q.header("Authorization","Bearer "+token);if(body!=null)q.header("Content-Type","application/json");
         var r=HTTP.send(q.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(OpsStore.JSON.writeValueAsString(body))).build(),HttpResponse.BodyHandlers.ofString());assertThat(r.statusCode()).as(path+" "+r.body()).isEqualTo(200);return OpsStore.JSON.readTree(r.body()).path("data");
@@ -31,7 +32,7 @@ class OpsExecutionMySqlIT {
         fixture=2_000_000_000_000L+new java.security.SecureRandom().nextLong(1_000_000_000L);
         try(var c=connection();var q=c.prepareStatement("INSERT INTO category(id,kind,name) VALUES(?,'TOPIC',?)")){q.setLong(1,fixture);q.setString(2,"ops-before-"+fixture);q.executeUpdate();}
         int businessPort,opsPort;try(var socket=new java.net.ServerSocket(0)){businessPort=socket.getLocalPort();}try(var socket=new java.net.ServerSocket(0)){opsPort=socket.getLocalPort();}
-        Path env=root.resolve("business-env.json");OpsStore.atomic(env,OpsStore.JSON.writeValueAsBytes(Map.of("CAMPUSHUB_DB_HOST","127.0.0.1","CAMPUSHUB_DB_PORT","3306","CAMPUSHUB_DB_NAME","campushub_test","CAMPUSHUB_DB_USERNAME",username,"CAMPUSHUB_DB_PASSWORD",password,"CAMPUSHUB_AUTH_PEPPER",AuthTestSupport.TEST_KEY,"CAMPUSHUB_LOG_ENABLED","true","CAMPUSHUB_RUN_MODE","release")));
+        Path env=root.resolve("business-env.json");OpsStore.atomic(env,OpsStore.JSON.writeValueAsBytes(Map.of("CAMPUSHUB_DB_HOST","127.0.0.1","CAMPUSHUB_DB_PORT",mysqlPort,"CAMPUSHUB_DB_NAME","campushub_test","CAMPUSHUB_DB_USERNAME",username,"CAMPUSHUB_DB_PASSWORD",password,"CAMPUSHUB_AUTH_PEPPER",AuthTestSupport.TEST_KEY,"CAMPUSHUB_LOG_ENABLED","true","CAMPUSHUB_RUN_MODE","release")));
         config=new OpsConfig(root.resolve("control"),root.resolve("runtime"),root.resolve("artifacts"),root.resolve("backups"),root.resolve("media"),Path.of(System.getProperty("java.home"),"bin","java.exe"),Path.of(Objects.requireNonNull(System.getenv("CAMPUSHUB_OPS_TEST_MYSQL"))),Path.of(Objects.requireNonNull(System.getenv("CAMPUSHUB_OPS_TEST_DUMP"))),env,opsPort,"http://127.0.0.1:"+businessPort+"/actuator/health","http://127.0.0.1:5173","campushub_test");config.validate();
         Path media=config.mediaRoot().resolve("objects");Files.createDirectories(media);Path image=media.resolve(UUID.randomUUID().toString());byte[] original="controlled-image-before".getBytes(java.nio.charset.StandardCharsets.UTF_8);Files.write(image,original);
         Path artifact=config.artifactRoot().resolve("release-one");Files.createDirectories(artifact);Path jar=artifact.resolve("application.jar");Files.copy(Path.of("target/campushub-server-0.1.0.jar"),jar);

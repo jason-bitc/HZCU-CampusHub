@@ -16,6 +16,7 @@
 | kind | 接收者和事件 | target.type |
 | --- | --- | --- |
 | CAMPUS_VERIFIED | 本人完成校园邮箱认证 | CERTIFICATION |
+| CAMPUS_REVOKED | 本人校园认证已撤销 | CERTIFICATION，打开本人认证结果查看当前理由和恢复入口 |
 | COMMENT_REPLY | 被直接回复的评论作者，跳过本人回复本人 | COMMENT |
 | CASE_DECISION | 举报或反馈的提交者，管理员记录决定 | CASE |
 | ARTICLE_MODERATION | 文章作者，文章隐藏或恢复 | ARTICLE |

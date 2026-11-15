@@ -20,13 +20,22 @@ public class WritingRepository {
     static MapSqlParameterSource p(String key,Object value){return new MapSqlParameterSource(key,value);}
     static Timestamp time(Instant t){return Timestamp.from(t);}
     public long allocate(String name){long next=jdbc.queryForObject("SELECT next_value FROM authoring_sequence WHERE name=:name FOR UPDATE",p("name",name),Long.class);jdbc.update("UPDATE authoring_sequence SET next_value=next_value+1 WHERE name=:name",p("name",name));return next;}
-    public void lockUser(long id){if(jdbc.query("SELECT id FROM platform_user WHERE id=:id FOR UPDATE",p("id",id),(r,n)->r.getLong(1)).isEmpty())throw ApiException.notFound();}
+    public void lockUser(long id) {
+        var eligible = jdbc.query("""
+                SELECT u.account_state='ACTIVE' AND u.role='USER' AND c.state='VALID' eligible
+                FROM platform_user u JOIN campus_certification c ON c.user_id=u.id
+                WHERE u.id=:id FOR UPDATE
+                """, p("id", id), (r, n) -> r.getBoolean("eligible")).stream().findFirst();
+        if (!eligible.orElse(false)) {
+            throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN, "ACCESS_RESTRICTED",
+                    "账号或校园认证当前不可用于此操作");
+        }
+    }
     boolean restricted(long user, String scope) {
         return jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",
                 p("user", user).addValue("scope", scope), Long.class) > 0;
     }
-    public void assertAllowed(long user, String scope) {
-        lockUser(user);
+    public void assertUnrestricted(long user, String scope) {
         if (restricted(user, scope)) {
             throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN, "BEHAVIOR_RESTRICTED",
                     "此行为已受限制，可在本人处理记录中查看理由并申诉");

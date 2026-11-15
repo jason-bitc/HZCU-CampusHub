@@ -1,6 +1,6 @@
 # 社区管理员网页对接说明
 
-业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。当前接口基线为迁移 V1—V12。
+业务服务前缀为 `/api/v1/admin`，默认 `http://127.0.0.1:8080`。普通校园用户使用 `/api/v1/me`。校园认证管理使用 V15 数据库迁移。
 
 响应沿用 `code/data/traceId`；失败使用真实 HTTP 状态及 `code/message/traceId`，不返回 `data`。管理响应 `Cache-Control: no-store`。管理令牌通过 `Authorization: Bearer …` 传递，禁止放在URL。
 
@@ -20,10 +20,11 @@
 | 分类维护 | `GET/POST /admin/categories`、`PUT /admin/categories/{id}` | 岗位、专业、公司、主题；创建、改名、排序、启停 |
 | 治理记录 | `GET /admin/governance-events` | 对象、理由、操作者、前后状态、修订和时间 |
 | 用户限制 | `GET /admin/users`、`GET/POST /admin/users/{id}/restrictions` | PUBLISH和COMMENT两类行为分别设置；不封锁阅读和本人申诉 |
+| 校园认证 | `GET /admin/users/{id}/certification`、`POST /admin/users/{id}/certification/revocation` | 查看认证状态、修订号和最近撤销记录，提交撤销理由 |
 | 申诉处理 | `GET /admin/appeals`、`POST /admin/appeals/{id}/decisions` | ACCEPTED或REJECTED；接受申诉只解除对应版本的限制 |
 | 用户查看结果 | `GET /me/restrictions`、`GET/POST /me/appeals` | 仅本人限制和申诉，不公开他人信息 |
 
-`/admin/me` 返回能力 `CASE_READ`、`CASE_HANDLE`、`CONTENT_MODERATE`、`CATEGORY_MANAGE`、`GOVERNANCE_READ`、`USER_RESTRICT`、`APPEAL_HANDLE`、`CONTRIBUTION_INVALIDATE`。社区管理员共享这些社区能力，贡献处置由案件认领人执行，运维能力单独授权。
+`/admin/me` 返回能力 `CASE_READ`、`CASE_HANDLE`、`CONTENT_MODERATE`、`CATEGORY_MANAGE`、`GOVERNANCE_READ`、`USER_RESTRICT`、`CERTIFICATION_REVOKE`、`APPEAL_HANDLE`、`CONTRIBUTION_INVALIDATE`。社区管理员共享这些社区能力，贡献处置由案件认领人执行，运维能力单独授权。
 
 ## 参数及返回结构
 
@@ -68,6 +69,20 @@
 ```
 
 同一限制版本不能有两个OPEN申诉。接受申诉时校验原限制版本，不能解除后来新设的限制。当前申诉用于上述行为限制；未来人工认证材料申诉不在本轮实现范围。
+
+## 校园认证撤销
+
+先用 `GET /admin/users/{id}/certification` 读取 `userId/state/revision/verifiedAt/lastRevocation`。有撤销记录时，`lastRevocation` 提供撤销时的 `revision/adminId/reason/occurredAt`，包括用户后来重新认证成功的情形。
+
+`POST /admin/users/{id}/certification/revocation` 接收以下字段。
+
+```json
+{"expectedRevision":1,"requestId":"00000000-0000-4000-8000-000000000006","reason":"校园邮箱归属需重新核验"}
+```
+
+成功响应为 `userId/state/revision`，状态为 `REVOKED`。相同管理员和请求编号可重读历史回执，当前状态以 GET 为准。修改原请求内容返回 `REQUEST_KEY_REUSED`，旧修订返回 `REVISION_CONFLICT`，已撤销的当前修订返回 `CERTIFICATION_ALREADY_REVOKED`，均为 HTTP 409。
+
+认证更新、理由及操作者记录、站内通知和业务审计在同一事务保存。账号状态及原内容保持原状。具备有效会话的本人可查看认证结果，并通过原校园邮箱重新认证。管理员入口用于撤销，恢复通过[本人重新认证](AUTH_API.md#校园邮箱重新认证)执行。
 
 ## 案件闭环
 
