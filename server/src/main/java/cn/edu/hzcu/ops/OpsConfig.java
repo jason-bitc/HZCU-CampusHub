@@ -3,16 +3,25 @@ package cn.edu.hzcu.ops;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.*;
+import java.time.LocalTime;
 import java.util.*;
 import tools.jackson.databind.JsonNode;
 
 public record OpsConfig(Path controlRoot,Path runtimeRoot,Path artifactRoot,Path backupRoot,Path mediaRoot,
-    Path javaExecutable,Path mysqlExecutable,Path dumpExecutable,Path businessEnvironment,int port,String healthUrl,String allowedOrigin,String databaseName) {
+    Path javaExecutable,Path mysqlExecutable,Path dumpExecutable,Path businessEnvironment,int port,String healthUrl,
+    String allowedOrigin,String databaseName,LocalTime dailyBackupTime) {
     static Path path(JsonNode n,String name){String value=n.path(name).asString("");if(value.isBlank())throw new IllegalArgumentException("OPS_CONFIG_MISSING");return Path.of(value).toAbsolutePath().normalize();}
     public static OpsConfig load(Path file)throws IOException {
         var n=OpsStore.JSON.readTree(Files.readString(file));
-        var config=new OpsConfig(path(n,"controlRoot"),path(n,"runtimeRoot"),path(n,"artifactRoot"),path(n,"backupRoot"),path(n,"mediaRoot"),path(n,"javaExecutable"),path(n,"mysqlExecutable"),path(n,"dumpExecutable"),path(n,"businessEnvironment"),n.path("port").asInt(8091),n.path("healthUrl").asString("http://127.0.0.1:8080/actuator/health"),n.path("allowedOrigin").asString("http://127.0.0.1:5173"),n.path("databaseName").asString("campushub_dev"));
+        var config=new OpsConfig(path(n,"controlRoot"),path(n,"runtimeRoot"),path(n,"artifactRoot"),path(n,"backupRoot"),path(n,"mediaRoot"),path(n,"javaExecutable"),path(n,"mysqlExecutable"),path(n,"dumpExecutable"),path(n,"businessEnvironment"),n.path("port").asInt(8091),n.path("healthUrl").asString("http://127.0.0.1:8080/actuator/health"),n.path("allowedOrigin").asString("http://127.0.0.1:5173"),n.path("databaseName").asString("campushub_dev"),parseDailyBackupTime(n.path("dailyBackupTime")));
         config.validate();return config;
+    }
+    static LocalTime parseDailyBackupTime(JsonNode value) throws IOException {
+        if (value.isMissingNode() || value.isNull()) return null;
+        if (!value.isString() || !value.asString().matches("(?:[01][0-9]|2[0-3]):[0-5][0-9]")) {
+            throw new IOException("OPS_DAILY_BACKUP_TIME_INVALID");
+        }
+        return LocalTime.parse(value.asString());
     }
     public void validate()throws IOException {
         if(port<1024||port>65535||!Set.of("campushub_dev","campushub_test").contains(databaseName))throw new IOException("OPS_CONFIG_INVALID");
