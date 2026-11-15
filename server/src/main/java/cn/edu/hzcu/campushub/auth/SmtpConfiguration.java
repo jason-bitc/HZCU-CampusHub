@@ -46,7 +46,12 @@ public class SmtpConfiguration {
         for(String timeout: new String[]{"connectiontimeout","timeout","writetimeout"}) p.setProperty("mail.smtp."+timeout,String.valueOf(settings.getTimeoutMs()));
         return (email,purpose,code)-> {
             SimpleMailMessage message=new SimpleMailMessage(); message.setFrom(settings.getFrom()); message.setTo(email);
-            message.setSubject("城院帮"+(purpose.equals("REGISTER")?"注册":"密码重置")+"验证码");
+            String action = switch (AuthModels.Purpose.valueOf(purpose)) {
+                case REGISTER -> "注册";
+                case PASSWORD_RESET -> "密码重置";
+                case CAMPUS_REVERIFY -> "校园邮箱重新认证";
+            };
+            message.setSubject("城院帮"+action+"验证码");
             message.setText("你的城院帮"+(purpose.equals("REGISTER")?"注册":"密码重置")+"验证码为："+code+"\n有效期5分钟，仅供本人使用。\n校园邮箱认证不代表工作经历认证，也不会创建管理员权限。\n如果不是你发起，请忽略本邮件。");
             try { sender.send(message); }
             catch (MailException e) {

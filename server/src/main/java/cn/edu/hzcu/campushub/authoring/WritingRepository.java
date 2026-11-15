@@ -20,28 +20,81 @@ public class WritingRepository {
     static MapSqlParameterSource p(String key,Object value){return new MapSqlParameterSource(key,value);}
     static Timestamp time(Instant t){return Timestamp.from(t);}
     public long allocate(String name){long next=jdbc.queryForObject("SELECT next_value FROM authoring_sequence WHERE name=:name FOR UPDATE",p("name",name),Long.class);jdbc.update("UPDATE authoring_sequence SET next_value=next_value+1 WHERE name=:name",p("name",name));return next;}
-    public void lockUser(long id){if(jdbc.query("SELECT id FROM platform_user WHERE id=:id FOR UPDATE",p("id",id),(r,n)->r.getLong(1)).isEmpty())throw ApiException.notFound();}
-    public void assertAllowed(long user,String scope){lockUser(user);if(jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",p("user",user).addValue("scope",scope),Long.class)>0)throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN,"BEHAVIOR_RESTRICTED","此行为已受限制，可在本人处理记录中查看理由并申诉");}
+    public void lockUser(long id) {
+        var eligible = jdbc.query("""
+                SELECT u.account_state='ACTIVE' AND u.role='USER' AND c.state='VALID' eligible
+                FROM platform_user u JOIN campus_certification c ON c.user_id=u.id
+                WHERE u.id=:id FOR UPDATE
+                """, p("id", id), (r, n) -> r.getBoolean("eligible")).stream().findFirst();
+        if (!eligible.orElse(false)) {
+            throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN, "ACCESS_RESTRICTED",
+                    "账号或校园认证当前不可用于此操作");
+        }
+    }
+    boolean restricted(long user, String scope) {
+        return jdbc.queryForObject("SELECT COUNT(*) FROM community_restriction WHERE user_id=:user AND scope=:scope AND enabled=TRUE",
+                p("user", user).addValue("scope", scope), Long.class) > 0;
+    }
+    public void assertUnrestricted(long user, String scope) {
+        if (restricted(user, scope)) {
+            throw new ApiException(org.springframework.http.HttpStatus.FORBIDDEN, "BEHAVIOR_RESTRICTED",
+                    "此行为已受限制，可在本人处理记录中查看理由并申诉");
+        }
+    }
     public Profile profile(long user){return jdbc.query("SELECT * FROM author_profile WHERE user_id=:id",p("id",user),(r,n)->new Profile(r.getLong("revision"),r.getString("nickname"),r.getObject("major_id",Long.class),r.getString("current_stage"),r.getString("bio"))).stream().findFirst().orElse(new Profile(0,"城院同学",null,"UNSET",""));}
     public void profile(long user,Profile profile){jdbc.update("INSERT INTO author_profile(user_id,revision,nickname,major_id,current_stage,bio) VALUES(:user,:rev,:name,:major,:stage,:bio) ON DUPLICATE KEY UPDATE revision=:rev,nickname=:name,major_id=:major,current_stage=:stage,bio=:bio",p("user",user).addValue("rev",profile.revision()).addValue("name",profile.nickname()).addValue("major",profile.majorId()).addValue("stage",profile.currentStage()).addValue("bio",profile.bio()));}
+    public Optional<Long> enabledMajorOf(long user) {
+        return jdbc.query("""
+                SELECT effective.id FROM author_profile p JOIN category c ON c.id=p.major_id
+                JOIN category effective ON effective.id=COALESCE(c.canonical_id,c.id)
+                WHERE p.user_id=:user AND c.kind='MAJOR' AND effective.kind='MAJOR' AND effective.enabled=TRUE
+                """, Map.of("user", user), (rs, row) -> rs.getLong(1)).stream().findFirst();
+    }
     public void categories(List<Long> ids,String kind){
         if(ids.isEmpty())return;
-        long available=jdbc.queryForObject("SELECT COUNT(*) FROM category WHERE kind=:kind AND enabled=TRUE",p("kind",kind),Long.class);
-        if(ids.size()>available)throw ApiException.invalid();
-        long matched=jdbc.queryForObject("SELECT COUNT(*) FROM category WHERE id IN (:ids) AND kind=:kind AND enabled=TRUE",p("kind",kind).addValue("ids",ids),Long.class);if(matched!=ids.size())throw ApiException.invalid();
+        long matched = jdbc.queryForObject("""
+                SELECT COUNT(*) FROM category c JOIN category effective ON effective.id=COALESCE(c.canonical_id,c.id)
+                WHERE c.id IN (:ids) AND c.kind=:kind AND effective.kind=:kind AND effective.enabled=TRUE
+                """, p("kind", kind).addValue("ids", ids), Long.class);
+        if (matched != ids.size()) throw ApiException.invalid();
     }
     public Long created(long user,String request){return jdbc.query("SELECT article_id FROM author_create_request WHERE user_id=:user AND request_id=:request",p("user",user).addValue("request",request),(r,n)->r.getLong(1)).stream().findFirst().orElse(null);}
     public void create(long id,long user,String request,Instant now){
         var params=p("id",id).addValue("user",user).addValue("request",request).addValue("now",time(now));
         jdbc.update("INSERT INTO article(id,state,owner_user_id,count_origin,created_at,updated_at) VALUES(:id,'DRAFT',:user,'NONE',:now,:now)",params);
         jdbc.update("INSERT INTO article_draft(article_id,body) VALUES(:id,'')",params);
+        enabledMajorOf(user).ifPresent(major -> addDraftCategory(id, major));
         jdbc.update("INSERT INTO author_create_request(user_id,request_id,article_id) VALUES(:user,:request,:id)",params);
     }
+    private void addDraftCategory(long article, long category) {
+        jdbc.update("INSERT INTO article_draft_category(article_id,category_id) VALUES(:id,:category)",
+                p("id", article).addValue("category", category));
+    }
     public Article owned(long user,long id,boolean lock){stage(TARGET);var article=jdbc.query("SELECT a.id,a.state,d.revision,a.first_published_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.id=:id AND a.owner_user_id=:user"+(lock?" FOR UPDATE":""),p("id",id).addValue("user",user),(r,n)->new Article(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getTimestamp("first_published_at")==null?null:r.getTimestamp("first_published_at").toInstant())).stream().findFirst().orElseThrow(ApiException::notFound);RequestTrace.article(article.id());return article;}
-    public OwnedPage list(long user,int page,int size){
-        var params=p("user",user).addValue("size",size).addValue("offset",((long)page-1)*size);
-        long total=jdbc.queryForObject("SELECT COUNT(*) FROM article WHERE owner_user_id=:user",params,Long.class);
-        var rows=jdbc.query("SELECT a.id,a.state,d.revision,d.title,a.updated_at FROM article a JOIN article_draft d ON d.article_id=a.id WHERE a.owner_user_id=:user ORDER BY a.updated_at DESC,a.id DESC LIMIT :size OFFSET :offset",params,(r,n)->new OwnedArticle(r.getLong("id"),r.getString("state"),r.getLong("revision"),r.getString("title"),r.getTimestamp("updated_at").toInstant()));return new OwnedPage(rows,total,page,size);
+    public OwnedPage list(long user, ArticleState state, int page, int size) {
+        var params = p("user", user).addValue("size", size).addValue("offset", ((long) page - 1) * size);
+        String from = """
+                 FROM article a JOIN article_draft d ON d.article_id=a.id
+                 LEFT JOIN article_version v ON v.id=a.public_version_id AND v.article_id=a.id
+                     AND v.published_at IS NOT NULL
+                 WHERE a.owner_user_id=:user
+                """;
+        if (state != null) {
+            from += " AND a.state=:state";
+            params.addValue("state", state.name());
+            if (state == ArticleState.PUBLISHED) from += " AND v.id IS NOT NULL";
+        }
+        long total = jdbc.queryForObject("SELECT COUNT(*)" + from, params, Long.class);
+        boolean canPublish = !restricted(user, "PUBLISH");
+        var rows = jdbc.query("""
+                SELECT a.id,a.state,d.revision,d.title,a.updated_at,v.id IS NOT NULL has_public_version
+                """ + from + " ORDER BY a.updated_at DESC,a.id DESC LIMIT :size OFFSET :offset", params, (r, n) -> {
+            var current = ArticleState.valueOf(r.getString("state"));
+            return new OwnedArticle(r.getLong("id"), current, r.getLong("revision"), r.getString("title"),
+                    r.getTimestamp("updated_at").toInstant(),
+                    WorkspaceAction.allowed(current, r.getBoolean("has_public_version"), canPublish));
+        });
+        return new OwnedPage(rows, total, page, size, !canPublish);
     }
     public Content content(long id){return jdbc.query("SELECT * FROM article_draft WHERE article_id=:id",p("id",id),(r,n)->new Content(r.getString("title"),r.getString("summary"),r.getString("body"),tags(id),r.getString("experience_stage"),r.getString("source_type"),r.getString("source_note"),links(id))).getFirst();}
     private Tags tags(long id){var groups=new HashMap<String,List<Long>>();jdbc.query("SELECT c.kind,c.id FROM article_draft_category d JOIN category c ON c.id=d.category_id WHERE d.article_id=:id ORDER BY c.id",p("id",id),r->{groups.computeIfAbsent(r.getString(1),k->new ArrayList<>()).add(r.getLong(2));});return new Tags(groups.getOrDefault("JOB",List.of()),groups.getOrDefault("MAJOR",List.of()),groups.getOrDefault("COMPANY",List.of()),groups.getOrDefault("TOPIC",List.of()));}
@@ -57,7 +110,7 @@ public class WritingRepository {
         var params=p("id",id).addValue("title",c.title()).addValue("summary",c.summary()).addValue("body",c.body()).addValue("stage",c.experienceStage()).addValue("source",c.sourceType()).addValue("note",c.sourceNote());
         jdbc.update("UPDATE article_draft SET title=:title,summary=:summary,body=:body,experience_stage=:stage,source_type=:source,source_note=:note WHERE article_id=:id",params);
         jdbc.update("DELETE FROM article_draft_category WHERE article_id=:id",params);
-        for(var ids:List.of(c.tags().jobIds(),c.tags().majorIds(),c.tags().companyIds(),c.tags().topicIds()))for(long category:ids)jdbc.update("INSERT INTO article_draft_category VALUES(:id,:category)",p("id",id).addValue("category",category));
+        for(var ids:List.of(c.tags().jobIds(),c.tags().majorIds(),c.tags().companyIds(),c.tags().topicIds()))for(long category:ids)addDraftCategory(id,category);
         jdbc.update("DELETE FROM article_draft_source_link WHERE article_id=:id",params);int order=0;
         for(SourceLink link:c.sourceLinks())jdbc.update("INSERT INTO article_draft_source_link VALUES(:id,:ord,:label,:url)",p("id",id).addValue("ord",order++).addValue("label",link.label()).addValue("url",link.url()));
         jdbc.update("DELETE FROM article_draft_image WHERE article_id=:id",params);for(String image:images)jdbc.update("INSERT INTO article_draft_image VALUES(:id,:image)",p("id",id).addValue("image",image));bump(id,now);

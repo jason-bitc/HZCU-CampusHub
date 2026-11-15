@@ -2,7 +2,7 @@
 
 2026-10-22第八阶段：counts.effectiveCoins为真实有效投币SUM，effectiveLikes为真实active点赞COUNT，origin保持LIVE。认可排序为有效获币、有效点赞、首发时间、文章ID依次降序；最新排序及筛选保持。钱包和奖励见[COINS_API.md](COINS_API.md)。
 
-默认本机地址 `http://127.0.0.1:8080`。本文接口无需登录，仅游客可读字段。所有时间为UTC ISO-8601，文章/分类ID为正整数。
+默认本机地址 `http://127.0.0.1:8080`。文章响应只含公开可读字段。同专业快捷筛选要求校园认证，普通检索对访客开放。所有时间为UTC ISO-8601，文章/分类ID为正整数。
 
 本文件继续描述公开读取合同；身份接口见[AUTH_API.md](AUTH_API.md)，第三阶段认证作者写接口见[AUTHORING_API.md](AUTHORING_API.md)。游客列表/详情新增updatedAt，不增加真实作者私有资料。
 
@@ -26,19 +26,22 @@
 
 此处仅显示结构，实际演示分类为2岗位、2专业、2公司、3主题。文章已有分类即使后续禁用仍保留标签；catalog只提供当前可选分类。
 
+同义分类归并后，目录只列启用的保留分类。使用旧 ID 或保留 ID 均可筛选同一组公开文章，文章展示发布时关联的标签。
+
 ## GET /api/v1/articles
 
 | 参数 | 约束与语义 |
 | --- | --- |
 | keyword | 可选，去首尾空白后最多100个UTF-16字符；禁止控制字符；空白同不筛选；检索标题及摘要，不检索正文 |
 | jobId / majorId / companyId / topicId | 可选正整数，多个条件同时满足；不存在或类别不匹配得到空列表 |
+| sameMajor | 可选，小写 true 或 false。true 按登录者当前资料中的专业筛选，不得同时传 majorId |
 | sort | 默认recognized，另支持latest，大小写严格 |
 | page | 从1开始，默认1，上限1000000 |
 | size | 默认20，1至100，超过上限返回400 |
 
 重复参数、未知参数、空数字、不合法数字或排序均400。关键词 `%`、`_`、`!`作为字面字符匹配；单引号等通过SQL参数绑定。采用MySQL utf8mb4_0900_ai_ci的大小写/重音比较规则。所有过滤在排序前生效，不放宽条件。
 
-recognized为有效获币（本批固定0）、真实有效点赞、首次发布时间、文章id依次降序；latest为首次发布时间、文章id降序。当前counts.origin统一LIVE，effectiveLikes只统计真实未取消点赞，不加旧DEMO值或收藏数。publishedAt保持首发；updatedAt记录当前公开版本发布时间，不因点赞/收藏更新。列表项如下，数量0仅示例，实际按事实读取；categories内四类均为数组，公司可为空。
+recognized为有效获币、真实有效点赞、首次发布时间、文章id依次降序；latest为首次发布时间、文章id降序。当前counts.origin统一LIVE，effectiveLikes只统计真实未取消点赞，不加旧DEMO值或收藏数。publishedAt保持首发；updatedAt记录当前公开版本发布时间，不因点赞/收藏更新。列表项如下，数量0仅示例，实际按事实读取；categories内四类均为数组，公司可为空。
 
 ```json
 {
@@ -57,6 +60,10 @@ recognized为有效获币（本批固定0）、真实有效点赞、首次发布
 data结构为 `{"items":[列表项],"total":6,"page":1,"size":20}`，无结果或超过末页返回 `items=[]`，total仍为匹配总数。列表不返回全文、内部状态、版本id、作者账号或身份资料。每次读取在MySQL REPEATABLE_READ只读事务中保持计数、行和分类快照一致；稳定数据下分页无重复遗漏，跨请求期间数据改变时不承诺offset分页固定快照。
 
 示例 `/api/v1/articles?keyword=Java&jobId=1&majorId=11&companyId=21&topicId=31&sort=latest&page=1&size=20`。
+
+快捷筛选示例 `/api/v1/articles?sameMajor=true&jobId=1&companyId=21&sort=recognized`。请求携带本人 Bearer 令牌。接口按当前启用的本人专业匹配文章公开版本的专业标签，并保留关键词、岗位、公司、主题、排序和分页。资料中选过后来归并的专业时，使用当前保留专业筛选。个人资料变更后，下次请求使用新专业。
+
+缺少有效会话返回 401 `UNAUTHORIZED`，账号或认证受限返回 403 `ACCESS_RESTRICTED`，本人专业未填写或已停用返回 409 `SAME_MAJOR_UNAVAILABLE`。客户端可让用户先更新资料，也可关闭快捷筛选后手动选择专业。快捷请求使用 `Cache-Control: no-store`。省略 `sameMajor` 或设为 `false` 走普通检索。
 
 ## GET /api/v1/articles/{id}
 

@@ -5,6 +5,7 @@ import cn.edu.hzcu.campushub.audit.BusinessAudit;
 import cn.edu.hzcu.campushub.audit.BusinessAudit.*;
 import cn.edu.hzcu.campushub.authoring.*;
 import cn.edu.hzcu.campushub.common.*;
+import cn.edu.hzcu.campushub.notification.NotificationService;
 import java.time.Clock;
 import java.util.*;
 import org.slf4j.*;
@@ -17,8 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class CommunityService {
     private static final Logger LOG=LoggerFactory.getLogger(CommunityService.class);
+    private final NotificationService notifications;
     private final CommunityRepository db;private final WritingRepository writing;private final MediaStore files;private final BusinessAudit audit;private final AdminAuthService admins;private final Clock clock;private final TransactionTemplate read,write;
-    public CommunityService(CommunityRepository db,WritingRepository writing,MediaStore files,BusinessAudit audit,AdminAuthService admins,Clock clock,PlatformTransactionManager manager){this.db=db;this.writing=writing;this.files=files;this.audit=audit;this.admins=admins;this.clock=clock;read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);}
+    public CommunityService(CommunityRepository db,WritingRepository writing,MediaStore files,BusinessAudit audit,AdminAuthService admins,Clock clock,PlatformTransactionManager manager,NotificationService notifications){this.db=db;this.writing=writing;this.files=files;this.audit=audit;this.admins=admins;this.clock=clock;this.notifications=notifications;read=new TransactionTemplate(manager);read.setReadOnly(true);read.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);}
     public static ApiException conflict(String code){return new ApiException(HttpStatus.CONFLICT,code,switch(code){case "REQUEST_KEY_REUSED"->"该请求编号已用于其他内容";case "REVISION_CONFLICT"->"案件已更新，请刷新后重试";case "CASE_ASSIGNED"->"案件已由其他管理员认领";case "CASE_NOT_ASSIGNEE"->"仅当前受理人可执行此操作";case "IMAGE_ALREADY_USED"->"证据图片已绑定其他案件";default->"当前案件状态不允许此操作";});}
     private Receipt replay(Previous p,String digest){if(!p.digest().equals(digest))throw conflict("REQUEST_KEY_REUSED");RequestTrace.caseId(p.receipt().caseId());return p.receipt();}
     public Receipt submit(long user,CommunityInput.Submission input){return RequestTrace.write(write,tx->{
@@ -37,6 +39,16 @@ public class CommunityService {
     public WritingService.BinaryImage image(long user,String id){return read.execute(tx->{var image=db.image(WritingInput.requestId(id)).filter(i->i.user()==user).orElseThrow(ApiException::notFound);return new WritingService.BinaryImage(files.read(image.id(),image.size(),image.digest()),image.mime());});}
     public Page page(long actor,boolean admin,CommunityPage page){return read.execute(tx->{RequestTrace.stage(RequestTrace.Stage.READ);return db.page(actor,admin,page);});}
     public Map<String,Object> detail(long actor,long id,boolean admin){return read.execute(tx->{Case c=db.row(id,false);if(!admin&&c.user()!=actor)throw ApiException.notFound();RequestTrace.stage(RequestTrace.Stage.READ);return db.detail(c,admin);});}
+    public CaseAudit audit(long admin, long id, int page, int size) {
+        return read.execute(tx -> {
+            admins.active(admin, false);
+            Case result = db.row(id, false);
+            RequestTrace.stage(RequestTrace.Stage.READ);
+            var timeline = db.audit(result, page, size);
+            LOG.info("case access actorId={} caseId={} objectType={}", admin, id, "AUDIT");
+            return timeline;
+        });
+    }
     public Map<String,Object> context(long admin,long id){return read.execute(tx->{Case c=db.row(id,false);RequestTrace.stage(RequestTrace.Stage.READ);var result=db.context(c);LOG.info("case access actorId={} caseId={} objectType={}",admin,id,"CONTEXT");return result;});}
     public WritingService.BinaryImage adminImage(long admin,long id,String imageId){return read.execute(tx->{db.row(id,false);String image=WritingInput.requestId(imageId);var evidence=db.image(image).filter(i->Objects.equals(i.caseId(),id));byte[] bytes;String mime;
         if(evidence.isPresent()){var i=evidence.get();bytes=files.read(i.id(),i.size(),i.digest());mime=i.mime();}else{var metadata=db.contextMedia(id,image);bytes=files.read(image,((Number)metadata.get("size")).longValue(),(String)metadata.get("digest"));mime=(String)metadata.get("mime");}
@@ -53,6 +65,10 @@ public class CommunityService {
             default->throw ApiException.invalid();
         }
         RequestTrace.stage(RequestTrace.Stage.PERSIST);long sequence=writing.allocate("community");var now=clock.instant();db.state(id,state,assignee,now);Case after=db.row(id,false);db.history(sequence,after,RequestTrace.Domain.COMMUNITY_ADMIN,admin,command.action(),command.outcome(),command.reply(),command.note(),command.reason(),now);db.receipt(admin,command.requestId(),digest,after);
+        if ("CASE_DECISION".equals(command.action())) {
+            notifications.record(c.user(), NotificationService.Kind.CASE_DECISION, id, after.revision(),
+                    NotificationService.Outcome.valueOf(command.outcome()));
+        }
         audit.changed(RequestTrace.Domain.COMMUNITY_ADMIN,admin,Action.valueOf(command.action()),ObjectType.CASE,id,c.revision(),after.revision(),State.valueOf(c.state()),State.valueOf(after.state()));return new Receipt(id,after.revision(),state);
     });}
 }

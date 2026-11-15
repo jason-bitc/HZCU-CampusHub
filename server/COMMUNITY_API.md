@@ -44,7 +44,7 @@ kind为FEEDBACK或REPORT。FEEDBACK类别BUG／SUGGESTION／OTHER，可无目标
 | --- | --- |
 | POST /admin/auth/login | application/json，恰含login、password；返回Bearer、accessToken、expiresAt |
 | POST /admin/auth/logout | 无参数／正文；退出当前管理会话 |
-| GET /admin/me | adminId、actorDomain:COMMUNITY_ADMIN、capabilities:[CASE_READ,CASE_HANDLE] |
+| GET /admin/me | adminId、actorDomain:COMMUNITY_ADMIN、capabilities，含 CONTRIBUTION_INVALIDATE |
 | GET /admin/cases | page、size、snapshot、kind、state；按历史快照筛选全部案件 |
 | GET /admin/cases/{id} | 当前案件、提交者内部ID、受理人内部ID、证据、完整处理时间线及提交时版本ID |
 | GET /admin/cases/{id}/context | 案件固定的原公开文章版本、必要评论快照、当前文章状态、关联媒体ID |
@@ -58,6 +58,14 @@ kind为FEEDBACK或REPORT。FEEDBACK类别BUG／SUGGESTION／OTHER，可无目标
 管理上下文的articleVersionId固定为举报时的公开版本，后续改稿、下架、隐藏或软删除不改成当前草稿。评论快照含TARGET／ROOT／REPLY_TO角色；提交时不可见的必要父上下文只保存标识和available:false，body为空。context.articleAvailable标明保存版本能否读取，已不存在的真实资料不补造。media列出本案准许的image ID及来源，客户端应使用本案/admin/cases/{id}/media/{imageId}构造图片请求，不依赖旧公开链接访问下架内容。该入口不浏览其他图片或任意版本。
 
 管理login仅允许小写字母、数字、点、短横线、下划线，3—64字符且首字符为字母或数字；密码沿用8—64字符且UTF-8不超过72字节，BCrypt cost12。管理令牌带adm_域前缀、只存摘要，固定8小时有效；退出、过期、停用或本机重设失效。每个规范登录名的摘要对应持久失败窗口，15分钟最多5次失败，第6次起429；未知和既有账号均按同样规则和通用错误处理。
+
+## 案件审计
+
+`GET /api/v1/admin/cases/{id}/audit?page=1&size=20` 由社区管理员访问。响应包含 `caseId/state/revision/targetType/articleId/commentId/items/total/page/size`。案件状态、总数和本页记录来自同一数据库快照。
+
+审计条目用 `source` 区分案件流转 `CASE`、内容处置 `CONTENT` 和投币失效 `CONTRIBUTION`。`sequence` 与 `source` 共同标识一条记录。条目含动作、操作者域与 ID、目标、前后状态、结果、理由、时间及存在时的公开答复。内容处置和贡献失效的新记录保留其执行时的案件修订 `caseRevision`。投币失效附 `contributionEventId` 用于查找对应贡献。历史投币失效可按原有案件关联读取，其 `caseRevision` 为 `null`。
+
+条目按时间升序，同一时间按可用的案件修订、来源和序号依次排序。新请求按当前快照分页，案件新增处置后可从第一页刷新。普通用户继续通过本人案件详情查看处理状态和公开答复。
 
 ## 幂等与稳定分页
 
@@ -85,4 +93,27 @@ kind为FEEDBACK或REPORT。FEEDBACK类别BUG／SUGGESTION／OTHER，可无目标
 | 409 IMAGE_ALREADY_USED | 本人图已绑定其他案件 |
 | 503 SERVICE_UNAVAILABLE／STORAGE_UNAVAILABLE | 必需数据库／审计或文件失败，不能假称成功 |
 
-除精确POST /admin/auth/login外，整个/admin前缀，包括错误ID和未知子路径，均先验证管理身份。普通校园Bearer不授管理权，管理Bearer不授普通用户或运维权。没有公开管理注册、内容隐藏／封禁／返币、删除案件、任意改账或运维接口。
+除精确POST /admin/auth/login外，整个/admin前缀，包括错误ID和未知子路径，均先验证管理身份。普通校园Bearer不授管理权，管理Bearer不授普通用户或运维权。
+
+## 贡献失效与追溯
+
+| 方法与路由 | 用途及返回 |
+| --- | --- |
+| GET /admin/cases/{caseId}/contributions | 社区管理员从文章举报查询对应文章的投币。接受 page（默认 1）和 size（默认 20，最大 100），按流水倒序返回 items、total、page、size。 |
+| POST /admin/cases/{caseId}/contributions/{eventId}/invalidation | 认领人标记指定投币失效。JSON 须含 expectedRevision、requestId、reason。成功返回 caseId、eventId、effective（false）。 |
+
+列表中的每项含 eventId、amount、occurredAt、effective。已有处置时，invalidation 含实际处置的 caseId、adminId、reason 和 occurredAt。仅社区管理员可查，列表省去投币者身份和余额。案件须为指向文章的举报，投币须属于该文章；其他案件类型、未知或错配目标返回 404。
+
+写入要求案件处于 PROCESSING 或 NEEDS_ACTION，由当前认领人提交案件修订号及非空原因（最多 2000 个字符）。失效状态、关联处置记录和业务审计在同一事务提交。成功后可用 GOVERNANCE_COMPLETED 关闭关联案件。一次处置处理一笔投币，案件修订号由原案件流转更新。
+
+| 返回码 | 含义 |
+| --- | --- |
+| 409 REVISION_CONFLICT | 案件修订已变化，重新读取后再提交 |
+| 409 CASE_NOT_ASSIGNEE／CASE_STATE_CONFLICT | 需认领人处理，且案件处于可处置状态 |
+| 409 REQUEST_KEY_REUSED | 同一管理员在贡献失效接口复用已成功的请求编号，且请求内容不同 |
+| 409 CONTRIBUTION_ALREADY_INVALID | 使用新请求编号时，该笔贡献已失效 |
+| 503 SERVICE_UNAVAILABLE | 必要的数据库写入或审计失败，事务回滚，可按原请求重试 |
+
+同一管理员使用原编号和相同内容重试会返回原回执，案件关闭后也可重放成功回执。失效只影响文章有效计数、认可排序和荣誉计算，读者余额与原流水继续用于账本核对。
+
+数据库迁移为 V12。现有部署按运维维护流程升级数据库和执行器后，再使用网页发布同一数据库版本的构建。
