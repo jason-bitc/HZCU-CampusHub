@@ -30,7 +30,7 @@
 
 输入 `{"email":"...","password":"..."}`。成功HTTP 200返回 `data={"tokenType":"Bearer","accessToken":"不透明会话令牌","expiresAt":"UTC时间"}`。每次登录创建独立会话，使用256位随机令牌，数据库只保存SHA-256摘要。绝对有效期7天，不滑动续期。
 
-邮箱不存在、密码错误、账号受限或校园认证已撤销统一401 `LOGIN_FAILED`。未知账号也执行密码匹配成本，接口不返回内部账号存在性原因。密码重置与会话创建对账号行加锁，避免旧密码核验后在重置完成后再创建有效会话。
+邮箱不存在、密码错误或账号受限统一401 `LOGIN_FAILED`。未知账号也执行密码匹配成本，接口不返回内部账号存在性原因。账号正常但校园认证已撤销的用户可登录，使用本人认证、通知和退出入口。密码重置与会话创建对账号行加锁。
 
 ## GET /me
 
@@ -41,6 +41,20 @@
 ## POST /auth/logout
 
 同Bearer头，成功200 `data={"loggedOut":true}`，只撤销当前会话。撤销后该令牌401，其他端会话仍有效。账号受限或认证撤销后仍可用尚未过期的本人会话退出。没有或失效会话401；此合同不将重复退出伪称新撤销成功。
+
+## 校园邮箱重新认证
+
+| 请求 | 返回 |
+| --- | --- |
+| GET /api/v1/me/certification | `state`、`verifiedAt`、`canReverify`、`revocationReason`、`revokedAt`、`revision`、`canAppeal`、`appealId`，使用有效本人会话 |
+| POST /api/v1/me/certification/reverification-codes | 无请求体，向账号的原校园邮箱发送验证码，202 返回 `challengeId`、`expiresAt`、`resendAt`、`notice` |
+| POST /api/v1/me/certification/reverification | JSON 仅含 `challengeId` 和 `code`，200 返回 `reverified:true`、`signInRequired:true` |
+
+三个接口均无查询参数。申请与提交使用同一登录会话。验证码与原邮箱、会话、认证版本及重新认证用途绑定，沿用五分钟有效期、单次消费、错误尝试和发送限额。申请要求账号 ACTIVE 且认证状态 REVOKED。账号受限返回 403，已认证返回 409 `CERTIFICATION_ALREADY_VALID`，无效挑战返回 400 `CODE_INVALID`。SMTP 发送结果表示服务器受理，收件以本人邮箱为准。
+
+认证恢复、时间和版本更新、验证码消费、撤销旧会话、本人通知及变更审计在同一事务完成。客户端收到成功结果后清除旧令牌，请用户重新登录。请求结果未知时，也可重新登录查询认证状态。原账号内容、账号限制以及发布、评论限制继续按现有规则处理。
+
+社区管理员可通过[管理接口](ADMIN_API.md#校园认证撤销)撤销认证。本人查询返回当前撤销的原因和时间，已恢复或没有历史撤销依据时，这两个字段为 `null`。`verifiedAt` 一直表示最近一次认证通过时间。认证撤销且当前修订还无申诉时，`canAppeal` 为 `true`。当前修订已有申诉时返回 `appealId`，可打开本人详情。现有部署须依次应用 V14 至 V16 数据库迁移。[申诉接口](ADMIN_API.md#校园认证申诉)
 
 ## POST /auth/password-reset-codes
 

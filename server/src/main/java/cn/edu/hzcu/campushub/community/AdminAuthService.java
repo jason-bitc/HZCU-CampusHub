@@ -23,6 +23,15 @@ public class AdminAuthService {
     public AdminAuthService(JdbcTemplate db,PasswordEncoder encoder,AuthCrypto crypto,Clock clock,PlatformTransactionManager manager){this.db=db;this.encoder=encoder;this.crypto=crypto;this.clock=clock;write=new TransactionTemplate(manager);write.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);dummy=encoder.encode(crypto.token());}
     public static ApiException unauthorized(){return new ApiException(HttpStatus.UNAUTHORIZED,"ADMIN_UNAUTHORIZED","请使用有效社区管理会话");}
     public void active(long id,boolean lock){RequestTrace.stage(RequestTrace.Stage.AUTHORIZATION);var found=db.query("SELECT enabled FROM community_admin WHERE id=?"+(lock?" FOR UPDATE":""),(r,n)->r.getBoolean(1),id);if(found.isEmpty()||!found.getFirst())throw unauthorized();RequestTrace.actor(id);}
+    void lockSession(Identity identity) {
+        active(identity.adminId(), true);
+        var session = db.query("""
+                SELECT revoked_at,expires_at FROM community_admin_session WHERE id=? AND admin_id=? FOR UPDATE
+                """, (r, n) -> r.getTimestamp("revoked_at") == null
+                        && clock.instant().isBefore(r.getTimestamp("expires_at").toInstant()),
+                identity.sessionId(), identity.adminId()).stream().findFirst();
+        if (!session.orElse(false)) throw unauthorized();
+    }
     public Login login(String name,String password){
         String canonical=CommunityInput.login(name),raw=AuthInput.password(password),gate=AuthCrypto.tokenDigest(canonical);
         Outcome outcome=RequestTrace.write(write,tx->{

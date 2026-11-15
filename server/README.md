@@ -13,13 +13,15 @@
 | 评论与图片 | [COMMENTS_API.md](COMMENTS_API.md) |
 | 点赞与收藏 | [INTERACTIONS_API.md](INTERACTIONS_API.md) |
 | 奖励、币与账本 | [COINS_API.md](COINS_API.md) |
+| 本人通知和已读状态 | [NOTIFICATIONS_API.md](NOTIFICATIONS_API.md) |
+| 双端规则说明与可选写作提示 | [USER_GUIDANCE_API.md](USER_GUIDANCE_API.md) |
 | 私人举报反馈及基础案件 | [COMMUNITY_API.md](COMMUNITY_API.md) |
 | 社区管理员网页与治理 | [ADMIN_API.md](ADMIN_API.md) |
 | 独立运维网页与实际执行 | [OPS_API.md](OPS_API.md) |
 | 调试日志 | [LOGGING.md](LOGGING.md) |
 | 手工接口调试 | [Postman集合](postman/CampusHub.postman_collection.json) |
 
-原后端来源为feat/wc-community-foundation的399dcbb，当前集成保留原迁移及功能，新增V10治理与V11行为限制/申诉。历史开发及测试记录仍可从原分支查看；当前验证以本任务检查记录和target测试报告为准。
+数据库迁移包含 V10 内容治理、V11 行为限制与申诉、V12 贡献失效、V13 站内通知、V14 校园邮箱重新认证、V15 管理员撤销校园认证、V16 校园认证申诉、V17 同义分类归并及 V18 案件关联审计。现有部署按 [运维维护流程](OPS_API.md) 升级数据库和执行器。
 
 ## 本机准备
 

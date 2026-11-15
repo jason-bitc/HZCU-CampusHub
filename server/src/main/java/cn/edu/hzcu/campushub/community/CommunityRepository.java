@@ -18,7 +18,55 @@ public class CommunityRepository {
     private static Timestamp time(Instant t){return Timestamp.from(t);}
     private static Case row(ResultSet r)throws SQLException{return new Case(r.getLong("id"),r.getLong("user_id"),r.getString("kind"),r.getString("category"),r.getString("target_type"),r.getObject("article_id",Long.class),r.getObject("comment_id",Long.class),r.getObject("article_version_id",Long.class),r.getString("description"),r.getString("state"),r.getLong("revision"),r.getObject("assignee_id",Long.class),r.getString("content_digest"),r.getTimestamp("created_at").toInstant(),r.getTimestamp("updated_at").toInstant());}
     public Case row(long id,boolean lock){RequestTrace.caseId(id);RequestTrace.stage(RequestTrace.Stage.TARGET);return db.query("SELECT * FROM community_case WHERE id=:id"+(lock?" FOR UPDATE":""),p("id",id),(r,n)->row(r)).stream().findFirst().orElseThrow(ApiException::notFound);}
-    public boolean governanceRecorded(Case c){return c.targetType()!=null&&db.queryForObject("SELECT COUNT(*) FROM governance_event WHERE target_type=:type AND target_id=:target AND action='HIDE' AND occurred_at>=:created",p("type",c.targetType()).addValue("target",c.targetType().equals("ARTICLE")?c.article():c.comment()).addValue("created",time(c.created())),Long.class)>0;}
+    public boolean governanceRecorded(Case c) {
+        if (c.targetType() == null) return false;
+        var params = p("caseId", c.id()).addValue("type", c.targetType())
+                .addValue("target", c.targetType().equals("ARTICLE") ? c.article() : c.comment())
+                .addValue("created", time(c.created()));
+        return Boolean.TRUE.equals(db.queryForObject("""
+                SELECT EXISTS(SELECT 1 FROM governance_event
+                    WHERE target_type=:type AND target_id=:target AND action='HIDE' AND occurred_at>=:created
+                      AND (case_id=:caseId OR case_id IS NULL))
+                    OR EXISTS(SELECT 1 FROM contribution_invalidation WHERE case_id=:caseId)
+                """, params, Boolean.class));
+    }
+    public CaseAudit audit(Case c, int page, int size) {
+        var args = p("caseId", c.id()).addValue("size", size).addValue("offset", ((long) page - 1) * size);
+        long total = db.queryForObject("""
+                SELECT (SELECT COUNT(*) FROM community_case_history WHERE case_id=:caseId)
+                   + (SELECT COUNT(*) FROM governance_event WHERE case_id=:caseId)
+                   + (SELECT COUNT(*) FROM contribution_invalidation WHERE case_id=:caseId)
+                """, args, Long.class);
+        var events = db.query("""
+                SELECT * FROM (
+                  SELECT h.sequence_id event_sequence,'CASE' event_source,h.action,h.actor_domain,h.actor_id,
+                         'CASE' target_type,h.case_id target_id,NULL contribution_event_id,
+                         h.revision case_revision,h.revision,previous.state before_state,h.state after_state,
+                         h.outcome,h.public_reply,h.reason,h.occurred_at,0 event_order
+                  FROM community_case_history h LEFT JOIN community_case_history previous
+                    ON previous.case_id=h.case_id AND previous.revision=h.revision-1
+                  WHERE h.case_id=:caseId
+                  UNION ALL
+                  SELECT g.id,'CONTENT',g.action,'COMMUNITY_ADMIN',g.admin_id,g.target_type,g.target_id,NULL,
+                         g.case_revision,g.revision,g.before_state,g.after_state,NULL,NULL,g.reason,g.occurred_at,1
+                  FROM governance_event g WHERE g.case_id=:caseId
+                  UNION ALL
+                  SELECT i.coin_sequence_id,'CONTRIBUTION','CONTRIBUTION_INVALIDATE','COMMUNITY_ADMIN',i.admin_id,
+                         'CONTRIBUTION',i.coin_sequence_id,e.event_id,i.case_revision,1,'ENABLED','DISABLED','INVALIDATED',NULL,
+                         i.reason,i.occurred_at,2
+                  FROM contribution_invalidation i JOIN coin_event e ON e.sequence_id=i.coin_sequence_id
+                  WHERE i.case_id=:caseId
+                ) timeline
+                ORDER BY occurred_at,COALESCE(case_revision,9223372036854775807),event_order,event_sequence
+                LIMIT :size OFFSET :offset
+                """, args, (r, n) -> new AuditEvent(r.getLong("event_sequence"), r.getString("event_source"),
+                r.getString("action"), r.getString("actor_domain"), r.getLong("actor_id"), r.getString("target_type"),
+                r.getLong("target_id"), r.getString("contribution_event_id"), r.getObject("case_revision", Long.class),
+                r.getLong("revision"), r.getString("before_state"), r.getString("after_state"), r.getString("outcome"),
+                r.getString("public_reply"), r.getString("reason"), r.getTimestamp("occurred_at").toInstant()));
+        return new CaseAudit(c.id(), c.state(), c.revision(), c.targetType(), c.article(), c.comment(), events,
+                total, page, size);
+    }
     public Optional<Previous> previous(long user,String key){RequestTrace.stage(RequestTrace.Stage.RECEIPT);return db.query("SELECT id,content_digest FROM community_case WHERE user_id=:user AND request_id=:key",p("user",user).addValue("key",key),(r,n)->new Previous(r.getString(2),new Receipt(r.getLong(1),1,"OPEN"))).stream().findFirst();}
     public Target target(String type,Long id){
         if(type==null)return new Target(null,null,null);RequestTrace.stage(RequestTrace.Stage.TARGET);long article=id;

@@ -62,8 +62,10 @@ public class RequestTrace extends OncePerRequestFilter {
     public static String safeCode(String code){return code!=null&&code.matches("[A-Z][A-Z0-9_]{1,47}")?code:"INTERNAL_ERROR";}
     public static void errorCode(String code){if(current()!=null)MDC.put("errorCode",safeCode(code));}
     public static String module(String action){
+        if(action.equals("RULES_READ")||action.equals("WRITING_PROMPTS_READ"))return "GUIDANCE";
         if(action.startsWith("ADMIN_"))return "COMMUNITY_ADMIN";
         if(action.startsWith("CASE_"))return "COMMUNITY";
+        if(action.startsWith("NOTIFICATION_"))return "NOTIFICATION";
         if(java.util.Set.of("COIN_BALANCE","COIN_LEDGER","REWARDS_READ","LOGIN_REWARD","READING_START","READING_REWARD","COIN_STATE","ARTICLE_COIN").contains(action))return "COIN";
         if(action.startsWith("LIKE_")||action.startsWith("FAVORITE")||action.equals("INTERACTION_READ"))return "INTERACTION";
         if(action.startsWith("AUTH_")||action.equals("IDENTITY_READ"))return "AUTH";
@@ -76,6 +78,13 @@ public class RequestTrace extends OncePerRequestFilter {
     }
     public static String action(String path){return action(path,"GET");}
     public static String action(String path,String method){
+        if(path.equals("/api/v1/me/certification"))return "AUTH_CERTIFICATION_READ";
+        if(path.equals("/api/v1/me/certification/reverification-codes"))return "AUTH_REVERIFY_CODE";
+        if(path.equals("/api/v1/me/certification/reverification"))return "AUTH_REVERIFY";
+        if(path.equals("/api/v1/rules"))return "RULES_READ";
+        if(path.equals("/api/v1/me/writing-prompts"))return "WRITING_PROMPTS_READ";
+        if(path.equals("/api/v1/me/notifications"))return "NOTIFICATION_LIST";
+        if(path.matches("/api/v1/me/notifications/[^/]+/read"))return "NOTIFICATION_MARK_READ";
         if(path.equals("/api/v1/me/cases"))return method.equals("POST")?"CASE_SUBMIT":"CASE_LIST";
         if(path.startsWith("/api/v1/me/cases/"))return "CASE_DETAIL";
         if(path.equals("/api/v1/me/case-images"))return "CASE_IMAGE_UPLOAD";
@@ -85,16 +94,21 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.equals("/api/v1/admin/me"))return "ADMIN_ME";
         if(path.equals("/api/v1/admin/cases"))return "ADMIN_CASE_LIST";
         if(path.matches("/api/v1/admin/cases/[^/]+/context"))return "ADMIN_CASE_CONTEXT";
+        if(path.matches("/api/v1/admin/cases/[^/]+/audit"))return "ADMIN_CASE_AUDIT";
         if(path.matches("/api/v1/admin/cases/[^/]+/media/[^/]+"))return "ADMIN_CASE_MEDIA";
         if(path.matches("/api/v1/admin/cases/[^/]+/claim"))return "ADMIN_CASE_CLAIM";
         if(path.matches("/api/v1/admin/cases/[^/]+/release"))return "ADMIN_CASE_RELEASE";
         if(path.matches("/api/v1/admin/cases/[^/]+/decisions"))return "ADMIN_CASE_DECISION";
+        if(path.matches("/api/v1/admin/cases/[^/]+/contributions"))return "ADMIN_CONTRIBUTION_READ";
+        if(path.matches("/api/v1/admin/cases/[^/]+/contributions/[^/]+/invalidation"))return "ADMIN_CONTRIBUTION_INVALIDATE";
         if(path.matches("/api/v1/admin/cases/[^/]+"))return "ADMIN_CASE_DETAIL";
         if(path.equals("/api/v1/admin/overview"))return "ADMIN_OVERVIEW";
+        if(path.matches("/api/v1/admin/users/[^/]+/certification/revocation"))return "ADMIN_CERTIFICATION_REVOKE";
+        if(path.matches("/api/v1/admin/users/[^/]+/certification"))return "ADMIN_CERTIFICATION_READ";
         if(path.startsWith("/api/v1/admin/users"))return "ADMIN_RESTRICTION";
         if(path.startsWith("/api/v1/admin/appeals"))return "ADMIN_APPEAL";
         if(path.equals("/api/v1/me/restrictions"))return "RESTRICTION_READ";
-        if(path.equals("/api/v1/me/appeals"))return "APPEAL";
+        if(path.equals("/api/v1/me/appeals")||path.matches("/api/v1/me/appeals/[^/]+"))return "APPEAL";
         if(path.matches("/api/v1/admin/(articles|comments)/[^/]+/moderation"))return "ADMIN_MODERATION";
         if(path.startsWith("/api/v1/admin/articles"))return "ADMIN_PATROL";
         if(path.startsWith("/api/v1/admin/categories"))return "ADMIN_CATEGORY";
@@ -123,6 +137,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.matches("/api/v1/me/articles/[^/]+/draft"))return method.equals("PUT")?"DRAFT_SAVE":"DRAFT_READ";
         if(path.matches("/api/v1/me/articles/[^/]+/images"))return "ARTICLE_IMAGE_UPLOAD";
         if(path.matches("/api/v1/me/articles/[^/]+/publish"))return "WRITING_PUBLISH";
+        if(path.matches("/api/v1/me/articles/[^/]+/preview"))return "WRITING_PREVIEW";
         if(path.matches("/api/v1/me/articles/[^/]+/unpublish"))return "WRITING_UNPUBLISH";
         if(path.matches("/api/v1/me/articles/[^/]+/restore"))return "WRITING_RESTORE";
         if(path.matches("/api/v1/me/articles/[^/]+")&&method.equals("DELETE"))return "WRITING_DELETE";

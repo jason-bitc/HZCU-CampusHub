@@ -96,12 +96,19 @@ final class OpsRunner implements OpsJobs.Executor {
             var entries=zip.stream().filter(e->!e.isDirectory()&&e.getName().startsWith("BOOT-INF/classes/db/migration/")).toList();
             if(entries.isEmpty())throw failure("OPS_ARTIFACT_INVALID");
             var names=new TreeSet<String>();for(var entry:entries){String resource=entry.getName().substring("BOOT-INF/classes/".length());names.add(resource);try(var expected=OpsRunner.class.getClassLoader().getResourceAsStream(resource);var actual=zip.getInputStream(entry)){if(expected==null||!MessageDigest.isEqual(expected.readAllBytes(),actual.readAllBytes()))throw failure("OPS_ARTIFACT_SCHEMA_CHANGE");}}
-            for(String resource:List.of("V1__article_reading_schema.sql","V3__account_email_auth.sql","V4__author_profiles_drafts_and_media.sql","V5__author_contact_and_business_audit.sql","V6__authenticated_comments_and_images.sql","V7__likes_favorites_and_live_counts.sql","V8__coin_wallet_ledger_and_reading.sql","V9__community_cases_and_admin_identity.sql","V10__community_governance.sql","V11__user_restrictions_and_appeals.sql"))if(!names.contains("db/migration/"+resource))throw failure("OPS_ARTIFACT_SCHEMA_CHANGE");
+            for(String resource:List.of("V1__article_reading_schema.sql","V3__account_email_auth.sql","V4__author_profiles_drafts_and_media.sql","V5__author_contact_and_business_audit.sql","V6__authenticated_comments_and_images.sql","V7__likes_favorites_and_live_counts.sql","V8__coin_wallet_ledger_and_reading.sql","V9__community_cases_and_admin_identity.sql","V10__community_governance.sql","V11__user_restrictions_and_appeals.sql","V12__contribution_invalidation.sql","V13__personal_notifications.sql","V14__campus_email_reverification.sql","V15__campus_certification_revocation.sql","V16__campus_certification_appeals.sql","V17__category_canonical_mapping.sql","V18__case_linked_moderation.sql"))if(!names.contains("db/migration/"+resource))throw failure("OPS_ARTIFACT_SCHEMA_CHANGE");
         }
         return n;
     }
     private JsonNode release(){try{return OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("release.json")));}catch(Exception e){return OpsStore.JSON.createObjectNode();}}
     Map<String,Object> status()throws IOException {return Map.of("target","business","healthy",healthy(),"managedProcessRunning",managed().isPresent(),"release",release());}
+    boolean scheduledBackupReady() {
+        try {
+            return managed().isPresent() && healthy();
+        } catch (IOException | OpsApplication.Failure unavailable) {
+            return false;
+        }
+    }
     List<Object> backups(){var out=new ArrayList<>();try(var dirs=Files.list(config.backupRoot())){for(Path path:dirs.sorted(Comparator.reverseOrder()).limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"createdAt",n.path("createdAt").asString(),"complete",n.path("complete").asBoolean(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
     List<Object> artifacts(){var out=new ArrayList<>();try(var dirs=Files.list(config.artifactRoot())){for(Path path:dirs.sorted().limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"sha256",n.path("sha256").asString(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
     void register(String id,Path source)throws Exception {

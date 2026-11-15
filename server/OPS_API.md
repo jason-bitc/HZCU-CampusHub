@@ -4,7 +4,7 @@
 
 ## 1 启动与准备
 
-先按 [README.md](README.md)准备业务数据库和本机配置，构建迁移V1—V11的应用，至少正常启动一次使迁移完成，然后停止业务应用。独立运维只管理由自己启动并持有PID及开始时刻的业务进程；不会停止其他手工启动的进程。
+先按 [README.md](README.md) 准备业务数据库和本机配置，构建当前应用，至少正常启动一次使迁移完成，然后停止业务应用。独立运维只管理由自己启动且能核对 PID 与开始时刻的业务进程。
 
 创建Git忽略的 `server/.env.ops.json`。路径替换为当前电脑实际位置；五个数据目录相互独立、不嵌套，不使用符号链接或其他项目目录。
 
@@ -57,7 +57,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 登录 | POST /auth/login | login、password；返回Bearer、accessToken、expiresAt |
 | 退出 | POST /auth/logout | 空正文；loggedOut |
 | 权限 | GET /me | OPS_ADMIN域及能力 |
-| 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired |
+| 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
 | 备份 | GET /backups | 最近100份清单的ID、时间、complete、模式指纹 |
 | 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响 |
@@ -100,6 +100,14 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 
 恢复会保留替换前的media-held目录；清理前由维护人员核对保护备份和当前数据。备份目录与runtime/media需位于支持原子移动的相同本机卷，生产部署需另做验证。当前没有自动清理保护副本。
 
+### 每日备份
+
+在本机 `.env.ops.json` 添加 `"dailyBackupTime": "03:00"` 并重启独立运维，即可在北京时间每天 03:00 后检查是否执行备份。省略该字段或设置为 `null` 会关闭每日调度。选取可接受短暂停机的时间。运维进程每分钟检查一次，要求业务由独立运维启动且健康。部署、恢复或其他任务占用时当天稍后重试排队，待人工核查期间暂停。进程当天恢复运行且已过设定时间时，可以在条件满足后补做当天备份。
+
+每日任务与手动备份共用互斥队列和执行流程。在备份任务入队时同时记录北京时间日期，同一天只入队一次，运维重启后仍生效。错过的日期不补做。当天任务失败时，可查看错误并按需发起手动备份。
+
+`GET /status` 的 `dailyBackup` 提供 `enabled/time/timeZone/lastScheduledFor`。日期代表已入队，执行结果以 `GET /jobs/{id}` 为准。每日任务的 `actorDomain` 为 `OPS_SCHEDULER`，`scheduledFor` 记录北京时间日期。离机副本按维护流程另行保存。
+
 错误示例：401 OPS_UNAUTHORIZED、403 ORIGIN_FORBIDDEN、409 OPS_CONFIRMATION_INVALID/OPS_TARGET_BUSY/REQUEST_KEY_REUSED/OPS_BACKUP_INVALID/OPS_ARTIFACT_SCHEMA_CHANGE、429 OPS_RATE_LIMITED、503 OPS_SERVICE_UNAVAILABLE。执行中的错误记录到任务errorCode；HTTP200读到FAILED任务不能显示成功。
 
 ## 5 中断、回退和边界
@@ -112,4 +120,4 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 
 工具展示状态并要求本人输入RECONCILED确认已完成核查，留存核对时间后才解除拦截。实际无法判断时保留维护状态，不以刷新网页抹去失败。
 
-本轮验证范围为Windows本机、真实MySQL及隔离业务JVM。未完成的总体需求包括每日备份调度、离机副本交接、跨主机部署、真实网页联调、RPO/RTO计时、容量/压力和安全专项验收。它们仍按项目计划验收，本接口实现不把整机故障保护或整个运维工作包标为完成。
+验证范围为 Windows 本机、真实 MySQL 及隔离业务 JVM。离机副本交接、跨主机部署、真实网页联调、RPO/RTO 计时、容量和安全专项验收仍按项目计划实施。
