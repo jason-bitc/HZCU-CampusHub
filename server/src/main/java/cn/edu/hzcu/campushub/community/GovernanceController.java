@@ -54,5 +54,17 @@ public class GovernanceController {
     }
     @PostMapping(value="/categories",consumes="application/json") public ApiResponse<?> create(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@RequestParam MultiValueMap<String,String> p,@RequestBody String raw){only(p);return save(me.adminId(),null,raw);}
     @PutMapping(value="/categories/{id}",consumes="application/json") public ApiResponse<?> update(@RequestAttribute("campushub.admin") AdminAuthService.Identity me,@PathVariable String id,@RequestParam MultiValueMap<String,String> p,@RequestBody String raw){only(p);return save(me.adminId(),ArticleQuery.requiredId(id),raw);}
+    @PostMapping(value="/categories/{id}/merge",consumes="application/json")
+    public ApiResponse<?> merge(@RequestAttribute("campushub.admin") AdminAuthService.Identity admin,
+            @PathVariable String id, @RequestParam MultiValueMap<String,String> params, @RequestBody String raw) {
+        only(params);
+        var input = CoinInput.parse(raw,"canonicalId","expectedRevision","expectedCanonicalRevision","requestId","reason");
+        long canonical = WritingInput.number(input.path("canonicalId"));
+        String reason = WritingInput.text(input,"reason",2000).strip();
+        if (canonical == 0 || reason.isEmpty()) throw ApiException.invalid();
+        return ApiResponse.success(service.mergeCategory(admin,ArticleQuery.requiredId(id),canonical,
+                WritingInput.revision(input),WritingInput.number(input.path("expectedCanonicalRevision")),
+                CoinInput.key(input),reason));
+    }
     private ApiResponse<?> save(long admin,Long id,String raw){var n=CoinInput.parse(raw,"kind","name","enabled","displayOrder","expectedRevision","requestId","reason");if(!n.path("enabled").isBoolean()||!n.path("displayOrder").isInt())throw ApiException.invalid();String name=WritingInput.text(n,"name",100).strip(),reason=WritingInput.text(n,"reason",2000);if(name.isBlank()||reason.isBlank())throw ApiException.invalid();return ApiResponse.success(service.category(admin,id,WritingInput.text(n,"kind",16),name,n.path("enabled").asBoolean(),n.path("displayOrder").asInt(),WritingInput.number(n.path("expectedRevision")),CoinInput.key(n),reason));}
 }

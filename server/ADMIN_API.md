@@ -17,7 +17,7 @@
 | 评论巡查 | `GET /admin/articles/{id}/comments` | 该文章的评论，含当前状态和修订号 |
 | 内容治理 | `POST /admin/articles/{id}/moderation`、`POST /admin/comments/{id}/moderation` | HIDE或RESTORE，有真实状态变更与事务审计 |
 | 贡献治理 | `GET /admin/cases/{id}/contributions`、`POST /admin/cases/{id}/contributions/{eventId}/invalidation` | 在文章举报下定位投币、提交失效原因及查询审计。字段与错误见[贡献失效与追溯](COMMUNITY_API.md#贡献失效与追溯) |
-| 分类维护 | `GET/POST /admin/categories`、`PUT /admin/categories/{id}` | 岗位、专业、公司、主题；创建、改名、排序、启停 |
+| 分类维护 | `GET/POST /admin/categories`、`PUT /admin/categories/{id}`、`POST /admin/categories/{id}/merge` | 创建、改名、排序、启停及同类标签归并 |
 | 治理记录 | `GET /admin/governance-events` | 对象、理由、操作者、前后状态、修订和时间 |
 | 用户限制 | `GET /admin/users`、`GET/POST /admin/users/{id}/restrictions` | PUBLISH和COMMENT两类行为分别设置；不封锁阅读和本人申诉 |
 | 校园认证 | `GET /admin/users/{id}/certification`、`POST /admin/users/{id}/certification/revocation` | 查看认证状态、修订号和最近撤销记录，提交撤销理由 |
@@ -46,7 +46,19 @@
 {"kind":"JOB","name":"后端开发","enabled":true,"displayOrder":10,"expectedRevision":0,"requestId":"00000000-0000-4000-8000-000000000002","reason":"补充岗位分类"}
 ```
 
-更新请求字段相同，`expectedRevision` 使用当前值；分类kind不可改变。停用不删除历史文章关系。当前没有同义词合并、历史关联批量映射或分类删除接口。
+更新请求字段相同，`expectedRevision` 使用当前值，分类 `kind` 固定。停用后仍保留历史文章关系。管理列表中的 `canonicalId` 为当前归入的分类 ID，未归并时为 `null`。
+
+### 同义分类归并
+
+向 `POST /admin/categories/{id}/merge` 提交待归并分类的 ID 和以下字段。归入的分类须属于同一类型，当前启用，并且是组内保留的分类。
+
+```json
+{"canonicalId":12,"expectedRevision":1,"expectedCanonicalRevision":0,"requestId":"00000000-0000-4000-8000-000000000008","reason":"两个专业标签指向同一专业"}
+```
+
+成功返回 `targetId/state/revision/canonicalId`，其中 `targetId` 是被归并的旧分类，状态为 `MERGED`。重复提交相同请求可取得原回执。两边修订有变化时返回 409 `REVISION_CONFLICT`。已归并的分类作为归并来源或编辑对象时返回 `CATEGORY_ALREADY_MERGED`，已停用或已归并的分类作为目标时返回 `CATEGORY_TARGET_UNAVAILABLE`。
+
+若被保留的分类后来再归并，组内旧 ID 一起指向最终保留的分类。公开目录展示启用的保留分类，使用任一组内 ID 筛选均可找到同一组公开文章，文章和标签的原始关联保留。治理记录中的 `MERGE` 事件保存当次来源、目标、理由、操作者和时间。部署需应用 V17 数据库迁移。
 
 行为限制请求：
 

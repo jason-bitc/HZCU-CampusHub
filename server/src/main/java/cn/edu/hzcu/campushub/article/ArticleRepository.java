@@ -71,7 +71,10 @@ public class ArticleRepository {
     private static void filter(StringBuilder where, MapSqlParameterSource params, String kind, String key, Long value) {
         if (value == null) return;
         where.append(" AND EXISTS (SELECT 1 FROM article_version_category vc JOIN category c ON c.id=vc.category_id"
-                + " WHERE vc.version_id=v.id AND c.kind=:").append(key).append("Kind AND c.id=:").append(key).append(")");
+                + " JOIN category requested ON requested.id=:").append(key)
+                .append(" AND requested.kind=:").append(key)
+                .append("Kind WHERE vc.version_id=v.id AND c.kind=requested.kind"
+                        + " AND COALESCE(c.canonical_id,c.id)=COALESCE(requested.canonical_id,requested.id))");
         params.addValue(key, value).addValue(key + "Kind", kind);
     }
 

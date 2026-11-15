@@ -26,6 +26,8 @@
 
 此处仅显示结构，实际演示分类为2岗位、2专业、2公司、3主题。文章已有分类即使后续禁用仍保留标签；catalog只提供当前可选分类。
 
+同义分类归并后，目录只列启用的保留分类。使用旧 ID 或保留 ID 均可筛选同一组公开文章，文章展示发布时关联的标签。
+
 ## GET /api/v1/articles
 
 | 参数 | 约束与语义 |
@@ -59,7 +61,7 @@ data结构为 `{"items":[列表项],"total":6,"page":1,"size":20}`，无结果�
 
 示例 `/api/v1/articles?keyword=Java&jobId=1&majorId=11&companyId=21&topicId=31&sort=latest&page=1&size=20`。
 
-快捷筛选示例 `/api/v1/articles?sameMajor=true&jobId=1&companyId=21&sort=recognized`。请求携带本人 Bearer 令牌。接口按当前启用的本人专业匹配文章公开版本的专业标签，并保留关键词、岗位、公司、主题、排序和分页。个人资料变更后，下次请求使用新专业。
+快捷筛选示例 `/api/v1/articles?sameMajor=true&jobId=1&companyId=21&sort=recognized`。请求携带本人 Bearer 令牌。接口按当前启用的本人专业匹配文章公开版本的专业标签，并保留关键词、岗位、公司、主题、排序和分页。资料中选过后来归并的专业时，使用当前保留专业筛选。个人资料变更后，下次请求使用新专业。
 
 缺少有效会话返回 401 `UNAUTHORIZED`，账号或认证受限返回 403 `ACCESS_RESTRICTED`，本人专业未填写或已停用返回 409 `SAME_MAJOR_UNAVAILABLE`。客户端可让用户先更新资料，也可关闭快捷筛选后手动选择专业。快捷请求使用 `Cache-Control: no-store`。省略 `sameMajor` 或设为 `false` 走普通检索。
 

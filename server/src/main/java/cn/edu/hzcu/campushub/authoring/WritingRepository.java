@@ -45,15 +45,18 @@ public class WritingRepository {
     public void profile(long user,Profile profile){jdbc.update("INSERT INTO author_profile(user_id,revision,nickname,major_id,current_stage,bio) VALUES(:user,:rev,:name,:major,:stage,:bio) ON DUPLICATE KEY UPDATE revision=:rev,nickname=:name,major_id=:major,current_stage=:stage,bio=:bio",p("user",user).addValue("rev",profile.revision()).addValue("name",profile.nickname()).addValue("major",profile.majorId()).addValue("stage",profile.currentStage()).addValue("bio",profile.bio()));}
     public Optional<Long> enabledMajorOf(long user) {
         return jdbc.query("""
-                SELECT c.id FROM author_profile p JOIN category c ON c.id=p.major_id
-                WHERE p.user_id=:user AND c.kind='MAJOR' AND c.enabled=TRUE
+                SELECT effective.id FROM author_profile p JOIN category c ON c.id=p.major_id
+                JOIN category effective ON effective.id=COALESCE(c.canonical_id,c.id)
+                WHERE p.user_id=:user AND c.kind='MAJOR' AND effective.kind='MAJOR' AND effective.enabled=TRUE
                 """, Map.of("user", user), (rs, row) -> rs.getLong(1)).stream().findFirst();
     }
     public void categories(List<Long> ids,String kind){
         if(ids.isEmpty())return;
-        long available=jdbc.queryForObject("SELECT COUNT(*) FROM category WHERE kind=:kind AND enabled=TRUE",p("kind",kind),Long.class);
-        if(ids.size()>available)throw ApiException.invalid();
-        long matched=jdbc.queryForObject("SELECT COUNT(*) FROM category WHERE id IN (:ids) AND kind=:kind AND enabled=TRUE",p("kind",kind).addValue("ids",ids),Long.class);if(matched!=ids.size())throw ApiException.invalid();
+        long matched = jdbc.queryForObject("""
+                SELECT COUNT(*) FROM category c JOIN category effective ON effective.id=COALESCE(c.canonical_id,c.id)
+                WHERE c.id IN (:ids) AND c.kind=:kind AND effective.kind=:kind AND effective.enabled=TRUE
+                """, p("kind", kind).addValue("ids", ids), Long.class);
+        if (matched != ids.size()) throw ApiException.invalid();
     }
     public Long created(long user,String request){return jdbc.query("SELECT article_id FROM author_create_request WHERE user_id=:user AND request_id=:request",p("user",user).addValue("request",request),(r,n)->r.getLong(1)).stream().findFirst().orElse(null);}
     public void create(long id,long user,String request,Instant now){
