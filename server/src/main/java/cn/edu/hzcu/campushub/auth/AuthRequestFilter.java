@@ -29,8 +29,15 @@ public class AuthRequestFilter extends OncePerRequestFilter {
                 && java.util.Arrays.equals(request.getParameterValues("sameMajor"), new String[]{"true"});
         boolean casePath=path.equals("/api/v1/me/cases")||path.startsWith("/api/v1/me/cases/")||path.equals("/api/v1/me/case-images")||path.startsWith("/api/v1/media/case-images");
         boolean writingPath=path.startsWith("/api/v1/me/");
+        boolean certificationPath = (request.getMethod().equals("GET") && path.equals("/api/v1/me/certification"))
+                || (request.getMethod().equals("POST") && (path.equals("/api/v1/me/certification/reverification")
+                || path.equals("/api/v1/me/certification/reverification-codes")));
         boolean notificationPath=(request.getMethod().equals("GET")&&path.equals("/api/v1/me/notifications"))
                 ||(request.getMethod().equals("PUT")&&path.matches("/api/v1/me/notifications/[^/]+/read"));
+        boolean readRequest = request.getMethod().equals("GET") || request.getMethod().equals("HEAD");
+        boolean ownAppealPath = (readRequest && (path.equals("/api/v1/me/restrictions")
+                || path.matches("/api/v1/me/appeals(?:/[^/]+)?")))
+                || (request.getMethod().equals("POST") && path.equals("/api/v1/me/appeals"));
         boolean coinPath=path.matches("/api/v1/me/(coins|coin-ledger|rewards)(?:/.*)?")||path.matches("/api/v1/articles/[^/]+/(coins|coin-state|reading-session)(?:/.*)?");
         boolean interactionPath=path.matches("/api/v1/articles/[^/]+/(like|favorite|interaction-state)(?:/.*)?");
         boolean commentPath=path.equals("/api/v1/comments")||path.startsWith("/api/v1/comments/")||path.equals("/api/v1/media/comment-images")||path.startsWith("/api/v1/media/comment-images/")||path.matches("/api/v1/articles/[^/]+/(comments|comment-images)(?:/.*)?");
@@ -41,7 +48,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
             if(path.equals("/api/v1/me")||path.equals("/api/v1/auth/logout")||writingPath||readerPath){
                 var headers=Collections.list(request.getHeaders("Authorization"));
                 if(headers.size()!=1||!headers.getFirst().startsWith("Bearer "))throw AuthService.unauthorized();
-                var identity=auth.authenticate(headers.getFirst().substring(7));if((writingPath||readerPath)&&!notificationPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
+                var identity=auth.authenticate(headers.getFirst().substring(7));if((writingPath||readerPath)&&!notificationPath&&!certificationPath&&!ownAppealPath)auth.me(identity);request.setAttribute("campushub.identity",identity);
             }
             cn.edu.hzcu.campushub.common.RequestTrace.stage(cn.edu.hzcu.campushub.common.RequestTrace.Stage.VALIDATION);
             if((interactionPath||path.equals("/api/v1/me/favorites"))&&(request.getContentLengthLong()>0||request.getInputStream().read()!=-1))throw ApiException.invalid();
@@ -50,7 +57,7 @@ public class AuthRequestFilter extends OncePerRequestFilter {
             }
             if(authPath&&java.util.Set.of("POST","PUT","DELETE").contains(request.getMethod())
                     &&(request.getContentType()==null||!request.getContentType().toLowerCase(java.util.Locale.ROOT).startsWith("multipart/"))){
-                int limit=casePath?caseJsonLimit:coinPath?4096:commentPath?commentJsonLimit:writingPath?writingJsonLimit:16_384;
+                int limit=casePath?caseJsonLimit:coinPath||certificationPath?4096:ownAppealPath?32_768:commentPath?commentJsonLimit:writingPath?writingJsonLimit:16_384;
                 if(request.getContentLengthLong()>limit)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");
                 byte[] body=request.getInputStream().readNBytes(limit+1);
                 if(body.length>limit)throw new ApiException(HttpStatus.valueOf(413),"REQUEST_TOO_LARGE","请求内容超过允许大小");

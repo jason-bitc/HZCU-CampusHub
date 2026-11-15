@@ -16,12 +16,13 @@
 | kind | 接收者和事件 | target.type |
 | --- | --- | --- |
 | CAMPUS_VERIFIED | 本人完成校园邮箱认证 | CERTIFICATION |
+| CAMPUS_REVOKED | 本人校园认证已撤销 | CERTIFICATION，打开本人认证结果查看当前理由和恢复入口 |
 | COMMENT_REPLY | 被直接回复的评论作者，跳过本人回复本人 | COMMENT |
 | CASE_DECISION | 举报或反馈的提交者，管理员记录决定 | CASE |
 | ARTICLE_MODERATION | 文章作者，文章隐藏或恢复 | ARTICLE |
 | COMMENT_MODERATION | 评论作者，评论隐藏或恢复 | COMMENT |
 | RESTRICTION_CHANGED | 受到发布或评论限制变化的用户 | RESTRICTION |
-| APPEAL_DECIDED | 申诉人，申诉被接受或驳回 | APPEAL |
+| APPEAL_DECIDED | 管理员处理本人行为限制或校园认证申诉 | APPEAL，使用 `GET /api/v1/me/appeals/{id}` 查看结果 |
 | CONTRIBUTION_INVALIDATED | 被取消有效贡献的文章作者 | ARTICLE |
 
 目标包括 type、id、articleId、rootCommentId。CERTIFICATION 对应应用中的本人认证状态页。COMMENT 使用 articleId 和 rootCommentId 打开文章内的评论线程，id 是定位的评论。CASE 对应 `/me/cases/{id}`。RESTRICTION 和 APPEAL 对应本人限制及申诉列表。ARTICLE 对应公开文章。打开时仍需调用对应业务接口重新验证权限。

@@ -59,6 +59,14 @@ kind为FEEDBACK或REPORT。FEEDBACK类别BUG／SUGGESTION／OTHER，可无目标
 
 管理login仅允许小写字母、数字、点、短横线、下划线，3—64字符且首字符为字母或数字；密码沿用8—64字符且UTF-8不超过72字节，BCrypt cost12。管理令牌带adm_域前缀、只存摘要，固定8小时有效；退出、过期、停用或本机重设失效。每个规范登录名的摘要对应持久失败窗口，15分钟最多5次失败，第6次起429；未知和既有账号均按同样规则和通用错误处理。
 
+## 案件审计
+
+`GET /api/v1/admin/cases/{id}/audit?page=1&size=20` 由社区管理员访问。响应包含 `caseId/state/revision/targetType/articleId/commentId/items/total/page/size`。案件状态、总数和本页记录来自同一数据库快照。
+
+审计条目用 `source` 区分案件流转 `CASE`、内容处置 `CONTENT` 和投币失效 `CONTRIBUTION`。`sequence` 与 `source` 共同标识一条记录。条目含动作、操作者域与 ID、目标、前后状态、结果、理由、时间及存在时的公开答复。内容处置和贡献失效的新记录保留其执行时的案件修订 `caseRevision`。投币失效附 `contributionEventId` 用于查找对应贡献。历史投币失效可按原有案件关联读取，其 `caseRevision` 为 `null`。
+
+条目按时间升序，同一时间按可用的案件修订、来源和序号依次排序。新请求按当前快照分页，案件新增处置后可从第一页刷新。普通用户继续通过本人案件详情查看处理状态和公开答复。
+
 ## 幂等与稳定分页
 
 普通提交键在同一用户范围唯一。规范化内容、目标和图片顺序相同，重复／并发／重启只产生一个案件；成功后目标不可用仍返回原OPEN／1回执。换内容409 REQUEST_KEY_REUSED。失败未提交无成功记录，可原键重试。
