@@ -94,6 +94,7 @@ public class RequestTrace extends OncePerRequestFilter {
         if(path.equals("/api/v1/admin/me"))return "ADMIN_ME";
         if(path.equals("/api/v1/admin/cases"))return "ADMIN_CASE_LIST";
         if(path.matches("/api/v1/admin/cases/[^/]+/context"))return "ADMIN_CASE_CONTEXT";
+        if(path.matches("/api/v1/admin/cases/[^/]+/audit"))return "ADMIN_CASE_AUDIT";
         if(path.matches("/api/v1/admin/cases/[^/]+/media/[^/]+"))return "ADMIN_CASE_MEDIA";
         if(path.matches("/api/v1/admin/cases/[^/]+/claim"))return "ADMIN_CASE_CLAIM";
         if(path.matches("/api/v1/admin/cases/[^/]+/release"))return "ADMIN_CASE_RELEASE";

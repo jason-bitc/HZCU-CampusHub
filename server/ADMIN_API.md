@@ -11,6 +11,7 @@
 | 管理登录 | `POST /admin/auth/login`、`POST /admin/auth/logout`、`GET /admin/me` | 独立社区身份，不复用校园账号或运维令牌 |
 | 工作台 | `GET /admin/overview` | OPEN、PROCESSING、NEEDS_ACTION案件数与隐藏文章数 |
 | 举报和反馈 | `GET /admin/cases`、`GET /admin/cases/{id}` | 快照分页、状态及负责人；完整协议见 COMMUNITY_API.md |
+| 案件审计 | `GET /admin/cases/{id}/audit` | 分页查看案件流转、明确关联的内容处置与投币失效 |
 | 案件处理 | `POST /admin/cases/{id}/claim`、`release`、`decisions` | 修订检查、成功幂等回执、公开答复与内部备注分离 |
 | 原文和证据 | `GET /admin/cases/{id}/context`、`GET /admin/cases/{id}/media/{imageId}` | 案件限定的原公开版本和必要评论；不得借机读取草稿 |
 | 文章巡查 | `GET /admin/articles`、`GET /admin/articles/{id}` | 仅已有公开版本的文章；可检查当前下架状态 |
@@ -39,6 +40,8 @@
 ```
 
 返回 `targetId/state/revision`。文章使用独立的治理修订号，初值0；评论沿用评论修订号，初值1。必须读取当前值，不把文章草稿修订号当作治理修订号。恢复文章回到管理员隐藏前的PUBLISHED或AUTHOR_OFFLINE，不把作者主动下架的文章自动发布。历史隐藏数据没有保存恢复上下文时拒绝恢复，不猜测状态。
+
+从举报处理页发起隐藏或恢复时，可同时提供 `caseId` 和 `expectedCaseRevision`。该举报须与内容是同一对象，处于处理中或待治理，且由发起操作的管理员认领。成功回执补充 `caseId/caseRevision`，治理记录也保留这两个字段。案件与内容的修订号分别校验。日常巡查可沿用原请求格式。
 
 分类创建请求：
 
@@ -110,7 +113,9 @@
 
 ## 案件闭环
 
-案件沿用 OPEN、PROCESSING、NEEDS_ACTION、CLOSED 及认领规则。举报以 `GOVERNANCE_COMPLETED` 闭案时，须已有针对目标且发生于举报后的 HIDE 事件，或已有直接关联本案的贡献失效记录。缺少处置依据时返回 409 `GOVERNANCE_NOT_RECORDED`。贡献失效在提交时更新有效贡献，闭案只记录案件结果。
+案件沿用 OPEN、PROCESSING、NEEDS_ACTION、CLOSED 及认领规则。举报以 `GOVERNANCE_COMPLETED` 闭案时，可使用明确关联本案的 HIDE 事件或贡献失效记录。未绑定案件的巡查 HIDE 事件沿用原有的同一目标、发生于举报提交后规则。已经绑定其他案件的处置只用于其关联案件。缺少处置依据时返回 409 `GOVERNANCE_NOT_RECORDED`。贡献失效在提交时更新有效贡献，闭案记录案件结果。
+
+案件审计支持 `page/size`。响应提供案件当前状态、修订、被举报对象和归属于本案的审计条目。历史巡查如未绑定案件，仍可从治理记录查看。部署需应用 V18 数据库迁移。[案件审计响应字段](COMMUNITY_API.md#案件审计)
 
 ## 幂等、失败与安全
 
