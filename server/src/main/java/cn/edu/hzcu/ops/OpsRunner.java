@@ -102,6 +102,13 @@ final class OpsRunner implements OpsJobs.Executor {
     }
     private JsonNode release(){try{return OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("release.json")));}catch(Exception e){return OpsStore.JSON.createObjectNode();}}
     Map<String,Object> status()throws IOException {return Map.of("target","business","healthy",healthy(),"managedProcessRunning",managed().isPresent(),"release",release());}
+    boolean scheduledBackupReady() {
+        try {
+            return managed().isPresent() && healthy();
+        } catch (IOException | OpsApplication.Failure unavailable) {
+            return false;
+        }
+    }
     List<Object> backups(){var out=new ArrayList<>();try(var dirs=Files.list(config.backupRoot())){for(Path path:dirs.sorted(Comparator.reverseOrder()).limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"createdAt",n.path("createdAt").asString(),"complete",n.path("complete").asBoolean(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
     List<Object> artifacts(){var out=new ArrayList<>();try(var dirs=Files.list(config.artifactRoot())){for(Path path:dirs.sorted().limit(100).toList())try{var n=OpsStore.JSON.readTree(Files.readString(path.resolve("manifest.json")));out.add(Map.of("id",path.getFileName().toString(),"sha256",n.path("sha256").asString(),"schemaFingerprint",n.path("schemaFingerprint").asString()));}catch(Exception ignored){}}catch(IOException ignored){}return out;}
     void register(String id,Path source)throws Exception {
