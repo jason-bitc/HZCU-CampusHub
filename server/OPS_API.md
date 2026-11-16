@@ -59,7 +59,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 权限 | GET /me | OPS_ADMIN域及能力 |
 | 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
-| 备份 | GET /backups | 按创建时间倒序列出当前库的最近100份完整清单，含ID、时间、complete、模式指纹和withinRetentionWindow |
+| 备份 | GET /backups | 按创建时间倒序列出当前库的最近100份完整清单，含ID、创建时间、快照时点、complete、模式指纹和withinRetentionWindow |
 | 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响；恢复操作另返回预检结果 |
 | 创建任务 | POST /jobs | 原操作三字段、requestId、confirmationId；返回持久任务 |
 | 任务列表 | GET /jobs | 最近100个任务，最新在前 |
@@ -91,7 +91,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 
 选择备份后，先提交 `POST /confirmations`，动作传 `RESTORE`，`referenceId` 传备份 ID。服务端在发放确认前检查数据库和 Flyway 模式、文件集合、SHA-256，以及备份内应用包和版本清单是否配套。预检只读取数据。备份不存在时返回 404 `OPS_BACKUP_NOT_FOUND`，文件或清单损坏时返回 409 `OPS_BACKUP_INVALID`，数据库或模式不匹配时返回 409 `OPS_BACKUP_INCOMPATIBLE`。
 
-预检通过后，确认响应的 `restorePreview` 包含 `backupId/backupCreatedAt/backupReleaseId/affectedComponents/verifiedFileCount/mediaFileCount`。页面展示备份时间、备份版本和覆盖范围后，再由操作者确认提交。覆盖范围一定包含 `DATABASE`、`MEDIA`，带应用包时还包含 `RELEASE`，否则保持现有应用版本。
+预检通过后，确认响应的 `restorePreview` 包含 `backupId/backupCreatedAt/backupSnapshotAt/backupReleaseId/affectedComponents/verifiedFileCount/mediaFileCount`。页面展示备份时间、备份版本和覆盖范围后，再由操作者确认提交。覆盖范围一定包含 `DATABASE`、`MEDIA`，带应用包时还包含 `RELEASE`，否则保持现有应用版本。
 
 恢复任务记录确认时的 `backupManifestSha256`。任务在停机前和导入前核对清单摘要及文件。确认后清单有变化时，原任务记录 `OPS_BACKUP_CHANGED`，需要重新预检和确认。文件预检结果和实际恢复任务结果分别查询。
 
@@ -132,6 +132,20 @@ java '-Dloader.main=cn.edu.hzcu.ops.OpsApplication' -cp target/campushub-server-
 ```
 
 导出只复制快照清单及其文件。核对源快照和目标副本的文件集合及 SHA-256 后，才公布目标备份目录。同名目录保留原状。命令的 JSON 回执包含 `backupId/manifestSha256/backupCreatedAt/verifiedAt/verifiedFileCount`。把回执与介质交接记录另行保存，接收人用其中的 `manifestSha256` 在目标设备复核。独立复核只需程序包、副本路径和已记录摘要，无需配置文件或数据库连接。签收时由维护人员确认介质所在地，文件校验结果与恢复演练分别记录。
+
+### 恢复演练计时
+
+新备份在受控业务停止写入后、开始导出数据库前写下 `snapshotAt`，清单落盘前另记 `createdAt`。历史清单可继续预检和恢复，其快照时点显示为 `null`。
+
+成功的 RESTORE 任务通过 `GET /jobs/{id}` 提供 `result.recoveryEvidence`，记录：
+
+| 字段 | 计时口径 |
+|---|---|
+| `backupSnapshotAt`、`restoreStartedAt`、`serviceAvailableAt` | 所选备份的快照时点、执行停机前的时点、业务进程通过健康检查的时点 |
+| `snapshotAgeMillis`、`rpoTargetMillis`、`rpoTargetStatus` | 快照到本次恢复操作开始的间隔，与 24 小时目标比较。快照时点缺失或晚于恢复开始时显示 `UNAVAILABLE` |
+| `restoreElapsedMillis`、`rtoTargetMillis`、`rtoTargetStatus` | 用单调时钟测量停机、保护备份、导入、媒体核对和健康恢复的总用时，与 10 分钟目标比较 |
+
+达到目标显示 `WITHIN_TARGET`，超过显示 `EXCEEDS_TARGET`。失败或回退沿用任务状态和阶段记录。验收另记实际故障时点、发起恢复前的等待、恢复前后业务样本和离机交接，合并判断整场演练。
 
 错误示例：401 OPS_UNAUTHORIZED、403 ORIGIN_FORBIDDEN、409 OPS_CONFIRMATION_INVALID/OPS_TARGET_BUSY/REQUEST_KEY_REUSED/OPS_BACKUP_INVALID/OPS_ARTIFACT_SCHEMA_CHANGE、429 OPS_RATE_LIMITED、503 OPS_SERVICE_UNAVAILABLE。执行中的错误记录到任务errorCode；HTTP200读到FAILED任务不能显示成功。
 

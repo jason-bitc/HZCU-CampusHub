@@ -89,6 +89,8 @@ class OpsExecutionMySqlIT {
             var inventory = request("GET", "/backups", null).path("items");
             assertThat(inventory.get(0).path("id").asString()).isEqualTo(backup);
             assertThat(inventory.get(0).path("withinRetentionWindow").asBoolean()).isTrue();
+            Instant snapshotAt = Instant.parse(inventory.get(0).path("snapshotAt").asString());
+            assertThat(snapshotAt).isBeforeOrEqualTo(Instant.parse(inventory.get(0).path("createdAt").asString()));
             Path handoff = Files.createDirectory(root.resolve("handoff"));
             var receipt = OpsBackupExport.export(config, backup, handoff);
             assertThat(receipt.verifiedFileCount()).isEqualTo(4);
@@ -100,6 +102,7 @@ class OpsExecutionMySqlIT {
             var preview=confirmation.path("restorePreview");
             assertThat(preview.path("backupId").asString()).isEqualTo(backup);
             assertThat(preview.path("backupCreatedAt").asString()).isNotBlank();
+            assertThat(Instant.parse(preview.path("backupSnapshotAt").asString())).isEqualTo(snapshotAt);
             assertThat(preview.path("backupReleaseId").asString()).isEqualTo("release-one");
             assertThat(preview.path("affectedComponents").toString()).isEqualTo("[\"DATABASE\",\"MEDIA\",\"RELEASE\"]");
             assertThat(preview.path("verifiedFileCount").asInt()).isEqualTo(4);
@@ -108,6 +111,14 @@ class OpsExecutionMySqlIT {
             var restored=submitConfirmed(restoreRequest,confirmation);
             assertThat(restored.path("state").asString()).as(restored.toString()).isEqualTo("SUCCEEDED");
             assertThat(restored.path("result").path("verifiedMediaReferences").asLong()).isEqualTo(1);
+            var recovery = restored.path("result").path("recoveryEvidence");
+            var restoreStartedAt = Instant.parse(recovery.path("restoreStartedAt").asString());
+            assertThat(Instant.parse(recovery.path("backupSnapshotAt").asString())).isEqualTo(snapshotAt);
+            assertThat(recovery.path("snapshotAgeMillis").asLong())
+                    .isEqualTo(java.time.Duration.between(snapshotAt, restoreStartedAt).toMillis());
+            assertThat(recovery.path("restoreElapsedMillis").asLong()).isPositive();
+            assertThat(recovery.path("rpoTargetStatus").asString()).isEqualTo("WITHIN_TARGET");
+            assertThat(recovery.path("rtoTargetStatus").asString()).isEqualTo("WITHIN_TARGET");
             assertThat(Files.readAllBytes(image)).isEqualTo(original);
             assertLiveRows(image,"ops-before-");
             Path selected=config.backupRoot().resolve(backup),manifestPath=selected.resolve("manifest.json");
@@ -133,6 +144,7 @@ class OpsExecutionMySqlIT {
             var mismatch=job("RESTORE",backup);
             assertThat(mismatch.path("state").asString()).isEqualTo("FAILED");
             assertThat(mismatch.path("errorCode").asString()).isEqualTo("OPS_MEDIA_REFERENCE_MISMATCH");
+            assertThat(mismatch.path("result").has("recoveryEvidence")).isFalse();
             assertThat(mismatch.path("events").toString()).contains("VERIFYING_MEDIA","ROLLBACK_VERIFIED");
             assertThat(request("GET","/status",null).path("healthy").asBoolean()).isTrue();
             assertThat(Files.readAllBytes(image)).isEqualTo(newer);
