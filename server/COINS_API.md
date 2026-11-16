@@ -53,17 +53,15 @@ GET与阅读开始均不支持正文，表中未列的查询参数拒绝。写JS
 
 未启用规则或未达门槛时省略 honor。作者接口只返回荣誉，不公开钱包或收到的币数。访客读取公开正文时不会取得该字段。荣誉采用已生效投币的作者贡献合计，取满足门槛的最高已启用规则。本人花币不改变收到的贡献。读取荣誉不创建钱包、奖励或新的账本记录。
 
-服务启动时读取 campushub.honors.rules。每条规则提供 id、title、正整数 threshold、可选 badge 标识和 enabled。id 与 threshold 各自唯一，id 和 badge 使用小写字母、数字和连字符。badge 由客户端映射到图案资源。仓库默认没有启用规则，正式配置须采用已确认的称号和门槛。以下仅供隔离验证：
+服务启动时读取 `campushub.honors.rules`。每条规则提供 `id`、`title`、正整数 `threshold`、可选 `badge` 和 `enabled`。应用配置启用以下四档：
 
-~~~yaml
-campushub:
-  honors:
-    rules:
-      - id: test-one
-        title: 测试荣誉
-        threshold: 10
-        badge: test-icon
-        enabled: true
-~~~
+| 有效获币 | 称号 | `ruleId` | `badge` 与图案 |
+| --- | --- | --- | --- |
+| 5 | 经验分享者 | `experience-sharer` | `sprout` 嫩芽 |
+| 20 | 热心同行者 | `helpful-peer` | `open-book` 展开的书页 |
+| 50 | 校园助力者 | `campus-supporter` | `star-book` 书页与星光 |
+| 100 | 城院之星 | `campus-star` | `lighthouse` 灯塔 |
+
+前端按 `badge` 映射图案资源。配置覆盖时，`id` 与 `threshold` 各自唯一，`id` 和 `badge` 使用小写字母、数字和连字符。
 
 贡献失效按 [社区治理接口](COMMUNITY_API.md#贡献失效与追溯) 处理。失效后，文章有效币数、认可优先排序及作者荣誉使用剩余有效贡献。原投币流水、历史回执、读者余额与单篇累计投币额度沿用原记录。
