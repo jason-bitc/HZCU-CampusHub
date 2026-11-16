@@ -60,7 +60,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
 | 备份 | GET /backups | 最近100份清单的ID、时间、complete、模式指纹 |
-| 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响 |
+| 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响；恢复操作另返回预检结果 |
 | 创建任务 | POST /jobs | 原操作三字段、requestId、confirmationId；返回持久任务 |
 | 任务列表 | GET /jobs | 最近100个任务，最新在前 |
 | 任务详情 | GET /jobs/{id} | 状态、事件、结果或错误码、起止时间 |
@@ -87,16 +87,28 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 
 登录失败窗口持久保存，15分钟5次失败后429，运维重启不清除窗口。只允许配置的浏览器Origin；未配置来源403。任何未知命令、目标、目录、SQL和额外JSON字段均不接受。
 
+### 恢复预检
+
+选择备份后，先提交 `POST /confirmations`，动作传 `RESTORE`，`referenceId` 传备份 ID。服务端在发放确认前检查数据库和 Flyway 模式、文件集合、SHA-256，以及备份内应用包和版本清单是否配套。预检只读取数据。备份不存在时返回 404 `OPS_BACKUP_NOT_FOUND`，文件或清单损坏时返回 409 `OPS_BACKUP_INVALID`，数据库或模式不匹配时返回 409 `OPS_BACKUP_INCOMPATIBLE`。
+
+预检通过后，确认响应的 `restorePreview` 包含 `backupId/backupCreatedAt/backupReleaseId/affectedComponents/verifiedFileCount/mediaFileCount`。页面展示备份时间、备份版本和覆盖范围后，再由操作者确认提交。覆盖范围一定包含 `DATABASE`、`MEDIA`，带应用包时还包含 `RELEASE`，否则保持现有应用版本。
+
+恢复任务记录确认时的 `backupManifestSha256`。任务在停机前和导入前核对清单摘要及文件。确认后清单有变化时，原任务记录 `OPS_BACKUP_CHANGED`，需要重新预检和确认。文件预检结果和实际恢复任务结果分别查询。
+
 ## 4 实际执行策略
 
 | 操作 | 真正执行的步骤 | 成功依据 |
 |---|---|---|
 | DEPLOY | 校验登记包和模式；停止受控业务；保护备份；安装JAR与版本清单；启动 | 受控进程存活且业务健康UP，任务记录版本与保护备份 |
 | RESTART | 核对PID+开始时刻；停止；重新启动 | 新进程及健康检查，不把“已发送重启请求”写成成功 |
-| BACKUP | 停止受控写入；mysqldump；复制完整图片及当前JAR/版本；生成校验清单；原先在运行则启动 | SQL、图片、版本和全部文件SHA256清单齐全后标完整 |
-| RESTORE | 校验备份、模式、文件集合与SHA256；停止业务；保护当前状态；恢复MySQL、图片、备份版本；启动 | 数据恢复命令成功且健康检查通过；失败执行保护副本回退 |
+| BACKUP | 停止受控写入；导出 MySQL；复制图片、应用包和版本；核对图片引用及文件摘要；恢复原运行状态 | 文件清单生成且数据库中的图片引用均可在副本中核对 |
+| RESTORE | 校验备份；停止业务并保护当前状态；导入 MySQL；核对暂存图片；切换图片和应用版本；启动 | 图片引用核对及健康检查完成。失败时尝试使用保护副本回退 |
 
 业务处于维护窗口时，独立控制目录及任务查询保持可用。备份不包含密码或SMTP配置，维护人员须另行安全保存相同摘要密钥和连接配置。备份及恢复均只针对当前配置的固定业务数据库，不接收网页传入库名。
+
+图片一致性核对覆盖文章图片、评论图片、举报与反馈附件，以及案件留存的图片记录。核对每条数据库记录对应文件的存在性、字节数和 SHA-256。同一图片若被多条记录引用，每条记录都必须与文件一致。新备份的清单和成功恢复任务的 `result` 使用 `verifiedMediaReferences` 记录核对的数据库记录数。
+
+恢复任务在 `VERIFYING_MEDIA` 阶段完成 MySQL 记录与暂存图片的核对。出现 `OPS_MEDIA_REFERENCE_MISMATCH` 时，任务失败。若随后出现 `ROLLBACK_VERIFIED`，表示保护副本已完成回退核对。历史备份也会在恢复时重新核对。
 
 恢复会保留替换前的media-held目录；清理前由维护人员核对保护备份和当前数据。备份目录与runtime/media需位于支持原子移动的相同本机卷，生产部署需另做验证。当前没有自动清理保护副本。
 
