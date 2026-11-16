@@ -1,1 +1,19 @@
-.profile-name { margin-top: 24rpx; font-size: 44rpx; font-weight: 700; }
+@import '../../styles/sections.wxss';
+.my-page { padding-top: 14rpx; }
+.identity-card { display: flex; align-items: center; gap: 24rpx; width: 100% !important; text-align: left; }
+.profile-avatar { display: flex; align-items: center; justify-content: center; width: 94rpx; height: 94rpx; flex: 0 0 94rpx; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary); font-size: 46rpx; font-weight: 700; }
+.profile-copy { flex: 1; min-width: 0; }
+.profile-name { display: block; font-size: 40rpx; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+.profile-copy .status-tag { margin: 12rpx 0 8rpx; }
+.my-entries { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8rpx; padding: 16rpx 10rpx; }
+.my-entries button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8rpx; min-height: 110rpx; color: var(--color-text-secondary); font-size: 25rpx; }
+.metric-value { font-size: 36rpx; font-weight: 700; color: var(--color-primary); font-variant-numeric: tabular-nums; }
+.wallet-card { display: block; width: 100% !important; padding: 28rpx; border-radius: var(--radius-md); text-align: left; background: var(--color-primary); color: var(--color-surface); }
+.wallet-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18rpx; font-size: 27rpx; }
+.wallet-metric { display: block; margin-top: 8rpx; font-size: 64rpx; line-height: 1.2; font-weight: 700; font-variant-numeric: tabular-nums; }
+.wallet-caption { display: block; margin-top: 26rpx; font-size: 25rpx; }
+.my-links { padding-top: 4rpx; padding-bottom: 4rpx; }
+.my-links .menu-row { gap: 16rpx; }
+.my-links .menu-row:last-child { border-bottom: 0; }
+.my-links .row-title { margin: 0; }
+.my-link-label { flex-shrink: 0; color: var(--color-primary-dark); font-size: 27rpx; }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WritingPrompts from "../components/WritingPrompts.vue";
 import {
   computed,
   nextTick,
@@ -287,7 +288,36 @@ async function publish() {
     return;
   }
   if (dirty.value && !(await save())) return;
-  preview.value = true;
+  busy.value = true;
+  error.value = "";
+  try {
+    const result = await get<{
+      canPublish: boolean;
+      missingFields: string[];
+      blockedBy?: string;
+    }>(`/me/articles/${id}/preview?expectedRevision=${revision.value}`, true);
+    if (!result.canPublish) {
+      error.value =
+        result.blockedBy === "BEHAVIOR_RESTRICTED"
+          ? "当前账号发布受限，请查看限制与申诉。"
+          : result.missingFields.length
+            ? `发布条件未满足（${result.missingFields.join("、")}）。`
+            : "当前文章状态不允许发布。";
+      return;
+    }
+    preview.value = true;
+  } catch (e) {
+    error.value = message(e);
+    if (e instanceof ApiError && e.code === "REVISION_CONFLICT") {
+      try {
+        conflict.value = await get<Draft>(`/me/articles/${id}/draft`, true);
+      } catch (readError) {
+        error.value = message(readError);
+      }
+    }
+  } finally {
+    busy.value = false;
+  }
 }
 async function confirmPublish() {
   if (!form.value || locked.value) return;
@@ -475,6 +505,7 @@ onBeforeRouteLeave(() => {
     <p v-if="error" class="error" role="alert">{{ error }}</p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <p v-if="busy" role="status">正在处理，请保持当前页面…</p>
+    <WritingPrompts v-if="form && !readOnly" />
     <section v-if="recovery" class="panel recovery-panel">
       <h2>发现本标签页保存的副本</h2>
       <p>

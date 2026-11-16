@@ -1,0 +1,355 @@
+{
+  "checkedAt": "2026-11-06T11:45:07.095Z",
+  "status": "PASS",
+  "mode": "real local Java backend + one explicit simulated 503 transport response",
+  "assertions": [
+    "real bodyless favorite actions directly from six public DEMO cards; no discovery right sidebar",
+    "real current-public collection table, five-row size choice and responsive horizontal table containment",
+    "browser Back retains collection page/size; removing sole final-page row returns to page one with real new total",
+    "explicit simulated 503 remains an error, retry uses real backend without empty-state fallback",
+    "real backend rejects ordinary campus Bearer on admin/me while the ordinary session remains valid"
+  ],
+  "evidence": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "traceId": "6586f936-eb48-48c4-8809-b15d23bad08d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "5347b51c-04be-45fa-87a3-590fef65f8c4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles",
+      "status": 200,
+      "traceId": "c68f92c5-5723-4118-ac49-372317c15b85"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "edc2ed7e-cd50-40e2-8add-63d3e547e093"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "056b3840-093b-4894-b7d4-e0ff8505ebba"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "status": 200,
+      "traceId": "c727cdb6-0987-4425-b576-e477c8e608cf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "status": 200,
+      "traceId": "98eb89bf-77f6-42d9-828c-f2be7427a4fb"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1004/interaction-state",
+      "status": 200,
+      "traceId": "5a22dc98-e789-4c24-bb06-a9e6445605c5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "status": 200,
+      "traceId": "24b0ea41-5459-4240-a053-de632bc70f74"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "status": 200,
+      "traceId": "6f83aa25-02df-43f7-8e1f-fbb067b169bf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "status": 200,
+      "traceId": "9cf80dd4-f7b4-43bc-8d83-ed6208402d85"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "1ca5cb0b-67eb-4695-8778-8299c15651b0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles",
+      "status": 200,
+      "traceId": "04815f18-8277-4d56-ba50-aee58a947fc2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "traceId": "35f05daa-0d3f-409f-8b16-083b74700083"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "status": 200,
+      "traceId": "28c8950c-7b5f-481f-94c0-7cabdf65aa54"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "status": 200,
+      "traceId": "97c7f8e2-febe-436f-8e85-ec871509fc10"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1004/interaction-state",
+      "status": 200,
+      "traceId": "b02c19aa-d1ca-412f-9add-8c78f4aed82e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "status": 200,
+      "traceId": "e9196a2c-9a00-4645-aed6-ef8419810ff5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1006/interaction-state",
+      "status": 200,
+      "traceId": "e9a14c9c-52d2-4f4d-a8fe-b1c7f7e02277"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "status": 200,
+      "traceId": "84f8d567-acfa-4cd6-a67a-cc88c5d60de7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "status": 200,
+      "traceId": "4979243b-12ac-40b1-9c58-d6139c6450ee"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/2005/favorite",
+      "status": 200,
+      "traceId": "804e38d5-b330-488c-8a43-0b5fd1e5669e"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1005/favorite",
+      "status": 200,
+      "traceId": "e277fdcf-4180-4195-ba71-3d0bbca4d6aa"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1004/favorite",
+      "status": 200,
+      "traceId": "16f34e47-3a3c-4684-8f3c-feed02df7288"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1003/favorite",
+      "status": 200,
+      "traceId": "99edebd3-2255-463e-b30b-f82c951c0ecc"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1002/favorite",
+      "status": 200,
+      "traceId": "06e67698-1e9f-458f-8cac-3d3b9bbc790f"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/articles/1001/favorite",
+      "status": 200,
+      "traceId": "3cd7fbe0-7b31-4183-990f-d07ef0edb501"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "200ad094-4efd-43a9-96f0-356322da2642"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "1afa56db-854d-463a-bdd3-65a9fa22af9d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "0fb3b014-bf9c-4349-8a2e-565fe3de9c63"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005",
+      "status": 200,
+      "traceId": "54970702-ddbb-41e3-b4e1-620b568a60e8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "status": 200,
+      "traceId": "751d3176-1da9-4702-bd3b-3faa54b3948e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/images/e3b9d1ff-ddc9-403f-a98c-26fd92ea54ad",
+      "status": 200,
+      "traceId": "ff9523c2-7a1a-41a3-b0cb-ad02118fb5c5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "7deb3fff-39f0-410e-91bd-fefbcdf69c7d"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2005/favorite",
+      "status": 200,
+      "traceId": "38e951d9-5f77-4a3d-93e4-159f452ced74"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "575fb2cc-ffe8-47c2-a1a8-2a920b1959aa"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "dbe753d3-0425-4ce6-99ba-bb0f07e2373b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "dcacecb3-aa27-4110-b399-296e267e4e18"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 503,
+      "traceId": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "06f20ff6-5f80-487e-8850-ae2fe29360ca"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 401,
+      "traceId": "4cb291af-17fd-4309-bf24-7ea0c6b0ed4c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "traceId": "a12868cf-93f2-47c6-8339-8cb803fad5c7"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/2005/favorite",
+      "status": 200,
+      "traceId": "cf2450a5-dc6a-4317-a546-0c980bde4bfd"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/1005/favorite",
+      "status": 200,
+      "traceId": "f22efe3e-0766-47ec-a9f1-60c4b02b5d42"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/1004/favorite",
+      "status": 200,
+      "traceId": "94dce3ca-4702-4cb5-8a60-62b033c332ff"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/1003/favorite",
+      "status": 200,
+      "traceId": "9014f229-66df-4b78-a044-4c0fb56b35f0"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/1002/favorite",
+      "status": 200,
+      "traceId": "a36c4516-6bb7-4310-b029-69d24a4d9445"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/articles/1001/favorite",
+      "status": 200,
+      "traceId": "7b7d0756-92fe-4474-9baa-b7c6b7df85b1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2005/interaction-state",
+      "status": 200,
+      "traceId": "d14dd3c9-79bc-451b-b1f1-b50d7a0f51a1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1005/interaction-state",
+      "status": 200,
+      "traceId": "f0356980-673a-4ec7-b488-b21ac7373d88"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1004/interaction-state",
+      "status": 200,
+      "traceId": "3d922e09-e979-4db6-8f1c-52ca86bb78d8"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1003/interaction-state",
+      "status": 200,
+      "traceId": "57baf4cc-3bf2-4f1b-9e8a-6a626071e72b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1002/interaction-state",
+      "status": 200,
+      "traceId": "3204f160-df25-4a75-967e-635ed761d81b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/1001/interaction-state",
+      "status": 200,
+      "traceId": "3ec32b02-1e9f-4459-a146-ae29316c4f73"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "status": 200,
+      "traceId": "7eec1c1f-3a75-48d0-a3db-ad1600a2f520"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "traceId": "fa81885f-ec41-463b-87cd-54043a01af18"
+    }
+  ],
+  "realEmailsSent": 0,
+  "realCoinsSpent": 0,
+  "realAdminMutation": false,
+  "restoredOriginalFavoriteStates": true,
+  "uncaughtPageErrors": 0
+}

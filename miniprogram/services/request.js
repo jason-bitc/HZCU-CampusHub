@@ -14,7 +14,8 @@ function getTraceId(headers) {
 
 function request(options) {
   const startedAt = Date.now();
-  const accessToken = options.auth ? session.token() : '';
+  const personal = /^\/api\/v1\/(?:auth\/logout|me\/certification(?:\/reverification(?:-codes)?)?|me\/notifications(?:\/[1-9]\d*\/read)?|me\/appeals(?:\/[1-9]\d*)?)$/.test(options.path);
+  const accessToken = options.auth ? personal ? session.personalToken() : session.token() : '';
   const captured = session.version();
   if (options.auth && !accessToken) return { promise: Promise.reject(new ApiError({ kind: 'AUTH', status: 401, message: '请登录校园账号后继续' })), abort() {} };
   let task;
@@ -42,7 +43,7 @@ function request(options) {
           reject(new ApiError({ kind: 'CONTRACT', status: response.statusCode, traceId: event.traceId, message: '服务响应格式不符合接口合同' }));
           return;
         }
-        if (options.auth && (response.statusCode === 401 || response.statusCode === 403)) session.invalidate(captured, response.statusCode);
+        if (options.auth && (response.statusCode === 401 || response.statusCode === 403 && payload && payload.code === 'ACCESS_RESTRICTED')) session.invalidate(captured, response.statusCode);
         reject(fromHttp(response.statusCode, payload, event.traceId));
       },
       fail(error) {

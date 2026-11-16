@@ -1,0 +1,1745 @@
+[
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 8,
+    "snippet": "Undocumented color #20262e is outside DESIGN.md colors",
+    "ignoreValue": "#20262e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 21,
+    "snippet": "Undocumented color #163e36 is outside DESIGN.md colors",
+    "ignoreValue": "#163e36",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 22,
+    "snippet": "Undocumented color #b4cdc6 is outside DESIGN.md colors",
+    "ignoreValue": "#b4cdc6",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 26,
+    "snippet": "Undocumented color #18312f is outside DESIGN.md colors",
+    "ignoreValue": "#18312f",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 32,
+    "snippet": "font-size: 23px is off the DESIGN.md type ramp",
+    "ignoreValue": "23px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 58,
+    "snippet": "Undocumented color #b4cdc6 is outside DESIGN.md colors",
+    "ignoreValue": "#b4cdc6",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 64,
+    "snippet": "Undocumented color #204e43 is outside DESIGN.md colors",
+    "ignoreValue": "#204e43",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 68,
+    "snippet": "Undocumented color #275a4e is outside DESIGN.md colors",
+    "ignoreValue": "#275a4e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 93,
+    "snippet": "Undocumented color #d3e5df is outside DESIGN.md colors",
+    "ignoreValue": "#d3e5df",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 107,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 111,
+    "snippet": "border-radius: 5px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "5px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 114,
+    "snippet": "font-size: 11px is off the DESIGN.md type ramp",
+    "ignoreValue": "11px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 138,
+    "snippet": "Undocumented color #20262e is outside DESIGN.md colors",
+    "ignoreValue": "#20262e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 149,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 155,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 170,
+    "snippet": "Undocumented color #c54646 is outside DESIGN.md colors",
+    "ignoreValue": "#c54646",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 173,
+    "snippet": "Undocumented color #9a6a0a is outside DESIGN.md colors",
+    "ignoreValue": "#9a6a0a",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 187,
+    "snippet": "Undocumented color #20262e is outside DESIGN.md colors",
+    "ignoreValue": "#20262e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 205,
+    "snippet": "Undocumented color #c54646 is outside DESIGN.md colors",
+    "ignoreValue": "#c54646",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 216,
+    "snippet": "Undocumented color #e3e7eb is outside DESIGN.md colors",
+    "ignoreValue": "#e3e7eb",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 223,
+    "snippet": "Undocumented color #20262e is outside DESIGN.md colors",
+    "ignoreValue": "#20262e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 227,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 252,
+    "snippet": "Undocumented color #17735a is outside DESIGN.md colors",
+    "ignoreValue": "#17735a",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 255,
+    "snippet": "Undocumented color #fff4d5 is outside DESIGN.md colors",
+    "ignoreValue": "#fff4d5",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 256,
+    "snippet": "Undocumented color #a27410 is outside DESIGN.md colors",
+    "ignoreValue": "#a27410",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 260,
+    "snippet": "Undocumented color #c54646 is outside DESIGN.md colors",
+    "ignoreValue": "#c54646",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 263,
+    "snippet": "font-size: 22px is off the DESIGN.md type ramp",
+    "ignoreValue": "22px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 272,
+    "snippet": "font-size: 11px is off the DESIGN.md type ramp",
+    "ignoreValue": "11px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 273,
+    "snippet": "border-radius: 5px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "5px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 278,
+    "snippet": "Undocumented color #c54646 is outside DESIGN.md colors",
+    "ignoreValue": "#c54646",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 281,
+    "snippet": "Undocumented color #fff4d5 is outside DESIGN.md colors",
+    "ignoreValue": "#fff4d5",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 282,
+    "snippet": "Undocumented color #a27410 is outside DESIGN.md colors",
+    "ignoreValue": "#a27410",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 286,
+    "snippet": "Undocumented color #fff4d5 is outside DESIGN.md colors",
+    "ignoreValue": "#fff4d5",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 287,
+    "snippet": "Undocumented color #785b16 is outside DESIGN.md colors",
+    "ignoreValue": "#785b16",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 289,
+    "snippet": "Undocumented color #eadbb1 is outside DESIGN.md colors",
+    "ignoreValue": "#eadbb1",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 297,
+    "snippet": "Undocumented color #5f7169 is outside DESIGN.md colors",
+    "ignoreValue": "#5f7169",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 375,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 402,
+    "snippet": "Undocumented color #6f7772 is outside DESIGN.md colors",
+    "ignoreValue": "#6f7772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 469,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 480,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 510,
+    "snippet": "font-size: 20px is off the DESIGN.md type ramp",
+    "ignoreValue": "20px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 578,
+    "snippet": "Undocumented color #e3e7eb is outside DESIGN.md colors",
+    "ignoreValue": "#e3e7eb",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 594,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 693,
+    "snippet": "Undocumented color #20262e is outside DESIGN.md colors",
+    "ignoreValue": "#20262e",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 718,
+    "snippet": "font-size: 26px is off the DESIGN.md type ramp",
+    "ignoreValue": "26px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 732,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 758,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 898,
+    "snippet": "Undocumented color #7d8580 is outside DESIGN.md colors",
+    "ignoreValue": "#7d8580",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 910,
+    "snippet": "font-size: 17px is off the DESIGN.md type ramp",
+    "ignoreValue": "17px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 920,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 965,
+    "snippet": "Undocumented color #e3e7eb is outside DESIGN.md colors",
+    "ignoreValue": "#e3e7eb",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 973,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 978,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 982,
+    "snippet": "font-size: 17px is off the DESIGN.md type ramp",
+    "ignoreValue": "17px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1011,
+    "snippet": "font-size: 17px is off the DESIGN.md type ramp",
+    "ignoreValue": "17px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1029,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1045,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1091,
+    "snippet": "font-size: 24px is off the DESIGN.md type ramp",
+    "ignoreValue": "24px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1128,
+    "snippet": "font-size: 10px is off the DESIGN.md type ramp",
+    "ignoreValue": "10px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1137,
+    "snippet": "font-size: 22px is off the DESIGN.md type ramp",
+    "ignoreValue": "22px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1180,
+    "snippet": "font-size: 26px is off the DESIGN.md type ramp",
+    "ignoreValue": "26px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1272,
+    "snippet": "font-size: 25px is off the DESIGN.md type ramp",
+    "ignoreValue": "25px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1330,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\management\\management.css",
+    "line": 1413,
+    "snippet": "Undocumented color #d3e5df is outside DESIGN.md colors",
+    "ignoreValue": "#d3e5df",
+    "importedBy": [
+      "ManagementLayout.vue"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 10,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 45,
+    "snippet": "Undocumented color #d6dfd9 is outside DESIGN.md colors",
+    "ignoreValue": "#d6dfd9"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 54,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 55,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 82,
+    "snippet": "Undocumented color #606772 is outside DESIGN.md colors",
+    "ignoreValue": "#606772"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 138,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 190,
+    "snippet": "Undocumented color #9cafa4 is outside DESIGN.md colors",
+    "ignoreValue": "#9cafa4"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 271,
+    "snippet": "Undocumented color #4d6156 is outside DESIGN.md colors",
+    "ignoreValue": "#4d6156"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 311,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 314,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 366,
+    "snippet": "font-size: 27px is off the DESIGN.md type ramp",
+    "ignoreValue": "27px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 374,
+    "snippet": "font-size: 11px is off the DESIGN.md type ramp",
+    "ignoreValue": "11px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 378,
+    "snippet": "Undocumented color #5e7367 is outside DESIGN.md colors",
+    "ignoreValue": "#5e7367"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 386,
+    "snippet": "Undocumented color #52635a is outside DESIGN.md colors",
+    "ignoreValue": "#52635a"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 387,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 427,
+    "snippet": "Undocumented color #d9e2dc is outside DESIGN.md colors",
+    "ignoreValue": "#d9e2dc"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 431,
+    "snippet": "Undocumented color #64746b is outside DESIGN.md colors",
+    "ignoreValue": "#64746b"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 440,
+    "snippet": "Undocumented color #594611 is outside DESIGN.md colors",
+    "ignoreValue": "#594611"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 468,
+    "snippet": "Undocumented color #b94b45 is outside DESIGN.md colors",
+    "ignoreValue": "#b94b45"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 473,
+    "snippet": "Undocumented color #438662 is outside DESIGN.md colors",
+    "ignoreValue": "#438662"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 478,
+    "snippet": "Undocumented color #ab8935 is outside DESIGN.md colors",
+    "ignoreValue": "#ab8935"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 549,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 550,
+    "snippet": "Undocumented color #617269 is outside DESIGN.md colors",
+    "ignoreValue": "#617269"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 558,
+    "snippet": "Undocumented color #729784 is outside DESIGN.md colors",
+    "ignoreValue": "#729784"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 561,
+    "snippet": "font-size: 22px is off the DESIGN.md type ramp",
+    "ignoreValue": "22px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 569,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 580,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 602,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 616,
+    "snippet": "Undocumented color #dce4df is outside DESIGN.md colors",
+    "ignoreValue": "#dce4df"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 620,
+    "snippet": "font-size: 32px is off the DESIGN.md type ramp",
+    "ignoreValue": "32px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 669,
+    "snippet": "font-size: 27px is off the DESIGN.md type ramp",
+    "ignoreValue": "27px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 672,
+    "snippet": "font-size: 23px is off the DESIGN.md type ramp",
+    "ignoreValue": "23px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 684,
+    "snippet": "border-radius: 5px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "5px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 689,
+    "snippet": "Undocumented color #d3dfd7 is outside DESIGN.md colors",
+    "ignoreValue": "#d3dfd7"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 692,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font",
+    "name": "Font outside DESIGN.md",
+    "description": "A font is used that is not declared in DESIGN.md typography. Use the documented type system or update DESIGN.md if this is an intentional brand addition.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 696,
+    "snippet": "font-family: Consolas is not declared in DESIGN.md typography",
+    "ignoreValue": "Consolas"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 701,
+    "snippet": "border-radius: 3px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "3px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 707,
+    "snippet": "Undocumented color #6e9983 is outside DESIGN.md colors",
+    "ignoreValue": "#6e9983"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 708,
+    "snippet": "Undocumented color #526a5b is outside DESIGN.md colors",
+    "ignoreValue": "#526a5b"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 722,
+    "snippet": "Undocumented color #baccc0 is outside DESIGN.md colors",
+    "ignoreValue": "#baccc0"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 736,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 748,
+    "snippet": "Undocumented color #91ae9d is outside DESIGN.md colors",
+    "ignoreValue": "#91ae9d"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 752,
+    "snippet": "Undocumented color #234b3420 is outside DESIGN.md colors",
+    "ignoreValue": "#234b3420"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 773,
+    "snippet": "font-size: 40px is off the DESIGN.md type ramp",
+    "ignoreValue": "40px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 776,
+    "snippet": "Undocumented color #1b4834 is outside DESIGN.md colors",
+    "ignoreValue": "#1b4834"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 787,
+    "snippet": "Undocumented color #4c6556 is outside DESIGN.md colors",
+    "ignoreValue": "#4c6556"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 800,
+    "snippet": "font-size: 23px is off the DESIGN.md type ramp",
+    "ignoreValue": "23px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 803,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 837,
+    "snippet": "Undocumented color #9aafa6 is outside DESIGN.md colors",
+    "ignoreValue": "#9aafa6"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 843,
+    "snippet": "font-size: 21px is off the DESIGN.md type ramp",
+    "ignoreValue": "21px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 851,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 861,
+    "snippet": "Undocumented color #795b38 is outside DESIGN.md colors",
+    "ignoreValue": "#795b38"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 910,
+    "snippet": "font-size: 36px is off the DESIGN.md type ramp",
+    "ignoreValue": "36px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 943,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font",
+    "name": "Font outside DESIGN.md",
+    "description": "A font is used that is not declared in DESIGN.md typography. Use the documented type system or update DESIGN.md if this is an intentional brand addition.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 961,
+    "snippet": "font-family: Consolas is not declared in DESIGN.md typography",
+    "ignoreValue": "Consolas"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 980,
+    "snippet": "font-size: 20px is off the DESIGN.md type ramp",
+    "ignoreValue": "20px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 996,
+    "snippet": "Undocumented color #4d6156 is outside DESIGN.md colors",
+    "ignoreValue": "#4d6156"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1005,
+    "snippet": "border-radius: 5px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "5px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1017,
+    "snippet": "Undocumented color #dce4df is outside DESIGN.md colors",
+    "ignoreValue": "#dce4df"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1027,
+    "snippet": "Undocumented color #b69857 is outside DESIGN.md colors",
+    "ignoreValue": "#b69857"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1045,
+    "snippet": "Undocumented color #4d6156 is outside DESIGN.md colors",
+    "ignoreValue": "#4d6156"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1049,
+    "snippet": "Undocumented color #795915 is outside DESIGN.md colors",
+    "ignoreValue": "#795915"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1065,
+    "snippet": "Undocumented color #b99b59 is outside DESIGN.md colors",
+    "ignoreValue": "#b99b59"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1074,
+    "snippet": "Undocumented color #152a2066 is outside DESIGN.md colors",
+    "ignoreValue": "#152a2066"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1085,
+    "snippet": "Undocumented color #152a2066 is outside DESIGN.md colors",
+    "ignoreValue": "#152a2066"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1144,
+    "snippet": "font-size: 24px is off the DESIGN.md type ramp",
+    "ignoreValue": "24px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1160,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1172,
+    "snippet": "font-size: 25px is off the DESIGN.md type ramp",
+    "ignoreValue": "25px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1189,
+    "snippet": "border-radius: 9px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "9px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1228,
+    "snippet": "font-size: 27px is off the DESIGN.md type ramp",
+    "ignoreValue": "27px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1234,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1237,
+    "snippet": "font-size: 21px is off the DESIGN.md type ramp",
+    "ignoreValue": "21px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1296,
+    "snippet": "font-size: 11px is off the DESIGN.md type ramp",
+    "ignoreValue": "11px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1307,
+    "snippet": "font-size: 13px is off the DESIGN.md type ramp",
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1310,
+    "snippet": "font-size: 32px is off the DESIGN.md type ramp",
+    "ignoreValue": "32px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1323,
+    "snippet": "Undocumented color #123b29 is outside DESIGN.md colors",
+    "ignoreValue": "#123b29"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\wangc\\Desktop\\HZCU-CampusHub-Frontend\\web\\src\\style.css",
+    "line": 1324,
+    "snippet": "Undocumented color #c7e2d3 is outside DESIGN.md colors",
+    "ignoreValue": "#c7e2d3"
+  }
+]

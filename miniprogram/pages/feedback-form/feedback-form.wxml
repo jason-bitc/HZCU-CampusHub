@@ -1,0 +1,50 @@
+<view class="member-page feedback-form">
+  <page-state wx:if="{{invalidTarget}}" status="unavailable" title="关联链接无效" description="请返回原文或评论，从可用内容重新发起。" />
+  <page-state wx:elif="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后提交" description="仅本人和有权限的处理人员可查看你提交的材料。" action-text="登录校园账号" bindaction="login" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
+  <page-state wx:elif="{{receipt}}" status="success" title="提交成功" description="反馈编号 #{{receipt.caseId}}。可在我的反馈中查看处理进度。" action-text="查看处理进度" bindaction="record" />
+  <view wx:else>
+    <view class="segmented" aria-label="反馈类型">
+      <button wx:if="{{targetType}}" class="{{kind === 'REPORT' ? 'selected' : ''}}" data-kind="REPORT" bindtap="changeKind" disabled="{{busy || pending}}">举报内容</button>
+      <button class="{{kind === 'FEEDBACK' ? 'selected' : ''}}" data-kind="FEEDBACK" bindtap="changeKind" disabled="{{busy || pending}}">使用反馈</button>
+    </view>
+    <view class="section-card">
+      <text class="row-title">关联对象 · {{targetLabel}}</text>
+      <text class="hint">{{targetType ? '从当前内容进入时自动关联。' : '可以反馈功能问题或建议。从原文或评论发起可关联内容。'}}</text>
+    </view>
+    <view class="field">
+      <text class="field-label">类别 *</text>
+      <picker range="{{choices}}" range-key="label" bindchange="changeCategory" disabled="{{busy || pending}}" aria-label="反馈类别">
+        <view class="field-picker">{{categoryText || '请选择类别'}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <text class="field-label">具体问题 *</text>
+      <textarea class="field-textarea" value="{{description}}" bindinput="input" maxlength="-1" disabled="{{busy || pending}}" placeholder="说明问题发生的位置和原因" aria-label="具体问题" />
+    </view>
+    <view class="feedback-attachments">
+      <text class="field-label">证据图片（可选）</text>
+      <text class="hint">仅本人和有权限的处理人员可见。支持 JPEG / PNG，单张不超过 10MiB。</text>
+      <view wx:for="{{uploads}}" wx:key="requestId" class="section-card">
+        <text class="row-title">图片 {{index + 1}} · {{item.state === 'done' ? '已上传' : item.state === 'failed' ? '上传失败' : '等待上传'}}</text>
+        <secure-image wx:if="{{item.image}}" url="{{item.image.url}}" alt="本人证据图片" />
+        <text wx:if="{{item.error}}" class="field-error">{{item.error}}</text>
+        <view class="inline-actions">
+          <button wx:if="{{item.state !== 'done'}}" class="button-secondary" data-index="{{index}}" bindtap="retryImage" disabled="{{busy || pending}}">重试原图片</button>
+          <button class="button-text danger-action" data-index="{{index}}" bindtap="removeImage" disabled="{{busy || pending}}">移除图片</button>
+        </view>
+      </view>
+      <button class="button-secondary form-section" bindtap="chooseImages" disabled="{{busy || pending}}">添加证据图片</button>
+    </view>
+    <view class="notice feedback-note">提交失败会保留说明和附件状态。成功后可在“我的反馈”查询。</view>
+    <text wx:if="{{pending}}" class="hint form-section">上次提交结果待确认。核对时会使用原输入和附件。</text>
+    <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+    <text wx:if="{{notice}}" class="success-note" role="status">{{notice}}</text>
+    <button wx:if="{{pending}}" class="button-text" bindtap="records" disabled="{{busy}}">查看我的反馈</button>
+    <view class="form-footer">
+      <button class="button-secondary" bindtap="saveInput" disabled="{{busy}}">保存输入</button>
+      <button class="button-primary" bindtap="submit" disabled="{{busy}}" loading="{{busy}}">{{pending ? '核对上次提交' : '提交'}}</button>
+    </view>
+  </view>
+</view>

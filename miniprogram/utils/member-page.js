@@ -18,6 +18,11 @@ async function enter(page, tab) {
   catch (error) { if (epoch === page._epoch) page.setData({ authStatus: session.token() ? 'error' : 'guest', error: errorText(error) }); return false; }
 }
 function leave(page) { page._epoch = (page._epoch || 0) + 1; if (page._unsubscribe) page._unsubscribe(); }
+function enterPersonal(page) {
+  const signedIn = !!session.personalToken();
+  page.setData({ authStatus: signedIn ? 'ready' : 'guest' });
+  return signedIn;
+}
 function login() { const pages = getCurrentPages(); const page = pages[pages.length - 1]; const route = page && page.route; const query = page && page.options || {}; const url = route ? `/${route}${Object.keys(query).length ? '?' + Object.keys(query).map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`).join('&') : ''}` : '/pages/me/me'; wx.navigateTo({ url: `/pages/account/account?returnTo=${encodeURIComponent(url)}` }); }
 function discover() { wx.switchTab({ url: '/pages/discover/discover' }); }
-module.exports = { attach, enter, leave, login, discover, errorText };
+module.exports = { attach, enter, enterPersonal, leave, login, discover, errorText };

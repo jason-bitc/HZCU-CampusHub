@@ -1,7 +1,16 @@
 const { request } = require('./request');
 const session = require('./session');
 let checking;
-function login(email, password) { return request({ path: '/api/v1/auth/login', method: 'POST', data: { email, password } }).promise.then((result) => { session.accept(result); return verify(); }); }
+function login(email, password) {
+  return request({ path: '/api/v1/auth/login', method: 'POST', data: { email, password } }).promise
+    .then((result) => {
+      session.accept(result);
+      return verify().catch((error) => {
+        if (error.code === 'ACCESS_RESTRICTED' && session.personalToken()) return { limited: true };
+        throw error;
+      });
+    });
+}
 function verify() {
   const version = session.version();
   if (checking && checking.version === version) return checking.promise;

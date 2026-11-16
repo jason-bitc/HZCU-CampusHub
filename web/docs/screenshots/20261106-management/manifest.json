@@ -1,0 +1,287 @@
+{
+  "checkedAt": "2026-11-06T12:07:30.778564+00:00",
+  "source": "Installed Google Chrome / Playwright, actual Vue frontend; explicit fixtures and real backend pages separated",
+  "count": 35,
+  "images": [
+    {
+      "file": "A01-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "9607625d00fa9df48cb8d71fb869a151ed515d163d7ca77e3007fedfe560f8d2"
+    },
+    {
+      "file": "A01-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "46486c803df72d40b961430eff980c3c95ddbb7a3b5f645bae8243fcca4db739"
+    },
+    {
+      "file": "A01-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "6734ab1379b49cf48e57b23a328b3dd03af37b8bec4b86d7d9126020173ab4c0"
+    },
+    {
+      "file": "A02-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "2a39131645b1a29708b789e0882a51ea5698e85f8ec0c79b40dacf8d594e2b78"
+    },
+    {
+      "file": "A02-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "b44d07879d3aae1aa932597b5d1f7c355cec9aff67ca90f58c59678019cacad8"
+    },
+    {
+      "file": "A02-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "e8b513a86a6f45d264f1c67389c00aaaf5a5fdaab64d9f248fc7079d21ae19f6"
+    },
+    {
+      "file": "A03-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "e90669eb24e6a0f2dc4f9e9a95763f9bae7da3a574a4dc58e5efebb50c849dde"
+    },
+    {
+      "file": "A03-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "842d9d0d7b7bde7da112b305573e35caee43908adf1bca2606695702070ecdd0"
+    },
+    {
+      "file": "A04-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "58811e3e2b72df3d08ef10b8436e52ba7c0871b9650aab3232b859578a758d14"
+    },
+    {
+      "file": "A05-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "b0073f4f3780ba8b0f6b52b0c5e2b77751be933333917c258c5bf9ab7fc2172f"
+    },
+    {
+      "file": "A06-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "a55349e05595d25eefd9914b4ce899cb19ba6de83aa6a391573d9ce04e113773"
+    },
+    {
+      "file": "A06-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "af735834a9502fdb95726335f611756018be0981131a612c1a84f27f07671568"
+    },
+    {
+      "file": "A07-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "928c721fa238d6b96d868279b918459c6f5ad0f44ab8f1918e405599bc7c8da9"
+    },
+    {
+      "file": "A08-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "55ba4b9cd9c8406cc42fc96923b02873b298615fe5aeb59aabac70f78daf502b"
+    },
+    {
+      "file": "F01-favorites-actual-mobile.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 390,
+      "height": 844,
+      "sha256": "191940b9b1d9b3793c01fcc59d1a564ef45ab23110809415fdb9e95d0991f077"
+    },
+    {
+      "file": "F01-favorites-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "68d321d011b5fbe9a30859c35bbaff5eff22c0aec24fb59b4ca7a048819bbd09"
+    },
+    {
+      "file": "F02-last-page-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "7c3884faedbdf9d3ff15bccbc7b9f5e56cce7cf670eb6b17b8410d156ce36798"
+    },
+    {
+      "file": "F03-empty-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "e5d432a8597a58c874045b389967579c98845e76f8037c3fc647b90330d5430b"
+    },
+    {
+      "file": "O01-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "8ca94f4d276ec283b8f0523f8aed31054d5c58fa1f8a561b4dfece84a322795a"
+    },
+    {
+      "file": "O01-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "f569db8dd6a5d6b4e6f1c582841e698b81ac37ad202f614998e202f7e2882ce4"
+    },
+    {
+      "file": "O02-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "2ac140043a19ab63e42d55455c5d4b7b3a0a33d82417ed4ddb6aa7ae7ae41875"
+    },
+    {
+      "file": "O02-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "6a46a461ed47480842505b9ed9a562b707d780bf09c23a886d5df43516f31b5a"
+    },
+    {
+      "file": "O02-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "8b1b7fccb09b9edb4dbcdf10f862d093d13a38a3e3c2af77670e00380b10708c"
+    },
+    {
+      "file": "O03-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "6379cd1ef4a62b829e6557dce1abe61424019d85a9dc21e383f9618ab886de26"
+    },
+    {
+      "file": "O04-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "96cfe6798932ac6e8fc28bde09d4f5b668ad531bf15a6568b41505c5169ed7c4"
+    },
+    {
+      "file": "O05-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "3451da13d045556f12f5e8418d6de5de738220fd4d77169ae34f3966db2a76ab"
+    },
+    {
+      "file": "O06-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "b2d0fe7836eb06665f6e22aae0a80667e86ac938a6339ff58965e5e9fff04107"
+    },
+    {
+      "file": "O07-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "f8fbbb6b295ce2d22709e35ebd94b3ee95aa0cd1013dfcc7eea375949329ee65"
+    },
+    {
+      "file": "O07-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "347cdef80d655d70268dfaddc9eebccb477cc4db4629d7a3f2a8477cd784df60"
+    },
+    {
+      "file": "O08-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "b1822f3ea209423a188606eb5fea1b79adc85b1b782694304a36113dad95a0fb"
+    },
+    {
+      "file": "O09-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "eed6f11dd25fb0144bed88f9b3edc1f12979d4b81f7fc8602e0fd9a927c3eccc"
+    },
+    {
+      "file": "O10-prototype-mobile.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 390,
+      "height": 844,
+      "sha256": "f0fb785cb1956501c6ce33f536d89c3ae0028a6f4f85d8f9840fc70689102160"
+    },
+    {
+      "file": "O10-prototype.png",
+      "mode": "prototype",
+      "note": "只读原型示例，非真实运行数据",
+      "width": 1440,
+      "height": 960,
+      "sha256": "ffe8edb976c1a6f05fb85dd12367b5df5758b07cf0c865f0714e55bd4f5a9dc8"
+    },
+    {
+      "file": "W01-single-column-actual-mobile.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 390,
+      "height": 844,
+      "sha256": "817d89cbe54ffaea5de8540845eb45a1fcc6d4663551799bcaa9acfe6833406f"
+    },
+    {
+      "file": "W01-single-column-actual.png",
+      "mode": "actual",
+      "note": "实际前端：真实校园/收藏接口，或明确的管理/运维接入状态；不表示特权操作已验证",
+      "width": 1440,
+      "height": 960,
+      "sha256": "55574562de3976fce6f63c1aed9167951245a58a8cd5e516ee887eec7a7c97ec"
+    }
+  ]
+}

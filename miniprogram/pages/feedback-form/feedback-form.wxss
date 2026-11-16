@@ -1,0 +1,5 @@
+@import '../../styles/sections.wxss';
+.feedback-form .field { margin-top: 34rpx; }
+.feedback-form .feedback-attachments { margin-top: 38rpx; }
+.feedback-form .feedback-note { margin-top: 28rpx; }
+.feedback-form .form-footer .button-primary { flex: 1.35; }

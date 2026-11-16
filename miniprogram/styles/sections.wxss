@@ -1,0 +1,13 @@
+.section-card { margin: 24rpx 0; padding: 26rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); overflow-wrap: anywhere; }
+.section-card .row-title { margin-bottom: 10rpx; }
+.status-tag { display: inline-block; padding: 6rpx 14rpx; border-radius: var(--radius-sm); color: var(--color-primary-dark); background: var(--color-primary-soft); font-size: 24rpx; line-height: 1.55; }
+.status-tag.warn { color: var(--color-warning); background: var(--color-warning-soft); }
+.status-tag.danger, .limit-banner { color: var(--color-danger); background: var(--color-danger-soft); }
+.limit-banner { padding: 24rpx; border-radius: var(--radius-md); line-height: 1.65; font-size: 28rpx; }
+.segmented { display: flex; flex-wrap: wrap; gap: 10rpx; margin-bottom: 22rpx; }
+.segmented button { padding: 10rpx 18rpx; min-height: var(--touch-target); border: 1rpx solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); font-size: 26rpx; }
+.segmented button.selected { border-color: var(--color-primary); color: var(--color-primary-dark); background: var(--color-primary-soft); font-weight: 650; }
+.section-copy { display: block; margin: 16rpx 0 0; font-size: 30rpx; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+.section-stack { display: flex; flex-direction: column; gap: 18rpx; }
+.section-stack .section-card { margin: 0; }
+.status-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12rpx; margin-bottom: 16rpx; }

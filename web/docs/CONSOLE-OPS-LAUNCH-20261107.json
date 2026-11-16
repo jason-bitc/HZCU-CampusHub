@@ -1,0 +1,215 @@
+{
+  "backendHead": "b487c3b561225e07c98be7fe1df56db559929836",
+  "jarSha256": "C7E46857E4748656FFFFA80CBBDFC7485176D3546C1575D224E18D6058AE9CFC",
+  "database": "campushub_test",
+  "opsPort": 8092,
+  "businessPort": 8082,
+  "bootJarFinding": "PropertiesLauncher deployed task reaches PREFLIGHT then JDBC SQLException: No suitable driver; captured in local JFR",
+  "testFixtureFinding": "Classpath launcher advanced through INSTALLING and STARTING; isolated fixture initially lacked required SMTP startup fields. Prior protection manifest hashes verified. New isolated roots use loopback-only dummy SMTP and no email requests.",
+  "failedAttempts": [
+    {
+      "id": "eb8aa01d-f932-4ba3-9cfe-033d02aa8fef",
+      "action": "DEPLOY",
+      "target": "business",
+      "state": "FAILED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:15:03.202372400Z"
+        }
+      ],
+      "errorCode": "OPS_EXECUTION_FAILED",
+      "createdAt": "2026-11-07T04:15:03.165223800Z",
+      "finishedAt": "2026-11-07T04:15:03.354624400Z"
+    },
+    {
+      "id": "ca0db6db-73c9-40f4-ad86-b0dd5b66505e",
+      "action": "DEPLOY",
+      "target": "business",
+      "state": "FAILED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:16:11.663242100Z"
+        }
+      ],
+      "errorCode": "OPS_EXECUTION_FAILED",
+      "createdAt": "2026-11-07T04:16:11.637294200Z",
+      "finishedAt": "2026-11-07T04:16:11.717168600Z"
+    },
+    {
+      "id": "29a36b14-99b9-4bd1-91ed-6f293693cc90",
+      "action": "DEPLOY",
+      "target": "business",
+      "state": "FAILED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:16:58.667753200Z"
+        },
+        {
+          "phase": "STOPPING",
+          "occurredAt": "2026-11-07T04:16:59.289238400Z"
+        },
+        {
+          "phase": "PROTECTING",
+          "occurredAt": "2026-11-07T04:16:59.304639600Z"
+        },
+        {
+          "phase": "INSTALLING",
+          "occurredAt": "2026-11-07T04:17:00.161390500Z"
+        },
+        {
+          "phase": "STARTING",
+          "occurredAt": "2026-11-07T04:17:00.254017400Z"
+        },
+        {
+          "phase": "ROLLING_BACK",
+          "occurredAt": "2026-11-07T04:17:07.430504100Z"
+        },
+        {
+          "phase": "MANUAL_RECOVERY_REQUIRED",
+          "occurredAt": "2026-11-07T04:17:19.207419300Z"
+        }
+      ],
+      "errorCode": "OPS_MANUAL_RECOVERY_REQUIRED",
+      "createdAt": "2026-11-07T04:16:58.638133700Z",
+      "finishedAt": "2026-11-07T04:17:19.217447200Z"
+    }
+  ],
+  "verifiedAttempts": [
+    {
+      "id": "c4aee080-b14c-4c1a-999b-2067bb8492bc",
+      "action": "DEPLOY",
+      "target": "business",
+      "state": "SUCCEEDED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:19:34.465557400Z"
+        },
+        {
+          "phase": "STOPPING",
+          "occurredAt": "2026-11-07T04:19:34.946550100Z"
+        },
+        {
+          "phase": "PROTECTING",
+          "occurredAt": "2026-11-07T04:19:34.962091Z"
+        },
+        {
+          "phase": "INSTALLING",
+          "occurredAt": "2026-11-07T04:19:35.551135500Z"
+        },
+        {
+          "phase": "STARTING",
+          "occurredAt": "2026-11-07T04:19:35.650260300Z"
+        },
+        {
+          "phase": "VERIFIED",
+          "occurredAt": "2026-11-07T04:19:45.134869900Z"
+        }
+      ],
+      "result": {
+        "referenceId": "frontend-20261106",
+        "healthy": true,
+        "protectionBackupId": "1545ee34-bd5d-4e88-8930-a951920f2bde"
+      },
+      "createdAt": "2026-11-07T04:19:34.436709700Z",
+      "finishedAt": "2026-11-07T04:19:45.145870100Z"
+    },
+    {
+      "id": "d6535985-3eeb-4772-bcc7-f3d9a70230ad",
+      "action": "RESTART",
+      "target": "business",
+      "state": "SUCCEEDED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:42:07.759478700Z"
+        },
+        {
+          "phase": "STOPPING",
+          "occurredAt": "2026-11-07T04:42:07.770868Z"
+        },
+        {
+          "phase": "STARTING",
+          "occurredAt": "2026-11-07T04:42:07.786711300Z"
+        }
+      ],
+      "result": {
+        "healthy": true
+      },
+      "createdAt": "2026-11-07T04:42:07.737597300Z",
+      "finishedAt": "2026-11-07T04:42:16.666559900Z"
+    },
+    {
+      "id": "8bb50de5-b333-4639-826e-7bd25eaf419d",
+      "action": "BACKUP",
+      "target": "business",
+      "state": "SUCCEEDED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:42:18.424102600Z"
+        },
+        {
+          "phase": "STOPPING",
+          "occurredAt": "2026-11-07T04:42:18.435091100Z"
+        },
+        {
+          "phase": "PROTECTING",
+          "occurredAt": "2026-11-07T04:42:18.458724400Z"
+        },
+        {
+          "phase": "STARTING",
+          "occurredAt": "2026-11-07T04:42:19.072867300Z"
+        }
+      ],
+      "result": {
+        "healthy": true,
+        "backupId": "23316b2b-59be-43ae-8482-837c61c06933"
+      },
+      "createdAt": "2026-11-07T04:42:18.405096800Z",
+      "finishedAt": "2026-11-07T04:42:27.423044400Z"
+    },
+    {
+      "id": "93584ae0-fe75-4709-b661-fa5f37ad2bbe",
+      "action": "RESTORE",
+      "target": "business",
+      "state": "SUCCEEDED",
+      "events": [
+        {
+          "phase": "PREFLIGHT",
+          "occurredAt": "2026-11-07T04:42:29.680044700Z"
+        },
+        {
+          "phase": "STOPPING",
+          "occurredAt": "2026-11-07T04:42:29.758090400Z"
+        },
+        {
+          "phase": "PROTECTING",
+          "occurredAt": "2026-11-07T04:42:29.774018Z"
+        },
+        {
+          "phase": "RESTORING",
+          "occurredAt": "2026-11-07T04:42:30.240703600Z"
+        },
+        {
+          "phase": "STARTING",
+          "occurredAt": "2026-11-07T04:42:35.230576300Z"
+        },
+        {
+          "phase": "VERIFIED",
+          "occurredAt": "2026-11-07T04:42:43.668739500Z"
+        }
+      ],
+      "result": {
+        "referenceId": "23316b2b-59be-43ae-8482-837c61c06933",
+        "healthy": true,
+        "protectionBackupId": "b5a00498-a473-4c05-b75f-904784c67958"
+      },
+      "createdAt": "2026-11-07T04:42:29.662974700Z",
+      "finishedAt": "2026-11-07T04:42:43.678728700Z"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ const { mapSummary } = require('./article-mapper');
 const { upload } = require('./media');
 function call(path, method = 'GET', data) { const options = { path: `/api/v1${path}`, method, auth: true }; if (data !== undefined) options.data = data; return request(options).promise; }
 function id(value) { if (!Number.isSafeInteger(Number(value)) || Number(value) <= 0) throw new Error('链接编号无效'); return String(Number(value)); }
-function favorites(page) { return call('/me/favorites', 'GET', { page, size: 20 }).then((r) => Object.assign({}, r, { items: r.items.map((row) => row.available ? { articleId: row.articleId, available: true, article: mapSummary(row.article) } : { articleId: row.articleId, available: false }) })); }
+function favorites(page, size = 20) { return call('/me/favorites', 'GET', { page, size }).then((r) => Object.assign({}, r, { items: r.items.map((row) => row.available ? { articleId: row.articleId, available: true, article: mapSummary(row.article) } : { articleId: row.articleId, available: false }) })); }
 module.exports = {
   call, id, favorites,
   profile: () => call('/me/profile'), saveProfile: (data) => call('/me/profile', 'PUT', data),
@@ -11,7 +11,8 @@ module.exports = {
   interaction: (article) => call(`/articles/${id(article)}/interaction-state`),
   like: (article, active) => call(`/articles/${id(article)}/like`, active ? 'PUT' : 'DELETE'),
   favorite: (article, active) => call(`/articles/${id(article)}/favorite`, active ? 'PUT' : 'DELETE'),
-  owned: (page) => call('/me/articles', 'GET', { page, size: 20 }),
+  owned: (page, size = 20) => call('/me/articles', 'GET', { page, size }),
+  deleteArticle: (article, revision) => call(`/me/articles/${id(article)}?expectedRevision=${encodeURIComponent(revision)}`, 'DELETE'),
   create: (requestId) => call('/me/articles', 'POST', { requestId }),
   draft: (article) => call(`/me/articles/${id(article)}/draft`),
   saveDraft: (article, data) => call(`/me/articles/${id(article)}/draft`, 'PUT', data),

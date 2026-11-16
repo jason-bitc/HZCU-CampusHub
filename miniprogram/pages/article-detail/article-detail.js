@@ -59,9 +59,17 @@ Page({
       this.setData({ authenticated: true });
       if (this.data.status !== 'ready') return;
       const id = this.data.articleId;
-      const [interaction, author, coinState, wallet] = await Promise.all([member.interaction(id), member.articleAuthor(id).catch((e) => { if (e.status === 404) return null; throw e; }), member.coinState(id), member.wallet()]);
+      const state = await Promise.all([
+        member.interaction(id),
+        member.articleAuthor(id).catch((e) => { if (e.status === 404) return null; throw e; }),
+        member.coinState(id),
+        member.wallet()
+      ]);
       if (round !== this.memberRound) return;
-      this.setData({ interaction, author, coinState, wallet, pendingCoin: pending.read(`coin:${id}`) });
+      this.setData({
+        interaction: state[0], author: state[1], coinState: state[2], wallet: state[3],
+        pendingCoin: pending.read(`coin:${id}`)
+      });
       member.startReading(id).catch(() => {});
     } catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
     finally { if (round === this.memberRound) this.setData({ privateLoading: false }); }
@@ -76,6 +84,10 @@ Page({
     try { const result = await member[kind](this.data.articleId, target); if (round !== this.memberRound) return; this.setData(kind === 'like' ? { 'interaction.liked': result.liked, 'article.effectiveLikes': result.effectiveLikes } : { 'interaction.favorited': result.favorited }); }
     catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
     finally { if (round === this.memberRound) this.setData({ busyAction: '' }); }
+  },
+  report() {
+    if (this.data.demoMode || this.data.status !== 'ready') return;
+    wx.navigateTo({ url: `/pages/feedback-form/feedback-form?type=ARTICLE&id=${this.data.articleId}` });
   },
   comments() { if (!this.data.authenticated) { this.login(); return; } wx.navigateTo({ url: `/pages/comments/comments?id=${this.data.articleId}` }); },
   author() { if (this.data.author) wx.navigateTo({ url: `/pages/author/author?id=${this.data.author.authorId}` }); },

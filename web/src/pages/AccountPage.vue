@@ -86,18 +86,26 @@ async function submit() {
         session.me = await get<Me>("/me", true);
         session.status = "ready";
       } catch (e) {
-        if (session.token) {
-          session.status = "error";
-          session.message = message(e);
+        if (session.status !== "limited") {
+          if (session.token) {
+            session.status = "error";
+            session.message = message(e);
+          }
+          throw e;
         }
-        throw e;
       }
       const next =
         typeof route.query.next === "string" &&
         /^\/(?!\/)/.test(route.query.next)
           ? route.query.next
           : "/workspace";
-      await router.replace(next);
+      await router.replace(
+        session.status === "limited" &&
+          !next.startsWith("/me/notifications") &&
+          !next.startsWith("/me/appeals/")
+          ? "/me/certification"
+          : next,
+      );
     } else {
       if (
         !challenge.value ||

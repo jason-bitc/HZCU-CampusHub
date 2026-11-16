@@ -1,0 +1,22 @@
+<view class="member-page">
+  <view class="section-card">
+    <view wx:for="{{rules}}" wx:key="id" class="settings-item">
+      <button class="settings-row" data-id="{{item.id}}" bindtap="toggle" aria-expanded="{{expanded === item.id}}">
+        <view><text class="row-title">{{item.title}}</text><text class="hint">{{item.summary}}</text></view><app-icon name="chevron-right" size="34" />
+      </button>
+      <text wx:if="{{expanded === item.id}}" class="hint settings-detail">{{item.detail}}</text>
+    </view>
+    <button class="settings-row" bindtap="profile"><view><text class="row-title">资料与隐私</text><text class="hint">修改本人资料及联系开关。</text></view><app-icon name="chevron-right" size="34" /></button>
+    <button class="settings-row" bindtap="reset"><view><text class="row-title">找回或重设密码</text><text class="hint">通过本人校园邮箱验证码核验。</text></view><app-icon name="chevron-right" size="34" /></button>
+  </view>
+  <view class="section-card">
+    <button class="settings-row" bindtap="feedback"><view><text class="row-title">使用反馈</text><text class="hint">反馈问题或建议。</text></view><app-icon name="chevron-right" size="34" /></button>
+    <button class="settings-row" bindtap="records"><view><text class="row-title">我的反馈</text><text class="hint">查看本人举报和反馈的处理进度。</text></view><app-icon name="chevron-right" size="34" /></button>
+    <button class="settings-row" bindtap="appeals"><view><text class="row-title">账号处理与申诉</text><text class="hint">核对本人行为限制及复核答复。</text></view><app-icon name="chevron-right" size="34" /></button>
+  </view>
+  <button wx:if="{{signedIn}}" class="button-secondary form-section" bindtap="logout" disabled="{{busy}}" loading="{{busy}}">退出当前账号</button>
+  <button wx:else class="button-secondary form-section" bindtap="login">登录校园账号</button>
+  <text wx:if="{{signedIn}}" class="hint">退出后清理本机私有副本，并回到游客阅读。</text>
+  <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+  <button wx:if="{{logoutUncertain}}" class="button-secondary" bindtap="forget" disabled="{{busy}}">仅清理本机登录数据</button>
+</view>

@@ -84,6 +84,78 @@ test("401 clears authentication and does not retry the mutation", async () => {
     clearSession();
   }
 });
+test("restricted sessions discard old private responses and keep the inbox available", async () => {
+  const original = globalThis.fetch;
+  login();
+  let release: (response: Response) => void = () => {};
+  const profile = new Promise<Response>((resolve) => (release = resolve));
+  const calls: string[] = [];
+  globalThis.fetch = async (url, init) => {
+    const path = String(url);
+    calls.push(path);
+    assert.equal(
+      (init?.headers as Record<string, string>).Authorization,
+      "Bearer unit-test-token",
+    );
+    if (path === "/api/v1/me/profile") return profile;
+    if (path === "/api/v1/me")
+      return Response.json({ code: "ACCESS_RESTRICTED" }, { status: 403 });
+    return Response.json({ code: "OK", data: { unreadCount: 1 } });
+  };
+  try {
+    const old = request("/me/profile", { auth: true });
+    await assert.rejects(request("/me", { auth: true }), {
+      code: "ACCESS_RESTRICTED",
+    });
+    release(Response.json({ code: "OK", data: { nickname: "private" } }));
+    await assert.rejects(old, { code: "SESSION_CHANGED" });
+    await assert.rejects(request("/me/notifications/1/other", { auth: true }), {
+      code: "ACCESS_RESTRICTED",
+    });
+    assert.deepEqual(
+      await request("/me/notifications?page=1", { auth: true }),
+      { unreadCount: 1 },
+    );
+    assert.deepEqual(calls, [
+      "/api/v1/me/profile",
+      "/api/v1/me",
+      "/api/v1/me/notifications?page=1",
+    ]);
+    assert.equal(session.status, "limited");
+  } finally {
+    globalThis.fetch = original;
+    clearSession();
+  }
+});
+test("an empty gateway failure becomes an actionable service error", async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response(null, { status: 503 });
+  try {
+    await assert.rejects(request("/articles"), {
+      status: 503,
+      code: "HTTP_503",
+      message: "服务暂时不可用，请稍后重试。",
+    });
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+test("an empty 401 response still clears a private session", async () => {
+  const original = globalThis.fetch;
+  login();
+  globalThis.fetch = async () => new Response(null, { status: 401 });
+  try {
+    await assert.rejects(request("/me/profile", { auth: true }), {
+      status: 401,
+      code: "HTTP_401",
+    });
+    assert.equal(session.token, "");
+    assert.equal(session.status, "guest");
+  } finally {
+    globalThis.fetch = original;
+    clearSession();
+  }
+});
 test("private image download returns a Blob rather than parsing JSON", async () => {
   const original = globalThis.fetch;
   login();

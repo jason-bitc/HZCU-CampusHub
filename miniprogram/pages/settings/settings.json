@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "规则与设置",
+  "usingComponents": { "app-icon": "/components/app-icon/index" }
+}

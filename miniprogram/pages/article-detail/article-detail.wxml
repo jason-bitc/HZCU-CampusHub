@@ -1,4 +1,5 @@
 <page-meta page-style="{{tocDrawerVisible ? 'overflow: hidden;' : ''}}" />
+<import src="../../templates/honor.wxml" />
 <view class="detail-page">
   <view wx:if="{{demoMode}}" class="demo-banner">演示模式 · 本地示例，未连接真实后端</view>
 
@@ -29,6 +30,7 @@
         </view>
         <view wx:if="{{!authenticated}}" class="guest-note">游客可阅读全文。登录校园账号后可查看作者及参与交流。<button wx:if="{{!demoMode}}" class="button-text" bindtap="login">登录校园账号</button></view>
         <button wx:if="{{author}}" class="menu-row" bindtap="author"><text>{{author.nickname}}</text><text class="menu-note">查看作者主页</text></button>
+        <template is="author-honor" data="{{honor: author.honor}}" wx:if="{{author && author.honor}}" />
         <text wx:if="{{authenticated && !author && !privateLoading && !memberError}}" class="hint">当前文章没有可访问的作者主页。</text>
         <text wx:if="{{privateLoading}}" class="hint">正在读取本人互动状态…</text>
         <view wx:if="{{memberError}}"><text class="field-error">{{memberError}}</text><button class="button-secondary" bindtap="refreshMember">重新核对互动状态</button></view>
@@ -52,6 +54,7 @@
         <text class="source-disclaimer">外部内容由读者自愿访问，请自行核验内容与访问权限。</text>
       </view>
       <view class="reading-note">目录点击定位到对应章节；阅读全文免费。</view>
+      <button wx:if="{{!demoMode}}" class="button-text article-report" bindtap="report">举报这篇经验</button>
     </view>
   </view>
 

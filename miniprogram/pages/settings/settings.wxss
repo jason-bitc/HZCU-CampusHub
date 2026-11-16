@@ -1,0 +1,5 @@
+@import '../../styles/sections.wxss';
+.settings-row { display: flex; width: 100% !important; min-height: 112rpx; align-items: center; justify-content: space-between; gap: 18rpx; padding: 20rpx 0; text-align: left; }
+.settings-row view { min-width: 0; }
+.settings-item + .settings-item, .settings-item + .settings-row, .settings-row + .settings-row { border-top: 1rpx solid var(--color-border); }
+.settings-detail { margin: 0 0 18rpx; padding: 18rpx; background: var(--color-primary-soft); border-radius: var(--radius-sm); }

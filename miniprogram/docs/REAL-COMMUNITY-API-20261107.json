@@ -1,0 +1,351 @@
+{
+  "checkedAt": "2026-11-07T05:17:19.987Z",
+  "status": "PASS",
+  "database": "campushub_test",
+  "checks": [
+    "原生登录适配器连接隔离的真实校园会话",
+    "草稿删除校验旧 revision、无请求体和终态重试",
+    "私有证据真实上传与同键重试，鉴权下载字节一致",
+    "文章举报提交、原键重试、回执和附件",
+    "无目标反馈进入本人列表，既有分页快照不漂移",
+    "评论举报关联可见评论",
+    "管理员处理后，用户只读取公开答复和时间线",
+    "限制评论时 403 保留校园会话，仍可查看本人限制",
+    "申诉重复提交同回执、接受后显示公开答复且限制解除",
+    "演示文章下架后，本人仍可查看证据且游客无法读原文"
+  ],
+  "requests": 47,
+  "evidence": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "61097161-623b-4634-a8ba-e4b685009faa"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me",
+      "status": 200,
+      "code": "OK",
+      "traceId": "dbf8dd2f-7c7f-426d-acad-c6ff4d738b30"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "code": "OK",
+      "traceId": "c78b0826-0726-410a-89bd-994cd5be4382"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2605/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a54653f8-4242-4c41-9ea8-f2e3860ee639"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/me/articles/2605",
+      "status": 409,
+      "code": "REVISION_CONFLICT",
+      "traceId": "ed003762-18a1-4fe8-a779-696515f895ad"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/me/articles/2605",
+      "status": 200,
+      "code": "OK",
+      "traceId": "70a4ad36-4776-4fa7-aafa-3213161f50b9"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/me/articles/2605",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1423e7bd-2dc2-44ec-bcb1-548845ee55b1"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles",
+      "status": 201,
+      "code": "OK",
+      "traceId": "7a8acd0b-ac1b-4e16-847a-0aa780790230"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2606/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "ff022e2d-a9fb-4f3d-857b-ac53834d8d93"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog",
+      "status": 200,
+      "code": "OK",
+      "traceId": "37c86401-e541-42a3-ad40-04585ad194eb"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/articles/2606/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a2244025-06b9-46eb-a59d-d4d869aa678c"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2606/publish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "3e396352-4a8d-407f-afd8-a46fd11dc2a0"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/case-images",
+      "status": 200,
+      "code": "OK",
+      "traceId": "a4f1f6ba-3e38-4643-8a5d-2b9bc1892f2d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/case-images",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2e9a9d94-f405-4cb3-95d6-bd24b2f2992c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/case-images/f1ad4a21-ffb9-496c-8279-a487a143827f",
+      "status": 401,
+      "code": "UNAUTHORIZED",
+      "traceId": "0536c860-8ee9-4341-a0e8-2e2c47f7d8b6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/case-images/f1ad4a21-ffb9-496c-8279-a487a143827f",
+      "status": 200,
+      "binary": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "fd309e3a-1756-4eca-938d-0bc74e91709d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e97cf685-6e5e-4ad2-bbff-3373c5e5b4ad"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases/236",
+      "status": 200,
+      "code": "OK",
+      "traceId": "8a2f20de-b720-45d7-a45a-f4db9bab8c1c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases/236",
+      "status": 401,
+      "code": "UNAUTHORIZED",
+      "traceId": "9b07711a-2f3b-4360-8648-3381b4423f85"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "cc87be6a-7ba7-4732-9f1e-92d8a39f507e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "915d3ec5-c255-4e70-ae5c-b171402c5dff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "15184aa0-5bbb-474c-84dd-18ac5a7d140f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "89b1f1d6-5434-4846-94a4-edafecb0f584"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2606/comments",
+      "status": 201,
+      "code": "OK",
+      "traceId": "4f8e7659-86e0-4b2f-ace7-b3c2ec439b56"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/cases",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d9ee82fb-9595-40f7-972d-3c238008c24c"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases/238",
+      "status": 200,
+      "code": "OK",
+      "traceId": "1dd2f1df-bf72-4c5c-abea-daf316bdf194"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/auth/login",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2d51dc6e-f584-4370-9ea9-7b6c360e94ab"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/cases/236/claim",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f7af8220-8953-4d14-88b3-387c79e7a771"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/cases/236/decisions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "c6f01ea9-d857-44a6-ade5-fa5d118834a4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases/236",
+      "status": 200,
+      "code": "OK",
+      "traceId": "7639e03a-d91e-439e-aff1-43f8beb4ece7"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/users/372/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f7441de0-34e3-431b-b2b0-f9dde3a8af2e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/articles/2606/comments",
+      "status": 403,
+      "code": "BEHAVIOR_RESTRICTED",
+      "traceId": "916de329-4802-4d1c-a2c5-1d2a7a23c7f7"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "e4e8cfcd-669b-4238-aca1-13c1b5ce3407"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "6a29c26a-2520-4987-93c1-c5266440a24d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "50229279-3c9a-45c4-a3b3-ce7795b76d73"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/appeals/6/decisions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "bef75e95-50ae-4ac3-b1f5-68a5d9e6ff6e"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/appeals",
+      "status": 200,
+      "code": "OK",
+      "traceId": "97b75042-714e-4ed6-9b9c-55a50d70f855"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/restrictions",
+      "status": 200,
+      "code": "OK",
+      "traceId": "81b6cdc8-5857-4518-a4bd-5a8c3ae415e8"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/comments/386",
+      "status": 200,
+      "code": "OK",
+      "traceId": "28d87c2b-e17a-42f1-beff-6ecf85c83572"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/articles/2606/draft",
+      "status": 200,
+      "code": "OK",
+      "traceId": "f5ed3f5e-c60c-494a-b8c1-7a67a4d612bf"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/articles/2606/unpublish",
+      "status": 200,
+      "code": "OK",
+      "traceId": "2bd675ff-32d5-491e-bb79-3cdf5b7d4a94"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/articles/2606",
+      "status": 404,
+      "code": "NOT_FOUND",
+      "traceId": "c9203826-0b69-4887-8fe6-a03155ed0445"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/cases/236",
+      "status": 200,
+      "code": "OK",
+      "traceId": "d3fa4044-3ed9-494e-aaa7-d56b67f51b9f"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/media/case-images/f1ad4a21-ffb9-496c-8279-a487a143827f",
+      "status": 200,
+      "binary": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "96908119-ad49-4584-adeb-f334783f6300"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/auth/logout",
+      "status": 200,
+      "code": "OK",
+      "traceId": "9078aada-828e-4b9a-bc81-58f3e531390b"
+    }
+  ],
+  "backendCommit": "b487c3b561225e07c98be7fe1df56db559929836",
+  "backendJarSha256": "C7E46857E4748656FFFFA80CBBDFC7485176D3546C1575D224E18D6058AE9CFC",
+  "transport": "Actual native service modules over a local Node wx transport bridge",
+  "fixture": "Synthetic campus and administrator accounts; isolated MySQL V11 and media. Test article ended AUTHOR_OFFLINE."
+}

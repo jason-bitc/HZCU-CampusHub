@@ -12,6 +12,9 @@ class ApiError extends Error {
 function fromHttp(status, payload, traceId) {
   const body = payload && typeof payload === 'object' ? payload : {};
   const tracking = traceId || body.traceId || '';
+  if (status === 403 && body.code === 'BEHAVIOR_RESTRICTED') {
+    return new ApiError({ kind: 'BEHAVIOR', status, code: body.code, traceId: tracking, message: '此行为当前受限，可在本人处理记录查看原因并申诉。' });
+  }
   if (status === 401 || status === 403) {
     return new ApiError({ kind: status === 401 ? 'AUTH' : 'PERMISSION', status, code: body.code, traceId: tracking, message: body.code === 'LOGIN_FAILED' ? '邮箱或密码不正确，或当前账号暂不可用' : status === 401 ? '登录已失效，请重新登录' : '当前账号或校园认证不可用，请退出后重新核对' });
   }

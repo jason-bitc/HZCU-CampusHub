@@ -6,10 +6,16 @@ const content = require('../../utils/editor-content');
 const { bytes } = require('../../utils/validation');
 const config = require('../../config/env');
 const sourceTypes = [null, 'FIRST_HAND', 'CURATED', 'DEMO'];
+const tagFields = [
+  { name: 'jobs', field: 'jobIds', label: '目标岗位' },
+  { name: 'majors', field: 'majorIds', label: '文章适用专业' },
+  { name: 'companies', field: 'companyIds', label: '公司（可选）' },
+  { name: 'topics', field: 'topicIds', label: '主题（可选）' }
+];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
-const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false };
+const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false };
 Page({
-  data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
+  data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, webHandoff: !!config.webBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
   onLoad(options) {
     const articleId = Number(options.id); this.setData({ articleId });
     access.attach(this, blank, (reason) => { if (reason && reason !== 'logout') this.checkpoint(); this.saved = null; });
@@ -23,13 +29,17 @@ Page({
   onUnload() { this.checkpoint(); access.leave(this); }, login: access.login,
   checkpoint() {
     if (!this.data.form || !this._ownerId) return;
-    try { local.write(`draft:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, savedAt: new Date().toISOString() }, this._ownerId); }
+    try { local.write(`draft:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, dirty: this.data.dirty, savedAt: new Date().toISOString() }, this._ownerId); }
     catch (_) { this.setData({ notice: '本机副本存储失败，请保持当前页面并先复制正文。云端保存尚未确认。' }); }
   },
   async load() {
     const epoch = this._epoch; this.setData({ busy: true, error: '' });
     try {
-      const [draft, catalog, profile] = await Promise.all([api.draft(this.data.articleId), api.call('/catalog'), api.profile()]); if (epoch !== this._epoch) return;
+      const result = await Promise.all([api.draft(this.data.articleId), api.call('/catalog'), api.profile()]);
+      if (epoch !== this._epoch) return;
+      const draft = result[0];
+      const catalog = result[1];
+      const profile = result[2];
       this.setData({ catalog }); this.applyDraft(draft);
       const recovery = local.read(`draft:${this.data.articleId}`); this.setData({ hasBackup: !!local.read(`backup:${this.data.articleId}`) }); if (recovery && (JSON.stringify(recovery.form) !== this.saved || recovery.pendingPublish || (recovery.uploads || []).some((f) => f.state !== 'done'))) this.setData({ recovery });
       else if (draft.revision === 0 && !this.data.form.majorIds.length && profile.majorId && catalog.majors.some((m) => m.id === profile.majorId)) this.updateForm(Object.assign({}, this.data.form, { majorIds: [profile.majorId] }));
@@ -37,7 +47,10 @@ Page({
   },
   applyDraft(draft) { const form = content.formFromDraft(draft); const complexSource = content.blocks(form.body) === null; this.saved = JSON.stringify(form); this.setData({ revision: draft.revision, articleState: draft.state, stateText: stateNames[draft.state] || '状态待核对', complexSource, preview: complexSource || this.data.preview, readOnly: complexSource || draft.state === 'ADMIN_HIDDEN' || draft.state === 'DELETED', dirty: false }); this.updateForm(form, false); },
   updateForm(form, dirty = true) {
-    const groups = this.data.catalog ? [['jobs', 'jobIds', '目标岗位'], ['majors', 'majorIds', '文章适用专业'], ['companies', 'companyIds', '公司（可选）'], ['topics', 'topicIds', '主题（可选）']].map(([name, field, label]) => ({ name, field, label, items: this.data.catalog[name].map((item) => Object.assign({}, item, { selected: form[field].includes(item.id) })) })) : [];
+    const groups = this.data.catalog ? tagFields.map(({ name, field, label }) => ({
+      name, field, label,
+      items: this.data.catalog[name].map((item) => Object.assign({}, item, { selected: form[field].includes(item.id) }))
+    })) : [];
     const blocks = content.blocks(form.body);
     this.setData({ form, tagGroups: groups, dirty: dirty && JSON.stringify(form) !== this.saved, blocks: blocks || [], blockSupported: !!blocks, sourceIndex: Math.max(0, sourceTypes.indexOf(form.sourceType)) });
     if (dirty) this.checkpoint();
@@ -51,7 +64,21 @@ Page({
   linkInput(e) { if (!this.editable()) return; const index = Number(e.currentTarget.dataset.index); const field = e.currentTarget.dataset.field; if (!['label', 'url'].includes(field)) return; const links = this.data.form.sourceLinks.map((row) => Object.assign({}, row)); links[index][field] = e.detail.value; this.updateForm(Object.assign({}, this.data.form, { sourceLinks: links })); },
   addLink() { if (this.editable()) this.updateForm(Object.assign({}, this.data.form, { sourceLinks: this.data.form.sourceLinks.concat({ label: '', url: '' }) })); },
   removeLink(e) { if (this.editable()) this.updateForm(Object.assign({}, this.data.form, { sourceLinks: this.data.form.sourceLinks.filter((_, i) => i !== Number(e.currentTarget.dataset.index)) })); },
-  toggleHints() { this.setData({ hintsVisible: !this.data.hintsVisible }); },
+  async toggleHints() {
+    const show = !this.data.hintsVisible;
+    this.setData({ hintsVisible: show });
+    if (!show || this.data.prompts || this.data.loadingPrompts) return;
+    const epoch = this._epoch;
+    this.setData({ loadingPrompts: true, promptsError: '' });
+    try {
+      const result = await api.call('/me/writing-prompts');
+      if (epoch === this._epoch) this.setData({ prompts: result.items });
+    } catch (e) {
+      if (epoch === this._epoch) this.setData({ promptsError: access.errorText(e) });
+    } finally {
+      if (epoch === this._epoch) this.setData({ loadingPrompts: false });
+    }
+  },
   toggleOrder() { this.setData({ orderVisible: !this.data.orderVisible }); },
   move(e) { if (!this.editable()) return; this.updateForm(Object.assign({}, this.data.form, { body: content.moveBlock(this.data.form.body, Number(e.currentTarget.dataset.index), Number(e.currentTarget.dataset.delta)) })); },
   removeBlock(e) { if (!this.editable()) return; const index = Number(e.currentTarget.dataset.index); wx.showModal({ title: '移除这一段？', content: '只移除草稿中的文字或图片引用，保存前可通过本机副本核对。', success: (r) => { if (r.confirm && this.editable()) this.updateForm(Object.assign({}, this.data.form, { body: content.removeBlock(this.data.form.body, index) })); } }); },
@@ -87,7 +114,7 @@ Page({
   backup() { const recovery = local.read(`backup:${this.data.articleId}`); if (recovery) this.setData({ recovery }); },
   keepServer() { this.setData({ recovery: null }); },
   resolve(e) {
-    const conflict = this.data.conflict; if (!conflict) return; this.checkpoint(); local.write(`backup:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, savedAt: new Date().toISOString() }, this._ownerId); this.setData({ hasBackup: true });
+    const conflict = this.data.conflict; if (!conflict) return; this.checkpoint(); local.write(`backup:${this.data.articleId}`, { form: this.data.form, baseRevision: this.data.revision, uploads: this.data.uploads, pendingPublish: this.data.pendingPublish, dirty: this.data.dirty, savedAt: new Date().toISOString() }, this._ownerId); this.setData({ hasBackup: true });
     if (e.currentTarget.dataset.keep === 'local' && content.blocks(conflict.latest.content.body) === null) { this.setData({ error: '云端新版本含复杂 Markdown。本机副本已保留，请复制后在完整编辑器中比较合并。' }); return; }
     if (e.currentTarget.dataset.keep === 'local') { this.setData({ revision: conflict.latest.revision, articleState: conflict.latest.state, stateText: stateNames[conflict.latest.state] || '状态待核对', readOnly: conflict.latest.state === 'ADMIN_HIDDEN' || conflict.latest.state === 'DELETED', conflict: null, notice: '已保留本机内容，请比较修改后再次保存。尚未写入云端。' }); this.checkpoint(); }
     else { this.applyDraft(conflict.latest); this.setData({ conflict: null, notice: '已载入云端版本，原本机副本仍保留。' }); }
@@ -106,11 +133,22 @@ Page({
   },
   async retryPublish() {
     if (!this.data.pendingPublish || this.data.busy || this.data.authStatus !== 'ready') return; const epoch = this._epoch; this.setData({ busy: true, error: '', notice: '正在核对发布结果…' });
-    try { const receipt = await api.publish(this.data.articleId, this.data.pendingPublish); if (epoch !== this._epoch) return; this.setData({ pendingPublish: null, reconciled: null, revision: receipt.revision, articleState: 'PUBLISHED', stateText: '已发布', notice: `发布成功 · 公开版本 ${receipt.versionId}`, dirty: false }); this.saved = JSON.stringify(this.data.form); this.checkpoint(); }
-    catch (error) { if (epoch === this._epoch) this.setData({ error: access.errorText(error), notice: '发布结果未确认。继续核对会沿用原请求，不会重新保存或新建公开版本。' }); }
+    try { const receipt = await api.publish(this.data.articleId, this.data.pendingPublish); if (epoch !== this._epoch) return; this.setData({ pendingPublish: null, reconciled: null, publishRestricted: false, revision: receipt.revision, articleState: 'PUBLISHED', stateText: '已发布', notice: `发布成功 · 公开版本 ${receipt.versionId}`, dirty: false }); this.saved = JSON.stringify(this.data.form); this.checkpoint(); }
+    catch (error) {
+      if (epoch !== this._epoch) return;
+      if (error.code === 'BEHAVIOR_RESTRICTED') {
+        this.setData({ error: access.errorText(error), publishRestricted: true, pendingPublish: null, notice: '发布未受理，草稿已保留。' });
+        this.checkpoint();
+      } else this.setData({ error: access.errorText(error), notice: '发布结果未确认。继续核对会沿用原请求，不会重新保存或新建公开版本。' });
+    }
     finally { if (epoch === this._epoch) this.setData({ busy: false }); }
   },
   async reconcile() { const epoch = this._epoch; try { const draft = await api.draft(this.data.articleId); if (epoch === this._epoch) this.setData({ reconciled: draft }); } catch (e) { if (epoch === this._epoch) this.setData({ error: access.errorText(e) }); } },
   endPending() { if (!this.data.reconciled) return; wx.showModal({ title: '停止重试上次发布？', content: '上次请求可能已经成功。请先查看当前公开文章核对；停止后保留本机内容，再按云端修订处理差异。', success: (r) => { if (!r.confirm) return; this.setData({ pendingPublish: null }); this.readConflict(); this.checkpoint(); } }); },
+  appeals() { wx.navigateTo({ url: '/pages/appeals/appeals?scope=PUBLISH' }); },
+  copyWebEditor() {
+    if (!config.webBaseUrl || this.data.authStatus !== 'ready' || !this.data.complexSource || this.data.articleState === 'ADMIN_HIDDEN') return;
+    wx.setClipboardData({ data: `${config.webBaseUrl}/#/editor/${this.data.articleId}` });
+  },
   viewPublished() { wx.navigateTo({ url: `/pages/article-detail/article-detail?id=${this.data.articleId}` }); }
 });

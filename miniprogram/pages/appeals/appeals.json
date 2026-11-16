@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "账号处理与申诉",
+  "usingComponents": { "page-state": "/components/page-state/index" }
+}

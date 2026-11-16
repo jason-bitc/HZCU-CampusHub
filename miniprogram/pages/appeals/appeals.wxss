@@ -1,0 +1,4 @@
+@import '../../styles/sections.wxss';
+.appeal-reason { margin-top: 24rpx; }
+.appeal-card.selected { border: 2rpx solid var(--color-primary); }
+.appeal-footer { margin-top: 28rpx; }

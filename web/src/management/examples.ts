@@ -1,0 +1,51 @@
+// Explicit prototype comparison fixtures. These never stand in for an API response.
+import type { CaseContext, CaseDetail } from "./types";
+export const exampleCase: CaseDetail = {
+  caseId: 102,
+  kind: "REPORT",
+  category: "ADVERTISEMENT",
+  state: "PROCESSING",
+  revision: 2,
+  createdAt: "2026-11-04T01:20:00Z",
+  updatedAt: "2026-11-04T01:25:00Z",
+  targetType: "ARTICLE",
+  articleId: 1,
+  commentId: null,
+  assigneeId: 1,
+  description: "相关链接疑似与经验无关。",
+  submitterId: 1,
+  articleVersionId: 1,
+  images: [{ id: "example-evidence", mime: "image/png", width: 0, height: 0 }],
+  history: [
+    {
+      revision: 1,
+      action: "CASE_CREATE",
+      state: "OPEN",
+      reply: "",
+      outcome: null,
+      occurredAt: "2026-11-04T01:20:00Z",
+      actorDomain: "USER",
+      actorId: 1,
+      assigneeId: null,
+      internalNote: "",
+      reason: "",
+    },
+  ],
+};
+export const exampleContext: CaseContext = {
+  caseId: 102,
+  articleAvailable: true,
+  article: {
+    versionId: 1,
+    articleId: 1,
+    title: "从零准备C++后端实习的8周复盘",
+    summary: "被举报位置：正文末尾的外部推广链接",
+    body: "查看对应正文段落、父评论和必要回复。\n\n原文已隐藏时，此处仍仅向有权限的处理人员开放。",
+    bodyFormat: "MARKDOWN",
+    sourceType: "DEMO",
+    publishedAt: "2026-11-02T01:00:00Z",
+    currentState: "PUBLISHED",
+  },
+  comments: [],
+  media: [],
+};

@@ -1,0 +1,245 @@
+{
+  "checkedAt": "2026-11-07T04:42:47.809Z",
+  "status": "PASS",
+  "prototypeScreens": [
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": false,
+      "file": "A01-prototype.png",
+      "visibleHeading": "社区管理登录",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": false,
+      "file": "A02-prototype.png",
+      "visibleHeading": "待办案件",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A03",
+      "path": "/admin/cases/102",
+      "mobile": false,
+      "file": "A03-prototype.png",
+      "visibleHeading": "案件 DEMO-C102 · 上下文与处理",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A04",
+      "path": "/admin/content",
+      "mobile": false,
+      "file": "A04-prototype.png",
+      "visibleHeading": "内容巡查",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A05",
+      "path": "/admin/accounts",
+      "mobile": false,
+      "file": "A05-prototype.png",
+      "visibleHeading": "账号限制与申诉复核",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A06",
+      "path": "/admin/categories",
+      "mobile": false,
+      "file": "A06-prototype.png",
+      "visibleHeading": "岗位、专业、公司与主题",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A07",
+      "path": "/admin/contributions",
+      "mobile": false,
+      "file": "A07-prototype.png",
+      "visibleHeading": "贡献治理与荣誉规则",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A08",
+      "path": "/admin/audit",
+      "mobile": false,
+      "file": "A08-prototype.png",
+      "visibleHeading": "治理审计与操作结果",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O01",
+      "path": "/ops/login",
+      "mobile": false,
+      "file": "O01-prototype.png",
+      "visibleHeading": "独立运维登录",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": false,
+      "file": "O02-prototype.png",
+      "visibleHeading": "服务总览",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O03",
+      "path": "/ops/logs",
+      "mobile": false,
+      "file": "O03-prototype.png",
+      "visibleHeading": "业务停止期间的日志与任务",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O04",
+      "path": "/ops/deploy",
+      "mobile": false,
+      "file": "O04-prototype.png",
+      "visibleHeading": "部署已准备的项目版本",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O05",
+      "path": "/ops/restart",
+      "mobile": false,
+      "file": "O05-prototype.png",
+      "visibleHeading": "重启业务服务",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O06",
+      "path": "/ops/backups",
+      "mobile": false,
+      "file": "O06-prototype.png",
+      "visibleHeading": "一致性备份",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O07",
+      "path": "/ops/restore",
+      "mobile": false,
+      "file": "O07-prototype.png",
+      "visibleHeading": "备份校验与恢复确认",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O08",
+      "path": "/ops/tasks/DEMO-T108",
+      "mobile": false,
+      "file": "O08-prototype.png",
+      "visibleHeading": "任务 DEMO-T108 · 持久进度",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O09",
+      "path": "/ops/exceptions",
+      "mobile": false,
+      "file": "O09-prototype.png",
+      "visibleHeading": "任务异常与冲突操作",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O10",
+      "path": "/ops/manual",
+      "mobile": false,
+      "file": "O10-prototype.png",
+      "visibleHeading": "运维手册与交接",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": true,
+      "file": "A01-prototype-mobile.png",
+      "visibleHeading": "社区管理登录",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": true,
+      "file": "A02-prototype-mobile.png",
+      "visibleHeading": "待办案件",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "A03",
+      "path": "/admin/cases/102",
+      "mobile": true,
+      "file": "A03-prototype-mobile.png",
+      "visibleHeading": "案件 DEMO-C102 · 上下文与处理",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": true,
+      "file": "O02-prototype-mobile.png",
+      "visibleHeading": "服务总览",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O07",
+      "path": "/ops/restore",
+      "mobile": true,
+      "file": "O07-prototype-mobile.png",
+      "visibleHeading": "备份校验与恢复确认",
+      "mode": "explicit prototype fixtures; not real data"
+    },
+    {
+      "code": "O10",
+      "path": "/ops/manual",
+      "mobile": true,
+      "file": "O10-prototype-mobile.png",
+      "visibleHeading": "运维手册与交接",
+      "mode": "explicit prototype fixtures; not real data"
+    }
+  ],
+  "actualReadOnlyScreens": [
+    {
+      "code": "A01",
+      "path": "/admin/login",
+      "mobile": false,
+      "file": "A01-actual.png"
+    },
+    {
+      "code": "A02",
+      "path": "/admin/cases",
+      "mobile": false,
+      "file": "A02-actual.png"
+    },
+    {
+      "code": "A06",
+      "path": "/admin/categories",
+      "mobile": false,
+      "file": "A06-actual.png"
+    },
+    {
+      "code": "O01",
+      "path": "/ops/login",
+      "mobile": false,
+      "file": "O01-actual.png"
+    },
+    {
+      "code": "O02",
+      "path": "/ops/overview",
+      "mobile": false,
+      "file": "O02-actual.png"
+    },
+    {
+      "code": "W01",
+      "file": "W01-single-column-actual.png",
+      "mode": "real public backend"
+    }
+  ],
+  "simulatedContractChecks": [
+    "isolated admin login, claim and no public-media fallback for hidden context",
+    "simulated lost management receipt survives reload and keeps original request/revision/text",
+    "admin logout leaves ordinary session and never sends its token to ordinary API"
+  ],
+  "realAdminLogin": "NOT_RUN_IN_PROTOTYPE_AND_MOCK_SUITE",
+  "opsBackend": "NOT_EXERCISED_IN_THIS_SUITE",
+  "realOperationsExecuted": 0,
+  "uncaughtPageErrors": 0,
+  "captureMethod": "expected route-specific h1 + key content readiness, not generic h1"
+}

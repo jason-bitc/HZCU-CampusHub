@@ -10,7 +10,13 @@ Page({
   onUnload() { access.leave(this); }, login: access.login,
   async load() {
     const epoch = this._epoch; this.setData({ busy: true, error: '' });
-    try { const [profile, contact, catalog] = await Promise.all([api.profile(), api.contactSettings(), api.call('/catalog')]); if (epoch !== this._epoch) return; this.setData({ majors: [{ id: null, name: '暂不填写' }].concat(catalog.majors) }); this.useProfile(profile); this.useContact(contact); }
+    try {
+      const result = await Promise.all([api.profile(), api.contactSettings(), api.call('/catalog')]);
+      if (epoch !== this._epoch) return;
+      this.setData({ majors: [{ id: null, name: '暂不填写' }].concat(result[2].majors) });
+      this.useProfile(result[0]);
+      this.useContact(result[1]);
+    }
     catch (e) { if (epoch === this._epoch) this.setData({ error: access.errorText(e) }); }
     finally { if (epoch === this._epoch) this.setData({ busy: false }); }
   },

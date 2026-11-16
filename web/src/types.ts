@@ -60,6 +60,31 @@ export interface Contact {
   type: "WECHAT" | "QQ" | "WEB" | null;
   value: string | null;
 }
+export interface Honor {
+  ruleId: string;
+  title: string;
+  badge?: string;
+}
+export interface Wallet {
+  balance: number;
+  receivedContribution: number;
+  honor?: Honor;
+}
+export interface AuthorSummary {
+  authorId: number;
+  nickname: string;
+  honor?: Honor;
+}
+export interface Author extends AuthorSummary {
+  major: Category | null;
+  currentStage: string;
+  bio: string;
+  campusCertification: string;
+  publicArticleCount: number;
+}
+export type AuthorContact =
+  | { enabled: false }
+  | { enabled: true; type: "WECHAT" | "QQ" | "WEB"; value: string };
 export type ArticleState =
   "DRAFT" | "PUBLISHED" | "AUTHOR_OFFLINE" | "ADMIN_HIDDEN" | "DELETED";
 export interface Owned {
@@ -68,6 +93,15 @@ export interface Owned {
   revision: number;
   title: string;
   updatedAt: string;
+  allowedActions?: (
+    | "VIEW_DRAFT"
+    | "EDIT_DRAFT"
+    | "VIEW_PUBLIC"
+    | "PUBLISH"
+    | "UNPUBLISH"
+    | "RESTORE"
+    | "DELETE"
+  )[];
 }
 export interface Form {
   title: string;
