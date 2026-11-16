@@ -214,8 +214,19 @@ class OpsExecutionMySqlIT {
             for (String file : List.of("database.sql","media/objects/"+image.getFileName(),"application.jar","release.json")) {
                 assertThat(manifest.path("files").path(file).asString()).isEqualTo(OpsRunner.sha(saved.resolve(file)));
             }
+            var missingArticle = HTTP.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+businessPort
+                    +"/api/v1/articles/99999999")).GET().build(),HttpResponse.BodyHandlers.ofString());
+            assertThat(missingArticle.statusCode()).isEqualTo(404);
+            String trace = missingArticle.headers().firstValue("X-Trace-Id").orElseThrow();
             stopTestBusiness();
+            Path logDirectory = config.runtimeRoot().resolve(".local-data/logs");
+            Files.move(logDirectory.resolve("campushub-runtime.log"),logDirectory.resolve("campushub-runtime.1.log"));
             assertThat(request("GET","/status",null).path("healthy").asBoolean()).isFalse();
+            var logs = request("GET","/logs?traceId="+trace+"&errorsOnly=true&limit=1",null);
+            assertThat(logs.path("businessRequests").size()).isEqualTo(1);
+            assertThat(logs.path("businessRequests").get(0).path("status").asString()).isEqualTo("404");
+            assertThat(logs.path("businessRequests").get(0).path("traceId").asString()).isEqualTo(trace);
+            assertThat(logs.path("taskEvents").isEmpty()).isFalse();
             assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(8);
           }
         } finally {

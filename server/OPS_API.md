@@ -64,10 +64,18 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 创建任务 | POST /jobs | 原操作三字段、requestId、confirmationId；返回持久任务 |
 | 任务列表 | GET /jobs | 最近100个任务，最新在前 |
 | 任务详情 | GET /jobs/{id} | 状态、事件、结果或错误码、起止时间 |
-| 日志 | GET /logs | 任务事件与业务安全请求日志的有限字段，不返回原始日志文本 |
+| 日志 | GET /logs | 最近200条任务阶段和业务请求摘要，业务请求支持按追踪编号和错误状态筛选 |
 | 进程存活 | GET /health | 仅公开独立运维自身UP；不代表业务健康 |
 
-以上列表当前不接收查询参数。全部管理响应no-store。未知身份、普通用户令牌、社区管理员令牌拒绝。网页通过Vite的 `/api/v1/ops` 独立代理访问8091，业务 `/api` 继续代理8080；需要改端口时使用CAMPUSHUB_OPS_TARGET和CAMPUSHUB_API_TARGET。不要把运维请求误发到业务8080。
+日志接口接受下文列出的查询参数，其余列表使用固定范围。全部管理响应no-store。未知身份、普通用户令牌、社区管理员令牌拒绝。网页通过Vite的 `/api/v1/ops` 独立代理访问8091，业务 `/api` 继续代理8080；需要改端口时使用CAMPUSHUB_OPS_TARGET和CAMPUSHUB_API_TARGET。不要把运维请求误发到业务8080。
+
+### 错误日志查询
+
+调用 `GET /logs?errorsOnly=true&limit=20` 查看最近的业务错误。要从响应的 `X-Trace-Id` 定位具体请求，附加 `traceId`，值使用小写 UUID。三个参数都可省略，`errorsOnly` 默认 `false`，设为 `true` 时筛选 HTTP 400–599，`limit` 默认 100，有效范围为 1–100。筛选只作用于 `businessRequests`，`taskEvents` 仍返回最近 200 条任务阶段。未知、重复或不合法参数返回 400。
+
+接口从受控业务运行目录读取当前日志和最多 30 个轮转文件。每个文件只读尾部 256 KiB，返回查到的最新匹配记录，数组按从旧到新的写入顺序呈现。`businessLogCoverage` 包含读取文件数 `filesRead`、文件超出扫描上限的 `scanLimited` 和部分文件不可读的 `readIncomplete`。业务停机时仍可查历史日志和任务阶段。需要查看扫描窗口之外的记录时，由维护人员按运维手册在本机核查。
+
+`businessRequests` 每条提供时间 `occurredAt`、追踪编号、动作、方法、状态、结果、耗时和可用的模块及错误码。状态和耗时沿用字符串字段。业务日志目录、原文、身份信息和 Debug 诊断文件均不通过接口返回。
 
 ## 3 确认与提交
 
