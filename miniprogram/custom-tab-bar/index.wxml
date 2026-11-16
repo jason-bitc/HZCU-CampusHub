@@ -1,1 +1,1 @@
-<prototype-nav active="{{active}}" />
+<prototype-nav wx:if="{{!hidden}}" active="{{active}}" />

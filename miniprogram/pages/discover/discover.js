@@ -48,7 +48,8 @@ Page({
   },
 
   onShow() {
-    if (this.getTabBar && this.getTabBar()) this.getTabBar().setData({ active: 'discover' });
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ active: 'discover', hidden: this.data.filterVisible });
     this.loadOwnMajor();
     // Returning from detail leaves this page instance and its query/list intact.
     if (this.hasShown && this.lastScrollTop > 0) {
@@ -231,12 +232,18 @@ Page({
   openFilter() {
     wx.hideKeyboard();
     wx.setNavigationBarTitle({ title: '筛选经验' });
-    this.setData({ filterVisible: true });
+    this.setFilterVisible(true);
   },
 
   closeFilter() {
-    this.setData({ filterVisible: false });
+    this.setFilterVisible(false);
     this.setListTitle(this.data.listStatus);
+  },
+
+  setFilterVisible(visible) {
+    this.setData({ filterVisible: visible });
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ hidden: visible });
   },
 
   applyFilter(event) {
