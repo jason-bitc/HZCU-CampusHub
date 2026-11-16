@@ -4,6 +4,8 @@ G04，2026年11月5日。王晨的GitHub账号为`jason-bitc`，刘景浩为`WLZ
 
 项目仓库：[jason-bitc/HZCU-CampusHub](https://github.com/jason-bitc/HZCU-CampusHub)。正式文档在`docs/project`，不再通过ZIP作为日常协作入口。
 
+2026年11月6日代码更新入口为`codex/wc-admin-ops-integration`，包含共享后端及社区管理、独立运维接口；[本次交接与运行步骤](ADMIN_OPS_BACKEND_HANDOFF.md)。复核合并前可Fetch后检出该分支；合并后再拉取main。下面“首次接入”描述11月5日当时状态，不用它判断现在main是否包含代码。
+
 ## 1 先理解保存 提交 推送 拉取
 
 |操作|结果|另一人能看到吗|

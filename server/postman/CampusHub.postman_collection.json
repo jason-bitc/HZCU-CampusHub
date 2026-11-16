@@ -1,0 +1,3666 @@
+{
+  "info": {
+    "name": "CampusHub 业务社区管理与独立运维",
+    "description": "本机后端合同。原文章演示数据保留；真实邮件测试只使用本人邮箱。密码、收到的验证码和令牌在本机输入，不保存或导出到此集合。身份流程需逐步完成，不直接批量发送。 第三阶段创作流程使用已有账号，每次按实际返回值填修订号。仅手工运行，不批量发布或删除。集合中不保存真实密码、验证码、令牌或用户图片。 第四阶段作者与联系均需有效校园认证。联系值只在本机临时输入，禁止导出真实联系方式或批量运行修改。 第五阶段评论使用独立创建/上传UUID；仅手工执行，新增内容与本人删除有实际业务效果。参见COMMENTS_API.md；不要导出真实正文、文件、凭据或令牌。 第八阶段counts统一LIVE真实点赞与有效投币聚合，旧DEMO存储不混算。新增点赞收藏只能逐步手工选择本人授权目标执行，PUT/DELETE无正文；不要全集合批量运行。参见INTERACTIONS_API.md和LIVE_COUNTS.md。 第八阶段每日登录2币、180秒阅读1币、每账号每日共3币、每人每篇累计投2币；不自行撤回。参见COINS_API.md。 第九阶段独立社区管理和私人举报反馈，普通/管理令牌分开，仅手工选择已授权目标执行。真实管理账号由本机工具初始化；不在此集合保存管理密码、令牌、举报文字或截图。参见COMMUNITY_API.md。 2026-11-06增加社区治理、限制申诉和独立运维。只逐项手工执行；部署、重启、备份和恢复具有真实效果，不能整集合批量运行。详见ADMIN_API.md和OPS_API.md。",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8080",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "receivedCode",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "registrationChallengeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "resetChallengeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "articleId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "imageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "uploadRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "publishRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "expectedRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "profileRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "authorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "contactRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rootCommentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentImageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentCreateRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentUploadRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "coinRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "readingSessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ledgerSnapshot",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "adminLogin",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseRevision",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "caseRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseImageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "caseSnapshot",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "adminCaseSnapshot",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "opsPassword",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsReferenceId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appealRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsConfirmationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsBaseUrl",
+      "value": "http://127.0.0.1:8091",
+      "type": "string"
+    },
+    {
+      "key": "governanceRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "moderatedUserId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "restrictionRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryRevision",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "restrictionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "governanceRequestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsLogin",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appealId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "opsJobId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "健康检查",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/actuator/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "分类目录",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/catalog"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "默认认可排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "最新排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?sort=latest"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "关键词",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=Java"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "组合筛选",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?jobId=1&majorId=11&companyId=21&topicId=31"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "空结果",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?companyId=999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "第二页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=2&size=2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "超过末页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=4&size=2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "公开详情",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/1001"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "草稿不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2001"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "作者下架不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2002"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "管理员隐藏不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2003"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "删除不可读",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/2004"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "不存在",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles/999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "无效分页",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?page=0"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "无效大小",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?size=101"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "未知排序",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?sort=wrong"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQL特殊字符字面检索",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=100%25"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQL注入字符串",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/articles?keyword=%27%20OR%201%3D1%20--"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('成功格式', () => { pm.expect(body.code).to.equal('OK'); pm.expect(body).to.have.property('data'); pm.expect(body).not.to.have.property('message'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "未知接口",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/missing"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "const body = pm.response.json();",
+              "pm.test('追踪编号一致', () => { pm.expect(body.traceId).to.match(/^[0-9a-f-]{36}$/); pm.expect(pm.response.headers.get('X-Trace-Id')).to.equal(body.traceId); });",
+              "pm.test('失败格式', () => { pm.expect(body.message).to.be.a('string'); pm.expect(body).not.to.have.property('data'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "第二阶段身份流程（仅本人，逐步输入验证码）",
+      "item": [
+        {
+          "name": "申请本人注册码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/registration-codes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 202) pm.variables.set(\"registrationChallengeId\", body.data.challengeId); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "验证码注册普通账号",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"challengeId\": \"{{registrationChallengeId}}\",\n  \"code\": \"{{receivedCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "密码登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 200) pm.variables.set(\"accessToken\", body.data.accessToken); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "退出当前会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/logout"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "申请本人重置码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/password-reset-codes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", () => pm.response.to.have.status(202));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));",
+                  "if (pm.response.code === 202) pm.variables.set(\"resetChallengeId\", body.data.challengeId); // transient local/run scope only"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "验证码重置密码并撤销旧会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/auth/password-resets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"challengeId\": \"{{resetChallengeId}}\",\n  \"code\": \"{{receivedCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.equal(body.traceId));",
+                  "pm.test(\"身份响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.equal(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第三阶段图文创作（已有账号，逐步手工操作）",
+      "item": [
+        {
+          "name": "读取本人资料",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/profile",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整保存本人资料",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/profile",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{profileRevision}},\n  \"nickname\": \"城院同学\",\n  \"majorId\": 11,\n  \"currentStage\": \"ENROLLED\",\n  \"bio\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "创建独立草稿（同创建标识重试）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{createRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人文章分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles?page=1&size=20",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取草稿及图片元数据",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/draft",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整保存Markdown草稿",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/draft",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}},\n  \"title\": \"【DEMO】图文创作接口示例\",\n  \"summary\": \"\",\n  \"body\": \"示例正文。\\n\\n![测试图](/api/v1/media/images/{{imageId}})\",\n  \"jobIds\": [\n    1\n  ],\n  \"majorIds\": [\n    11\n  ],\n  \"companyIds\": [],\n  \"topicIds\": [\n    31\n  ],\n  \"experienceStage\": \"DEMO演示阶段\",\n  \"sourceType\": \"DEMO\",\n  \"sourceNote\": \"接口示例，不是真实求职经历\",\n  \"sourceLinks\": [\n    {\n      \"label\": \"Java官方资料\",\n      \"url\": \"https://dev.java/learn/\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "上传单张本人文章图片",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/images",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{uploadRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人私有图片预览",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"图片不缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "确认发布（同标识同修订重试）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/publish",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}},\n  \"requestId\": \"{{publishRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "游客读取当前公开版本",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "游客读取当前公开引用图",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"图片不缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人自主下架",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/unpublish",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "下架后游客旧图404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/media/images/{{imageId}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "恢复本人自主下架文章",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}/restore",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{expectedRevision}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人软删除（终态）",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/articles/{{articleId}}?expectedRevision={{expectedRevision}}",
+            "description": "手工运行；先填本机实际ID、最新修订号和各操作独立小写UUID。私密变量使用本机临时作用域。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"服务器追踪号存在\", () => pm.expect(pm.response.headers.get(\"X-Trace-Id\")).to.exist);",
+                  "pm.test(\"统一JSON追踪\", () => pm.expect(pm.response.json().traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第四阶段作者联系（认证访问，单独修订）",
+      "item": [
+        {
+          "name": "从当前公开文章取得真实作者",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/author",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"authorId\",result.data.authorId); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认证作者主页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "作者当前公开文章分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}/articles?page=1&size=20",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人独立联系设置",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/contact-settings",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"contactRevision\",result.data.revision); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "完整修改本人联系设置（示例关闭并清空）",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/contact-settings",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{contactRevision}},\n  \"enabled\": false,\n  \"type\": null,\n  \"value\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (pm.response.code===200) pm.variables.set(\"contactRevision\",result.data.revision); // transient local/run scope"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "按实时开关读取作者联系方式",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/authors/{{authorId}}/contact",
+            "description": "逐步手工运行；先用第三阶段真实文章ID取得作者ID。目标必须ACTIVE/VALID且有公开文章。私密变量只在本机临时作用域使用。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"受限响应禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if (result.data && !result.data.enabled) pm.test(\"关闭不返回隐藏字段\", () => pm.expect(Object.keys(result.data)).to.eql([\"enabled\"]));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第五阶段：认证评论与图片（逐步手工执行）",
+      "item": [
+        {
+          "name": "主评论分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comments?page=1&size=20",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根线程平铺回复分页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/comments/{{rootCommentId}}/replies?page=1&size=20",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "发表主评论或同文回复",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comments",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。 imageIds填本次本人同文评论图ID；replyToCommentId非null表示回复可见目标，勿传rootId。删除后重放只返回旧ID。新操作需清空commentCreateRequestId。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{commentCreateRequestId}}\",\n  \"body\": \"示例评论，请替换为本次授权内容\",\n  \"imageIds\": [],\n  \"replyToCommentId\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.variables.get(\"commentCreateRequestId\")) pm.variables.set(\"commentCreateRequestId\",pm.variables.replaceIn(\"{{$guid}}\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "if(pm.response.code===201) {pm.variables.set(\"commentId\",result.data.commentId);pm.variables.set(\"rootCommentId\",result.data.rootCommentId);}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "软删除本人已知评论",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/comments/{{commentId}}",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "上传本人同文评论图片",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/comment-images",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{commentUploadRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.variables.get(\"commentUploadRequestId\")) pm.variables.set(\"commentUploadRequestId\",pm.variables.replaceIn(\"{{$guid}}\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "if(pm.response.code===200) pm.variables.set(\"commentImageId\",result.data.imageId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认证读取评论图片",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/comment-images/{{commentImageId}}",
+            "description": "仅逐步手工运行。先登录有效认证账号并选择当前公开文章。创建/上传UUID每次新操作更换，重试保留；返回ID仅临时保存。正文按安全文本呈现；删除只能操作本人评论。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"图片类型\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^image\\/(png|jpeg)/));",
+                  "pm.test(\"禁止嗅探\", () => pm.expect(pm.response.headers.get(\"X-Content-Type-Options\")).to.equal(\"nosniff\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第七阶段：点赞与本人收藏（逐步手工执行）",
+      "item": [
+        {
+          "name": "设置本人已点赞",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/like",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"真实点赞数非负\", () => pm.expect(result.data.effectiveLikes).to.be.at.least(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "取消本人点赞",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/like",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "pm.test(\"真实点赞数非负\", () => pm.expect(result.data.effectiveLikes).to.be.at.least(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "设置本人已收藏",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/favorite",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "取消本人收藏（允许已收藏的不可用目标）",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/favorite",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取本人当前文章互动状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/interaction-state",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人收藏分页与不可用占位",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/favorites?page=1&size=20",
+            "description": "仅手工运行。选择本次授权操作的公开articleId，无正文（包括{}也不传），不添加userId/role/UUID。状态重复不重复计数或刷新收藏时间。取消不可用收藏只允许本人的已知历史关系；不可用文章点赞与取消点赞仍404。凭据仅本机临时使用，不导出。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) for(const item of result.data.items) {if(!item.available) pm.test(\"不可用项仅占位\", () => pm.expect(Object.keys(item).sort()).to.eql([\"articleId\",\"available\"])); else pm.test(\"公开摘要LIVE\", () => pm.expect(item.article.counts.origin).to.equal(\"LIVE\"));}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第八阶段 非现金币与奖励",
+      "item": [
+        {
+          "name": "本人余额与贡献",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coins",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人账本首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coin-ledger?page=1&size=20",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"ledgerSnapshot\", String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "奖励规则与今日任务",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "领取今日登录奖",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards/login",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "开始或恢复今日阅读",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/reading-session",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"readingSessionId\", result.data.sessionId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "领取阅读奖励",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/rewards/reading",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{readingSessionId}}\",\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人投币状态",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/coin-state",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "向文章投1币",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/articles/{{articleId}}/coins",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1,\n  \"requestId\": \"{{coinRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人账本快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/coin-ledger?page=2&size=20&snapshot={{ledgerSnapshot}}",
+            "description": "按本人已授权目标逐条执行。独立动作生成小写UUID，失败网络重试沿用同键；成功同键改内容409。正文和令牌仅本机临时使用，勿导出。balanceAfter为事件时余额。阅读开始不传正文，实际资格由服务端计时判断。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"追踪一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"禁止缓存\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第九阶段 举报反馈与独立社区管理",
+      "item": [
+        {
+          "name": "上传私人证据",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/case-images",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "requestId",
+                  "value": "{{caseRequestId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"caseImageId\",result.data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "读取本人证据",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/media/case-images/{{caseImageId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "提交一般反馈",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"{{caseRequestId}}\",\n  \"kind\": \"FEEDBACK\",\n  \"category\": \"BUG\",\n  \"targetType\": null,\n  \"targetId\": null,\n  \"description\": \"本机输入本人反馈说明\",\n  \"imageIds\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件快照首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases?page=1&size=20",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"caseSnapshot\",String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases/{{caseId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理独立登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/auth/login",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{adminLogin}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"adminAccessToken\",result.data.accessToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理当前能力",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/me",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件快照首页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases?page=1&size=20",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) pm.collectionVariables.set(\"adminCaseSnapshot\",String(result.data.snapshot));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理原公开上下文",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/context",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理本案图片",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/media/{{caseImageId}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "认领案件",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/claim",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "释放本人认领",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/release",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\",\n  \"reason\": \"本机输入释放理由\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "答复反馈并关闭",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases/{{caseId}}/decisions",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expectedRevision\": {{caseRevision}},\n  \"requestId\": \"{{caseRequestId}}\",\n  \"outcome\": \"ANSWERED\",\n  \"reply\": \"本机输入公开答复\",\n  \"internalNote\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));",
+                  "if(pm.response.code===200) {pm.collectionVariables.set(\"caseId\",String(result.data.caseId));pm.collectionVariables.set(\"caseRevision\",String(result.data.revision));}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理退出当前会话",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/auth/logout",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "本人案件快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/cases?page=2&size=20&snapshot={{caseSnapshot}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "管理案件快照下一页",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/cases?page=2&size=20&snapshot={{adminCaseSnapshot}}",
+            "description": "逐条手工执行。管理员仅使用独立管理会话；正文/截图只在本机临时输入。一次动作生成小写UUID，重试沿用，独立动作换键；按最新caseRevision提交。列表后续翻页保留同一snapshot。"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const result=pm.response.json();",
+                  "pm.test(\"traceId一致\", () => pm.expect(result.traceId).to.equal(pm.response.headers.get(\"X-Trace-Id\")));",
+                  "pm.test(\"no-store\", () => pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "社区巡查分类限制与申诉",
+      "item": [
+        {
+          "name": "社区工作台",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/overview",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "巡查文章",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/articles?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "公开版本详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/articles/{{articleId}}",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "巡查文章评论",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/articles/{{articleId}}/comments?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "隐藏文章",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/articles/{{articleId}}/moderation",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"HIDE\",\"expectedRevision\":{{governanceRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "恢复文章",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/articles/{{articleId}}/moderation",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"RESTORE\",\"expectedRevision\":{{governanceRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "隐藏评论",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/comments/{{commentId}}/moderation",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"HIDE\",\"expectedRevision\":{{governanceRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "恢复评论",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/comments/{{commentId}}/moderation",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"RESTORE\",\"expectedRevision\":{{governanceRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "治理审计",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/governance-events?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "分类列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/categories?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "新增分类",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/categories",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"kind\":\"JOB\",\"name\":\"在本机填写分类\",\"enabled\":true,\"displayOrder\":10,\"expectedRevision\":{{categoryRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "更新或停用分类",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/categories/{{categoryId}}",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"kind\":\"JOB\",\"name\":\"在本机填写分类\",\"enabled\":true,\"displayOrder\":10,\"expectedRevision\":{{categoryRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "社区用户列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "用户行为限制",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users/{{moderatedUserId}}/restrictions",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "设置或解除行为限制",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/users/{{moderatedUserId}}/restrictions",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"scope\":\"COMMENT\",\"enabled\":true,\"expectedRevision\":{{restrictionRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写实际理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "申诉队列",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/appeals?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "决定申诉",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/admin/appeals/{{appealId}}/decisions",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"outcome\":\"ACCEPTED\",\"expectedRevision\":{{appealRevision}},\"requestId\":\"{{governanceRequestId}}\",\"reply\":\"在本机填写实际答复\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "本人限制结果",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/restrictions",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "本人申诉记录",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/appeals?page=1&size=20",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "提交本人申诉",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/me/appeals",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"restrictionId\":{{restrictionId}},\"requestId\":\"{{governanceRequestId}}\",\"reason\":\"在本机填写申诉理由\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "独立运维-逐项确认后执行",
+      "item": [
+        {
+          "name": "独立运维登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/auth/login",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"login\":\"{{opsLogin}}\",\"password\":\"{{opsPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) pm.collectionVariables.set(\"opsAccessToken\", pm.response.json().data.accessToken);"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ]
+        },
+        {
+          "name": "运维 me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/me",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "运维 status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/status",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "运维 artifacts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/artifacts",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "运维 backups",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/backups",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "运维 logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/logs",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "运维 jobs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/jobs",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "确认重启示例",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/confirmations",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"RESTART\",\"target\":\"business\",\"referenceId\":\"\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) pm.collectionVariables.set(\"opsConfirmationId\", pm.response.json().data.confirmationId);"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ]
+        },
+        {
+          "name": "提交真实重启示例",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/jobs",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"action\":\"RESTART\",\"target\":\"business\",\"referenceId\":\"\",\"requestId\":\"{{opsRequestId}}\",\"confirmationId\":\"{{opsConfirmationId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) pm.collectionVariables.set(\"opsJobId\", pm.response.json().data.id);"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ]
+        },
+        {
+          "name": "运维任务详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/jobs/{{opsJobId}}",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        },
+        {
+          "name": "退出运维",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{opsAccessToken}}"
+              }
+            ],
+            "url": "{{opsBaseUrl}}/api/v1/ops/auth/logout",
+            "description": "仅手工执行。先确认目标和当前修订；失败重试保留原UUID和原正文，修改语义时使用新UUID。不得将私人凭据或资料导出到集合。"
+          }
+        }
+      ]
+    }
+  ]
+}

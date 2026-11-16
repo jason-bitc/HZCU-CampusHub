@@ -866,84 +866,84 @@
       "Profile",
       "拥有",
       "1",
-      "0..1"
+      "1"
     ],
     [
       "Account",
       "Certification",
       "验证",
       "1",
-      "0..1"
+      "1"
     ],
     [
       "Major",
       "Profile",
       "归属",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "Article",
       "撰写",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Article",
       "ArticleVersion",
       "形成",
       "1",
-      "1..N"
+      "N"
     ],
     [
       "Job",
       "Article",
       "对应",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Company",
       "Article",
       "关联",
-      "0..1",
-      "0..N"
+      "1",
+      "N"
     ],
     [
       "Major",
       "Article",
       "经历适用",
-      "0..1",
-      "0..N"
+      "1",
+      "N"
     ],
     [
       "ArticleVersion",
       "Media",
       "引用",
-      "0..N",
-      "0..N"
+      "M",
+      "N"
     ],
     [
       "Article",
       "Comment",
       "接收",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "Comment",
       "发表",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "Article",
       "认可收藏",
-      "0..N",
-      "0..N"
+      "M",
+      "N"
     ],
     [
       "Account",
@@ -957,105 +957,105 @@
       "CoinEntry",
       "记账",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "CoinEntry",
       "Contribution",
       "投币贡献",
       "1",
-      "0..1"
+      "1"
     ],
     [
       "Account",
       "Contribution",
       "获得",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "Case",
       "提交",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Case",
       "ModerationAction",
       "处理",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "AdminIdentity",
       "ModerationAction",
       "执行",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "AdminIdentity",
       "OpsJob",
       "发起",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "OpsJob",
       "Backup",
       "产出",
       "1",
-      "0..1"
+      "1"
     ],
     [
       "Account",
       "HonorAward",
       "获得荣誉",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "HonorRule",
       "HonorAward",
       "评定依据",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "Session",
       "建立会话",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "EmailChallenge",
       "邮箱对应",
-      "0..1",
-      "0..N"
+      "1",
+      "N"
     ],
     [
       "Account",
       "Notification",
       "接收通知",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Account",
       "ReadProgress",
       "累计阅读",
       "1",
-      "0..N"
+      "N"
     ],
     [
       "Article",
       "ReadProgress",
       "阅读对象",
       "1",
-      "0..N"
+      "N"
     ]
   ],
   "externals": [
@@ -2288,7 +2288,7 @@
         {
           "a": "rel0",
           "b": "Profile",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
@@ -2300,7 +2300,7 @@
         {
           "a": "rel1",
           "b": "Certification",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
@@ -2312,12 +2312,12 @@
         {
           "a": "rel2",
           "b": "Profile",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER02",
@@ -2389,7 +2389,7 @@
         {
           "a": "rel3",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2401,7 +2401,7 @@
         {
           "a": "rel4",
           "b": "ArticleVersion",
-          "label": "1..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2413,36 +2413,36 @@
         {
           "a": "rel5",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "Company",
           "b": "rel6",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
           "a": "rel6",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "ArticleVersion",
           "b": "rel8",
-          "label": "0..N",
+          "label": "M",
           "dir": "none"
         },
         {
           "a": "rel8",
           "b": "Media",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER03",
@@ -2524,7 +2524,7 @@
         {
           "a": "rel9",
           "b": "Comment",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2536,19 +2536,19 @@
         {
           "a": "rel10",
           "b": "Comment",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "Account",
           "b": "rel11",
-          "label": "0..N",
+          "label": "M",
           "dir": "none"
         },
         {
           "a": "rel11",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2572,7 +2572,7 @@
         {
           "a": "rel13",
           "b": "CoinEntry",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2584,7 +2584,7 @@
         {
           "a": "rel14",
           "b": "Contribution",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
@@ -2596,12 +2596,12 @@
         {
           "a": "rel15",
           "b": "Contribution",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER04",
@@ -2673,7 +2673,7 @@
         {
           "a": "rel16",
           "b": "Case",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2685,7 +2685,7 @@
         {
           "a": "rel17",
           "b": "ModerationAction",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2697,7 +2697,7 @@
         {
           "a": "rel18",
           "b": "ModerationAction",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2709,7 +2709,7 @@
         {
           "a": "rel19",
           "b": "OpsJob",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2721,12 +2721,12 @@
         {
           "a": "rel20",
           "b": "Backup",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER05",
@@ -2834,7 +2834,7 @@
         {
           "a": "rel21",
           "b": "HonorAward",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -2846,12 +2846,12 @@
         {
           "a": "rel22",
           "b": "HonorAward",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER02A",
@@ -2991,7 +2991,7 @@
         {
           "a": "rel3",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3003,24 +3003,24 @@
         {
           "a": "rel5",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "Company",
           "b": "rel6",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
           "a": "rel6",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER02B",
@@ -3128,24 +3128,24 @@
         {
           "a": "rel4",
           "b": "ArticleVersion",
-          "label": "1..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "ArticleVersion",
           "b": "rel8",
-          "label": "0..N",
+          "label": "M",
           "dir": "none"
         },
         {
           "a": "rel8",
           "b": "Media",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER03A",
@@ -3258,7 +3258,7 @@
         {
           "a": "rel9",
           "b": "Comment",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3270,24 +3270,24 @@
         {
           "a": "rel10",
           "b": "Comment",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "Account",
           "b": "rel11",
-          "label": "0..N",
+          "label": "M",
           "dir": "none"
         },
         {
           "a": "rel11",
           "b": "Article",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER03B",
@@ -3444,7 +3444,7 @@
         {
           "a": "rel13",
           "b": "CoinEntry",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3456,7 +3456,7 @@
         {
           "a": "rel14",
           "b": "Contribution",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
@@ -3468,12 +3468,12 @@
         {
           "a": "rel15",
           "b": "Contribution",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER04A",
@@ -3613,7 +3613,7 @@
         {
           "a": "rel16",
           "b": "Case",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3625,7 +3625,7 @@
         {
           "a": "rel17",
           "b": "ModerationAction",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3637,12 +3637,12 @@
         {
           "a": "rel18",
           "b": "ModerationAction",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER04B",
@@ -3750,7 +3750,7 @@
         {
           "a": "rel19",
           "b": "OpsJob",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -3762,12 +3762,12 @@
         {
           "a": "rel20",
           "b": "Backup",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER06",
@@ -3875,24 +3875,24 @@
         {
           "a": "rel23",
           "b": "Session",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
           "a": "Account",
           "b": "rel24",
-          "label": "0..1",
+          "label": "1",
           "dir": "none"
         },
         {
           "a": "rel24",
           "b": "EmailChallenge",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "ER07",
@@ -4032,7 +4032,7 @@
         {
           "a": "rel25",
           "b": "Notification",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -4044,7 +4044,7 @@
         {
           "a": "rel26",
           "b": "ReadProgress",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         },
         {
@@ -4056,12 +4056,12 @@
         {
           "a": "rel27",
           "b": "ReadProgress",
-          "label": "0..N",
+          "label": "N",
           "dir": "none"
         }
       ],
       "rank": "LR",
-      "note": "矩形为实体，菱形为联系，椭圆为属性；基数写在实体端。主标识属性带下划线。"
+      "note": "矩形为实体，菱形为联系，椭圆为属性，主标识加下划线。实体端1与1表示1:1，1与N表示1:N，M与N表示M:N；是否允许没有关联记录见关系约束表。"
     },
     {
       "id": "DFD00",
@@ -5545,6 +5545,400 @@
       ],
       "rank": "LR",
       "note": "处理过程对应P2，输入输出都在数据字典中定义。"
+    }
+  ],
+  "relationConstraints": [
+    {
+      "id": "ER-REL01",
+      "a": "Account",
+      "b": "Profile",
+      "verb": "拥有",
+      "ratio": "1:1",
+      "aMark": "1",
+      "bMark": "1",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": 1,
+      "constraint": "每个个人资料必须关联且仅关联一个账号；账号允许没有关联的个人资料，关联时最多一个。"
+    },
+    {
+      "id": "ER-REL02",
+      "a": "Account",
+      "b": "Certification",
+      "verb": "验证",
+      "ratio": "1:1",
+      "aMark": "1",
+      "bMark": "1",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": 1,
+      "constraint": "每个校园认证必须关联且仅关联一个账号；账号允许没有关联的校园认证，关联时最多一个。"
+    },
+    {
+      "id": "ER-REL03",
+      "a": "Major",
+      "b": "Profile",
+      "verb": "归属",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个个人资料必须关联且仅关联一个校内专业；校内专业允许没有关联的个人资料，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL04",
+      "a": "Account",
+      "b": "Article",
+      "verb": "撰写",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个经验文章必须关联且仅关联一个账号；账号允许没有关联的经验文章，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL05",
+      "a": "Article",
+      "b": "ArticleVersion",
+      "verb": "形成",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 1,
+      "maxB": "many",
+      "constraint": "每个正文版本必须关联且仅关联一个经验文章；每个经验文章必须关联至少一个正文版本。"
+    },
+    {
+      "id": "ER-REL06",
+      "a": "Job",
+      "b": "Article",
+      "verb": "对应",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个经验文章必须关联且仅关联一个岗位；岗位允许没有关联的经验文章，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL07",
+      "a": "Company",
+      "b": "Article",
+      "verb": "关联",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 0,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "经验文章允许没有关联的公司，关联时最多一个；公司允许没有关联的经验文章，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL08",
+      "a": "Major",
+      "b": "Article",
+      "verb": "经历适用",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 0,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "经验文章允许没有关联的校内专业，关联时最多一个；校内专业允许没有关联的经验文章，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL09",
+      "a": "ArticleVersion",
+      "b": "Media",
+      "verb": "引用",
+      "ratio": "M:N",
+      "aMark": "M",
+      "bMark": "N",
+      "minA": 0,
+      "maxA": "many",
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "图片资料允许没有关联的正文版本，关联时可有多个；正文版本允许没有关联的图片资料，关联时可有多个。正文图片引用MediaRef承接版本与图片的关联及顺序。"
+    },
+    {
+      "id": "ER-REL10",
+      "a": "Article",
+      "b": "Comment",
+      "verb": "接收",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个评论回复必须关联且仅关联一个经验文章；经验文章允许没有关联的评论回复，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL11",
+      "a": "Account",
+      "b": "Comment",
+      "verb": "发表",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个评论回复必须关联且仅关联一个账号；账号允许没有关联的评论回复，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL12",
+      "a": "Account",
+      "b": "Article",
+      "verb": "认可收藏",
+      "ratio": "M:N",
+      "aMark": "M",
+      "bMark": "N",
+      "minA": 0,
+      "maxA": "many",
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "经验文章允许没有关联的账号，关联时可有多个；账号允许没有关联的经验文章，关联时可有多个。认可与收藏分别记录，同账号同文章同类型只保留一条有效记录。"
+    },
+    {
+      "id": "ER-REL13",
+      "a": "Account",
+      "b": "Wallet",
+      "verb": "持有",
+      "ratio": "1:1",
+      "aMark": "1",
+      "bMark": "1",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 1,
+      "maxB": 1,
+      "constraint": "每个可用币账户必须关联且仅关联一个账号；每个账号必须关联且仅关联一个可用币账户。"
+    },
+    {
+      "id": "ER-REL14",
+      "a": "Account",
+      "b": "CoinEntry",
+      "verb": "记账",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个币账本事件必须关联且仅关联一个账号；账号允许没有关联的币账本事件，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL15",
+      "a": "CoinEntry",
+      "b": "Contribution",
+      "verb": "投币贡献",
+      "ratio": "1:1",
+      "aMark": "1",
+      "bMark": "1",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": 1,
+      "constraint": "每个作者贡献必须关联且仅关联一个币账本事件；币账本事件允许没有关联的作者贡献，关联时最多一个。仅投币事件形成作者贡献，登录或阅读奖励不形成该关联。"
+    },
+    {
+      "id": "ER-REL16",
+      "a": "Account",
+      "b": "Contribution",
+      "verb": "获得",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个作者贡献必须关联且仅关联一个账号；账号允许没有关联的作者贡献，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL17",
+      "a": "Account",
+      "b": "Case",
+      "verb": "提交",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个举报反馈必须关联且仅关联一个账号；账号允许没有关联的举报反馈，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL18",
+      "a": "Case",
+      "b": "ModerationAction",
+      "verb": "处理",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个处理动作必须关联且仅关联一个举报反馈；举报反馈允许没有关联的处理动作，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL19",
+      "a": "AdminIdentity",
+      "b": "ModerationAction",
+      "verb": "执行",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个处理动作必须关联且仅关联一个管理身份；管理身份允许没有关联的处理动作，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL20",
+      "a": "AdminIdentity",
+      "b": "OpsJob",
+      "verb": "发起",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个运维任务必须关联且仅关联一个管理身份；管理身份允许没有关联的运维任务，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL21",
+      "a": "OpsJob",
+      "b": "Backup",
+      "verb": "产出",
+      "ratio": "1:1",
+      "aMark": "1",
+      "bMark": "1",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": 1,
+      "constraint": "每个备份清单必须关联且仅关联一个运维任务；运维任务允许没有关联的备份清单，关联时最多一个。只有成功生成备份的任务关联备份清单。"
+    },
+    {
+      "id": "ER-REL22",
+      "a": "Account",
+      "b": "HonorAward",
+      "verb": "获得荣誉",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个作者荣誉必须关联且仅关联一个账号；账号允许没有关联的作者荣誉，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL23",
+      "a": "HonorRule",
+      "b": "HonorAward",
+      "verb": "评定依据",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个作者荣誉必须关联且仅关联一个荣誉规则；荣誉规则允许没有关联的作者荣誉，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL24",
+      "a": "Account",
+      "b": "Session",
+      "verb": "建立会话",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个登录会话必须关联且仅关联一个账号；账号允许没有关联的登录会话，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL25",
+      "a": "Account",
+      "b": "EmailChallenge",
+      "verb": "邮箱对应",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 0,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "邮箱校验允许没有关联的账号，关联时最多一个；账号允许没有关联的邮箱校验，关联时可有多个。注册前的邮箱校验允许尚无账号；账号建立后仍可有多次校验记录。"
+    },
+    {
+      "id": "ER-REL26",
+      "a": "Account",
+      "b": "Notification",
+      "verb": "接收通知",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个业务通知必须关联且仅关联一个账号；账号允许没有关联的业务通知，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL27",
+      "a": "Account",
+      "b": "ReadProgress",
+      "verb": "累计阅读",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个阅读奖励进度必须关联且仅关联一个账号；账号允许没有关联的阅读奖励进度，关联时可有多个。"
+    },
+    {
+      "id": "ER-REL28",
+      "a": "Article",
+      "b": "ReadProgress",
+      "verb": "阅读对象",
+      "ratio": "1:N",
+      "aMark": "1",
+      "bMark": "N",
+      "minA": 1,
+      "maxA": 1,
+      "minB": 0,
+      "maxB": "many",
+      "constraint": "每个阅读奖励进度必须关联且仅关联一个经验文章；经验文章允许没有关联的阅读奖励进度，关联时可有多个。"
     }
   ]
 }

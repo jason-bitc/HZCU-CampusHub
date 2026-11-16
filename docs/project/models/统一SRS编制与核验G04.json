@@ -1,6 +1,6 @@
 {
-  "version": "1.5",
-  "id": "G04-SRS-20261105-02",
+  "version": "1.5.1",
+  "id": "G04-SRS-20261105-03",
   "date": "2026-11-05",
   "sourceCommit": "7ffe55a210f895ba8a2478f98054087c570e1a8e",
   "sourceFiles": [
@@ -112,5 +112,11 @@
     "HIER01",
     "IPO01"
   ],
-  "presentationSync": "讲稿、PDF查阅导航和豆包提示词已按统一SRS页码更新；原PPT/PDF未改动"
+  "presentationSync": "讲稿、PDF查阅导航和豆包提示词已按统一SRS页码更新；原PPT/PDF未改动",
+  "ERNotation": "1:1 / 1:N / M:N; optional participation stated separately",
+  "ERRelations": 28,
+  "ERFigures": 13,
+  "latestChange": "ER记法与文字约束统一；实体、字段、功能与非功能需求不变",
+  "latestInputCommit": "766a2ec17f0c708164c0cfbe975be63f0582a7fb",
+  "latestVisualReview": "目录、封面、文档控制、ER章节与附件索引按本次导出逐页复核；其他章节结构和页码与上一基线一致"
 }

@@ -1,0 +1,282 @@
+{
+  "verifiedAt": "2026-11-06T19:59:59.1158228+08:00",
+  "branch": "codex/wc-admin-ops-integration",
+  "baseMain": "c5b57e7",
+  "importedBackend": "399dcbb",
+  "applicationSourceSha256": "0f29d381caef39590a23e1f909a1e69c49d630c4176718d06f0ea82df96f7218",
+  "unitTests": 66.0,
+  "mysqlAndExecutionTests": 121.0,
+  "failures": 0.0,
+  "errors": 0.0,
+  "skipped": 0.0,
+  "scope": [
+    "Real campushub_test MySQL",
+    "Isolated JVM via operations HTTP",
+    "Actual mysqldump and mysql restore",
+    "No frontend or production acceptance"
+  ],
+  "note": "Latest suite reports consolidate the full run and corrected GovernanceMySqlIT rerun. Reports are not counted twice.",
+  "suites": [
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.article.ArticleQueryTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "89a50e71ec4912ec99a3124e08f45c9465089ef50a6073650e8f3f9d2169a07a"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.audit.LocalDiagnosticsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "9ab327af2382af1bcced91be094cdeaf526858b9cec646536272379c6b15ad5c"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.audit.RunModeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "dad3dbe6c76a6520a08644a0f2af007603cd64723d65b888ba68d76bd9872e8f"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.audit.SafeFileLogsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "1b35fd04a475e9b8aaf33c7b69d762bc0ac1bed5ab54bf9f5c44885375d2b68a"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.auth.AuthInputTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "408a58a8a2aeb7a010204eb34cde28f81ef98d5ec94019524e07627b3ebb0645"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.author.ContactInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "eb9b820665e38d82579af931cbb857838be8608b31cfa98e665402718b50107d"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.authoring.MarkdownReferencesTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "9bb16d7c76115a31f5a179e63f3fe695fc4f69dc226595f75b2af22fc10b3388"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.authoring.MediaStoreTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "05841060c7605ea8dbc456d66c5be7e490a31eba6ecb19b6bb1198d5d4604cae"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.coin.CoinInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "51c1f86a884c9ead18dd3dcc2402de48c5adb2c2ed197eccabae05a5a95c28ae"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.comment.CommentInputTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "9c2a3e2b75c5cedbbde19e2c5570a8163a0a86cbed708f77e70f0fbb6274c940"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.common.DatabaseConfigTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "3812a43e6aace338512e65c453b27a02b45460ce0dc030d06d92bd6bec99366f"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.common.ExceptionHandlerAdviceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "c2bd0af972cbdad6c0113ad5f1bbc525917bf1398e8658add877ddd004e151eb"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.common.RequestTraceTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "62ac46a3956acb66808e48be713e6558810d739cdc6f8b1090e6796b83e1342f"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.campushub.community.CommunityInputTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "f0a5bf9ac8139338f514a6e9dc23ee5ce49d623038e1aaa7441320187147dc11"
+    },
+    {
+      "kind": "surefire",
+      "name": "cn.edu.hzcu.ops.OpsControlTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "0ec6f1cd9c974bce583dfa1fde4945dda385c5dbdc292ea3ba06a5b9fc3b66eb"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.article.ArticleMySqlIT",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "ed1c2a01f25dd8c78fc51738b85e5b86ca0865b3a7d86d4bf7ef826e973ad8e2"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.article.LoggingModesMySqlIT",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "b9343a776a5e15ab53b3094e1b3dc84fd9d18f17eaf50b7a52137e0a20ae8eb5"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.auth.AuthMySqlIT",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "d2c57b27a964415e45c0e09a215d93c23da019312ec7a1706a7b0b46b6725060"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.author.AuthorContactMySqlIT",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "49fcd67533bc2e6da01dc6ff9c0c707cdf9de6ff1f06a7125df0fb39ceb1faa8"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.authoring.AuthoringMySqlIT",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "96ba092c6a8d07a373d065c44f44b2f006c9b410459171a5a0143fa9178fdf9f"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.coin.CoinsMySqlIT",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "b0dbf51d7de08bf5f6732514ace5919d779ffb5474d01b585cf27b300947d4fe"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.comment.CommentsMySqlIT",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "9387f62c3b7c66931298d0fc5e89d1494cbf060336e6ad3661632fe785777a0c"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.community.CommunityMySqlIT",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "baf5170b24cedddfc5eb20b9c3e81e2d5384a3c6570e8cfe63881e3d649894c7"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.community.GovernanceMySqlIT",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "23d63dda84d1dd5686566706197dfc0a7b0de0e32f4194a712c899d87dde3e34"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.campushub.interaction.InteractionsMySqlIT",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "f62203641707ae28e3c9e99e165772a3bf900cb01add79a4de7e3ba2e652c7f2"
+    },
+    {
+      "kind": "failsafe",
+      "name": "cn.edu.hzcu.ops.OpsExecutionMySqlIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": null,
+      "reportSha256": "0b687182cb107d0b92e70375e5312d0b71f6bb4e2c758a30c7c3cc907e8574e8"
+    }
+  ],
+  "fingerprintAlgorithm": "SHA256 of sorted Git-normalized blob ID + space + repository path lines, LF separators, server/src/main and server/pom.xml"
+}
