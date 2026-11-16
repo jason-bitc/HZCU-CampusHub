@@ -84,6 +84,7 @@ class OpsExecutionMySqlIT {
             app.start();base="http://127.0.0.1:"+opsPort+"/api/v1/ops";token=request("POST","/auth/login",Map.of("login","testops","password","test-password")).path("accessToken").asString();
             assertThat(request("GET","/status",null).path("healthy").asBoolean()).isFalse();
             var deployed=job("DEPLOY","release-one");assertThat(deployed.path("state").asString()).as(deployed.toString()).isEqualTo("SUCCEEDED");assertThat(request("GET","/status",null).path("release").path("id").asString()).isEqualTo("release-one");
+            assertProtectionCheckpoint(deployed, "INSTALLING");
             long pid=OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong();var restarted=job("RESTART","");assertThat(restarted.path("state").asString()).as(restarted.toString()).isEqualTo("SUCCEEDED");assertThat(OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong()).isNotEqualTo(pid);
             var backed=job("BACKUP","");assertThat(backed.path("state").asString()).as(backed.toString()).isEqualTo("SUCCEEDED");String backup=backed.path("result").path("backupId").asString();
             var inventory = request("GET", "/backups", null).path("items");
@@ -111,6 +112,7 @@ class OpsExecutionMySqlIT {
             assertThat(preview.toString()).doesNotContain(config.backupRoot().toString(),"database.sql");
             var restored=submitConfirmed(restoreRequest,confirmation);
             assertThat(restored.path("state").asString()).as(restored.toString()).isEqualTo("SUCCEEDED");
+            assertProtectionCheckpoint(restored, "RESTORING");
             assertThat(restored.path("result").path("verifiedMediaReferences").asLong()).isEqualTo(1);
             var businessCheck = restored.path("result").path("businessVerification");
             assertThat(businessCheck.path("status").asString()).isEqualTo("VERIFIED");
@@ -165,6 +167,7 @@ class OpsExecutionMySqlIT {
             var businessMismatch = job("RESTORE", backup);
             assertThat(businessMismatch.path("state").asString()).isEqualTo("FAILED");
             assertThat(businessMismatch.path("errorCode").asString()).isEqualTo("OPS_BUSINESS_SNAPSHOT_MISMATCH");
+            assertProtectionCheckpoint(businessMismatch, "RESTORING");
             assertThat(businessMismatch.path("events").toString()).contains("VERIFYING_DATA", "ROLLBACK_VERIFIED");
             assertThat(businessMismatch.path("result").has("recoveryEvidence")).isFalse();
             assertThat(request("GET", "/status", null).path("healthy").asBoolean()).isTrue();
@@ -221,6 +224,17 @@ class OpsExecutionMySqlIT {
         }
         // Tasks and results survive an independent control-plane restart; sessions deliberately do not.
         try(var app=new OpsApplication(config)){app.start();token=null;token=request("POST","/auth/login",Map.of("login","testops","password","test-password")).path("accessToken").asString();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(8);}
+    }
+    private void assertProtectionCheckpoint(JsonNode job, String mutationPhase) {
+        String backupId = job.path("protectionBackupId").asString();
+        assertThat(backupId).isNotBlank();
+        assertThat(config.backupRoot().resolve(backupId).resolve("manifest.json")).exists();
+        var phases = new ArrayList<String>();
+        job.path("events").forEach(event -> phases.add(event.path("phase").asString()));
+        assertThat(phases).containsSubsequence("PROTECTION_READY", mutationPhase);
+        if (job.path("state").asString().equals("SUCCEEDED")) {
+            assertThat(job.path("result").path("protectionBackupId").asString()).isEqualTo(backupId);
+        }
     }
     private static byte[] png(int rgb)throws Exception {
         var image=new BufferedImage(1,1,BufferedImage.TYPE_INT_RGB);

@@ -57,7 +57,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 登录 | POST /auth/login | login、password；返回Bearer、accessToken、expiresAt |
 | 退出 | POST /auth/logout | 空正文；loggedOut |
 | 权限 | GET /me | OPS_ADMIN域及能力 |
-| 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
+| 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、recoveryIncident、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
 | 备份 | GET /backups | 按创建时间倒序列出当前库的最近100份完整清单，含ID、创建时间、快照时点、complete、模式指纹和withinRetentionWindow |
 | 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响；恢复操作另返回预检结果 |
@@ -157,12 +157,16 @@ java '-Dloader.main=cn.edu.hzcu.ops.OpsApplication' -cp target/campushub-server-
 
 ## 5 中断、回退和边界
 
-运维崩溃后遗留QUEUED/RUNNING一律记INTERRUPTED并置recoveryRequired，禁止自动重做恢复。维护人员检查业务进程、数据库、图片和保护备份，停运维后执行：
+部署和恢复在保护备份完成后，先把 `protectionBackupId` 和 `PROTECTION_READY` 阶段一起持久化，再进入 `INSTALLING` 或 `RESTORING`。任务详情的顶层字段在执行中、失败和中断时均可查询。成功任务的 `result.protectionBackupId` 也可继续读取。
+
+执行器重启时，遗留的 `QUEUED`、`RUNNING` 变为 `INTERRUPTED`，保留原有阶段，`finishedAt` 记录重启时发现中断的时间。人工核查期间，运维总览的 `recoveryRequired` 为 `true`，`recoveryIncident` 提供 `jobId/action/state/errorCode/lastPhase/protectionBackupId`。中断早于保护备份完成时，保护备份编号为空。服务保持查询可用，待核查期间拦截新的变更和每日备份。
+
+维护人员按任务编号核对业务进程、数据库、图片和保护备份，停运维后执行：
 
 ```powershell
-java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher --reconcile .env.ops.json
+java '-Dloader.main=cn.edu.hzcu.ops.OpsApplication' -cp target/campushub-server-0.1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher --reconcile .env.ops.json
 ```
 
-工具展示状态并要求本人输入RECONCILED确认已完成核查，留存核对时间后才解除拦截。实际无法判断时保留维护状态，不以刷新网页抹去失败。
+工具展示待核查任务和保护备份编号。确认检查完成后输入 `RECONCILED`，任务详情记录 `reconciledAt`，运维解除拦截。核查完成后仍可从任务详情追溯原状态和阶段。
 
 验证范围为 Windows 本机、真实 MySQL 及隔离业务 JVM。离机副本交接、跨主机部署、真实网页联调、RPO/RTO 计时、容量和安全专项验收仍按项目计划实施。

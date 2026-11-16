@@ -9,13 +9,17 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.*;
 
 final class OpsJobs implements AutoCloseable {
-    interface Executor {Map<String,Object> execute(String action,String reference,String backupManifestSha256,Consumer<String> phase)throws Exception;}
+    interface Progress extends Consumer<String> {
+        void protectionReady(String backupId);
+    }
+    interface Executor {Map<String,Object> execute(String action,String reference,String backupManifestSha256,Progress phase)throws Exception;}
+    record RecoveryStatus(boolean required, OpsStore.RecoveryIncident incident) {}
     private record Confirmation(String digest,String session,Instant expires,String backupManifestSha256){}
     private final Map<String,Confirmation> confirmations=new HashMap<>();
     private final OpsStore store;
     private final Executor executor;
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
-    private volatile boolean unsafe;
+    private volatile String unsafeJobId;
     OpsJobs(OpsStore store,Executor executor){this.store=store;this.executor=executor;}
     private static String digest(String action,String target,String reference){validate(action,target,reference);return OpsAuth.digest(action+"\n"+target+"\n"+reference);}
     static void validate(String action,String target,String reference){
@@ -61,7 +65,13 @@ final class OpsJobs implements AutoCloseable {
     }
 
     private boolean recoveryRequired(JsonNode state) {
-        return unsafe || state.path("recoveryRequired").asBoolean();
+        return unsafeJobId != null || state.path("recoveryRequired").asBoolean();
+    }
+
+    RecoveryStatus recoveryStatus(JsonNode state) {
+        String unsafe = unsafeJobId;
+        boolean required = unsafe != null || state.path("recoveryRequired").asBoolean();
+        return new RecoveryStatus(required, required ? OpsStore.recoveryIncident(state, unsafe) : null);
     }
 
     private static boolean busy(JsonNode state) {
@@ -92,24 +102,41 @@ final class OpsJobs implements AutoCloseable {
     private synchronized void update(String id,Consumer<ObjectNode> mutation,boolean recoveryRequired)throws IOException {
         store.change(state->{
             for(var job:state.path("jobs"))if(job.path("id").asString().equals(id))mutation.accept((ObjectNode)job);
-            if(recoveryRequired)state.put("recoveryRequired",true);
+            if(recoveryRequired)state.put("recoveryRequired",true).put("recoveryJobId",id);
         });
     }
     private void update(String id,Consumer<ObjectNode> mutation)throws IOException {update(id,mutation,false);}
-    private void phase(String id,String code){
+    private void phase(String id,String code,String backupId){
         if(!code.matches("[A-Z_]{2,48}"))throw new IllegalArgumentException("Unsafe event code");
-        try{update(id,job->{var event=OpsStore.JSON.createObjectNode();event.put("phase",code).put("occurredAt",Instant.now().toString());((ArrayNode)job.get("events")).add(event);});}
-        catch(IOException e){unsafe=true;throw new java.io.UncheckedIOException(e);}
+        try {
+            update(id, job -> {
+                var event = OpsStore.JSON.createObjectNode().put("phase",code).put("occurredAt",Instant.now().toString());
+                ((ArrayNode)job.get("events")).add(event);
+                if (backupId != null) job.put("protectionBackupId", backupId);
+            });
+        } catch(IOException e) {
+            unsafeJobId=id;
+            throw new UncheckedIOException(e);
+        }
     }
     private void run(String id,String action,String reference,String backupManifestSha256) {
+        boolean executionCompleted = false;
         try{update(id,n->n.put("state","RUNNING").put("startedAt",Instant.now().toString()));
-            Map<String,Object> result=executor.execute(action,reference,backupManifestSha256,code->phase(id,code));
+            Map<String,Object> result=executor.execute(action,reference,backupManifestSha256,new Progress() {
+                @Override public void accept(String code) { phase(id,code,null); }
+                @Override public void protectionReady(String backupId) {
+                    if (!backupId.matches("[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}")) throw new IllegalArgumentException("Invalid backup ID");
+                    phase(id,"PROTECTION_READY",backupId);
+                }
+            });
+            executionCompleted = true;
             update(id,n->{n.put("state","SUCCEEDED").put("finishedAt",Instant.now().toString());n.set("result",OpsStore.JSON.valueToTree(result));});
         }catch(Exception e){
-            String code=e instanceof OpsApplication.Failure f?f.code:e instanceof IOException?"OPS_IO_FAILED":"OPS_EXECUTION_FAILED";
-            boolean recovery=unsafe||(e instanceof OpsApplication.Failure f&&f.code.equals("OPS_MANUAL_RECOVERY_REQUIRED"));
+            if (executionCompleted) unsafeJobId=id;
+            String code=e instanceof OpsApplication.Failure f?f.code:(e instanceof IOException||e instanceof UncheckedIOException)?"OPS_IO_FAILED":"OPS_EXECUTION_FAILED";
+            boolean recovery=unsafeJobId!=null||code.equals("OPS_MANUAL_RECOVERY_REQUIRED");
             try{update(id,n->n.put("state","FAILED").put("errorCode",code).put("finishedAt",Instant.now().toString()),recovery);}
-            catch(IOException failed){unsafe=true;}
+            catch(IOException failed){unsafeJobId=id;}
         }
     }
     JsonNode list(){var out=OpsStore.JSON.createArrayNode();var jobs=store.read().path("jobs");for(int i=jobs.size()-1;i>=0&&out.size()<100;i--)out.add(publicJob(jobs.get(i)));return out;}

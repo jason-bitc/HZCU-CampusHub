@@ -275,7 +275,7 @@ final class OpsRunner implements OpsJobs.Executor {
         OpsStore.atomic(root.resolve("manifest.json"),OpsStore.JSON.writeValueAsBytes(Map.of("id",id,"sha256",sha(jar),"schemaFingerprint",schema(),"registeredAt",Instant.now().toString())));
         artifact(id);
     }
-    public Map<String,Object> execute(String action,String reference,String backupManifestSha256,Consumer<String> phase)throws Exception {
+    public Map<String,Object> execute(String action,String reference,String backupManifestSha256,OpsJobs.Progress phase)throws Exception {
         OpsJobs.validate(action,"business",reference);phase.accept("PREFLIGHT");
         if(action.equals("DEPLOY"))artifact(reference);
         RestorePlan restorePlan = null;
@@ -291,6 +291,7 @@ final class OpsRunner implements OpsJobs.Executor {
             if(action.equals("RESTART")){phase.accept("STARTING");start();return Map.of("healthy",true);}
             phase.accept("PROTECTING");protection=backup();
             if(action.equals("BACKUP")){if(wasRunning){phase.accept("STARTING");start();}return Map.of("backupId",protection,"healthy",healthy());}
+            phase.protectionReady(protection);
             var result=new LinkedHashMap<String,Object>();
             if(action.equals("DEPLOY")){
                 phase.accept("INSTALLING");Path root=child(config.artifactRoot(),reference);artifact(reference);install(root.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));install(root.resolve("manifest.json"),config.runtimeRoot().resolve("release.json"));

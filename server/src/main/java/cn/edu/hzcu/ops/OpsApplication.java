@@ -76,7 +76,9 @@ public final class OpsApplication implements AutoCloseable {
     private Map<String,Object> status() throws IOException {
         var result=new LinkedHashMap<>(runner.status());
         var state=store.read();
-        result.put("recoveryRequired",state.path("recoveryRequired").asBoolean());
+        var recovery = jobs.recoveryStatus(state);
+        result.put("recoveryRequired", recovery.required());
+        result.put("recoveryIncident", recovery.incident());
         var schedule=new LinkedHashMap<String,Object>();
         schedule.put("enabled",dailyBackup!=null);
         schedule.put("timeZone",OpsDailyBackup.ZONE.getId());
@@ -121,9 +123,14 @@ public final class OpsApplication implements AutoCloseable {
         if(args.length==4&&args[0].equals("--register")){var config=OpsConfig.load(Path.of(args[1]));try(var store=new OpsStore(config.controlRoot())){new OpsRunner(config).register(args[2],Path.of(args[3]));}System.out.println("OPS_ARTIFACT_REGISTERED");return;}
         if(args.length==2&&args[0].equals("--reconcile")){
             var config=OpsConfig.load(Path.of(args[1]));var console=System.console();if(console==null)throw new IOException("OPS_RECONCILE_REQUIRES_CONSOLE");
-            try(var store=new OpsStore(config.controlRoot())){console.printf("%s%n",OpsStore.JSON.writeValueAsString(new OpsRunner(config).status()));
+            try(var store=new OpsStore(config.controlRoot())){
+                var status = new LinkedHashMap<>(new OpsRunner(config).status());
+                var journal = store.read();
+                status.put("recoveryRequired", journal.path("recoveryRequired").asBoolean());
+                status.put("recoveryIncident", journal.path("recoveryRequired").asBoolean() ? OpsStore.recoveryIncident(journal,null) : null);
+                console.printf("%s%n",OpsStore.JSON.writeValueAsString(status));
                 if(!"RECONCILED".equals(console.readLine("After checking DB, media, process and protection backup, type RECONCILED: ")))throw new IOException("OPS_RECONCILE_CANCELLED");
-                store.change(n->n.put("recoveryRequired",false).put("manualReconciliationAt",Instant.now().toString()));}return;
+                store.reconcile();}return;
         }
         if(args.length==2&&args[0].equals("--init")){OpsAuth.initialize(Path.of(args[1]));System.out.println("OPS_SETUP_COMPLETED");return;}
         if(args.length!=2||!args[0].equals("--config"))throw new IllegalArgumentException(

@@ -35,15 +35,38 @@ class OpsControlTest {
         }
     }
     @Test void interruptedJournalRequiresManualReconciliationAndNeverBecomesSuccess()throws Exception {
-        try(var store=new OpsStore(root)){store.change(n->{var j=OpsStore.JSON.createObjectNode();j.put("id","test").put("state","RUNNING");((tools.jackson.databind.node.ArrayNode)n.get("jobs")).add(j);});}
+        try(var store=new OpsStore(root)){
+            store.change(journal -> journal.withArray("jobs").addObject()
+                    .put("id","test").put("action","RESTORE").put("state","RUNNING")
+                    .put("protectionBackupId","safe-backup").putArray("events").addObject().put("phase","RESTORING"));
+        }
         try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,h,p)->Map.of())){
             assertThat(jobs.get("test").path("state").asString()).isEqualTo("INTERRUPTED");String c=(String)jobs.prepare("RESTART","business","","token",null).get("confirmationId");
+            assertThat(jobs.get("test").path("finishedAt").asString()).isNotBlank();
+            var recovery = jobs.recoveryStatus(store.read());
+            assertThat(recovery.required()).isTrue();
+            assertThat(recovery.incident()).isEqualTo(new OpsStore.RecoveryIncident(
+                    "test","RESTORE","INTERRUPTED","EXECUTOR_INTERRUPTED","RESTORING","safe-backup"));
             assertThatThrownBy(()->jobs.submit("RESTART","business","",UUID.randomUUID().toString(),c,"token")).hasMessage("OPS_RECOVERY_REQUIRED");
+            store.reconcile();
+            assertThat(jobs.recoveryStatus(store.read())).isEqualTo(new OpsJobs.RecoveryStatus(false,null));
+        }
+        try(var store=new OpsStore(root);var jobs=new OpsJobs(store,(a,r,h,p)->Map.of())){
+            var job = jobs.get("test");
+            assertThat(job.path("state").asString()).isEqualTo("INTERRUPTED");
+            assertThat(job.path("protectionBackupId").asString()).isEqualTo("safe-backup");
+            assertThat(job.path("reconciledAt").asString()).isNotBlank();
+            assertThat(jobs.recoveryStatus(store.read()).incident()).isNull();
         }
     }
     @Test void invalidTargetsPathsAndCommandsCannotBeSubmitted(){for(String action:List.of("SHELL","SQL","DELETE"))assertThatThrownBy(()->OpsJobs.validate(action,"business","")).isInstanceOf(OpsApplication.Failure.class);assertThatThrownBy(()->OpsJobs.validate("RESTORE","business","../outside")).isInstanceOf(OpsApplication.Failure.class);assertThatThrownBy(()->OpsJobs.validate("RESTART","mysql","")).isInstanceOf(OpsApplication.Failure.class);}
     @Test void httpAuthIsolationLogoutAndStatusWorkWithoutBusinessDatabase()throws Exception {
         Path control=root.resolve("control");Files.createDirectories(control);OpsStore.atomic(control.resolve("credentials.json"),OpsStore.JSON.writeValueAsBytes(Map.of("login","testops","passwordHash",new BCryptPasswordEncoder(4).encode("test-password"))));
+        try (var journal = new OpsStore(control)) {
+            journal.change(state -> state.withArray("jobs").addObject()
+                    .put("id","interrupted-job").put("action","DEPLOY").put("state","RUNNING")
+                    .put("protectionBackupId","handoff-backup"));
+        }
         int port;try(var socket=new java.net.ServerSocket(0)){port=socket.getLocalPort();}
         var config=new OpsConfig(control,root.resolve("runtime"),root.resolve("artifacts"),root.resolve("backups"),root.resolve("media"),Path.of("unused"),Path.of("unused"),Path.of("unused"),root.resolve("missing-env"),port,"http://127.0.0.1:1/actuator/health","http://127.0.0.1:5173","campushub_test",null);
         try(var app=new OpsApplication(config)){app.start();var http=HttpClient.newHttpClient();String base="http://127.0.0.1:"+port+"/api/v1/ops";
@@ -53,6 +76,10 @@ class OpsControlTest {
             var backup = OpsStore.JSON.readTree(status.body()).path("data").path("dailyBackup");
             assertThat(backup.path("enabled").asBoolean()).isFalse();
             assertThat(backup.path("lastScheduledFor").isNull()).isTrue();
+            var recovery = OpsStore.JSON.readTree(status.body()).path("data");
+            assertThat(recovery.path("recoveryRequired").asBoolean()).isTrue();
+            assertThat(recovery.path("recoveryIncident").path("protectionBackupId").asString()).isEqualTo("handoff-backup");
+            assertThat(recovery.path("recoveryIncident").path("errorCode").asString()).isEqualTo("EXECUTOR_INTERRUPTED");
             assertThat(http.send(HttpRequest.newBuilder(URI.create(base+"/jobs")).header("Authorization","Bearer "+token).header("Origin","https://evil.example").GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(403);
             http.send(HttpRequest.newBuilder(URI.create(base+"/auth/logout")).header("Authorization","Bearer "+token).POST(HttpRequest.BodyPublishers.noBody()).build(),HttpResponse.BodyHandlers.ofString());assertThat(http.send(request,HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(401);
         }
@@ -102,16 +129,21 @@ class OpsControlTest {
         var entered = new CountDownLatch(1);
         var release = new CountDownLatch(1);
         var date = LocalDate.of(2030, 1, 1);
+        String id;
         try (var store = new OpsStore(root);
                 var jobs = new OpsJobs(store, (action, reference, hash, phase) -> {
+                    phase.protectionReady("ready-backup");
                     entered.countDown();
                     release.await();
                     throw new OpsApplication.Failure(409, "OPS_MANUAL_RECOVERY_REQUIRED");
                 })) {
-            String confirmation = (String) jobs.prepare("RESTART","business","","token",null).get("confirmationId");
+            String confirmation = (String) jobs.prepare("DEPLOY","business","release-one","token",null).get("confirmationId");
             try {
-                jobs.submit("RESTART","business","",UUID.randomUUID().toString(),confirmation,"token");
+                id = jobs.submit("DEPLOY","business","release-one",UUID.randomUUID().toString(),confirmation,"token").path("id").asString();
                 assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();
+                var checkpoint = OpsStore.JSON.readTree(Files.readAllBytes(root.resolve("state.json"))).path("jobs").get(0);
+                assertThat(checkpoint.path("protectionBackupId").asString()).isEqualTo("ready-backup");
+                assertThat(checkpoint.path("events").get(0).path("phase").asString()).isEqualTo("PROTECTION_READY");
                 assertThat(jobs.scheduleBackup(date)).isFalse();
                 assertThat(store.read().has("lastScheduledBackupDate")).isFalse();
             } finally {
@@ -120,7 +152,9 @@ class OpsControlTest {
         }
         try (var store = new OpsStore(root); var jobs = new OpsJobs(store, (action, reference, hash, phase) -> Map.of())) {
             assertThat(jobs.scheduleBackup(date)).isFalse();
-            store.change(state -> state.put("recoveryRequired",false));
+            assertThat(jobs.recoveryStatus(store.read()).incident().jobId()).isEqualTo(id);
+            assertThat(jobs.recoveryStatus(store.read()).incident().protectionBackupId()).isEqualTo("ready-backup");
+            store.reconcile();
             assertThat(jobs.scheduleBackup(date)).isTrue();
             assertThat(jobs.scheduleBackup(date)).isFalse();
         }
