@@ -62,6 +62,20 @@ class OpsBackupExportTest {
         }
     }
 
+    @Test void legacyManifestIsAcceptedButMalformedBusinessSnapshotIsRejected() throws Exception {
+        var config = config();
+        var source = snapshot(config, "latest", Instant.parse("2030-01-01T00:00:00Z"), true);
+        var legacy = OpsRunner.readBackupManifest(source, "latest", null);
+        assertThat(OpsRunner.verifyBackupFiles(source, "latest", legacy).preview().businessSnapshotAvailable()).isFalse();
+        assertThat(OpsBusinessSnapshot.verify(null, null).status()).isEqualTo("UNAVAILABLE");
+
+        var manifest = (tools.jackson.databind.node.ObjectNode) legacy.data();
+        manifest.putNull("businessSnapshot");
+        Files.write(source.resolve("manifest.json"), OpsStore.JSON.writeValueAsBytes(manifest));
+        var malformed = OpsRunner.readBackupManifest(source, "latest", null);
+        assertThatThrownBy(() -> OpsRunner.verifyBackupFiles(source, "latest", malformed)).hasMessage("OPS_BACKUP_INVALID");
+    }
+
     private OpsConfig config() {
         return new OpsConfig(root.resolve("control"), root.resolve("runtime"), root.resolve("artifacts"),
                 root.resolve("backups"), root.resolve("media"), Path.of("unused"), Path.of("unused"),

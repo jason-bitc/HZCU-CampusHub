@@ -15,18 +15,21 @@ import tools.jackson.databind.JsonNode;
 
 /** No shell, arbitrary command, user path, or user SQL is accepted. */
 final class OpsRunner implements OpsJobs.Executor {
-    record RestorePreview(String backupId,String backupCreatedAt,String backupReleaseId,
-                          List<String> affectedComponents,int verifiedFileCount,long mediaFileCount) {}
-    record RestorePlan(String manifestSha256,RestorePreview preview) {}
-    record BackupManifest(JsonNode data, String sha256, Instant createdAt) {}
-    record BackupEntry(String id, String createdAt, boolean complete, String schemaFingerprint,
+    record RestorePreview(String backupId,String backupCreatedAt,String backupSnapshotAt,String backupReleaseId,
+                          List<String> affectedComponents,int verifiedFileCount,long mediaFileCount,
+                          boolean businessSnapshotAvailable) {}
+    record RestorePlan(String manifestSha256,RestorePreview preview,Instant snapshotAt,
+                       OpsBusinessSnapshot.Snapshot businessSnapshot) {}
+    private record RestoreVerification(long mediaReferences, OpsBusinessSnapshot.Verification business) {}
+    record BackupManifest(JsonNode data, String sha256, Instant createdAt, Instant snapshotAt) {}
+    record BackupEntry(String id, String createdAt, String snapshotAt, boolean complete, String schemaFingerprint,
                        boolean withinRetentionWindow) {}
     private static final int RETAIN_RECENT_BACKUPS = 7;
     final OpsConfig config;
     private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1)).build();
     OpsRunner(OpsConfig config){this.config=config;}
     static OpsApplication.Failure failure(String code){return new OpsApplication.Failure(409,code);}
-    private static MessageDigest sha256() {
+    static MessageDigest sha256() {
         try { return MessageDigest.getInstance("SHA-256"); }
         catch (NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
     }
@@ -67,6 +70,14 @@ final class OpsRunner implements OpsJobs.Executor {
     private long verifyMedia(Path mediaRoot)throws IOException,SQLException {
         try(var connection=database()) { return OpsMediaIntegrity.verify(connection,mediaRoot); }
     }
+    private OpsBusinessSnapshot.Snapshot captureBusinessSnapshot() throws SQLException, IOException {
+        try (var connection = database()) {
+            connection.setReadOnly(true);
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            connection.setAutoCommit(false);
+            return OpsBusinessSnapshot.capture(connection);
+        }
+    }
     private void sql(Path file,boolean dump)throws Exception {
         var env=config.environment();String port=env.getOrDefault("CAMPUSHUB_DB_PORT","3306");if(!port.matches("[0-9]{1,5}"))throw failure("OPS_DATABASE_CONFIG_INVALID");
         var args=new ArrayList<>(List.of((dump?config.dumpExecutable():config.mysqlExecutable()).toString(),"--host=127.0.0.1","--protocol=TCP","--port="+port,"--user="+env.get("CAMPUSHUB_DB_USERNAME"),"--default-character-set=utf8mb4"));
@@ -82,13 +93,17 @@ final class OpsRunner implements OpsJobs.Executor {
     }
     private String backup()throws Exception {
         String id=UUID.randomUUID().toString();Path root=child(config.backupRoot(),id);Files.createDirectory(root);
-        String schema=schema();sql(root.resolve("database.sql"),true);copyTree(config.mediaRoot(),root.resolve("media"));
+        String schema=schema();
+        Instant snapshotAt = Instant.now();
+        var businessSnapshot = captureBusinessSnapshot();
+        sql(root.resolve("database.sql"),true);copyTree(config.mediaRoot(),root.resolve("media"));
         if(Files.isRegularFile(config.runtimeRoot().resolve("current.jar")))Files.copy(config.runtimeRoot().resolve("current.jar"),root.resolve("application.jar"));
         if(Files.isRegularFile(config.runtimeRoot().resolve("release.json")))Files.copy(config.runtimeRoot().resolve("release.json"),root.resolve("release.json"));
         var hashes=new TreeMap<String,String>();try(var files=Files.walk(root)){for(Path file:files.filter(Files::isRegularFile).toList())hashes.put(root.relativize(file).toString().replace('\\','/'),sha(file));}
         long checked=verifyMedia(root.resolve("media"));
         var manifest=Map.of("id",id,"database",config.databaseName(),"schemaFingerprint",schema,"createdAt",Instant.now().toString(),
-                "files",hashes,"complete",true,"verifiedMediaReferences",checked);
+                "snapshotAt",snapshotAt.toString(),"files",hashes,"complete",true,"verifiedMediaReferences",checked,
+                "businessSnapshot",businessSnapshot);
         OpsStore.atomic(root.resolve("manifest.json"),OpsStore.JSON.writeValueAsBytes(manifest));return id;
     }
     RestorePlan preflightRestore(String id) throws Exception {
@@ -123,11 +138,26 @@ final class OpsRunner implements OpsJobs.Executor {
                 ||!files.isObject()||!files.has("database.sql")) {
             throw failure("OPS_BACKUP_INVALID");
         }
-        try { return new BackupManifest(n, hash, Instant.parse(n.path("createdAt").asString())); }
+        try {
+            Instant createdAt = Instant.parse(n.path("createdAt").asString());
+            return new BackupManifest(n, hash, createdAt, readSnapshotAt(n, createdAt));
+        }
         catch (DateTimeException invalid) { throw failure("OPS_BACKUP_INVALID"); }
     }
 
+    private static Instant readSnapshotAt(JsonNode manifest, Instant createdAt) {
+        var value = manifest.path("snapshotAt");
+        if (!value.isString()) return null;
+        try {
+            Instant snapshotAt = Instant.parse(value.asString());
+            return snapshotAt.isAfter(createdAt) ? null : snapshotAt;
+        } catch (DateTimeException invalid) {
+            return null;
+        }
+    }
+
     static RestorePlan verifyBackupFiles(Path root, String id, BackupManifest backup) throws IOException {
+        var businessSnapshot = OpsBusinessSnapshot.read(backup.data().path("businessSnapshot"));
         if (!Files.isDirectory(root.resolve("media"), LinkOption.NOFOLLOW_LINKS)) throw failure("OPS_BACKUP_INVALID");
         Path manifest = root.resolve("manifest.json");
         var files = backup.data().path("files");
@@ -159,8 +189,10 @@ final class OpsRunner implements OpsJobs.Executor {
                     ||!release.path("schemaFingerprint").asString().equals(fingerprint)) throw failure("OPS_BACKUP_INVALID");
         }
         var components=releaseId==null?List.of("DATABASE","MEDIA"):List.of("DATABASE","MEDIA","RELEASE");
-        return new RestorePlan(backup.sha256(),new RestorePreview(id,backup.createdAt().toString(),releaseId,components,expected.size(),
-                expected.stream().filter(name->name.startsWith("media/")).count()));
+        var preview = new RestorePreview(id, backup.createdAt().toString(), Objects.toString(backup.snapshotAt(), null),
+                releaseId, components, expected.size(), expected.stream().filter(name->name.startsWith("media/")).count(),
+                businessSnapshot != null);
+        return new RestorePlan(backup.sha256(), preview, backup.snapshotAt(), businessSnapshot);
     }
 
     private static JsonNode backupJson(byte[] data) {
@@ -173,16 +205,20 @@ final class OpsRunner implements OpsJobs.Executor {
         throw failure("OPS_BACKUP_INVALID");
     }
 
-    private long restore(String id,String manifestHash,Consumer<String> phase)throws Exception {
-        validateBackup(id,manifestHash);Path backup=child(config.backupRoot(),id),staged=config.runtimeRoot().resolve("media-"+UUID.randomUUID());copyTree(backup.resolve("media"),staged);
+    private RestoreVerification restore(String id,String manifestHash,Consumer<String> phase)throws Exception {
+        var plan = validateBackup(id,manifestHash);
+        Path backup=child(config.backupRoot(),id),staged=config.runtimeRoot().resolve("media-"+UUID.randomUUID());copyTree(backup.resolve("media"),staged);
         sql(backup.resolve("database.sql"),false);
+        var expected = plan.businessSnapshot();
+        if (expected != null) phase.accept("VERIFYING_DATA");
+        var business = OpsBusinessSnapshot.verify(expected, expected == null ? null : captureBusinessSnapshot());
         phase.accept("VERIFYING_MEDIA");
         long checked=verifyMedia(staged);
         Path held=config.mediaRoot().resolveSibling(config.mediaRoot().getFileName()+"-held-"+UUID.randomUUID());Files.move(config.mediaRoot(),held,StandardCopyOption.ATOMIC_MOVE);
         Files.move(staged,config.mediaRoot(),StandardCopyOption.ATOMIC_MOVE);
         if(Files.exists(backup.resolve("application.jar")))install(backup.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));
         if(Files.exists(backup.resolve("release.json")))install(backup.resolve("release.json"),config.runtimeRoot().resolve("release.json"));
-        return checked;
+        return new RestoreVerification(checked, business);
     }
     private static void install(Path source,Path target)throws IOException {Path tmp=target.resolveSibling(target.getFileName()+".install");Files.copy(source,tmp,StandardCopyOption.REPLACE_EXISTING);Files.move(tmp,target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
     JsonNode artifact(String id)throws Exception {
@@ -226,7 +262,8 @@ final class OpsRunner implements OpsJobs.Executor {
         var entries = new ArrayList<BackupEntry>();
         for (int i = 0; i < Math.min(100, manifests.size()); i++) {
             var manifest = manifests.get(i);
-            entries.add(new BackupEntry(manifest.data().path("id").asString(), manifest.createdAt().toString(), true,
+            entries.add(new BackupEntry(manifest.data().path("id").asString(), manifest.createdAt().toString(),
+                    Objects.toString(manifest.snapshotAt(), null), true,
                     manifest.data().path("schemaFingerprint").asString(), i < RETAIN_RECENT_BACKUPS));
         }
         return entries;
@@ -241,11 +278,15 @@ final class OpsRunner implements OpsJobs.Executor {
     public Map<String,Object> execute(String action,String reference,String backupManifestSha256,Consumer<String> phase)throws Exception {
         OpsJobs.validate(action,"business",reference);phase.accept("PREFLIGHT");
         if(action.equals("DEPLOY"))artifact(reference);
+        RestorePlan restorePlan = null;
         if(action.equals("RESTORE")){
             if(backupManifestSha256==null)throw failure("OPS_CONFIRMATION_INVALID");
-            validateBackup(reference,backupManifestSha256);
+            restorePlan = validateBackup(reference,backupManifestSha256);
         }
-        boolean wasRunning=managed().isPresent();phase.accept("STOPPING");stop();String protection=null;
+        boolean wasRunning=managed().isPresent();phase.accept("STOPPING");
+        Instant restoreStartedAt = restorePlan == null ? null : Instant.now();
+        long restoreStartedNanos = restorePlan == null ? 0 : System.nanoTime();
+        stop();String protection=null;
         try{
             if(action.equals("RESTART")){phase.accept("STARTING");start();return Map.of("healthy",true);}
             phase.accept("PROTECTING");protection=backup();
@@ -253,8 +294,19 @@ final class OpsRunner implements OpsJobs.Executor {
             var result=new LinkedHashMap<String,Object>();
             if(action.equals("DEPLOY")){
                 phase.accept("INSTALLING");Path root=child(config.artifactRoot(),reference);artifact(reference);install(root.resolve("application.jar"),config.runtimeRoot().resolve("current.jar"));install(root.resolve("manifest.json"),config.runtimeRoot().resolve("release.json"));
-            }else{phase.accept("RESTORING");result.put("verifiedMediaReferences",restore(reference,backupManifestSha256,phase));}
-            phase.accept("STARTING");start();phase.accept("VERIFIED");
+            } else {
+                phase.accept("RESTORING");
+                var verification = restore(reference, backupManifestSha256, phase);
+                result.put("verifiedMediaReferences", verification.mediaReferences());
+                result.put("businessVerification", verification.business());
+            }
+            phase.accept("STARTING");start();
+            if (restorePlan != null) {
+                Duration elapsed = Duration.ofNanos(System.nanoTime() - restoreStartedNanos);
+                result.put("recoveryEvidence", OpsRecoveryEvidence.measure(restorePlan.snapshotAt(), restoreStartedAt,
+                        Instant.now(), elapsed));
+            }
+            phase.accept("VERIFIED");
             result.put("healthy",true);result.put("protectionBackupId",protection);result.put("referenceId",reference);
             return result;
         }catch(Exception failed){
