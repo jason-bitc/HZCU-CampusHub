@@ -59,7 +59,7 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 | 权限 | GET /me | OPS_ADMIN域及能力 |
 | 总览 | GET /status | target、healthy、managedProcessRunning、release、recoveryRequired、dailyBackup |
 | 发布包 | GET /artifacts | 最近100个已登记包的ID、SHA256和模式指纹 |
-| 备份 | GET /backups | 最近100份清单的ID、时间、complete、模式指纹 |
+| 备份 | GET /backups | 按创建时间倒序列出当前库的最近100份完整清单，含ID、时间、complete、模式指纹和withinRetentionWindow |
 | 操作确认 | POST /confirmations | action、target、referenceId；返回确认ID、过期时间和影响；恢复操作另返回预检结果 |
 | 创建任务 | POST /jobs | 原操作三字段、requestId、confirmationId；返回持久任务 |
 | 任务列表 | GET /jobs | 最近100个任务，最新在前 |
@@ -119,6 +119,19 @@ java -Dloader.main=cn.edu.hzcu.ops.OpsApplication -cp target/campushub-server-0.
 每日任务与手动备份共用互斥队列和执行流程。在备份任务入队时同时记录北京时间日期，同一天只入队一次，运维重启后仍生效。错过的日期不补做。当天任务失败时，可查看错误并按需发起手动备份。
 
 `GET /status` 的 `dailyBackup` 提供 `enabled/time/timeZone/lastScheduledFor`。日期代表已入队，执行结果以 `GET /jobs/{id}` 为准。每日任务的 `actorDomain` 为 `OPS_SCHEDULER`，`scheduledFor` 记录北京时间日期。离机副本按维护流程另行保存。
+
+### 备份保留与离机交接
+
+`GET /backups` 以清单的 `createdAt` 为准，最近七份的 `withinRetentionWindow` 为 `true`。列表检查清单元数据，文件完整性以导出校验或恢复预检为准。后端保留其他快照和保护副本，维护人员应先复核依赖及离机副本，再安排清理。
+
+维护人员在项目的 `server` 目录运行以下命令。先在另一台设备或移动介质上建立受限的交接目录，再用实际备份 ID 替换示例值。导出可在业务和独立运维运行期间执行。
+
+```powershell
+java '-Dloader.main=cn.edu.hzcu.ops.OpsApplication' -cp target/campushub-server-0.1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher --export-backup .env.ops.json BACKUP_ID E:/CampusHub-handoff
+java '-Dloader.main=cn.edu.hzcu.ops.OpsApplication' -cp target/campushub-server-0.1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher --verify-backup-export E:/CampusHub-handoff/BACKUP_ID MANIFEST_SHA256
+```
+
+导出只复制快照清单及其文件。核对源快照和目标副本的文件集合及 SHA-256 后，才公布目标备份目录。同名目录保留原状。命令的 JSON 回执包含 `backupId/manifestSha256/backupCreatedAt/verifiedAt/verifiedFileCount`。把回执与介质交接记录另行保存，接收人用其中的 `manifestSha256` 在目标设备复核。独立复核只需程序包、副本路径和已记录摘要，无需配置文件或数据库连接。签收时由维护人员确认介质所在地，文件校验结果与恢复演练分别记录。
 
 错误示例：401 OPS_UNAUTHORIZED、403 ORIGIN_FORBIDDEN、409 OPS_CONFIRMATION_INVALID/OPS_TARGET_BUSY/REQUEST_KEY_REUSED/OPS_BACKUP_INVALID/OPS_ARTIFACT_SCHEMA_CHANGE、429 OPS_RATE_LIMITED、503 OPS_SERVICE_UNAVAILABLE。执行中的错误记录到任务errorCode；HTTP200读到FAILED任务不能显示成功。
 

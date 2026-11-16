@@ -56,7 +56,11 @@ class OpsExecutionMySqlIT {
         fixture=2_000_000_000_000L+new java.security.SecureRandom().nextLong(1_000_000_000L);
         try(var c=connection();var q=c.prepareStatement("INSERT INTO category(id,kind,name) VALUES(?,'TOPIC',?)")){q.setLong(1,fixture);q.setString(2,"ops-before-"+fixture);q.executeUpdate();}
         int businessPort,opsPort;try(var socket=new java.net.ServerSocket(0)){businessPort=socket.getLocalPort();}try(var socket=new java.net.ServerSocket(0)){opsPort=socket.getLocalPort();}
-        Path env=root.resolve("business-env.json");OpsStore.atomic(env,OpsStore.JSON.writeValueAsBytes(Map.of("CAMPUSHUB_DB_HOST","127.0.0.1","CAMPUSHUB_DB_PORT",mysqlPort,"CAMPUSHUB_DB_NAME","campushub_test","CAMPUSHUB_DB_USERNAME",username,"CAMPUSHUB_DB_PASSWORD",password,"CAMPUSHUB_AUTH_PEPPER",AuthTestSupport.TEST_KEY,"CAMPUSHUB_LOG_ENABLED","true","CAMPUSHUB_RUN_MODE","release")));
+        Path env=root.resolve("business-env.json");OpsStore.atomic(env,OpsStore.JSON.writeValueAsBytes(Map.of(
+                "CAMPUSHUB_DB_HOST","127.0.0.1","CAMPUSHUB_DB_PORT",mysqlPort,"CAMPUSHUB_DB_NAME","campushub_test",
+                "CAMPUSHUB_DB_USERNAME",username,"CAMPUSHUB_DB_PASSWORD",password,"CAMPUSHUB_AUTH_PEPPER",AuthTestSupport.TEST_KEY,
+                "CAMPUSHUB_LOG_ENABLED","true","CAMPUSHUB_RUN_MODE","release",
+                "CAMPUSHUB_MAIL_HOST","127.0.0.1","CAMPUSHUB_MAIL_PASSWORD","smtp-not-exercised")));
         config=opsConfig(env,opsPort,businessPort,null);config.validate();
         Path media=config.mediaRoot().resolve("objects");
         Files.createDirectories(media);
@@ -82,6 +86,14 @@ class OpsExecutionMySqlIT {
             var deployed=job("DEPLOY","release-one");assertThat(deployed.path("state").asString()).as(deployed.toString()).isEqualTo("SUCCEEDED");assertThat(request("GET","/status",null).path("release").path("id").asString()).isEqualTo("release-one");
             long pid=OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong();var restarted=job("RESTART","");assertThat(restarted.path("state").asString()).as(restarted.toString()).isEqualTo("SUCCEEDED");assertThat(OpsStore.JSON.readTree(Files.readString(config.runtimeRoot().resolve("pid.json"))).path("pid").asLong()).isNotEqualTo(pid);
             var backed=job("BACKUP","");assertThat(backed.path("state").asString()).as(backed.toString()).isEqualTo("SUCCEEDED");String backup=backed.path("result").path("backupId").asString();
+            var inventory = request("GET", "/backups", null).path("items");
+            assertThat(inventory.get(0).path("id").asString()).isEqualTo(backup);
+            assertThat(inventory.get(0).path("withinRetentionWindow").asBoolean()).isTrue();
+            Path handoff = Files.createDirectory(root.resolve("handoff"));
+            var receipt = OpsBackupExport.export(config, backup, handoff);
+            assertThat(receipt.verifiedFileCount()).isEqualTo(4);
+            assertThat(OpsBackupExport.verify(handoff.resolve(backup), receipt.manifestSha256()).backupId()).isEqualTo(backup);
+            assertThat(request("GET", "/status", null).path("healthy").asBoolean()).isTrue();
             updateLiveImage(image,newer,"ops-after-");
             var restoreRequest=Map.of("action","RESTORE","target","business","referenceId",backup);
             var confirmation=request("POST","/confirmations",restoreRequest);
