@@ -36,6 +36,12 @@ campushub:
     reading-reward: ${CAMPUSHUB_COIN_READING_REWARD:1}
     reading-seconds: ${CAMPUSHUB_COIN_READING_SECONDS:180}
     article-limit: ${CAMPUSHUB_COIN_ARTICLE_LIMIT:2}
+  honors:
+    rules:
+      - {id: experience-sharer, title: 经验分享者, threshold: 5, badge: sprout, enabled: true}
+      - {id: helpful-peer, title: 热心同行者, threshold: 20, badge: open-book, enabled: true}
+      - {id: campus-supporter, title: 校园助力者, threshold: 50, badge: star-book, enabled: true}
+      - {id: campus-star, title: 城院之星, threshold: 100, badge: lighthouse, enabled: true}
   comments:
     body-max-code-points: ${CAMPUSHUB_COMMENT_MAX_CODE_POINTS:10000}
     json-max-bytes: ${CAMPUSHUB_COMMENT_JSON_MAX_BYTES:131072}
