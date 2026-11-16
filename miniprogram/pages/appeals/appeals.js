@@ -40,7 +40,9 @@ Page({
     const page = reset ? 1 : this.data.page + 1;
     this.setData({ busy: true, error: preserveError ? this.data.error : '' });
     try {
-      const [current, result] = await Promise.all([api.restrictions(), api.appeals(page)]);
+      const pages = await Promise.all([api.restrictions(), api.appeals(page)]);
+      const current = pages[0];
+      const result = pages[1];
       if (epoch !== this._epoch) return;
       const restrictions = current.items.map(view.restriction).filter((row) => row.id);
       const records = new Map((reset ? [] : this.data.records).map((row) => [row.id, row]));

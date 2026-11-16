@@ -6,6 +6,12 @@ const content = require('../../utils/editor-content');
 const { bytes } = require('../../utils/validation');
 const config = require('../../config/env');
 const sourceTypes = [null, 'FIRST_HAND', 'CURATED', 'DEMO'];
+const tagFields = [
+  { name: 'jobs', field: 'jobIds', label: '目标岗位' },
+  { name: 'majors', field: 'majorIds', label: '文章适用专业' },
+  { name: 'companies', field: 'companyIds', label: '公司（可选）' },
+  { name: 'topics', field: 'topicIds', label: '主题（可选）' }
+];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
 const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false };
 Page({
@@ -29,7 +35,11 @@ Page({
   async load() {
     const epoch = this._epoch; this.setData({ busy: true, error: '' });
     try {
-      const [draft, catalog, profile] = await Promise.all([api.draft(this.data.articleId), api.call('/catalog'), api.profile()]); if (epoch !== this._epoch) return;
+      const result = await Promise.all([api.draft(this.data.articleId), api.call('/catalog'), api.profile()]);
+      if (epoch !== this._epoch) return;
+      const draft = result[0];
+      const catalog = result[1];
+      const profile = result[2];
       this.setData({ catalog }); this.applyDraft(draft);
       const recovery = local.read(`draft:${this.data.articleId}`); this.setData({ hasBackup: !!local.read(`backup:${this.data.articleId}`) }); if (recovery && (JSON.stringify(recovery.form) !== this.saved || recovery.pendingPublish || (recovery.uploads || []).some((f) => f.state !== 'done'))) this.setData({ recovery });
       else if (draft.revision === 0 && !this.data.form.majorIds.length && profile.majorId && catalog.majors.some((m) => m.id === profile.majorId)) this.updateForm(Object.assign({}, this.data.form, { majorIds: [profile.majorId] }));
@@ -37,7 +47,10 @@ Page({
   },
   applyDraft(draft) { const form = content.formFromDraft(draft); const complexSource = content.blocks(form.body) === null; this.saved = JSON.stringify(form); this.setData({ revision: draft.revision, articleState: draft.state, stateText: stateNames[draft.state] || '状态待核对', complexSource, preview: complexSource || this.data.preview, readOnly: complexSource || draft.state === 'ADMIN_HIDDEN' || draft.state === 'DELETED', dirty: false }); this.updateForm(form, false); },
   updateForm(form, dirty = true) {
-    const groups = this.data.catalog ? [['jobs', 'jobIds', '目标岗位'], ['majors', 'majorIds', '文章适用专业'], ['companies', 'companyIds', '公司（可选）'], ['topics', 'topicIds', '主题（可选）']].map(([name, field, label]) => ({ name, field, label, items: this.data.catalog[name].map((item) => Object.assign({}, item, { selected: form[field].includes(item.id) })) })) : [];
+    const groups = this.data.catalog ? tagFields.map(({ name, field, label }) => ({
+      name, field, label,
+      items: this.data.catalog[name].map((item) => Object.assign({}, item, { selected: form[field].includes(item.id) }))
+    })) : [];
     const blocks = content.blocks(form.body);
     this.setData({ form, tagGroups: groups, dirty: dirty && JSON.stringify(form) !== this.saved, blocks: blocks || [], blockSupported: !!blocks, sourceIndex: Math.max(0, sourceTypes.indexOf(form.sourceType)) });
     if (dirty) this.checkpoint();

@@ -59,9 +59,17 @@ Page({
       this.setData({ authenticated: true });
       if (this.data.status !== 'ready') return;
       const id = this.data.articleId;
-      const [interaction, author, coinState, wallet] = await Promise.all([member.interaction(id), member.articleAuthor(id).catch((e) => { if (e.status === 404) return null; throw e; }), member.coinState(id), member.wallet()]);
+      const state = await Promise.all([
+        member.interaction(id),
+        member.articleAuthor(id).catch((e) => { if (e.status === 404) return null; throw e; }),
+        member.coinState(id),
+        member.wallet()
+      ]);
       if (round !== this.memberRound) return;
-      this.setData({ interaction, author, coinState, wallet, pendingCoin: pending.read(`coin:${id}`) });
+      this.setData({
+        interaction: state[0], author: state[1], coinState: state[2], wallet: state[3],
+        pendingCoin: pending.read(`coin:${id}`)
+      });
       member.startReading(id).catch(() => {});
     } catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
     finally { if (round === this.memberRound) this.setData({ privateLoading: false }); }

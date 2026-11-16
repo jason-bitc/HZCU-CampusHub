@@ -7,7 +7,14 @@ function blocks(body) {
   if (/(^|\n)(?:\s*(```|~~~|>|[-*+]\s|\d+[.)]\s)|\s*\|)|!\[[^\]]*\]\[|^\s*\[[^\]]+\]:/m.test(body)) return null;
   return body.split(/\n{2,}/).filter((raw) => raw.length).map((raw, index) => ({ index, raw, caption: raw.length > 90 ? raw.slice(0, 90) + '…' : raw, kind: /^!\[[^\]]*\]\([^\n]+\)$/.test(raw.trim()) ? '图片' : '文字' }));
 }
-function moveBlock(body, index, delta) { const parts = blocks(body); if (!parts || !parts[index] || !parts[index + delta]) return body; [parts[index], parts[index + delta]] = [parts[index + delta], parts[index]]; return parts.map((part) => part.raw).join('\n\n'); }
+function moveBlock(body, index, delta) {
+  const parts = blocks(body);
+  if (!parts || !parts[index] || !parts[index + delta]) return body;
+  const source = parts[index];
+  parts[index] = parts[index + delta];
+  parts[index + delta] = source;
+  return parts.map((part) => part.raw).join('\n\n');
+}
 function removeBlock(body, index) { const parts = blocks(body); return parts && parts[index] ? parts.filter((_, i) => i !== index).map((part) => part.raw).join('\n\n') : body; }
 function publishErrors(form) {
   const errors = [];

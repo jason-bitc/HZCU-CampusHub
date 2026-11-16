@@ -7,7 +7,25 @@ Page({
   onLoad(options) { this.setData({ authorId: Number(options.id) }); access.attach(this, blank); },
   async onShow() { if (await access.enter(this)) await this.load(true); },
   onHide() { this.contactRound = (this.contactRound || 0) + 1; this.setData({ contact: null, contactLoading: false }); }, onUnload() { access.leave(this); }, login: access.login,
-  async load(reset) { if (this.data.busy) return; const epoch = this._epoch; const page = reset === true ? 1 : this.data.page + 1; this.setData({ busy: true, error: '', contact: null }); try { const [author, result] = await Promise.all([api.author(this.data.authorId), api.authorArticles(this.data.authorId, page)]); if (epoch !== this._epoch) return; this.setData({ author, articles: page === 1 ? result.items : this.data.articles.concat(result.items), total: result.total, page }); } catch (e) { if (epoch === this._epoch) this.setData(Object.assign({ error: access.errorText(e) }, e.status === 404 ? blank : {})); } finally { if (epoch === this._epoch) this.setData({ busy: false }); } },
+  async load(reset) {
+    if (this.data.busy) return;
+    const epoch = this._epoch;
+    const page = reset === true ? 1 : this.data.page + 1;
+    this.setData({ busy: true, error: '', contact: null });
+    try {
+      const result = await Promise.all([api.author(this.data.authorId), api.authorArticles(this.data.authorId, page)]);
+      if (epoch !== this._epoch) return;
+      const articles = result[1];
+      this.setData({
+        author: result[0], articles: page === 1 ? articles.items : this.data.articles.concat(articles.items),
+        total: articles.total, page
+      });
+    } catch (e) {
+      if (epoch === this._epoch) this.setData(Object.assign({ error: access.errorText(e) }, e.status === 404 ? blank : {}));
+    } finally {
+      if (epoch === this._epoch) this.setData({ busy: false });
+    }
+  },
   more() { this.load(false); },
   async contact() {
     if (this.data.contactLoading) return null;
