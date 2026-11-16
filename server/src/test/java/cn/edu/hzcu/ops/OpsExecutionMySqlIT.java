@@ -107,10 +107,15 @@ class OpsExecutionMySqlIT {
             assertThat(preview.path("affectedComponents").toString()).isEqualTo("[\"DATABASE\",\"MEDIA\",\"RELEASE\"]");
             assertThat(preview.path("verifiedFileCount").asInt()).isEqualTo(4);
             assertThat(preview.path("mediaFileCount").asInt()).isEqualTo(1);
+            assertThat(preview.path("businessSnapshotAvailable").asBoolean()).isTrue();
             assertThat(preview.toString()).doesNotContain(config.backupRoot().toString(),"database.sql");
             var restored=submitConfirmed(restoreRequest,confirmation);
             assertThat(restored.path("state").asString()).as(restored.toString()).isEqualTo("SUCCEEDED");
             assertThat(restored.path("result").path("verifiedMediaReferences").asLong()).isEqualTo(1);
+            var businessCheck = restored.path("result").path("businessVerification");
+            assertThat(businessCheck.path("status").asString()).isEqualTo("VERIFIED");
+            assertThat(businessCheck.path("checkedTables").size()).isEqualTo(8);
+            assertThat(businessCheck.toString()).doesNotContain("sha256", "rows", "ops-before-");
             var recovery = restored.path("result").path("recoveryEvidence");
             var restoreStartedAt = Instant.parse(recovery.path("restoreStartedAt").asString());
             assertThat(Instant.parse(recovery.path("backupSnapshotAt").asString())).isEqualTo(snapshotAt);
@@ -152,6 +157,19 @@ class OpsExecutionMySqlIT {
 
             Files.write(selectedImage,original);
             Files.writeString(manifestPath,unchangedManifest);
+            var inconsistentManifest = OpsStore.JSON.readTree(unchangedManifest);
+            var categoryCheckpoint = (tools.jackson.databind.node.ObjectNode) inconsistentManifest
+                    .path("businessSnapshot").path("tables").path("category");
+            categoryCheckpoint.put("sha256", "0".repeat(64));
+            OpsStore.atomic(manifestPath, OpsStore.JSON.writeValueAsBytes(inconsistentManifest));
+            var businessMismatch = job("RESTORE", backup);
+            assertThat(businessMismatch.path("state").asString()).isEqualTo("FAILED");
+            assertThat(businessMismatch.path("errorCode").asString()).isEqualTo("OPS_BUSINESS_SNAPSHOT_MISMATCH");
+            assertThat(businessMismatch.path("events").toString()).contains("VERIFYING_DATA", "ROLLBACK_VERIFIED");
+            assertThat(businessMismatch.path("result").has("recoveryEvidence")).isFalse();
+            assertThat(request("GET", "/status", null).path("healthy").asBoolean()).isTrue();
+            assertLiveRows(image, "ops-protected-");
+            Files.writeString(manifestPath,unchangedManifest);
             livePid=runningPid().path("pid").asLong();
             Files.writeString(selected.resolve("database.sql"),"broken");
             assertThat(response("POST","/confirmations",restoreRequest,409).path("code").asString()).isEqualTo("OPS_BACKUP_INVALID");
@@ -159,7 +177,7 @@ class OpsExecutionMySqlIT {
                     "referenceId",UUID.randomUUID().toString()),404).path("code").asString()).isEqualTo("OPS_BACKUP_NOT_FOUND");
             assertThat(runningPid().path("pid").asLong()).isEqualTo(livePid);
             assertThat(request("GET","/status",null).path("healthy").asBoolean()).isTrue();
-            assertThat(request("GET","/logs",null).has("taskEvents")).isTrue();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(6);
+            assertThat(request("GET","/logs",null).has("taskEvents")).isTrue();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(7);
           }
           try(var app=new OpsApplication(opsConfig(env,opsPort,businessPort,LocalTime.of(5,30)),
                 Clock.fixed(Instant.parse("2030-01-01T21:30:00Z"),ZoneOffset.UTC))){
@@ -187,20 +205,22 @@ class OpsExecutionMySqlIT {
             var manifest = OpsStore.JSON.readTree(Files.readString(saved.resolve("manifest.json")));
             assertThat(manifest.path("complete").asBoolean()).isTrue();
             assertThat(manifest.path("verifiedMediaReferences").asLong()).isEqualTo(1);
+            assertThat(manifest.path("businessSnapshot").path("version").asInt()).isEqualTo(1);
+            assertThat(manifest.path("businessSnapshot").path("tables").size()).isEqualTo(8);
             assertThat(Files.readString(saved.resolve("database.sql"))).contains("ops-protected-"+fixture);
             for (String file : List.of("database.sql","media/objects/"+image.getFileName(),"application.jar","release.json")) {
                 assertThat(manifest.path("files").path(file).asString()).isEqualTo(OpsRunner.sha(saved.resolve(file)));
             }
             stopTestBusiness();
             assertThat(request("GET","/status",null).path("healthy").asBoolean()).isFalse();
-            assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(7);
+            assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(8);
           }
         } finally {
             stopTestBusiness();
             deleteFixture();
         }
         // Tasks and results survive an independent control-plane restart; sessions deliberately do not.
-        try(var app=new OpsApplication(config)){app.start();token=null;token=request("POST","/auth/login",Map.of("login","testops","password","test-password")).path("accessToken").asString();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(7);}
+        try(var app=new OpsApplication(config)){app.start();token=null;token=request("POST","/auth/login",Map.of("login","testops","password","test-password")).path("accessToken").asString();assertThat(request("GET","/jobs",null).path("items").size()).isEqualTo(8);}
     }
     private static byte[] png(int rgb)throws Exception {
         var image=new BufferedImage(1,1,BufferedImage.TYPE_INT_RGB);
