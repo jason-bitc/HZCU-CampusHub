@@ -80,6 +80,11 @@ class OpsControlTest {
             assertThat(recovery.path("recoveryRequired").asBoolean()).isTrue();
             assertThat(recovery.path("recoveryIncident").path("protectionBackupId").asString()).isEqualTo("handoff-backup");
             assertThat(recovery.path("recoveryIncident").path("errorCode").asString()).isEqualTo("EXECUTOR_INTERRUPTED");
+            var logUri = URI.create(base+"/logs?errorsOnly=true");
+            assertThat(http.send(HttpRequest.newBuilder(logUri).GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(401);
+            var logs = http.send(HttpRequest.newBuilder(logUri).header("Authorization","Bearer "+token).GET().build(),HttpResponse.BodyHandlers.ofString());
+            assertThat(logs.statusCode()).isEqualTo(200);
+            assertThat(OpsStore.JSON.readTree(logs.body()).path("data").path("businessRequests").isEmpty()).isTrue();
             assertThat(http.send(HttpRequest.newBuilder(URI.create(base+"/jobs")).header("Authorization","Bearer "+token).header("Origin","https://evil.example").GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(403);
             http.send(HttpRequest.newBuilder(URI.create(base+"/auth/logout")).header("Authorization","Bearer "+token).POST(HttpRequest.BodyPublishers.noBody()).build(),HttpResponse.BodyHandlers.ofString());assertThat(http.send(request,HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(401);
         }

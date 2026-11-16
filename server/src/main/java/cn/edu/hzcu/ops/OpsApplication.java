@@ -44,8 +44,9 @@ public final class OpsApplication implements AutoCloseable {
     private static void method(HttpExchange e,String expected){if(!e.getRequestMethod().equals(expected))throw new Failure(405,"METHOD_NOT_ALLOWED");}
     private static void empty(HttpExchange e)throws IOException {if(e.getRequestBody().read()!=-1)throw new Failure(400,"INVALID_PARAMETER");}
     private Object dispatch(HttpExchange e)throws Exception {
-        if(e.getRequestURI().getRawQuery()!=null)throw new Failure(400,"INVALID_PARAMETER");
         String path=e.getRequestURI().getPath();
+        String query=e.getRequestURI().getRawQuery();
+        if(query!=null&&!path.equals("/api/v1/ops/logs"))throw new Failure(400,"INVALID_PARAMETER");
         if(path.equals("/health")){method(e,"GET");empty(e);return Map.of("status","UP","actorDomain","OPS_ADMIN");}
         if(path.equals("/api/v1/ops/auth/login")){
             method(e,"POST");var n=body(e,"login","password");return auth.login(text(n,"login"),text(n,"password"));
@@ -57,7 +58,7 @@ public final class OpsApplication implements AutoCloseable {
         if(path.equals("/api/v1/ops/status")){method(e,"GET");empty(e);return status();}
         if(path.equals("/api/v1/ops/artifacts")){method(e,"GET");empty(e);return Map.of("items",runner.artifacts());}
         if(path.equals("/api/v1/ops/backups")){method(e,"GET");empty(e);return Map.of("items",runner.backups());}
-        if(path.equals("/api/v1/ops/logs")){method(e,"GET");empty(e);return logs();}
+        if(path.equals("/api/v1/ops/logs")){method(e,"GET");empty(e);return logs(OpsLogReader.parseQuery(query));}
         if(path.equals("/api/v1/ops/confirmations")){
             method(e,"POST");
             var n=body(e,"action","target","referenceId");
@@ -87,13 +88,20 @@ public final class OpsApplication implements AutoCloseable {
         result.put("dailyBackup",schedule);
         return result;
     }
-    private Object logs()throws IOException {
-        var events=new ArrayList<Object>();for(var job:jobs.list())for(var event:job.path("events"))events.add(Map.of("jobId",job.path("id").asString(),"phase",event.path("phase").asString(),"occurredAt",event.path("occurredAt").asString()));
-        var requests=new ArrayList<Object>();Path path=config.runtimeRoot().resolve(".local-data/logs/campushub-runtime.log");
-        if(Files.isRegularFile(path)&&Files.size(path)<=20*1024*1024){OpsStore.rejectLinks(path);try(var lines=Files.lines(path)){var recent=lines.filter(s->s.contains("event=REQUEST")).toList();for(String line:recent.subList(Math.max(0,recent.size()-100),recent.size())){
-            var safe=new LinkedHashMap<String,String>();var m=java.util.regex.Pattern.compile("(?<![A-Za-z])(traceId|action|status|code|durationMs|module)=([A-Za-z0-9_-]{1,64})(?= |$)").matcher(line);while(m.find())safe.put(m.group(1),m.group(2));if(!safe.isEmpty())requests.add(safe);
-        }}}
-        return Map.of("taskEvents",events.subList(Math.max(0,events.size()-200),events.size()),"businessRequests",requests);
+    private Object logs(OpsLogReader.Query query) {
+        var events = new ArrayList<Object>();
+        for (var job : jobs.list()) {
+            var phases = job.path("events");
+            for (int i = phases.size() - 1; i >= 0 && events.size() < 200; i--) {
+                var phase = phases.get(i);
+                events.add(Map.of("jobId", job.path("id").asString(), "phase", phase.path("phase").asString(),
+                        "occurredAt", phase.path("occurredAt").asString()));
+            }
+            if (events.size() == 200) break;
+        }
+        Collections.reverse(events);
+        var business = OpsLogReader.read(config.runtimeRoot().resolve(".local-data/logs"), query);
+        return Map.of("taskEvents",events,"businessRequests",business.requests(),"businessLogCoverage",business.coverage());
     }
     private void handle(HttpExchange e)throws IOException {
         String trace=UUID.randomUUID().toString();int status=200;String code="OK";Object data=null;

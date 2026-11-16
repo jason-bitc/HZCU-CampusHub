@@ -87,6 +87,8 @@ HTTP请求traceId可在business_audit与文件请求日志间关联；框架直�
 
 ## 按traceId排查
 
+运维管理员也可在独立运维入口按追踪编号查当前和轮转日志中的业务请求摘要。查询参数和扫描范围见[运维接口手册](OPS_API.md#错误日志查询)。
+
 1. 保存响应头X-Trace-Id（JSON同名字段traceId）。本机用 `Select-String -LiteralPath .local-data/logs/campushub-runtime.log -SimpleMatch '<实际traceId>'` 检索；轮转后按实际存档文件检索。不要粘贴正文、密码或令牌作为检索词。
 2. 看action、module、status、code、stage及已有内部ID。成功变更可在有数据库维护权限的本机环境以**绑定参数**查询business_audit的trace_id，核对SUCCESS及前后修订；文件事件不代替数据库提交证据，没有面向普通用户的审计接口。
 3. 5xx且需要代码位置时开启本地诊断、重现一次受控问题，按相同traceId查诊断文件，再关闭并重启。无诊断文件先检查有效开关和文件健康，勿直接开启SQL参数或HTTP正文日志。
