@@ -1,6 +1,16 @@
+<script lang="ts">
+let readingOrigin: { path: string; id: string; top: number } | undefined;
+</script>
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import type { LocationQueryRaw } from "vue-router";
 import { get, message } from "../lib/api";
 import type { Article, Catalog, Page, Profile } from "../types";
@@ -16,15 +26,31 @@ const busy = ref(false);
 const error = ref("");
 const profileBusy = ref(false);
 const profileError = ref("");
-const keyword = ref("");
+const keyword = ref(selected("keyword"));
+const catalogError = ref("");
+const resultHeading = ref<HTMLElement>();
+const filtersOpen = ref(false);
 let generation = 0;
 let profileGeneration = 0;
+let revealPage = false;
 const groups = [
   { key: "jobs", param: "jobId", label: "目标岗位" },
   { key: "majors", param: "majorId", label: "文章适用专业" },
   { key: "companies", param: "companyId", label: "公司" },
   { key: "topics", param: "topicId", label: "主题" },
 ] as const;
+const applied = computed(() => {
+  const search = selected("keyword");
+  const filters = search ? [{ param: "keyword", text: `搜索 ${search}` }] : [];
+  for (const { key, param, label } of groups) {
+    const id = selected(param);
+    if (id) {
+      const match = catalog.value?.[key].find((item) => String(item.id) === id);
+      filters.push({ param, text: `${label} ${match?.name ?? "已选"}` });
+    }
+  }
+  return filters;
+});
 function selected(key: string) {
   const value = route.query[key];
   return typeof value === "string" ? value : "";
@@ -36,13 +62,30 @@ function change(key: string, value: string) {
   void router.push({ path: "/", query });
 }
 function search() {
-  change("keyword", keyword.value.trim());
+  keyword.value = keyword.value.trim();
+  change("keyword", keyword.value);
+}
+function clearFilters() {
+  keyword.value = "";
+  const sort = selected("sort");
+  void router.push({ path: "/", query: sort ? { sort } : {} });
+}
+async function loadCatalog() {
+  catalogError.value = "";
+  try {
+    catalog.value = await get<Catalog>("/catalog");
+  } catch {
+    catalogError.value = "筛选选项暂时无法加载。";
+  }
+}
+function changePage(page: number) {
+  revealPage = true;
+  change("page", String(page));
 }
 async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  keyword.value = selected("keyword");
   const params = new URLSearchParams({
     size: "10",
     page: selected("page") || "1",
@@ -53,18 +96,31 @@ async function load() {
     if (value) params.set(key, value);
   }
   try {
-    const [c, r] = await Promise.all([
-      catalog.value || get<Catalog>("/catalog"),
-      get<Page<Article>>(`/articles?${params}`),
-    ]);
+    const r = await get<Page<Article>>(`/articles?${params}`);
     if (current === generation) {
-      catalog.value = c;
       result.value = r;
     }
   } catch (e) {
     if (current === generation) error.value = message(e);
   } finally {
-    if (current === generation) busy.value = false;
+    if (current === generation) {
+      busy.value = false;
+      await nextTick();
+      if (current !== generation) return;
+      if (revealPage) {
+        revealPage = false;
+        resultHeading.value?.focus();
+        resultHeading.value?.scrollIntoView({ block: "start" });
+      } else if (!error.value && readingOrigin?.path === route.fullPath) {
+        const origin = readingOrigin;
+        readingOrigin = undefined;
+        const card = document.getElementById(`experience-${origin.id}`);
+        if (card) {
+          window.scrollBy(0, card.getBoundingClientRect().top - origin.top);
+          card.querySelector("a")?.focus({ preventScroll: true });
+        }
+      }
+    }
   }
 }
 async function loadOwnMajor() {
@@ -99,11 +155,37 @@ function useSameMajor() {
     profileError.value = "本人专业当前不在可筛选分类中，请手动选择。";
     return;
   }
-  change("majorId", String(majorId));
+  change(
+    "majorId",
+    selected("majorId") === String(majorId) ? "" : String(majorId),
+  );
 }
+onBeforeRouteLeave((to, from) => {
+  const id = /^\/articles\/(\d+)$/.exec(to.path)?.[1];
+  const card =
+    id && to.query.from === from.fullPath
+      ? document.getElementById(`experience-${id}`)
+      : undefined;
+  readingOrigin =
+    id && card
+      ? { id, path: from.fullPath, top: card.getBoundingClientRect().top }
+      : undefined;
+});
 onMounted(load);
+onMounted(loadCatalog);
 onMounted(loadOwnMajor);
-watch(() => route.query, load);
+watch(
+  () => route.path === "/" && route.query.keyword,
+  () => {
+    if (route.path === "/") keyword.value = selected("keyword");
+  },
+);
+watch(
+  () => route.query,
+  () => {
+    if (route.path === "/") void load();
+  },
+);
 watch(() => session.status, loadOwnMajor);
 onBeforeUnmount(() => {
   generation += 1;
@@ -112,10 +194,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="page-heading">
-    <div>
-      <h1>按目标岗位，找到适合自己的经验</h1>
-      <p>从相似的起点出发，看看准备、投递与复盘。</p>
-    </div>
+    <h1>发现经验</h1>
   </div>
   <div class="discovery-layout discovery-single">
     <div>
@@ -132,39 +211,51 @@ onBeforeUnmount(() => {
                 id="search"
                 v-model="keyword"
                 type="search"
+                maxlength="100"
                 placeholder="搜索文章标题或摘要"
               />
               <button class="primary" type="submit">搜索</button>
             </div>
           </form>
-          <FilterSelect
-            v-for="group in groups"
-            :key="group.key"
-            :label="group.label"
-            :model-value="selected(group.param)"
-            :options="catalog?.[group.key] ?? []"
-            @update:model-value="change(group.param, $event)"
-          />
+          <button
+            class="mobile-filter-toggle"
+            :aria-expanded="filtersOpen"
+            aria-controls="catalog-filters"
+            @click="filtersOpen = !filtersOpen"
+          >
+            {{ filtersOpen ? "收起组合筛选" : "组合筛选" }}
+          </button>
+          <div
+            id="catalog-filters"
+            class="catalog-filters"
+            :class="{ 'catalog-filters-open': filtersOpen }"
+          >
+            <FilterSelect
+              v-for="group in groups"
+              :key="group.key"
+              :label="group.label"
+              :model-value="selected(group.param)"
+              :options="catalog?.[group.key] ?? []"
+              @update:model-value="change(group.param, $event)"
+            />
+          </div>
         </div>
+        <p v-if="catalogError" class="hint" role="status">
+          {{ catalogError }}
+          <button class="text-button" @click="loadCatalog">重试分类</button>
+        </p>
         <div class="filter-footer">
           <div class="same-major">
-            <p v-if="session.status !== 'ready'">
-              登录后可按本人专业快速筛选，也可手动选择。
-            </p>
-            <p v-else-if="profileBusy">正在读取本人专业…</p>
-            <p v-else-if="profileError">本人专业暂不可用，可重试或手动选择。</p>
-            <p v-else-if="!profile?.majorId">本人资料尚未填写专业。</p>
-            <p v-else>按本人专业筛选适用经验。</p>
             <button
               v-if="session.status !== 'ready'"
               :disabled="session.status === 'checking'"
               @click="useSameMajor"
             >
-              登录后使用同专业
+              登录后筛同专业
             </button>
-            <button v-else-if="profileBusy" disabled>正在读取</button>
+            <button v-else-if="profileBusy" disabled>正在读取专业</button>
             <button v-else-if="profileError" @click="loadOwnMajor">
-              重试读取
+              重试读取本人专业
             </button>
             <RouterLink v-else-if="!profile?.majorId" class="button" to="/me">
               完善本人专业
@@ -178,15 +269,33 @@ onBeforeUnmount(() => {
             </button>
           </div>
           <button
+            v-if="applied.length"
             class="text-button clear-filters"
-            :disabled="!Object.keys(route.query).length"
-            @click="router.push('/')"
+            @click="clearFilters"
           >
             清除所有条件
           </button>
         </div>
+        <ul
+          v-if="applied.length"
+          class="applied-filters"
+          aria-label="已应用的条件"
+        >
+          <li v-for="filter in applied" :key="filter.param">
+            <button
+              type="button"
+              :aria-label="`移除 ${filter.text}`"
+              @click="change(filter.param, '')"
+            >
+              {{ filter.text }}
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="m4 4 8 8m0-8-8 8" />
+              </svg>
+            </button>
+          </li>
+        </ul>
       </section>
-      <div class="result-heading">
+      <div ref="resultHeading" class="result-heading" tabindex="-1">
         <span class="result-count" aria-live="polite">{{
           busy
             ? "正在查找经验…"
@@ -242,7 +351,7 @@ onBeforeUnmount(() => {
           </svg>
           <h2>当前条件下还没有经验</h2>
           <p>可以减少筛选条件，或清除条件重新查找。</p>
-          <button @click="router.push('/')">清除条件</button>
+          <button v-if="applied.length" @click="clearFilters">清除条件</button>
         </section></template
       >
       <div v-else class="loading-list" role="status">
@@ -265,7 +374,7 @@ onBeforeUnmount(() => {
       >
         <button
           :disabled="result.page <= 1"
-          @click="change('page', String(result.page - 1))"
+          @click="changePage(result.page - 1)"
         >
           上一页</button
         ><span
@@ -273,7 +382,7 @@ onBeforeUnmount(() => {
           {{ Math.ceil(result.total / result.size) }} 页</span
         ><button
           :disabled="result.page * result.size >= result.total"
-          @click="change('page', String(result.page + 1))"
+          @click="changePage(result.page + 1)"
         >
           下一页
         </button>

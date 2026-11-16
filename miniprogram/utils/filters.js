@@ -42,17 +42,8 @@ function selectedFilterNames(filters, catalog) {
   }));
 }
 
-function filterSummary(filters, catalog) {
-  const majorId = Number(filters.majorId) || 0;
-  const companyId = Number(filters.companyId) || 0;
-  return {
-    majorText: majorId ? categoryName(catalog, 'majors', majorId) : '不限',
-    companyText: companyId ? categoryName(catalog, 'companies', companyId) : '不限'
-  };
-}
-
 function catalogReady(catalog) {
   return catalog && ['jobs', 'majors', 'companies', 'topics'].every((key) => Array.isArray(catalog[key]));
 }
 
-module.exports = { DEFINITIONS, emptyFilters, activeFilterChips, selectedFilterNames, filterSummary, catalogReady, categoryName };
+module.exports = { DEFINITIONS, emptyFilters, activeFilterChips, selectedFilterNames, catalogReady, categoryName };

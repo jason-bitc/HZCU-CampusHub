@@ -45,6 +45,7 @@ const route = useRoute();
 const id = String(route.params.id);
 const form = ref<Form>();
 const draft = ref<Draft>();
+const showReadingPreview = ref(false);
 const catalog = ref<Catalog>();
 const revision = ref(0);
 const saved = ref("");
@@ -572,15 +573,29 @@ onBeforeRouteLeave(() => {
             >标题<input
               v-model="form.title"
               maxlength="200"
-              placeholder="为这段经历起一个具体的标题" /></label
-          ><label
-            >摘要<textarea
-              v-model="form.summary"
-              rows="2"
-              maxlength="1000"
-              placeholder="可选：让读者了解这篇经验适合什么起点"
-            ></textarea>
-          </label>
+              placeholder="为这段经历起一个具体的标题"
+          /></label>
+        </fieldset>
+        <div class="writing-switch segmented" aria-label="切换正文编辑和预览">
+          <button
+            type="button"
+            :aria-pressed="!showReadingPreview"
+            @click="showReadingPreview = false"
+          >
+            写正文
+          </button>
+          <button
+            type="button"
+            :aria-pressed="showReadingPreview"
+            @click="showReadingPreview = true"
+          >
+            看预览
+          </button>
+        </div>
+        <fieldset
+          :disabled="locked"
+          :class="{ 'writing-preview-only': showReadingPreview }"
+        >
           <div class="editor-tools" aria-label="Markdown 工具">
             <button type="button" @click="insert('## ')">标题</button
             ><button type="button" @click="insert('**', '**')">加粗</button
@@ -610,7 +625,12 @@ onBeforeRouteLeave(() => {
           {{ pendingUpload.name }}
           上传结果待确认。请重新选择相同原图，沿用原请求重试。
         </p>
-        <div class="writing-grid">
+        <div
+          class="writing-grid"
+          :class="
+            showReadingPreview ? 'writing-preview-only' : 'writing-source-only'
+          "
+        >
           <label class="source-editor"
             >Markdown 编辑<textarea
               ref="bodyInput"
@@ -633,6 +653,14 @@ onBeforeRouteLeave(() => {
         <section class="panel">
           <h2>发布信息</h2>
           <fieldset :disabled="locked">
+            <label
+              >摘要<textarea
+                v-model="form.summary"
+                rows="2"
+                maxlength="1000"
+                placeholder="可选，让读者了解这篇经验适合什么起点"
+              ></textarea>
+            </label>
             <fieldset
               v-for="group in tagGroups"
               :key="group.field"

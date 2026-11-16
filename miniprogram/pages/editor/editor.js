@@ -13,7 +13,7 @@ const tagFields = [
   { name: 'topics', field: 'topicIds', label: '主题（可选）' }
 ];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
-const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false };
+const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false, detailsOpen: false, publishIssues: [] };
 Page({
   data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, webHandoff: !!config.webBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
   onLoad(options) {
@@ -122,7 +122,22 @@ Page({
   copy() { if (this.data.form) wx.setClipboardData({ data: JSON.stringify(this.data.form, null, 2) }); },
   copyBody() { if (this.data.form) wx.setClipboardData({ data: this.data.form.body }); },
   copyRecovery() { if (this.data.recovery) wx.setClipboardData({ data: JSON.stringify(this.data.recovery.form, null, 2) }); },
-  preview() { if (!this.data.form || this.data.busy) return; this.setData({ preview: !this.data.preview }); },
+  preview() {
+    if (!this.data.form || this.data.busy) return;
+    const preview = !this.data.preview;
+    const publishIssues = preview && !this.data.readOnly ? content.publishErrors(this.data.form) : [];
+    if (preview && this.data.uploads.some((file) => file.state !== 'done')) publishIssues.push('处理尚未上传成功的图片');
+    this.setData({ preview, publishIssues }, () => wx.pageScrollTo({ scrollTop: 0, duration: 0 }));
+  },
+  toggleDetails() { this.setData({ detailsOpen: !this.data.detailsOpen }); },
+  completePublishDetails() {
+    const form = this.data.form;
+    if (!form) return;
+    const bodyMissing = !form.title.trim() || !form.body.trim();
+    const imageMissing = this.data.uploads.some((file) => file.state !== 'done');
+    const target = bodyMissing ? '#draft-writing' : imageMissing ? '#draft-images' : '#publish-details';
+    this.setData({ preview: false, detailsOpen: true }, () => wx.pageScrollTo({ selector: target, duration: 0 }));
+  },
   drawer(e) { this.setData({ tocDrawerVisible: e.detail.visible }); },
   previewSources() { wx.createSelectorQuery().select('#preview-sources').boundingClientRect((rect) => { if (rect) wx.createSelectorQuery().selectViewport().scrollOffset((view) => { if (view) wx.pageScrollTo({ scrollTop: view.scrollTop + rect.top - 20, duration: 200 }); }).exec(); }).exec(); },
   requestPublish() {

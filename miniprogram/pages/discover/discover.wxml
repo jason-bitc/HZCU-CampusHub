@@ -23,29 +23,20 @@
       </view>
     </scroll-view>
 
-    <view class="condition-summary">
-      <view class="summary-major">
-        <text class="summary-label">专业：</text>
-        <button wx:if="{{filters.majorId}}" class="summary-value pressable" bindtap="clearMajorSummary">{{filterSummary.majorText}} ×</button>
-        <text wx:else class="summary-placeholder">{{filterSummary.majorText}}</text>
-      </view>
-      <button class="summary-company pressable" bindtap="openFilter">
-        <text>公司{{filterSummary.companyText}}</text>
-        <app-icon name="chevron-right" size="26" />
-      </button>
-    </view>
     <view class="filter-toolbar">
       <button class="filter-entry pressable" bindtap="openFilter"><app-icon name="filter" size="30" /><text>组合筛选</text></button>
-      <text wx:if="{{listStatus === 'ready' || listStatus === 'empty'}}" class="result-count">共 {{total}} 篇经验</text>
+      <button wx:if="{{signedIn && ownMajorId}}" class="same-major-entry {{filters.majorId === ownMajorId ? 'same-major-active' : ''}} pressable" bindtap="toggleSameMajor">{{filters.majorId === ownMajorId ? '已筛选同专业' : '只看同专业'}}</button>
+      <button wx:if="{{chips.length || filters.jobId}}" class="clear-conditions pressable" bindtap="resetFilters">清除条件</button>
     </view>
     <view wx:if="{{chips.length}}" class="extra-conditions">
-      <button wx:for="{{chips}}" wx:key="key" class="extra-chip pressable" data-key="{{item.key}}" bindtap="clearChip">{{item.label}} ×</button>
+      <button wx:for="{{chips}}" wx:key="key" class="extra-chip pressable" data-key="{{item.key}}" bindtap="clearChip" aria-label="移除{{item.label}}">{{item.label}} <app-icon name="close" size="22" /></button>
     </view>
     <button wx:if="{{catalogError}}" class="catalog-warning" bindtap="loadCatalog">分类加载失败，筛选选项可能不完整。点击重试。</button>
 
     <view class="sort-row" role="tablist">
-      <button class="sort-tab {{sort === 'recognized' ? 'sort-active' : ''}}" data-sort="recognized" bindtap="selectSort" role="tab">认可优先</button>
-      <button class="sort-tab {{sort === 'latest' ? 'sort-active' : ''}}" data-sort="latest" bindtap="selectSort" role="tab">最新发布</button>
+      <button class="sort-tab {{sort === 'recognized' ? 'sort-active' : ''}}" data-sort="recognized" bindtap="selectSort" role="tab" aria-selected="{{sort === 'recognized'}}">认可优先</button>
+      <button class="sort-tab {{sort === 'latest' ? 'sort-active' : ''}}" data-sort="latest" bindtap="selectSort" role="tab" aria-selected="{{sort === 'latest'}}">最新发布</button>
+      <text wx:if="{{listStatus === 'ready' || listStatus === 'empty'}}" class="result-count">共 {{total}} 篇经验</text>
     </view>
 
     <page-state wx:if="{{listStatus === 'loading'}}" status="loading" title="正在加载公开经验" description="正在按当前条件查询，请稍候。" />

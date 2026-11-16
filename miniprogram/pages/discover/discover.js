@@ -1,7 +1,7 @@
 const config = require('../../config/env');
 const articlesApi = require('../../services/articles');
 const { createRequestGate } = require('../../utils/request-gate');
-const { emptyFilters, activeFilterChips, filterSummary } = require('../../utils/filters');
+const { emptyFilters, activeFilterChips } = require('../../utils/filters');
 const { cleanKeyword, validateKeyword, buildArticleQuery, mergeUniqueArticles } = require('../../utils/query');
 const session = require('../../services/session');
 const member = require('../../services/member');
@@ -16,7 +16,6 @@ Page({
     catalogError: '',
     catalogLoading: true,
     chips: [],
-    filterSummary: { majorText: '不限', companyText: '不限' },
     articles: [],
     listStatus: 'loading',
     errorMessage: '',
@@ -94,8 +93,8 @@ Page({
 
   syncFilterPresentation(filters) {
     const current = filters || this.data.filters;
-    const chips = activeFilterChips(current, this.data.catalog).filter((item) => item.key === 'keyword' || item.key === 'topicId');
-    this.setData({ chips, filterSummary: filterSummary(current, this.data.catalog) });
+    const chips = activeFilterChips(current, this.data.catalog).filter((item) => item.key !== 'jobId');
+    this.setData({ chips });
   },
 
   setListTitle(status) {
@@ -197,7 +196,8 @@ Page({
       return;
     }
     const next = Object.assign(emptyFilters(), filters, { keyword: cleanKeyword(filters.keyword) });
-    this.setData({ filters: next, keywordInput: next.keyword });
+    const keywordInput = next.keyword === this.data.filters.keyword ? this.data.keywordInput : next.keyword;
+    this.setData({ filters: next, keywordInput });
     this.syncFilterPresentation(next);
     wx.pageScrollTo({ scrollTop: 0, duration: 0 });
     this.fetchArticles(true);
@@ -208,10 +208,13 @@ Page({
   },
 
   submitSearch() {
-    this.updateFilters(Object.assign({}, this.data.filters, { keyword: this.data.keywordInput }));
+    const keyword = cleanKeyword(this.data.keywordInput);
+    this.setData({ keywordInput: keyword });
+    this.updateFilters(Object.assign({}, this.data.filters, { keyword }));
   },
 
   clearSearch() {
+    this.setData({ keywordInput: '' });
     this.updateFilters(Object.assign({}, this.data.filters, { keyword: '' }));
   },
 
@@ -251,17 +254,21 @@ Page({
     this.updateFilters(event.detail.filters);
   },
 
-  clearMajorSummary() {
-    this.updateFilters(Object.assign({}, this.data.filters, { majorId: 0 }));
+  toggleSameMajor() {
+    const own = this.data.ownMajorId;
+    if (!own || !this.data.catalog.majors.some((item) => item.id === own)) return;
+    this.updateFilters(Object.assign({}, this.data.filters, { majorId: this.data.filters.majorId === own ? 0 : own }));
   },
 
   clearChip(event) {
     const key = event.currentTarget.dataset.key;
-    const patch = key === 'keyword' ? { keyword: '' } : { [key]: 0 };
+    if (key === 'keyword') { this.clearSearch(); return; }
+    const patch = { [key]: 0 };
     this.updateFilters(Object.assign({}, this.data.filters, patch));
   },
 
   resetFilters() {
+    this.setData({ keywordInput: '' });
     this.updateFilters(emptyFilters());
   },
 

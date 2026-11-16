@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import MarkdownIt from "markdown-it";
 import DOMPurify from "dompurify";
 import { message, request } from "../lib/api";
@@ -19,6 +19,9 @@ const props = withDefaults(
 const urls = ref<Record<string, string>>({});
 const error = ref("");
 const tocOpen = ref(false);
+const tocButton = ref<HTMLButtonElement>();
+const tocPanel = ref<HTMLElement>();
+const bodyElement = ref<HTMLElement>();
 let generation = 0;
 const md = new MarkdownIt({ html: false, linkify: false, breaks: false });
 md.renderer.rules.link_open = (tokens, index, options, _env, renderer) => {
@@ -120,37 +123,64 @@ onBeforeUnmount(() => {
   generation += 1;
   release();
 });
-function jump(id: string) {
-  document
-    .getElementById(id)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+function closeToc() {
   tocOpen.value = false;
+  tocButton.value?.focus({ preventScroll: true });
+}
+async function toggleToc() {
+  if (tocOpen.value) {
+    closeToc();
+    return;
+  }
+  tocOpen.value = true;
+  await nextTick();
+  tocPanel.value?.querySelector("button")?.focus({ preventScroll: true });
+}
+function jump(id: string) {
+  const heading = bodyElement.value?.querySelector<HTMLElement>(`#${id}`);
+  tocOpen.value = false;
+  if (!heading) return;
+  heading.tabIndex = -1;
+  heading.focus({ preventScroll: true });
+  heading.scrollIntoView({ block: "start" });
 }
 </script>
 <template>
   <div class="markdown-shell">
-    <button
+    <div
       v-if="toc && headings.length"
-      class="toc-trigger"
-      :aria-expanded="tocOpen"
-      aria-controls="reading-toc"
-      @click="tocOpen = !tocOpen"
+      class="toc-tools"
+      @keydown.esc.stop.prevent="closeToc"
     >
-      目录
-    </button>
-    <aside v-if="tocOpen" id="reading-toc" class="toc-panel">
-      <h2>文章目录</h2>
       <button
-        v-for="h in headings"
-        :key="h.id"
-        class="toc-item"
-        :style="{ paddingLeft: `${(h.level - 1) * 10 + 12}px` }"
-        @click="jump(h.id)"
+        ref="tocButton"
+        class="toc-trigger"
+        :aria-expanded="tocOpen"
+        aria-controls="reading-toc"
+        @click="toggleToc"
       >
-        {{ h.text }}</button
-      ><button class="text-button" @click="tocOpen = false">收起目录</button>
-    </aside>
-    <div class="markdown" v-html="html"></div>
+        目录
+      </button>
+      <nav
+        v-show="tocOpen"
+        id="reading-toc"
+        ref="tocPanel"
+        class="toc-panel"
+        aria-label="文章目录"
+      >
+        <h2>文章目录</h2>
+        <button
+          v-for="h in headings"
+          :key="h.id"
+          class="toc-item"
+          :style="{ paddingLeft: `${(h.level - 1) * 10 + 12}px` }"
+          @click="jump(h.id)"
+        >
+          {{ h.text }}</button
+        ><button class="text-button" @click="closeToc">收起目录</button>
+      </nav>
+    </div>
+    <div ref="bodyElement" class="markdown" v-html="html"></div>
     <p v-if="error" class="error" role="alert">
       {{ error }} <button @click="loadImages">重新读取图片</button>
     </p>

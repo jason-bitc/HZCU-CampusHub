@@ -33,7 +33,11 @@ function open(event: MouseEvent) {
 }
 </script>
 <template>
-  <article class="article-card panel" @click="open">
+  <article
+    :id="backTo ? `experience-${article.id}` : undefined"
+    class="article-card panel"
+    @click="open"
+  >
     <div class="article-card-heading">
       <h2>
         <RouterLink :to="destination">{{ article.title }}</RouterLink>
