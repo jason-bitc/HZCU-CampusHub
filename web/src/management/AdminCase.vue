@@ -12,6 +12,7 @@ import { caseStates, outcomes } from "./types";
 import type { CaseDetail, CaseContext, CaseCommand } from "./types";
 import { exampleCase, exampleContext } from "./examples";
 import AdminGate from "./AdminGate.vue";
+import CaseContributions from "./CaseContributions.vue";
 import MarkdownView from "../components/MarkdownView.vue";
 import { dateText } from "../lib/content";
 import { message } from "../lib/api";
@@ -306,12 +307,6 @@ onBeforeUnmount(() => {
             <img :src="url" alt="本案授权图片" />
           </figure>
         </div>
-        <RouterLink
-          v-if="context.article?.currentState === 'PUBLISHED' && !preview"
-          class="button console-object-link"
-          :to="`/articles/${context.article.articleId}`"
-          >查看当前公开对象</RouterLink
-        ><button v-else class="console-object-link" disabled>查看原对象</button>
       </section>
       <form
         class="console-panel console-decision"
@@ -400,6 +395,15 @@ onBeforeUnmount(() => {
     <p v-if="preview" class="console-note console-followup">
       处置后公开列表、正文、收藏与通知按目标状态一致展示。治理记录保留，不因作者删除内容而抹除。
     </p>
+    <CaseContributions
+      v-if="
+        detail?.kind === 'REPORT' && detail.targetType === 'ARTICLE' && !preview
+      "
+      :key="id"
+      :case-id="id"
+      :revision="detail.revision"
+      :can-handle="canHandle"
+    />
     <section v-if="detail && !preview" class="console-panel console-history">
       <h2>处理时间线</h2>
       <ol>

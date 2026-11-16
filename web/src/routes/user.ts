@@ -6,6 +6,10 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("../pages/ArticlePage.vue"),
   },
   { path: "/account", component: () => import("../pages/AccountPage.vue") },
+  {
+    path: "/authors/:id(\\d+)",
+    component: () => import("../pages/AuthorPage.vue"),
+  },
   { path: "/workspace", component: () => import("../pages/WorkspacePage.vue") },
   {
     path: "/editor/:id(\\d+)",

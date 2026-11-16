@@ -1,69 +1,149 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { get, message, send } from "../lib/api";
+import { ApiError, get, message, send } from "../lib/api";
 import { session } from "../lib/session";
 import { dateText, safeLink, sourceName } from "../lib/content";
-import type { Detail } from "../types";
+import type { AuthorSummary, Detail } from "../types";
 import MarkdownView from "../components/MarkdownView.vue";
+import AuthorHonor from "../components/AuthorHonor.vue";
+import ArticleCoins from "../components/ArticleCoins.vue";
+import ArticleComments from "../components/ArticleComments.vue";
 const route = useRoute();
+const articleId = computed(() => Number(route.params.id));
+const discovery = computed(() => {
+  const from = route.query.from;
+  return typeof from === "string" && /^\/(?:\?[^#]*)?$/.test(from) ? from : "/";
+});
 const article = ref<Detail>();
 const error = ref("");
 const actionError = ref("");
 const busy = ref(false);
 const interaction = ref<{ liked: boolean; favorited: boolean }>();
+const author = ref<AuthorSummary>();
+const authorError = ref("");
+const authorLoading = ref(false);
+const countError = ref("");
 const acting = ref(false);
+let generation = 0;
+let interactionGeneration = 0;
 async function load() {
+  const current = ++generation;
+  const id = articleId.value;
+  article.value = undefined;
+  interaction.value = undefined;
+  actionError.value = "";
+  countError.value = "";
+  acting.value = false;
   busy.value = true;
   error.value = "";
   try {
-    article.value = await get<Detail>(`/articles/${route.params.id}`);
-    await loadInteraction();
+    const value = await get<Detail>(`/articles/${id}`);
+    if (current !== generation) return;
+    article.value = value;
+    void loadInteraction();
+    void loadAuthor();
   } catch (e) {
-    error.value = message(e);
+    if (current === generation) error.value = message(e);
   } finally {
-    busy.value = false;
+    if (current === generation) busy.value = false;
+  }
+}
+async function loadAuthor() {
+  const current = generation;
+  const epoch = session.epoch;
+  author.value = undefined;
+  authorError.value = "";
+  authorLoading.value = false;
+  if (session.status !== "ready" || !article.value) return;
+  authorLoading.value = true;
+  try {
+    const value = await get<AuthorSummary>(
+      `/articles/${articleId.value}/author`,
+      true,
+    );
+    if (current === generation && epoch === session.epoch) author.value = value;
+  } catch (e) {
+    if (
+      current === generation &&
+      epoch === session.epoch &&
+      !(e instanceof ApiError && e.status === 404)
+    )
+      authorError.value = message(e);
+  } finally {
+    if (current === generation && epoch === session.epoch)
+      authorLoading.value = false;
+  }
+}
+async function refreshCoinCount() {
+  const current = generation;
+  countError.value = "";
+  try {
+    const value = await get<Detail>(`/articles/${articleId.value}`);
+    if (current === generation && article.value)
+      article.value.counts.effectiveCoins = value.counts.effectiveCoins;
+  } catch (e) {
+    if (current === generation) countError.value = message(e);
   }
 }
 async function loadInteraction() {
-  if (session.status !== "ready") {
-    interaction.value = undefined;
-    return;
-  }
+  const current = generation;
+  const read = ++interactionGeneration;
+  interaction.value = undefined;
+  actionError.value = "";
+  if (session.status !== "ready" || !article.value) return;
   try {
-    interaction.value = await get(
-      `/articles/${route.params.id}/interaction-state`,
+    const value = await get<NonNullable<typeof interaction.value>>(
+      `/articles/${articleId.value}/interaction-state`,
       true,
     );
+    if (current === generation && read === interactionGeneration)
+      interaction.value = value;
   } catch (e) {
-    actionError.value = message(e);
+    if (current === generation && read === interactionGeneration)
+      actionError.value = message(e);
   }
 }
 async function toggle(kind: "like" | "favorite") {
-  if (!interaction.value) return;
+  if (!interaction.value || acting.value) return;
+  const current = generation;
+  const epoch = session.epoch;
+  const id = articleId.value;
   acting.value = true;
   actionError.value = "";
   try {
     const active =
       kind === "like" ? !interaction.value.liked : !interaction.value.favorited;
-    await send(
-      `/articles/${route.params.id}/${kind}`,
-      active ? "PUT" : "DELETE",
-    );
-    await loadInteraction();
-    article.value = await get<Detail>(`/articles/${route.params.id}`);
+    const result = await send<{
+      liked?: boolean;
+      favorited?: boolean;
+      effectiveLikes?: number;
+    }>(`/articles/${id}/${kind}`, active ? "PUT" : "DELETE");
+    if (current !== generation || epoch !== session.epoch || !interaction.value)
+      return;
+    if (typeof result.liked === "boolean")
+      interaction.value.liked = result.liked;
+    if (typeof result.favorited === "boolean")
+      interaction.value.favorited = result.favorited;
+    if (article.value && typeof result.effectiveLikes === "number")
+      article.value.counts.effectiveLikes = result.effectiveLikes;
   } catch (e) {
-    actionError.value = message(e);
+    if (current === generation && epoch === session.epoch)
+      actionError.value = message(e);
   } finally {
-    acting.value = false;
+    if (current === generation) acting.value = false;
   }
 }
-onMounted(load);
-watch(() => session.status, loadInteraction);
+watch(articleId, load, { immediate: true });
+watch([() => session.epoch, () => session.status], () => {
+  void loadInteraction();
+  void loadAuthor();
+});
 </script>
 <template>
   <div class="breadcrumb">
-    <RouterLink to="/">发现经验</RouterLink><span>/</span><span>阅读正文</span>
+    <RouterLink :to="discovery">发现经验</RouterLink><span>/</span
+    ><span>阅读正文</span>
   </div>
   <section v-if="busy" class="panel state-panel" role="status">
     正在读取全文…
@@ -72,7 +152,7 @@ watch(() => session.status, loadInteraction);
     <h1>文章暂时无法阅读</h1>
     <p>{{ error }}</p>
     <button @click="load">重新读取</button
-    ><RouterLink class="button" to="/">返回发现</RouterLink>
+    ><RouterLink class="button" :to="discovery">返回发现</RouterLink>
   </section>
   <div v-else-if="article" class="reading-layout">
     <article class="panel reading-article">
@@ -95,6 +175,22 @@ watch(() => session.status, loadInteraction);
           ><span>首次发布 {{ dateText(article.publishedAt) }}</span
           ><span>更新 {{ dateText(article.updatedAt) }}</span>
         </p>
+        <div v-if="session.status === 'ready'" class="meta">
+          <RouterLink v-if="author" :to="`/authors/${author.authorId}`"
+            >{{ author.nickname }} · 作者主页</RouterLink
+          >
+          <AuthorHonor v-if="author?.honor" :honor="author.honor" />
+          <span v-if="authorLoading" role="status">正在读取作者资料…</span>
+          <span v-else-if="authorError" role="alert"
+            >{{ authorError }}
+            <button class="text-button" @click="loadAuthor">
+              重新读取作者
+            </button></span
+          >
+          <span v-else-if="!author" class="hint"
+            >当前文章没有可访问的作者主页。</span
+          >
+        </div>
       </header>
       <MarkdownView :body="article.body" toc />
       <section
@@ -113,6 +209,11 @@ watch(() => session.status, loadInteraction);
           ></template
         >
       </section>
+      <ArticleComments
+        v-if="session.status === 'ready'"
+        :key="`${articleId}:${session.epoch}`"
+        :article-id="articleId"
+      />
     </article>
     <aside class="reading-sidebar">
       <section class="panel">
@@ -144,9 +245,18 @@ watch(() => session.status, loadInteraction);
             <button class="text-button" @click="loadInteraction">
               重读互动状态
             </button>
-          </p></template
+          </p>
+          <ArticleCoins
+            :key="`${articleId}:${session.epoch}`"
+            :article-id="articleId"
+            @confirmed="refreshCoinCount"
+          />
+          <p v-if="countError" class="error" role="alert">
+            公开币数刷新失败。{{ countError }}
+            <button class="text-button" @click="refreshCoinCount">重试</button>
+          </p> </template
         ><template v-else
-          ><p>登录后点赞和收藏，全文可直接阅读。</p>
+          ><p>登录后查看作者资料、评论或参与互动。</p>
           <RouterLink
             class="button primary full"
             :to="{ path: '/account', query: { next: route.fullPath } }"
@@ -157,9 +267,6 @@ watch(() => session.status, loadInteraction);
       <section class="panel">
         <h2>阅读提示</h2>
         <p>对照当时的基础、经历阶段与内容来源，找到适合自己的部分。</p>
-        <p class="hint">
-          作者联系、评论与投币暂请在小程序中使用，网页正在分批接入。
-        </p>
       </section>
     </aside>
   </div>

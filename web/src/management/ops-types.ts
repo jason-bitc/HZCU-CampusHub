@@ -11,7 +11,9 @@ export interface Artifact {
 export interface Backup {
   id: string;
   createdAt: string;
+  snapshotAt?: string;
   complete: boolean;
+  withinRetentionWindow?: boolean;
   schemaFingerprint: string;
 }
 export interface OpsStatus {
@@ -20,6 +22,12 @@ export interface OpsStatus {
   managedProcessRunning: boolean;
   release: Partial<Artifact>;
   recoveryRequired: boolean;
+  dailyBackup?: {
+    enabled: boolean;
+    time: string | null;
+    timeZone: string;
+    lastScheduledFor: string | null;
+  };
 }
 export interface Operation {
   action: OpsAction;
@@ -30,6 +38,16 @@ export interface Confirmation extends Operation {
   confirmationId: string;
   expiresAt: string;
   impact: string;
+  restorePreview?: {
+    backupId: string;
+    backupCreatedAt: string;
+    backupSnapshotAt: string | null;
+    backupReleaseId: string | null;
+    affectedComponents: string[];
+    verifiedFileCount: number;
+    mediaFileCount: number;
+    businessSnapshotAvailable: boolean;
+  };
 }
 export interface JobInput extends Operation {
   requestId: string;
@@ -47,11 +65,20 @@ export interface Job {
   finishedAt?: string;
   events: { phase: string; occurredAt: string }[];
   errorCode?: string;
+  protectionBackupId?: string;
   result?: {
     healthy?: boolean;
     backupId?: string;
     protectionBackupId?: string;
     referenceId?: string;
+    verifiedMediaReferences?: number;
+    businessVerification?: { status: string; checkedTables: string[] };
+    recoveryEvidence?: {
+      snapshotAgeMillis: number | null;
+      rpoTargetStatus: string;
+      restoreElapsedMillis: number | null;
+      rtoTargetStatus: string;
+    };
   };
 }
 export const actionLabels: Record<OpsAction, string> = {
@@ -73,6 +100,9 @@ export const phases: Record<string, string> = {
   PROTECTING: "保护当前状态",
   INSTALLING: "安装已登记版本",
   RESTORING: "恢复数据库与图片",
+  VERIFYING_DATA: "核对业务数据",
+  VERIFYING_MEDIA: "核对媒体引用",
+  PROTECTION_READY: "保护副本已登记",
   STARTING: "启动并等待健康检查",
   VERIFIED: "核对通过",
   ROLLING_BACK: "保护副本回退",

@@ -13,7 +13,7 @@ import type { Owned, Page } from "../types";
 import MemberGate from "../components/MemberGate.vue";
 const router = useRouter();
 const route = useRoute();
-const result = ref<Page<Owned>>();
+const result = ref<Page<Owned> & { publishingRestricted?: boolean }>();
 const page = ref(1);
 const busy = ref(false);
 const error = ref("");
@@ -31,16 +31,42 @@ function restoreFilter() {
   const requested =
     typeof route.query.state === "string" ? route.query.state : "ALL";
   filter.value = states.includes(requested) ? requested : "ALL";
+  page.value = 1;
 }
 restoreFilter();
-watch(() => route.query.state, restoreFilter);
+watch(
+  () => route.query.state,
+  () => {
+    restoreFilter();
+    result.value = undefined;
+    void load();
+  },
+);
+function chooseFilter(state: string) {
+  void router.replace({ query: state === "ALL" ? {} : { state } });
+}
 async function load() {
   if (session.status !== "ready") return;
   busy.value = true;
   error.value = "";
   try {
     pending.value = readPrivate<string>("create") || "";
-    result.value = await get(`/me/articles?page=${page.value}&size=20`, true);
+    const requested = filter.value === "ALL" ? "" : `&state=${filter.value}`;
+    let listing = await get<NonNullable<typeof result.value>>(
+      `/me/articles?page=${page.value}&size=20${requested}`,
+      true,
+    );
+    if (!listing.items.length && page.value > 1) {
+      const lastPage = Math.max(1, Math.ceil(listing.total / listing.size));
+      if (lastPage < page.value) {
+        page.value = lastPage;
+        listing = await get(
+          `/me/articles?page=${page.value}&size=20${requested}`,
+          true,
+        );
+      }
+    }
+    result.value = listing;
   } catch (e) {
     error.value = message(e);
   } finally {
@@ -68,21 +94,35 @@ async function create() {
     busy.value = false;
   }
 }
-async function transition(item: Owned, action: "unpublish" | "restore") {
+async function transition(
+  item: Owned,
+  action: "unpublish" | "restore" | "delete",
+) {
+  if (busy.value) return;
   if (
     !confirm(
       action === "restore"
         ? "恢复上次公开版本？当前草稿的修改不会随之发布。"
-        : "下架后，其他读者将无法读取这篇文章。确认下架？",
+        : action === "delete"
+          ? "确认删除？删除后无法继续编辑或恢复。"
+          : "下架后，其他读者将无法读取这篇文章。确认下架？",
     )
   )
     return;
   busy.value = true;
   error.value = "";
   try {
-    await send(`/me/articles/${item.articleId}/${action}`, "POST", {
-      expectedRevision: item.revision,
-    });
+    if (action === "delete") {
+      await send(
+        `/me/articles/${item.articleId}?expectedRevision=${item.revision}`,
+        "DELETE",
+      );
+      removePrivate(`draft:${item.articleId}`);
+    } else {
+      await send(`/me/articles/${item.articleId}/${action}`, "POST", {
+        expectedRevision: item.revision,
+      });
+    }
     await load();
   } catch (e) {
     error.value = `${message(e)} 请重新读取文章状态再操作。`;
@@ -112,7 +152,8 @@ watch(() => session.status, load);
         v-for="state in states"
         :key="state"
         :aria-pressed="filter === state"
-        @click="filter = state"
+        :disabled="busy"
+        @click="chooseFilter(state)"
       >
         {{ state === "ALL" ? "全部文章" : stateName[state] }}
       </button>
@@ -121,14 +162,17 @@ watch(() => session.status, load);
       {{ error }} <button @click="load">重新读取状态</button>
     </p>
     <p v-if="busy" role="status">正在读取或处理，请稍候…</p>
+    <p v-if="result?.publishingRestricted" class="hint">
+      当前账号发布受限。可保存草稿并查看<RouterLink to="/me/appeals"
+        >限制与申诉</RouterLink
+      >。
+    </p>
     <RouterLink class="workspace-favorites-link" to="/favorites"
       >查看我的收藏 →</RouterLink
     >
     <div class="workspace-grid">
       <article
-        v-for="item in result?.items.filter(
-          (item) => filter === 'ALL' || item.state === filter,
-        )"
+        v-for="item in result?.items"
         :key="item.articleId"
         class="panel workspace-card"
       >
@@ -139,33 +183,53 @@ watch(() => session.status, load);
         <p class="meta">{{ dateText(item.updatedAt) }}</p>
         <div class="card-actions">
           <RouterLink
-            v-if="item.state !== 'DELETED'"
+            v-if="
+              item.allowedActions?.includes('VIEW_DRAFT') ??
+              item.state !== 'DELETED'
+            "
             class="button"
             :to="`/editor/${item.articleId}`"
             >{{
               item.state === "ADMIN_HIDDEN" ? "查看草稿" : "继续编辑"
             }}</RouterLink
           ><RouterLink
-            v-if="item.state === 'PUBLISHED'"
+            v-if="
+              item.allowedActions?.includes('VIEW_PUBLIC') ??
+              item.state === 'PUBLISHED'
+            "
             class="button"
             :to="`/articles/${item.articleId}`"
             >查看公开文章</RouterLink
           >
         </div>
         <button
-          v-if="item.state === 'PUBLISHED'"
+          v-if="
+            item.allowedActions?.includes('UNPUBLISH') ??
+            item.state === 'PUBLISHED'
+          "
           class="text-button"
           :disabled="busy"
           @click="transition(item, 'unpublish')"
         >
           下架</button
         ><button
-          v-if="item.state === 'AUTHOR_OFFLINE'"
+          v-if="
+            item.allowedActions?.includes('RESTORE') ??
+            item.state === 'AUTHOR_OFFLINE'
+          "
           class="text-button"
           :disabled="busy"
           @click="transition(item, 'restore')"
         >
           恢复上次公开版本
+        </button>
+        <button
+          v-if="item.allowedActions?.includes('DELETE')"
+          class="text-button"
+          :disabled="busy"
+          @click="transition(item, 'delete')"
+        >
+          删除
         </button>
         <p v-if="item.state === 'ADMIN_HIDDEN'" class="hint">
           管理员隐藏的文章不能自行修改、发布或恢复。
@@ -173,15 +237,11 @@ watch(() => session.status, load);
       </article>
     </div>
     <section
-      v-if="
-        !busy &&
-        result &&
-        !result.items.some((item) => filter === 'ALL' || item.state === filter)
-      "
+      v-if="!busy && result && !result.items.length"
       class="panel state-panel"
     >
-      <h2>这一页还没有此状态的文章</h2>
-      <p>可以切换状态、翻页，或写下第一篇经验。</p>
+      <h2>还没有此状态的文章</h2>
+      <p>可以切换状态或写下第一篇经验。</p>
     </section>
     <nav
       v-if="result && result.total > result.size"
@@ -196,7 +256,7 @@ watch(() => session.status, load);
         "
       >
         上一页</button
-      ><span>第 {{ page }} 页（状态筛选作用于当前页）</span
+      ><span>第 {{ page }} 页</span
       ><button
         :disabled="busy || page * result.size >= result.total"
         @click="

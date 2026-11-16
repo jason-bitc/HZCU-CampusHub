@@ -2,9 +2,18 @@
 import type { Article } from "../types";
 import FavoriteButton from "./FavoriteButton.vue";
 import { dateText, sourceName } from "../lib/content";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
-const props = defineProps<{ article: Article; showFavorite?: boolean }>();
+const props = defineProps<{
+  article: Article;
+  showFavorite?: boolean;
+  backTo?: string;
+}>();
 const router = useRouter();
+const destination = computed(() => ({
+  path: `/articles/${props.article.id}`,
+  query: props.backTo ? { from: props.backTo } : {},
+}));
 function open(event: MouseEvent) {
   if (
     event.defaultPrevented ||
@@ -20,16 +29,14 @@ function open(event: MouseEvent) {
     window.getSelection()?.toString()
   )
     return;
-  void router.push(`/articles/${props.article.id}`);
+  void router.push(destination.value);
 }
 </script>
 <template>
   <article class="article-card panel" @click="open">
     <div class="article-card-heading">
       <h2>
-        <RouterLink :to="`/articles/${article.id}`">{{
-          article.title
-        }}</RouterLink>
+        <RouterLink :to="destination">{{ article.title }}</RouterLink>
       </h2>
       <span class="card-open" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">

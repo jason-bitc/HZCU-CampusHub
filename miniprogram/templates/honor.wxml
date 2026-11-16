@@ -1,0 +1,6 @@
+<template name="author-honor">
+  <text wx:if="{{honor}}" class="hint">
+    {{honor.badge === 'sprout' ? '🌱' : honor.badge === 'open-book' ? '📖' : honor.badge === 'star-book' ? '📖 ✦' : honor.badge === 'lighthouse' ? '🗼' : ''}}
+    {{honor.title}}
+  </text>
+</template>

@@ -615,7 +615,7 @@ onBeforeUnmount(() => {
                   <th>备份 / 时点</th>
                   <th>完整性清单</th>
                   <th>模式指纹</th>
-                  <th>离机副本</th>
+                  <th>保留参考</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -631,7 +631,15 @@ onBeforeUnmount(() => {
                   <td class="console-fingerprint">
                     {{ row.schemaFingerprint }}
                   </td>
-                  <td>合同未提供</td>
+                  <td>
+                    {{
+                      row.withinRetentionWindow === true
+                        ? "最近七份"
+                        : row.withinRetentionWindow === false
+                          ? "早期快照"
+                          : "待核对"
+                    }}
+                  </td>
                   <td>
                     <button
                       v-if="page === 'restore'"
@@ -674,7 +682,11 @@ onBeforeUnmount(() => {
               }}
             </p>
             <p v-if="page === 'restore'">
-              当前未执行恢复前校验，不把“清单完整”显示成所有检查已通过。校验及保护副本阶段以原任务事件为准。
+              {{
+                confirmation?.restorePreview
+                  ? "服务端已返回备份预检结果，请核对覆盖范围。"
+                  : "请选择备份并读取恢复预检。"
+              }}
             </p>
             <button
               :disabled="!canAct || frozen || !validReference"
@@ -685,6 +697,55 @@ onBeforeUnmount(() => {
             <section v-if="confirmation" class="console-confirmation">
               <h3>请确认实际影响</h3>
               <p>{{ confirmation.impact }}</p>
+              <dl v-if="confirmation.restorePreview">
+                <dt>备份快照</dt>
+                <dd>
+                  {{
+                    dateText(
+                      confirmation.restorePreview.backupSnapshotAt ||
+                        confirmation.restorePreview.backupCreatedAt,
+                    )
+                  }}
+                </dd>
+                <dt>备份版本</dt>
+                <dd>
+                  {{
+                    confirmation.restorePreview.backupReleaseId ||
+                    "沿用当前版本"
+                  }}
+                </dd>
+                <dt>覆盖范围</dt>
+                <dd>
+                  {{
+                    confirmation.restorePreview.affectedComponents
+                      .map(
+                        (item) =>
+                          ({
+                            DATABASE: "数据库",
+                            MEDIA: "图片",
+                            RELEASE: "应用版本",
+                          })[item] || item,
+                      )
+                      .join("、")
+                  }}
+                </dd>
+                <dt>已完成文件核对</dt>
+                <dd>
+                  {{
+                    confirmation.restorePreview.verifiedFileCount
+                  }}
+                  个，其中媒体
+                  {{ confirmation.restorePreview.mediaFileCount }} 个
+                </dd>
+                <dt>业务核验基线</dt>
+                <dd>
+                  {{
+                    confirmation.restorePreview.businessSnapshotAvailable
+                      ? "已包含"
+                      : "暂无，恢复后需抽查"
+                  }}
+                </dd>
+              </dl>
               <p>
                 动作：{{ actionLabels[confirmation.action] }} · 目标：{{
                   confirmation.target
@@ -721,9 +782,16 @@ onBeforeUnmount(() => {
           class="console-panel ops-backup-policy"
         >
           <h2>策略与范围</h2>
-          <p>
-            当前支持手动完整备份。每日自动备份、保留调度与离机副本尚未接入；RPO/RTO目标仍需实测。
+          <p v-if="status?.dailyBackup?.enabled">
+            每日备份 {{ status.dailyBackup.time }}（{{
+              status.dailyBackup.timeZone
+            }}）。 最近入队
+            {{
+              status.dailyBackup.lastScheduledFor || "暂无"
+            }}，执行结果见任务。
           </p>
+          <p v-else-if="status?.dailyBackup">当前环境未开启每日自动备份。</p>
+          <p>离机副本由维护人员导出和验收，步骤见运维手册。</p>
         </section>
       </template>
       <template v-if="page === 'task' && job"
@@ -775,6 +843,11 @@ onBeforeUnmount(() => {
             <p v-if="job.errorCode" class="error">
               错误码：{{ job.errorCode }}
             </p>
+            <p v-if="job.protectionBackupId || job.result?.protectionBackupId">
+              保护备份：{{
+                job.protectionBackupId || job.result?.protectionBackupId
+              }}
+            </p>
             <template v-if="job.result"
               ><p v-if="job.result.healthy !== undefined">
                 业务健康检查：{{ job.result.healthy ? "通过" : "未通过" }}
@@ -782,8 +855,31 @@ onBeforeUnmount(() => {
               <p v-if="job.result.backupId">
                 完整备份：{{ job.result.backupId }}
               </p>
-              <p v-if="job.result.protectionBackupId">
-                保护备份：{{ job.result.protectionBackupId }}
+              <p v-if="job.result.verifiedMediaReferences !== undefined">
+                已核对媒体引用 {{ job.result.verifiedMediaReferences }} 条
+              </p>
+              <p v-if="job.result.businessVerification">
+                业务数据核对
+                {{
+                  job.result.businessVerification.status === "VERIFIED"
+                    ? "通过"
+                    : "暂无基线"
+                }}
+                ·
+                {{ job.result.businessVerification.checkedTables.length }} 张表
+              </p>
+              <p v-if="job.result.recoveryEvidence">
+                快照距恢复开始
+                {{
+                  job.result.recoveryEvidence.snapshotAgeMillis === null
+                    ? "暂无数据"
+                    : `${Math.round(job.result.recoveryEvidence.snapshotAgeMillis / 1000)} 秒`
+                }}。 恢复到服务可用耗时
+                {{
+                  job.result.recoveryEvidence.restoreElapsedMillis === null
+                    ? "暂无数据"
+                    : `${Math.round(job.result.recoveryEvidence.restoreElapsedMillis / 1000)} 秒`
+                }}。
               </p>
               <p v-if="job.result.referenceId">
                 引用：{{ job.result.referenceId }}

@@ -1,3 +1,4 @@
+<import src="../../templates/honor.wxml" />
 <view class="member-page my-page">
   <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
@@ -23,7 +24,7 @@
         <view><text>可用硬币</text><text class="wallet-metric">{{wallet ? wallet.balance : '—'}}</text></view>
         <view><text>累计有效贡献</text><text class="wallet-metric">{{wallet ? wallet.receivedContribution : '—'}}</text></view>
       </view>
-      <text class="wallet-caption">钱包余额与作者贡献分别计算</text>
+      <text class="wallet-caption">钱包余额与作者贡献分别计算</text><template is="author-honor" data="{{honor: wallet.honor}}" wx:if="{{wallet && wallet.honor}}" />
     </button>
     <view class="section-card my-links">
       <button class="menu-row" bindtap="wallet">

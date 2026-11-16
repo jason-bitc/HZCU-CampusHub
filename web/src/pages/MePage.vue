@@ -3,13 +3,14 @@ import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { get, message, send } from "../lib/api";
 import { clearSession, session } from "../lib/session";
-import type { Catalog, Contact, Profile } from "../types";
+import type { Catalog, Contact, Profile, Wallet } from "../types";
 import MemberGate from "../components/MemberGate.vue";
+import AuthorHonor from "../components/AuthorHonor.vue";
 const router = useRouter();
 const profile = ref<Profile>();
 const contact = ref<Contact>();
 const catalog = ref<Catalog>();
-const wallet = ref<{ balance: number; receivedContribution: number }>();
+const wallet = ref<Wallet>();
 const busy = ref(false);
 const error = ref("");
 const notice = ref("");
@@ -22,7 +23,7 @@ async function load() {
       get<Profile>("/me/profile", true),
       get<Contact>("/me/contact-settings", true),
       get<Catalog>("/catalog"),
-      get<{ balance: number; receivedContribution: number }>("/me/coins", true),
+      get<Wallet>("/me/coins", true),
     ]);
     profile.value = p;
     contact.value = c;
@@ -152,6 +153,10 @@ watch(() => session.status, load);
           <h2>我的硬币</h2>
           <p class="balance">{{ wallet.balance }}<span> 硬币</span></p>
           <p>收到的有效贡献 {{ wallet.receivedContribution }} 硬币</p>
+          <p v-if="wallet.honor">
+            作者荣誉 <AuthorHonor :honor="wallet.honor" />
+          </p>
+          <p v-else class="hint">当前暂无作者荣誉。</p>
           <p class="hint">
             硬币不能购买、提现或兑换现金。网页奖励和账本待接入，暂请在小程序查看。
           </p>

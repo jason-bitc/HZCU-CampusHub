@@ -142,8 +142,8 @@ try {
   assertions.push("real empty-result and clear-filter recovery");
   await page.getByRole("button", { name: "清除所有条件", exact: true }).click();
   await page.locator(".article-card").first().waitFor();
-  await page.goto(`${base}/#/articles/2005`);
-  await page.locator(".markdown h1").waitFor();
+  await page.locator(".article-card h2 a").first().click();
+  await page.locator(".markdown :is(h1, h2, h3)").first().waitFor();
   await page.getByRole("button", { name: "目录", exact: true }).click();
   assert.ok(await page.locator(".toc-item").count());
   await page.locator(".toc-item").first().click();

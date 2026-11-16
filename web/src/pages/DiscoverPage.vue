@@ -221,6 +221,7 @@ onBeforeUnmount(() => {
       </section>
       <template v-else-if="!busy"
         ><ArticleCard
+          :back-to="route.fullPath"
           v-for="article in result?.items"
           :key="article.id"
           :article="article"
