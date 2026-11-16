@@ -84,6 +84,49 @@ test("401 clears authentication and does not retry the mutation", async () => {
     clearSession();
   }
 });
+test("restricted sessions discard old private responses and keep the inbox available", async () => {
+  const original = globalThis.fetch;
+  login();
+  let release: (response: Response) => void = () => {};
+  const profile = new Promise<Response>((resolve) => (release = resolve));
+  const calls: string[] = [];
+  globalThis.fetch = async (url, init) => {
+    const path = String(url);
+    calls.push(path);
+    assert.equal(
+      (init?.headers as Record<string, string>).Authorization,
+      "Bearer unit-test-token",
+    );
+    if (path === "/api/v1/me/profile") return profile;
+    if (path === "/api/v1/me")
+      return Response.json({ code: "ACCESS_RESTRICTED" }, { status: 403 });
+    return Response.json({ code: "OK", data: { unreadCount: 1 } });
+  };
+  try {
+    const old = request("/me/profile", { auth: true });
+    await assert.rejects(request("/me", { auth: true }), {
+      code: "ACCESS_RESTRICTED",
+    });
+    release(Response.json({ code: "OK", data: { nickname: "private" } }));
+    await assert.rejects(old, { code: "SESSION_CHANGED" });
+    await assert.rejects(request("/me/notifications/1/other", { auth: true }), {
+      code: "ACCESS_RESTRICTED",
+    });
+    assert.deepEqual(
+      await request("/me/notifications?page=1", { auth: true }),
+      { unreadCount: 1 },
+    );
+    assert.deepEqual(calls, [
+      "/api/v1/me/profile",
+      "/api/v1/me",
+      "/api/v1/me/notifications?page=1",
+    ]);
+    assert.equal(session.status, "limited");
+  } finally {
+    globalThis.fetch = original;
+    clearSession();
+  }
+});
 test("an empty gateway failure becomes an actionable service error", async () => {
   const original = globalThis.fetch;
   globalThis.fetch = async () => new Response(null, { status: 503 });

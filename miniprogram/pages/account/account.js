@@ -4,7 +4,7 @@ const session = require('../../services/session');
 const check = require('../../utils/validation');
 const { errorText } = require('../../utils/member-page');
 const tabs = ['/pages/discover/discover', '/pages/favorites/favorites', '/pages/workspace/workspace', '/pages/me/me'];
-const returns = tabs.concat(['/pages/editor/editor', '/pages/profile/profile', '/pages/wallet/wallet', '/pages/article-detail/article-detail', '/pages/comments/comments', '/pages/author/author', '/pages/feedback-form/feedback-form', '/pages/feedback/feedback', '/pages/appeals/appeals', '/pages/settings/settings']);
+const returns = tabs.concat(['/pages/editor/editor', '/pages/profile/profile', '/pages/wallet/wallet', '/pages/article-detail/article-detail', '/pages/comments/comments', '/pages/author/author', '/pages/feedback-form/feedback-form', '/pages/feedback/feedback', '/pages/appeals/appeals', '/pages/settings/settings', '/pages/notifications/notifications', '/pages/certification/certification']);
 Page({
   data: { mode: 'login', title: '登录城院帮', email: '', password: '', confirmation: '', code: '', challenge: null, wait: 0, expired: false, busy: false, sending: false, error: '', errors: {}, notice: '', demoMode: config.demoMode },
   onLoad(options) { this.challenges = {}; try { this.returnTo = options.returnTo ? decodeURIComponent(options.returnTo) : '/pages/me/me'; } catch (_) { this.returnTo = '/pages/me/me'; } this.changeMode(options.mode || 'login'); this.offSession = session.subscribe(({ reason }) => { if (reason === 'logout') { this.challenges = {}; this.setData({ email: '', password: '', confirmation: '', code: '', challenge: null }); } }); },
@@ -34,13 +34,17 @@ Page({
     this.setData({ errors, error: '', notice: '' }); if (Object.keys(errors).length) return;
     this.setData({ busy: true });
     try {
-      if (mode === 'login') { await account.login(email, password); if (!this.destroyed) this.finish(); }
+      if (mode === 'login') { const result = await account.login(email, password); if (!this.destroyed) this.finish(!!(result && result.limited)); }
       else { await account.complete(mode, { email, password, challengeId: challenge.challengeId, code }); if (this.destroyed) return; delete this.challenges[`${mode}:${email}`]; if (mode === 'reset') session.clear('password-reset'); this.changeMode('login'); this.setData({ email, notice: mode === 'register' ? '注册成功，校园邮箱已验证。请使用刚设置的密码登录。' : '密码已更新，所有旧会话已失效。请重新登录。' }); }
     } catch (error) { if (!this.destroyed) this.setData({ error: errorText(error), password: '', confirmation: '', code: '' }); } finally { if (!this.destroyed) this.setData({ busy: false }); }
   },
-  finish() {
+  finish(limited) {
     this.setData({ email: '', password: '', confirmation: '', code: '' });
     let destination = this.returnTo; const route = destination.split('?')[0]; if (!returns.includes(route)) destination = '/pages/me/me';
+    if (limited && !['/pages/notifications/notifications', '/pages/certification/certification'].includes(route)) {
+      wx.redirectTo({ url: '/pages/certification/certification' });
+      return;
+    }
     if (tabs.includes(destination)) { wx.switchTab({ url: destination }); return; }
     const pages = getCurrentPages(); if (pages.length > 1 && `/${pages[pages.length - 2].route}` === route) wx.navigateBack(); else wx.redirectTo({ url: destination });
   },

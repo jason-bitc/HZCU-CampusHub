@@ -21,7 +21,7 @@ async function initializeMember() {
       session.me = await get<Me>("/me", true);
       session.status = "ready";
     } catch (error) {
-      if (session.token) {
+      if (session.token && session.status !== "limited") {
         session.status = "error";
         session.message = message(error);
       }
@@ -63,14 +63,20 @@ onMounted(initializeMember);
         </nav>
         <RouterLink
           class="account-link"
-          :to="session.status === 'ready' ? '/me' : '/account'"
+          :to="
+            session.status === 'ready'
+              ? '/me'
+              : session.status === 'limited'
+                ? '/me/certification'
+                : '/account'
+          "
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="8" r="3.5" />
             <path d="M5 20c.7-4 3.1-6 7-6s6.3 2 7 6" />
           </svg>
           <span>{{
-            session.status === "ready"
+            ["ready", "limited"].includes(session.status)
               ? "我的账号"
               : session.status === "checking"
                 ? "核验会话…"
@@ -81,6 +87,12 @@ onMounted(initializeMember);
     </header>
     <div v-if="session.message" class="global-notice" role="status">
       {{ session.message }}
+      <RouterLink v-if="session.status === 'limited'" to="/me/certification"
+        >查看认证状态</RouterLink
+      >
+      <RouterLink v-if="session.status === 'limited'" to="/me/notifications"
+        >查看通知</RouterLink
+      >
     </div>
     <div v-if="session.status === 'error'" class="global-notice">
       <button
@@ -105,7 +117,9 @@ onMounted(initializeMember);
     </div>
     <main id="main" tabindex="-1">
       <RouterView v-slot="{ Component }"
-        ><component :is="Component" :key="`${route.path}:${session.epoch}`"
+        ><component
+          :is="Component"
+          :key="`${route.path === '/me/cases/new' ? route.fullPath : route.path}:${session.epoch}`"
       /></RouterView>
     </main>
     <footer class="site-footer">

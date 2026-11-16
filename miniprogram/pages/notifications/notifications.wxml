@@ -1,0 +1,25 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'guest'}}" status="permission" title="登录后查看通知" action-text="登录校园账号" bindaction="login" />
+  <view wx:elif="{{authStatus === 'ready'}}">
+    <text class="form-title">站内通知</text>
+    <text wx:if="{{loaded}}" class="hint">{{unreadCount}} 条未读</text>
+    <text wx:if="{{busy}}" class="hint" role="status">正在读取或更新通知…</text>
+    <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+    <text wx:if="{{loaded && !total}}" class="hint">暂无通知。</text>
+    <view wx:for="{{items}}" wx:key="id" class="list-row notice-row">
+      <text class="row-title">{{item.message}}</text>
+      <text class="hint">{{item.time}} · {{item.readAt ? '已读' : '未读'}}{{item.outcome ? ' · ' + item.outcome : ''}}</text>
+      <view class="inline-actions">
+        <button wx:if="{{item.url}}" class="button-secondary" data-id="{{item.id}}" bindtap="open">查看相关内容</button>
+        <text wx:else class="hint">相关内容暂不可查看。</text>
+        <button wx:if="{{!item.readAt}}" class="button-text" data-id="{{item.id}}" bindtap="read" disabled="{{busy}}">标记已读</button>
+      </view>
+    </view>
+    <view wx:if="{{loaded && total > 20}}" class="inline-actions">
+      <button class="button-secondary" bindtap="previous" disabled="{{busy || page <= 1}}">上一页</button>
+      <text class="hint">第 {{page}} 页</text>
+      <button class="button-secondary" bindtap="next" disabled="{{busy || page * 20 >= total}}">下一页</button>
+    </view>
+    <button class="button-secondary" bindtap="refresh" disabled="{{busy}}">刷新通知</button>
+  </view>
+</view>

@@ -135,6 +135,17 @@ async function toggle(kind: "like" | "favorite") {
   }
 }
 watch(articleId, load, { immediate: true });
+const readingError = ref("");
+async function startReading() {
+  if (!article.value || session.status !== "ready") return;
+  readingError.value = "";
+  try {
+    await send(`/articles/${articleId.value}/reading-session`, "POST");
+  } catch (e) {
+    if (session.status === "ready") readingError.value = message(e);
+  }
+}
+watch([article, () => session.status], startReading);
 watch([() => session.epoch, () => session.status], () => {
   void loadInteraction();
   void loadAuthor();
@@ -211,7 +222,7 @@ watch([() => session.epoch, () => session.status], () => {
       </section>
       <ArticleComments
         v-if="session.status === 'ready'"
-        :key="`${articleId}:${session.epoch}`"
+        :key="`${articleId}:${session.epoch}:${route.query.thread || ''}:${route.query.comment || ''}`"
         :article-id="articleId"
       />
     </article>
@@ -268,6 +279,19 @@ watch([() => session.epoch, () => session.status], () => {
         <h2>阅读提示</h2>
         <p>对照当时的基础、经历阶段与内容来源，找到适合自己的部分。</p>
       </section>
+      <div v-if="session.status === 'ready'" class="panel stack">
+        <RouterLink
+          :to="{
+            path: '/me/cases/new',
+            query: { type: 'ARTICLE', target: articleId },
+          }"
+          >举报这篇经验</RouterLink
+        >
+        <p v-if="readingError" class="hint" role="status">
+          阅读奖励计时未启动。{{ readingError }}
+          <button @click="startReading">重试计时</button>
+        </p>
+      </div>
     </aside>
   </div>
 </template>

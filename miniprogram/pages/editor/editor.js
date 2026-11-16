@@ -13,7 +13,7 @@ const tagFields = [
   { name: 'topics', field: 'topicIds', label: '主题（可选）' }
 ];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
-const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false };
+const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false };
 Page({
   data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, webHandoff: !!config.webBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
   onLoad(options) {
@@ -64,7 +64,21 @@ Page({
   linkInput(e) { if (!this.editable()) return; const index = Number(e.currentTarget.dataset.index); const field = e.currentTarget.dataset.field; if (!['label', 'url'].includes(field)) return; const links = this.data.form.sourceLinks.map((row) => Object.assign({}, row)); links[index][field] = e.detail.value; this.updateForm(Object.assign({}, this.data.form, { sourceLinks: links })); },
   addLink() { if (this.editable()) this.updateForm(Object.assign({}, this.data.form, { sourceLinks: this.data.form.sourceLinks.concat({ label: '', url: '' }) })); },
   removeLink(e) { if (this.editable()) this.updateForm(Object.assign({}, this.data.form, { sourceLinks: this.data.form.sourceLinks.filter((_, i) => i !== Number(e.currentTarget.dataset.index)) })); },
-  toggleHints() { this.setData({ hintsVisible: !this.data.hintsVisible }); },
+  async toggleHints() {
+    const show = !this.data.hintsVisible;
+    this.setData({ hintsVisible: show });
+    if (!show || this.data.prompts || this.data.loadingPrompts) return;
+    const epoch = this._epoch;
+    this.setData({ loadingPrompts: true, promptsError: '' });
+    try {
+      const result = await api.call('/me/writing-prompts');
+      if (epoch === this._epoch) this.setData({ prompts: result.items });
+    } catch (e) {
+      if (epoch === this._epoch) this.setData({ promptsError: access.errorText(e) });
+    } finally {
+      if (epoch === this._epoch) this.setData({ loadingPrompts: false });
+    }
+  },
   toggleOrder() { this.setData({ orderVisible: !this.data.orderVisible }); },
   move(e) { if (!this.editable()) return; this.updateForm(Object.assign({}, this.data.form, { body: content.moveBlock(this.data.form.body, Number(e.currentTarget.dataset.index), Number(e.currentTarget.dataset.delta)) })); },
   removeBlock(e) { if (!this.editable()) return; const index = Number(e.currentTarget.dataset.index); wx.showModal({ title: '移除这一段？', content: '只移除草稿中的文字或图片引用，保存前可通过本机副本核对。', success: (r) => { if (r.confirm && this.editable()) this.updateForm(Object.assign({}, this.data.form, { body: content.removeBlock(this.data.form.body, index) })); } }); },

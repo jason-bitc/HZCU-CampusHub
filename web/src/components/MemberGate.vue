@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { session } from "../lib/session";
-defineProps<{ title?: string }>();
+defineProps<{ title?: string; allowLimited?: boolean }>();
 const route = useRoute();
 </script>
 <template>
-  <slot v-if="session.status === 'ready'" />
+  <slot
+    v-if="
+      session.status === 'ready' ||
+      (allowLimited && session.status === 'limited')
+    "
+  />
   <section v-else class="panel state-panel" aria-live="polite">
     <h1>
       {{
@@ -22,5 +27,11 @@ const route = useRoute();
       >登录校园账号</RouterLink
     >
     <p v-else-if="session.status === 'error'">请在页面顶部重试会话核验。</p>
+    <RouterLink
+      v-else-if="session.status === 'limited'"
+      class="button"
+      to="/me/certification"
+      >查看本人认证状态</RouterLink
+    >
   </section>
 </template>

@@ -222,6 +222,7 @@ onBeforeUnmount(() => {
           query: {
             article: String(detail.articleId),
             comment: detail.commentId ? String(detail.commentId) : undefined,
+            case: canHandle ? String(id) : undefined,
           },
         }"
         >前往对应文章与评论巡查</RouterLink

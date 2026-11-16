@@ -62,7 +62,18 @@ onBeforeUnmount(() => generation++);
                 {{ dateText(row.occurredAt)
                 }}<small>管理 {{ row.adminId }} · 记录 {{ row.id }}</small>
               </td>
-              <td>{{ row.targetType }} {{ row.targetId }}</td>
+              <td>
+                {{ row.targetType }} {{ row.targetId
+                }}<small v-if="row.canonicalId"
+                  >归并至分类 {{ row.canonicalId }}</small
+                >
+                <small v-if="row.caseId">
+                  <RouterLink :to="`/admin/cases/${row.caseId}`"
+                    >案件 {{ row.caseId }}</RouterLink
+                  >
+                  · 修订 {{ row.caseRevision }}
+                </small>
+              </td>
               <td>
                 {{ stateLabels[row.beforeState] || row.beforeState }} →
                 {{ stateLabels[row.afterState] || row.afterState }}

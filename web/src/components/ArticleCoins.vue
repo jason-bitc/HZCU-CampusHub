@@ -116,7 +116,8 @@ onBeforeUnmount(() => {
       {{ reasonText[state.reason] || "当前文章暂不可投币。" }}
     </p>
     <p v-else-if="wallet && wallet.balance < 1" class="hint">
-      余额不足。奖励可在小程序的“我的硬币”领取。
+      余额不足。可在
+      <RouterLink to="/me/wallet">我的硬币</RouterLink> 查看奖励。
     </p>
     <button v-if="pending" :disabled="busy" @click="submit()">
       核对上次投 {{ pending.amount }} 币

@@ -33,6 +33,14 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
     const second = transport.request({ path: '/api/v1/me', auth: true }).promise;
     sent[1].success({ statusCode: 403, header: {}, data: { code: 'ACCESS_RESTRICTED' } });
     await assert.rejects(second, (error) => error.status === 403); assert.equal(e.session.token(), '');
+    e.session.restore();
+    assert.equal(e.session.token(), '');
+    const inbox = transport.request({ path: '/api/v1/me/notifications', auth: true }).promise;
+    assert.match(sent[2].header.Authorization, /^Bearer /);
+    sent[2].success({ statusCode: 200, header: {}, data: { code: 'OK', data: { unreadCount: 1 } } });
+    assert.equal((await inbox).unreadCount, 1);
+    await assert.rejects(transport.request({ path: '/api/v1/me/notifications/1/other', auth: true }).promise);
+    assert.equal(sent.length, 3);
   });
   await test('会话恢复核验有效期，显式退出清除私有副本但保留无关缓存', () => {
     const e = environment(); const operations = load('utils/operation.js', { '../services/session': e.session, '../config/env': e.config }, { wx: e.wx }); e.session.accept(login()); e.session.identify({ userId: 10, role: 'USER', accountState: 'ACTIVE', campusCertification: 'VALID' });

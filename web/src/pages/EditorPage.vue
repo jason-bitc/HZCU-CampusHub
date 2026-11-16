@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WritingPrompts from "../components/WritingPrompts.vue";
 import {
   computed,
   nextTick,
@@ -504,6 +505,7 @@ onBeforeRouteLeave(() => {
     <p v-if="error" class="error" role="alert">{{ error }}</p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <p v-if="busy" role="status">正在处理，请保持当前页面…</p>
+    <WritingPrompts v-if="form && !readOnly" />
     <section v-if="recovery" class="panel recovery-panel">
       <h2>发现本标签页保存的副本</h2>
       <p>

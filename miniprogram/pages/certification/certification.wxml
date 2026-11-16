@@ -1,0 +1,39 @@
+<view class="member-page">
+  <page-state wx:if="{{authStatus === 'guest'}}" status="permission" title="登录后查看本人认证" action-text="登录校园账号" bindaction="login" />
+  <view wx:elif="{{authStatus === 'ready'}}">
+    <text class="form-title">{{appealId ? '本人申诉详情' : '本人校园认证'}}</text>
+    <text wx:if="{{busy}}" class="hint" role="status">正在读取或提交…</text>
+    <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+    <text wx:if="{{notice}}" class="success-note">{{notice}}</text>
+    <view wx:if="{{appeal}}" class="list-row">
+      <text class="row-title">{{appeal.state}} · {{appeal.time}}</text>
+      <text class="plain-text">{{appeal.reason}}</text>
+      <text wx:if="{{appeal.reply}}" class="plain-text">复核答复 {{appeal.reply}}</text>
+    </view>
+    <view wx:if="{{record}}" class="certification-panel">
+      <text class="section-title">{{record.stateText}}</text>
+      <text wx:if="{{record.verifiedText}}" class="hint">最近验证 {{record.verifiedText}}</text>
+      <text wx:if="{{record.revocationReason}}" class="plain-text">撤销理由 {{record.revocationReason}}</text>
+      <text wx:if="{{record.revokedText}}" class="hint">撤销时间 {{record.revokedText}}</text>
+      <view wx:if="{{record.canReverify}}" class="form-section">
+        <text class="section-title">使用原校园邮箱重新认证</text>
+        <button class="button-secondary" disabled="{{busy || wait > 0}}" bindtap="sendCode">{{wait ? wait + ' 秒后可重发' : '发送重新认证验证码'}}</button>
+        <view wx:if="{{challenge}}" class="field">
+          <text class="field-label">邮箱验证码</text>
+          <input class="field-input" value="{{code}}" type="number" maxlength="6" bindinput="inputCode" />
+          <text wx:if="{{expired}}" class="hint">验证码已过期，请重新发送。</text>
+          <button class="button-primary" bindtap="verify" disabled="{{busy || expired || code.length !== 6}}">提交重新认证</button>
+        </view>
+      </view>
+      <view wx:if="{{record.canAppeal || pending}}" class="field">
+        <text class="section-title">申请复核本次撤销</text>
+        <textarea class="field-textarea" value="{{reason}}" maxlength="2000" bindinput="inputReason" disabled="{{busy || pending}}" aria-label="申诉理由" />
+        <button class="button-secondary" bindtap="submitAppeal" disabled="{{busy || !reason.length}}">{{pending ? '按原请求核对申诉' : '提交认证申诉'}}</button>
+      </view>
+      <button wx:if="{{record.appealId}}" class="button-secondary" bindtap="openAppeal">查看本次认证申诉</button>
+      <button class="button-secondary" bindtap="notifications">站内通知</button>
+      <button class="button-text" bindtap="logout" disabled="{{busy}}">退出校园账号</button>
+    </view>
+    <button class="button-text" bindtap="load" disabled="{{busy}}">刷新记录</button>
+  </view>
+</view>

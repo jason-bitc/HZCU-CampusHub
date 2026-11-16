@@ -7,6 +7,7 @@ import type { Appeal, Page, Restriction, User } from "./governance";
 import { message } from "../lib/api";
 import { dateText } from "../lib/content";
 import AdminGate from "./AdminGate.vue";
+import AdminCertification from "./AdminCertification.vue";
 import ConsolePager from "./ConsolePager.vue";
 import MutationNotice from "./MutationNotice.vue";
 const route = useRoute(),
@@ -244,6 +245,12 @@ onBeforeUnmount(() => generation++);
             </button>
           </div>
         </fieldset>
+        <AdminCertification
+          v-if="user"
+          :key="user.id"
+          :user-id="user.id"
+          :nickname="user.nickname"
+        />
       </section>
       <section class="console-panel console-account-limit">
         <h2>本人申诉与复核</h2>
@@ -259,8 +266,11 @@ onBeforeUnmount(() => generation++);
             <tbody>
               <tr v-for="row in appeals.items" :key="row.id">
                 <td>
-                  {{ row.id }} / 限制 {{ row.restrictionId }} v{{
-                    row.restrictionRevision
+                  {{ row.id }} /
+                  {{
+                    row.subject === "CAMPUS_CERTIFICATION"
+                      ? `校园认证 v${row.certificationRevision}`
+                      : `限制 ${row.restrictionId} v${row.restrictionRevision}`
                   }}
                 </td>
                 <td>{{ stateLabels[row.state] || row.state }}</td>
@@ -297,6 +307,15 @@ onBeforeUnmount(() => generation++);
             {{ stateLabels[appeal.state] || appeal.state }}
           </h3>
           <p class="console-preserve">申诉理由：{{ appeal.reason }}</p>
+          <p
+            v-if="appeal.certificationRevocationReason"
+            class="console-preserve"
+          >
+            撤销理由 {{ appeal.certificationRevocationReason
+            }}<span v-if="appeal.certificationRevokedAt">
+              · {{ dateText(appeal.certificationRevokedAt) }}</span
+            >
+          </p>
           <p v-if="appeal.reply" class="console-preserve">
             已有答复：{{ appeal.reply }}
           </p>
@@ -308,8 +327,14 @@ onBeforeUnmount(() => generation++);
             >
               <label
                 >复核结论<select v-model="outcome" aria-label="复核结论">
-                  <option value="REJECTED">驳回申诉，维持原限制</option>
-                  <option value="ACCEPTED">接受申诉，解除对应版本限制</option>
+                  <option value="REJECTED">驳回申诉</option>
+                  <option value="ACCEPTED">
+                    {{
+                      appeal.subject === "CAMPUS_CERTIFICATION"
+                        ? "接受认证申诉，由本人重新验证邮箱"
+                        : "接受申诉，解除对应版本限制"
+                    }}
+                  </option>
                 </select></label
               ><label
                 >公开复核答复<textarea

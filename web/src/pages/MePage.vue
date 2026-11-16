@@ -91,6 +91,14 @@ watch(() => session.status, load);
       </div>
       <button :disabled="busy" @click="logout">退出当前账号</button>
     </div>
+    <nav class="card-actions" aria-label="个人服务">
+      <RouterLink class="button" to="/me/notifications">站内通知</RouterLink>
+      <RouterLink class="button" to="/me/wallet">奖励与账目</RouterLink>
+      <RouterLink class="button" to="/me/cases">我的反馈与举报</RouterLink>
+      <RouterLink class="button" to="/me/certification"
+        >校园认证状态</RouterLink
+      >
+    </nav>
     <p v-if="error" class="error" role="alert">{{ error }}</p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <div class="profile-layout">
@@ -157,9 +165,7 @@ watch(() => session.status, load);
             作者荣誉 <AuthorHonor :honor="wallet.honor" />
           </p>
           <p v-else class="hint">当前暂无作者荣誉。</p>
-          <p class="hint">
-            硬币不能购买、提现或兑换现金。网页奖励和账本待接入，暂请在小程序查看。
-          </p>
+          <p class="hint">硬币不能购买、提现或兑换现金。</p>
         </section>
         <button :disabled="busy" @click="load">重新读取服务器资料</button>
       </div>

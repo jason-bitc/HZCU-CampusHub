@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { get, message, request, send } from "../lib/api";
 import { readPrivate, removePrivate, writePrivate } from "../lib/session";
 import { dateText } from "../lib/content";
 import type { ImageAsset, Page } from "../types";
-import CommentImage from "./CommentImage.vue";
+import CommentImage from "./PrivateImage.vue";
 
 interface Commenter {
   nickname: string;
@@ -12,6 +13,7 @@ interface Commenter {
 }
 interface Comment {
   commentId: number;
+  articleId: number;
   rootCommentId: number;
   available: boolean;
   canDelete: boolean;
@@ -32,6 +34,15 @@ const props = defineProps<{ articleId: number }>();
 const path = `/articles/${props.articleId}/comments`;
 const key = `comment:${props.articleId}`;
 const roots = ref<Page<Comment>>();
+const route = useRoute();
+const linkedRoot = ref<Comment>();
+const visibleRoots = computed(() => {
+  const items = roots.value?.items ?? [];
+  return linkedRoot.value &&
+    !items.some((row) => row.commentId === linkedRoot.value?.commentId)
+    ? [linkedRoot.value, ...items]
+    : items;
+});
 const replies = ref<Record<number, Page<Comment>>>({});
 const target = ref<Comment>();
 const replyId = ref<number | null>(null);
@@ -74,6 +85,26 @@ async function reopen() {
       replyId.value = pending.value.replyToCommentId;
     }
     await readRoots();
+    const rootId = Number(route.query.thread);
+    if (Number.isSafeInteger(rootId) && rootId > 0) {
+      const thread = await get<Page<Comment> & { root: Comment }>(
+        `/comments/${rootId}/replies?page=1&size=20`,
+        true,
+      );
+      if (thread.root.articleId !== props.articleId)
+        throw new Error("相关评论暂不可查看。");
+      linkedRoot.value = thread.root;
+      replies.value[rootId] = thread;
+      await nextTick();
+      const comment = Number(route.query.comment);
+      const target =
+        Number.isSafeInteger(comment) && comment > 0
+          ? document.getElementById(`comment-${comment}`)
+          : null;
+      (
+        target ?? document.getElementById(`comment-${rootId}`)
+      )?.scrollIntoView();
+    }
   });
 }
 function reply(comment: Comment) {
@@ -182,10 +213,11 @@ onBeforeUnmount(() => {
       刷新评论
     </button>
     <p v-if="roots && !roots.total">还没有评论。</p>
-    <section v-for="root in roots?.items" :key="root.commentId" class="panel">
+    <section v-for="root in visibleRoots" :key="root.commentId" class="panel">
       <div
         v-for="comment in [root, ...(replies[root.commentId]?.items ?? [])]"
         :key="comment.commentId"
+        :id="`comment-${comment.commentId}`"
         class="stack"
       >
         <template v-if="comment.available">
@@ -222,6 +254,13 @@ onBeforeUnmount(() => {
             >
               回复
             </button>
+            <RouterLink
+              :to="{
+                path: '/me/cases/new',
+                query: { type: 'COMMENT', target: comment.commentId },
+              }"
+              >举报评论</RouterLink
+            >
             <button
               v-if="comment.canDelete"
               class="text-button"

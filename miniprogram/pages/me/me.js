@@ -45,5 +45,7 @@ Page({
   },
   favorites() { wx.switchTab({ url: '/pages/favorites/favorites' }); },
   feedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }); },
+  notifications() { wx.navigateTo({ url: '/pages/notifications/notifications' }); },
+  certification() { wx.navigateTo({ url: '/pages/certification/certification' }); },
   settings() { wx.navigateTo({ url: '/pages/settings/settings' }); }
 });

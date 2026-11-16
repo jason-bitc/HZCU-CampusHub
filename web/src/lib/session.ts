@@ -12,6 +12,12 @@ export const session = reactive({
   message: "",
 });
 let timer: ReturnType<typeof setTimeout> | undefined;
+export function limitSession() {
+  if (session.status !== "limited") session.epoch++;
+  session.me = null;
+  session.status = "limited";
+  session.message = "当前认证或账号受限。仍可查看本人认证状态、通知与申诉。";
+}
 export function clearSession(message = "") {
   clearTimeout(timer);
   session.epoch += 1;

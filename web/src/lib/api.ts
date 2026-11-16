@@ -1,4 +1,4 @@
-import { clearSession, session } from "./session.ts";
+import { clearSession, limitSession, session } from "./session.ts";
 
 export class ApiError extends Error {
   status: number;
@@ -39,6 +39,14 @@ export async function request<T>(
       clearSession("请重新登录校园账号。");
       throw new ApiError(401, "UNAUTHORIZED", "请重新登录校园账号");
     }
+    if (
+      auth &&
+      session.status === "limited" &&
+      !/^\/(?:auth\/logout|me\/certification(?:\/reverification(?:-codes)?)?|me\/notifications(?:\/[1-9]\d*\/read)?|me\/appeals(?:\/[1-9]\d*)?)$/.test(
+        path.split("?")[0],
+      )
+    )
+      throw new ApiError(403, "ACCESS_RESTRICTED", "当前认证或账号受限。");
     const headers: Record<string, string> = {};
     if (auth) headers.Authorization = `Bearer ${session.token}`;
     if (data !== undefined) headers["Content-Type"] = "application/json";
@@ -69,11 +77,8 @@ export async function request<T>(
           "code" in value &&
           value.code === "ACCESS_RESTRICTED"))
     )
-      clearSession(
-        response.status === 403
-          ? "账号或校园认证受限。"
-          : "会话已失效，请重新登录。",
-      );
+      if (response.status === 403) limitSession();
+      else clearSession("会话已失效，请重新登录。");
     if (!value || typeof value !== "object" || !("code" in value)) {
       if (!response.ok)
         throw new ApiError(

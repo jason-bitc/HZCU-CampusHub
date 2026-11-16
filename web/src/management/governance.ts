@@ -33,6 +33,7 @@ export interface Category {
   enabled: boolean;
   displayOrder: number;
   revision: number;
+  canonicalId?: number | null;
 }
 export interface User {
   id: number;
@@ -50,8 +51,12 @@ export interface Restriction {
 }
 export interface Appeal {
   id: number;
-  restrictionId: number;
-  restrictionRevision: number;
+  restrictionId: number | null;
+  restrictionRevision: number | null;
+  subject?: "CAMPUS_CERTIFICATION" | "BEHAVIOR_RESTRICTION";
+  certificationRevision?: number | null;
+  certificationRevocationReason?: string | null;
+  certificationRevokedAt?: string | null;
   state: string;
   revision: number;
   reason: string;
@@ -70,6 +75,9 @@ export interface GovernanceEvent {
   revision: number;
   reason: string;
   occurredAt: string;
+  canonicalId?: number | null;
+  caseId?: number | null;
+  caseRevision?: number | null;
 }
 export const stateLabels: Record<string, string> = {
   PUBLISHED: "公开",
@@ -82,6 +90,7 @@ export const stateLabels: Record<string, string> = {
   REJECTED: "已驳回",
   ENABLED: "启用",
   DISABLED: "停用",
+  MERGED: "已归并",
 };
 export const kinds: Record<string, string> = {
   JOB: "岗位",

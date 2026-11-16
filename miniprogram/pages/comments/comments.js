@@ -6,14 +6,33 @@ const { mapComment } = require('../../utils/comment-view');
 const blank = { items: [], root: null, total: 0, page: 0, body: '', uploads: [], replyTo: null, pendingComment: null, commentUncertain: false, restricted: false, loaded: false };
 Page({
   data: Object.assign({ articleId: 0, rootId: 0, authStatus: 'checking', busy: false, error: '', notice: '' }, blank),
-  onLoad(options) { this.setData({ articleId: Number(options.id) }); access.attach(this, blank, (reason) => { if (reason && reason !== 'logout') this.checkpoint(); }); },
+  onLoad(options) {
+    const root = Number(options.root);
+    const comment = Number(options.comment);
+    this.setData({ articleId: Number(options.id), rootId: Number.isSafeInteger(root) && root > 0 ? root : 0 });
+    this.linkedComment = Number.isSafeInteger(comment) && comment > 0 ? comment : 0;
+    access.attach(this, blank, (reason) => { if (reason && reason !== 'logout') this.checkpoint(); });
+  },
   async onShow() { if (this._choosingMedia && this.data.authStatus === 'ready') return; if (!await access.enter(this)) return; if (!Number.isSafeInteger(this.data.articleId) || this.data.articleId <= 0) { this.setData({ error: '文章链接无效' }); return; } const saved = local.read(`comment:${this.data.articleId}`); if (saved && !this.data.body && !this.data.uploads.length) this.setData(saved); await this.load(true); },
   onHide() { this.checkpoint(); }, onUnload() { this.checkpoint(); access.leave(this); }, login: access.login,
   checkpoint() { if (!this._ownerId) return false; try { local.write(`comment:${this.data.articleId}`, { body: this.data.body, uploads: this.data.uploads, replyTo: this.data.replyTo, pendingComment: this.data.pendingComment, commentUncertain: this.data.commentUncertain }, this._ownerId); return true; } catch (_) { this.setData({ notice: '本机副本存储失败，请保留当前页面。' }); return false; } },
   saveInput() { if (this.checkpoint()) this.setData({ notice: '已保存当前文字及附件状态。' }); },
   async load(reset, preserveError = false) {
     if (this.data.busy || this.data.authStatus !== 'ready') return; const epoch = this._epoch; const root = this.data.rootId; const page = reset === true ? 1 : this.data.page + 1; this.setData({ busy: true, error: preserveError ? this.data.error : '' });
-    try { const result = await (root ? api.replies(root, page) : api.comments(this.data.articleId, page)); if (epoch !== this._epoch || root !== this.data.rootId) return; const seen = new Map((page === 1 ? [] : this.data.items).map((r) => [r.commentId, r])); result.items.map(mapComment).forEach((r) => seen.set(r.commentId, r)); this.setData({ items: [...seen.values()], root: result.root ? mapComment(result.root) : null, total: result.total, page, loaded: true }); }
+    try {
+      const result = await (root ? api.replies(root, page) : api.comments(this.data.articleId, page));
+      if (epoch !== this._epoch || root !== this.data.rootId) return;
+      if (root && result.root && result.root.articleId !== this.data.articleId) throw new Error('相关评论暂不可查看');
+      const seen = new Map((page === 1 ? [] : this.data.items).map((r) => [r.commentId, r]));
+      result.items.map(mapComment).forEach((r) => seen.set(r.commentId, r));
+      this.setData({ items: [...seen.values()], root: result.root ? mapComment(result.root) : null, total: result.total, page, loaded: true }, () => {
+        const linked = this.linkedComment;
+        if (linked && (seen.has(linked) || this.data.root && this.data.root.commentId === linked)) {
+          this.linkedComment = 0;
+          wx.pageScrollTo({ selector: `#comment-${linked}`, duration: 0 });
+        }
+      });
+    }
     catch (error) { if (epoch === this._epoch) this.setData(Object.assign({ error: access.errorText(error) }, error.status === 404 ? { items: [], root: null, loaded: false } : {})); }
     finally { if (epoch === this._epoch) this.setData({ busy: false }); }
   },

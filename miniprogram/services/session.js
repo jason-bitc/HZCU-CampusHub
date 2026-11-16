@@ -25,11 +25,15 @@ function valid(value) {
   return value && typeof value.accessToken === 'string' && value.accessToken.length > 20 && Number.isFinite(Date.parse(value.expiresAt)) && Date.parse(value.expiresAt) > Date.now();
 }
 function restore() {
-  try { const saved = wx.getStorageSync(KEY); if (valid(saved)) { current = saved; generation += 1; scheduleExpiry(); } else if (saved) clear('expired'); } catch (_) { current = null; }
+  try { const saved = wx.getStorageSync(KEY); if (valid(saved)) { current = saved; reason = saved.restricted ? 'restricted' : ''; generation += 1; scheduleExpiry(); } else if (saved) clear('expired'); } catch (_) { current = null; }
 }
-function token() {
+function personalToken() {
   if (current && !valid(current)) clear('expired');
   return current ? current.accessToken : '';
+}
+function token() {
+  const active = personalToken();
+  return reason === 'restricted' ? '' : active;
 }
 function accept(login) {
   if (!valid(login) || login.tokenType !== 'Bearer') throw new Error('登录响应不完整，请重新登录');
@@ -46,6 +50,16 @@ function identify(me) {
   current.userId = me.userId;
   try { wx.setStorageSync(KEY, current); } catch (_) { /* Do not log session data. */ }
 }
-function invalidate(captured, status) { if (captured === generation) clear(status === 403 ? 'restricted' : 'expired'); }
+function invalidate(captured, status) {
+  if (captured !== generation) return;
+  if (status !== 403) { clear('expired'); return; }
+  if (!current || reason === 'restricted') return;
+  reason = 'restricted';
+  generation += 1;
+  current.userId = null;
+  current.restricted = true;
+  try { wx.setStorageSync(KEY, current); } catch (_) { /* The session remains available in memory. */ }
+  notify();
+}
 function subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); }
-module.exports = { restore, accept, identify, clear, token, invalidate, subscribe, version: () => generation, userId: () => current && current.userId, reason: () => reason };
+module.exports = { restore, accept, identify, clear, token, personalToken, invalidate, subscribe, version: () => generation, userId: () => current && current.userId, reason: () => reason };

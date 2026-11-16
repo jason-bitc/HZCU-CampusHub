@@ -2,7 +2,10 @@
 import { onBeforeUnmount, ref, watch } from "vue";
 import { message, request } from "../lib/api";
 
-const props = defineProps<{ imageId: string }>();
+const props = withDefaults(
+  defineProps<{ imageId: string; kind?: "comment" | "case" }>(),
+  { kind: "comment" },
+);
 const url = ref("");
 const error = ref("");
 const busy = ref(false);
@@ -21,7 +24,7 @@ async function load() {
   error.value = "";
   try {
     const bytes = await request<Blob>(
-      `/media/comment-images/${props.imageId}`,
+      `/media/${props.kind}-images/${props.imageId}`,
       { auth: true, blob: true },
     );
     if (current === generation) url.value = URL.createObjectURL(bytes);
@@ -31,18 +34,18 @@ async function load() {
     if (current === generation) busy.value = false;
   }
 }
-watch(() => props.imageId, load, { immediate: true });
+watch(() => [props.kind, props.imageId], load, { immediate: true });
 onBeforeUnmount(release);
 </script>
 <template>
   <img
     v-if="url"
     :src="url"
-    alt="评论附图"
+    :alt="kind === 'case' ? '案件证据图片' : '评论附图'"
     width="240"
     style="max-width: 100%; height: auto"
   />
-  <span v-else-if="busy" class="hint" role="status">正在读取评论图片…</span>
+  <span v-else-if="busy" class="hint" role="status">正在读取图片…</span>
   <p v-else-if="error" class="hint">
     {{ error }} <button class="text-button" @click="load">重试图片</button>
   </p>

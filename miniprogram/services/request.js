@@ -14,7 +14,8 @@ function getTraceId(headers) {
 
 function request(options) {
   const startedAt = Date.now();
-  const accessToken = options.auth ? session.token() : '';
+  const personal = /^\/api\/v1\/(?:auth\/logout|me\/certification(?:\/reverification(?:-codes)?)?|me\/notifications(?:\/[1-9]\d*\/read)?|me\/appeals(?:\/[1-9]\d*)?)$/.test(options.path);
+  const accessToken = options.auth ? personal ? session.personalToken() : session.token() : '';
   const captured = session.version();
   if (options.auth && !accessToken) return { promise: Promise.reject(new ApiError({ kind: 'AUTH', status: 401, message: '请登录校园账号后继续' })), abort() {} };
   let task;

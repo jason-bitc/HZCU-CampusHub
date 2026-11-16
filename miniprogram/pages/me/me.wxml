@@ -1,5 +1,9 @@
 <import src="../../templates/honor.wxml" />
 <view class="member-page my-page">
+  <view class="inline-actions">
+    <button class="button-secondary" bindtap="notifications">站内通知</button>
+    <button class="button-secondary" bindtap="certification">校园认证状态</button>
+  </view>
   <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重新核验" bindaction="onShow" />

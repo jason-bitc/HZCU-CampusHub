@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { adminRequest, adminSession } from "./client";
 import { stateLabels, useMutation } from "./governance";
 import type { Article, Comment, Page } from "./governance";
+import type { CaseDetail } from "./types";
 import { dateText } from "../lib/content";
 import { message } from "../lib/api";
 import MarkdownView from "../components/MarkdownView.vue";
@@ -14,7 +15,8 @@ const route = useRoute(),
   router = useRouter();
 const data = ref<Page<Article>>(),
   article = ref<Article>(),
-  comments = ref<Page<Comment>>();
+  comments = ref<Page<Comment>>(),
+  linkedCase = ref<CaseDetail>();
 const selected = ref<{
   type: "articles" | "comments";
   id: number;
@@ -28,6 +30,23 @@ const reason = ref(""),
   commentPage = ref(1);
 let generation = 0;
 const page = computed(() => Math.max(1, Number(route.query.page) || 1));
+const caseId = computed(() => Number(route.query.case) || 0);
+const caseRevision = computed(() => {
+  const item = linkedCase.value;
+  const target = selected.value;
+  if (
+    !item ||
+    item.kind !== "REPORT" ||
+    !target ||
+    item.assigneeId !== adminSession.me?.adminId ||
+    !["PROCESSING", "NEEDS_ACTION"].includes(item.state)
+  )
+    return undefined;
+  const matches = item.commentId
+    ? target.type === "comments" && target.id === item.commentId
+    : target.type === "articles" && target.id === item.articleId;
+  return matches ? item.revision : undefined;
+});
 const mutation = useMutation("content", "CONTENT_MODERATE", load);
 const frozen = computed(
   () => busy.value || mutation.busy.value || !!mutation.pending.value,
@@ -41,15 +60,20 @@ async function load() {
   article.value = undefined;
   comments.value = undefined;
   selected.value = undefined;
+  linkedCase.value = undefined;
   try {
     const query = new URLSearchParams({ page: String(page.value), size: "20" });
     if (typeof route.query.state === "string" && route.query.state)
       query.set("state", route.query.state);
-    const result = await adminRequest<Page<Article>>(
-      `/admin/articles?${query}`,
-    );
+    const [result, item] = await Promise.all([
+      adminRequest<Page<Article>>(`/admin/articles?${query}`),
+      caseId.value
+        ? adminRequest<CaseDetail>(`/admin/cases/${caseId.value}`)
+        : undefined,
+    ]);
     if (current !== generation) return;
     data.value = result;
+    linkedCase.value = item;
     mutation.restore();
     if (/^[1-9]\d*$/.test(String(route.query.article || "")))
       await open(Number(route.query.article));
@@ -98,7 +122,12 @@ function select(type: "articles" | "comments", row: Article | Comment) {
 }
 async function moderate() {
   const target = selected.value;
+  const linked = caseRevision.value;
   if (!target || frozen.value) return;
+  if (caseId.value && linked === undefined) {
+    error.value = "请选择该举报的对象，并核对案件仍由你处理。";
+    return;
+  }
   if (!reason.value.trim()) {
     error.value = "请填写处置依据。";
     return;
@@ -110,6 +139,9 @@ async function moderate() {
       action: action.value,
       expectedRevision: target.revision,
       reason: reason.value,
+      ...(linked === undefined
+        ? {}
+        : { caseId: caseId.value, expectedCaseRevision: linked }),
     },
     action.value === "HIDE" ? "隐藏内容" : "恢复内容",
   );
@@ -130,6 +162,14 @@ onBeforeUnmount(() => generation++);
   <AdminGate>
     <p class="console-note">
       读取已有公开版本，作者草稿不进入巡查。隐藏与恢复均保留治理审计；恢复保留作者原下架状态。
+    </p>
+    <p v-if="caseId" class="console-note">
+      本次治理关联<RouterLink :to="`/admin/cases/${caseId}`"
+        >举报案件 {{ caseId }}</RouterLink
+      >。
+      <span v-if="caseRevision !== undefined"
+        >案件修订 {{ caseRevision }}。</span
+      >
     </p>
     <p v-if="error" class="error" role="alert">
       {{ error }} <button :disabled="busy" @click="load">重新读取</button>
@@ -296,7 +336,14 @@ onBeforeUnmount(() => generation++);
               : "待选择"
           }}
         </p>
-        <fieldset :disabled="frozen || !selected || !mutation.allowed.value">
+        <fieldset
+          :disabled="
+            frozen ||
+            !selected ||
+            !mutation.allowed.value ||
+            (!!caseId && caseRevision === undefined)
+          "
+        >
           <label
             >动作<select v-model="action" aria-label="治理动作">
               <option v-if="selected?.state === 'ADMIN_HIDDEN'" value="RESTORE">
