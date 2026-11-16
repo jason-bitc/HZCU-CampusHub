@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 import { clearSession, restoreSession, session } from "./lib/session";
 import { get, message } from "./lib/api";
@@ -8,6 +8,8 @@ import { surface } from "./surface";
 import BackToTop from "./components/BackToTop.vue";
 const route = useRoute();
 const consoleRoute = surface !== "user";
+const siteHeader = ref<HTMLElement>();
+let headerObserver: ResizeObserver | undefined;
 let memberInitialized = false;
 function focusMain() {
   document.getElementById("main")?.focus();
@@ -29,6 +31,19 @@ async function initializeMember() {
   }
 }
 onMounted(initializeMember);
+onMounted(() => {
+  const header = siteHeader.value;
+  if (!header) return;
+  const measure = () =>
+    document.documentElement.style.setProperty(
+      "--member-header-height",
+      `${header.offsetHeight}px`,
+    );
+  measure();
+  headerObserver = new ResizeObserver(measure);
+  headerObserver.observe(header);
+});
+onBeforeUnmount(() => headerObserver?.disconnect());
 </script>
 <template>
   <RouterView v-if="consoleRoute" />
@@ -36,7 +51,7 @@ onMounted(initializeMember);
     <a class="skip-link" href="#main" @click.prevent="focusMain"
       >跳到主要内容</a
     >
-    <header class="site-header">
+    <header ref="siteHeader" class="site-header">
       <div class="header-inner">
         <RouterLink class="brand" to="/" aria-label="城院帮首页">
           <img

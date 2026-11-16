@@ -86,52 +86,6 @@
   font-weight: 600;
 }
 
-.condition-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24rpx;
-  min-height: 58rpx;
-  margin-top: 16rpx;
-}
-
-.summary-major {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
-.summary-label {
-  flex: none;
-  color: var(--color-primary);
-  font-size: 25rpx;
-  font-weight: 600;
-}
-
-.summary-value {
-  display: flex;
-  align-items: center;
-  min-height: var(--touch-target);
-  color: var(--color-primary);
-  font-size: 25rpx;
-  font-weight: 600;
-}
-
-.summary-placeholder {
-  color: var(--color-text-secondary);
-  font-size: 25rpx;
-}
-
-.summary-company {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 4rpx;
-  min-height: var(--touch-target);
-  color: var(--color-text-secondary);
-  font-size: 25rpx;
-}
-
 .extra-conditions {
   display: flex;
   flex-wrap: wrap;
@@ -142,6 +96,10 @@
 .extra-chip {
   display: flex;
   align-items: center;
+  gap: 8rpx;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
   min-height: var(--touch-target);
   padding: 8rpx 16rpx;
   border-radius: 8rpx;
@@ -164,6 +122,7 @@
 
 .sort-row {
   display: flex;
+  align-items: center;
   gap: 44rpx;
   margin-top: 14rpx;
 }
@@ -239,7 +198,11 @@
 }
 
 .search-submit { flex: none; min-height: var(--touch-target); padding: 0 8rpx; color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
-.filter-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+.filter-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 4rpx 16rpx; margin-top: 12rpx; }
 .filter-entry { display: flex; align-items: center; gap: 12rpx; min-height: var(--touch-target); color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
+.same-major-entry { min-height: var(--touch-target); padding: 0 16rpx; border-radius: 8rpx; color: var(--color-primary); font-size: var(--font-xs); }
+.same-major-active { background: var(--color-primary-soft); font-weight: 600; }
+.clear-conditions { margin-left: auto; min-height: var(--touch-target); color: var(--color-text-secondary); font-size: var(--font-xs); }
 .result-count, .list-end { color: var(--color-text-secondary); font-size: var(--font-xs); }
+.result-count { margin-left: auto; }
 .list-end { display: block; padding: 24rpx 0; }

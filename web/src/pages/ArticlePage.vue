@@ -220,6 +220,9 @@ watch([() => session.epoch, () => session.status], () => {
           ></template
         >
       </section>
+      <div v-if="typeof route.query.from === 'string'" class="reading-return">
+        <RouterLink class="button" :to="discovery">返回结果列表</RouterLink>
+      </div>
       <ArticleComments
         v-if="session.status === 'ready'"
         :key="`${articleId}:${session.epoch}:${route.query.thread || ''}:${route.query.comment || ''}`"

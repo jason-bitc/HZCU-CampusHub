@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => {
     },
   };
   return {
+    cacheDir: `node_modules/.vite-${surface}`,
     resolve: {
       alias: {
         "@surface-routes": fileURLToPath(

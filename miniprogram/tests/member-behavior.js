@@ -90,6 +90,20 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
     const editor = require('../utils/editor-content'); const complex = '# title\n\n```js\nconst a = 1;\n\nrun();\n```\n\n- nested\n  - list'; assert.equal(editor.blocks(complex), null); assert.equal(editor.moveBlock(complex, 0, 1), complex);
     const simple = 'first\n\n![图片](/api/v1/media/images/id)\n\nlast'; assert.equal(editor.blocks(simple).length, 3); assert.equal(editor.moveBlock(simple, 0, 1), '![图片](/api/v1/media/images/id)\n\nfirst\n\nlast');
   });
+  await test('预览提前列出发布缺项，并跳回对应编辑区域保留正文', () => {
+    const moves = [];
+    const p = page('pages/editor/editor.js', {}, { pageScrollTo: (target) => moves.push(target) });
+    const form = { title: '实习经验', body: '写到一半的正文', jobIds: [], majorIds: [11], experienceStage: '大三暑假', sourceType: 'FIRST_HAND' };
+    p.setData({ form });
+    p.preview();
+    assert.equal(p.data.preview, true);
+    assert.match(p.data.publishIssues.join(' '), /选择岗位/);
+    p.completePublishDetails();
+    assert.equal(p.data.preview, false);
+    assert.equal(p.data.detailsOpen, true);
+    assert.equal(moves.at(-1).selector, '#publish-details');
+    assert.equal(p.data.form.body, form.body);
+  });
   await test('邮箱精确域名与Unicode密码字节校验，不截断或trim密码', () => {
     const v = require('../utils/validation'); assert.equal(v.email(' Test+1@stu.hzcu.edu.cn '), 'test+1@stu.hzcu.edu.cn'); assert.equal(v.email('a@stu.hzcu.edu.cn.evil'), ''); assert.equal(v.email('a..b@stu.hzcu.edu.cn'), ''); assert.equal(v.password('中'.repeat(25)), false); assert.equal(v.password(' 123456 '), true); assert.equal(v.password('😀'.repeat(19)), false);
   });
