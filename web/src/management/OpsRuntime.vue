@@ -12,9 +12,13 @@ import type {
   OpsAction,
   OpsStatus,
 } from "./ops-types";
-import { ApiError, message } from "../lib/api";
+import { ApiError } from "../lib/api";
 import { dateText } from "../lib/content";
 import ConsoleTable from "./ConsoleTable.vue";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import ConsoleReadState from "./ConsoleReadState.vue";
+import CopyValue from "./CopyValue.vue";
+import { consoleError, opsLogQuery } from "./console-ux";
 const route = useRoute(),
   router = useRouter();
 const page = computed(() =>
@@ -43,6 +47,22 @@ const login = ref(""),
   job = ref<Job>(),
   artifacts = ref<Artifact[]>([]),
   backups = ref<Backup[]>([]);
+const loading = ref(false);
+const jobsLoaded = ref(false);
+const backupsLoaded = ref(false);
+const artifactsLoaded = ref(false);
+const readError = ref("");
+const logError = ref("");
+const lastTrace = ref("");
+const backupReceipt = ref<Backup>();
+const backupReadError = ref("");
+const logTrace = ref(
+  typeof route.query.traceId === "string" ? route.query.traceId : "",
+);
+const logOnlyErrors = ref(false);
+const logLimit = ref(100);
+const submittedLogQuery = ref("");
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 const logs = ref<{
   taskEvents: { jobId: string; phase: string; occurredAt: string }[];
   businessRequests: Record<string, string>[];
@@ -74,6 +94,7 @@ const canAct = computed(
     ready.value &&
     opsSession.me?.capabilities.includes(action.value) &&
     !!status.value &&
+    !readError.value &&
     !status.value.recoveryRequired &&
     !active.value,
 );
@@ -109,64 +130,126 @@ async function signIn() {
     password.value = "";
     await router.replace("/ops/overview");
   } catch (e) {
-    error.value = describe(e);
+    error.value = consoleError(e);
   } finally {
     busy.value = false;
   }
 }
-function describe(e: unknown) {
-  return `${message(e)}${e instanceof ApiError ? ` [${e.code}]` : ""}`;
+function nextPoll(delay: number) {
+  if (
+    !document.hidden &&
+    (!job.value || ["QUEUED", "RUNNING"].includes(job.value.state))
+  )
+    poll = setTimeout(() => void load(), delay);
+}
+async function loadLogs(current: number) {
+  const query = opsLogQuery(
+    logTrace.value,
+    logOnlyErrors.value,
+    logLimit.value,
+  );
+  logError.value = "";
+  try {
+    const data = await opsRequest<NonNullable<typeof logs.value>>(
+      `/ops/logs?${query}`,
+    );
+    if (current !== generation) return;
+    logs.value = data;
+    submittedLogQuery.value = query;
+  } catch (e) {
+    if (current === generation) logError.value = consoleError(e);
+  }
 }
 async function load() {
-  if (!ready.value || page.value === "login") return;
+  if (!ready.value || page.value === "login" || loading.value) return;
   const current = ++generation;
   stopPoll();
-  busy.value = true;
-  error.value = "";
+  loading.value = true;
+  readError.value = "";
   try {
-    if (page.value === "task") {
-      const value = await opsRequest<Job>(`/ops/jobs/${route.params.id}`);
-      if (current !== generation) return;
-      job.value = value;
-      if (["QUEUED", "RUNNING"].includes(value.state) && !document.hidden)
-        poll = setTimeout(() => void load(), 2000);
-    } else {
-      const [s, j, b, a] = await Promise.all([
-        opsRequest<OpsStatus>("/ops/status"),
-        opsRequest<{ items: Job[] }>("/ops/jobs"),
-        opsRequest<{ items: Backup[] }>("/ops/backups"),
-        opsRequest<{ items: Artifact[] }>("/ops/artifacts"),
-      ]);
-      if (current !== generation) return;
-      status.value = s;
-      jobs.value = j.items;
-      backups.value = b.items;
-      artifacts.value = a.items;
-      if (page.value === "logs") {
-        const l = await opsRequest<NonNullable<typeof logs.value>>("/ops/logs");
-        if (current !== generation) return;
-        logs.value = l;
-      }
-      if (
-        page.value === "restore" &&
-        !reference.value &&
-        typeof route.query.backup === "string"
-      )
-        reference.value = route.query.backup;
-    }
     const raw = sessionStorage.getItem(pendingKey);
     pending.value = raw ? (JSON.parse(raw) as JobInput) : undefined;
-  } catch (e) {
-    if (current === generation) {
-      error.value = describe(e);
-      if (page.value !== "task") status.value = undefined;
+    if (page.value === "task") {
+      let trace = "";
+      const value = await opsRequest<Job>(
+        `/ops/jobs/${route.params.id}`,
+        "GET",
+        undefined,
+        false,
+        false,
+        (id) => {
+          trace = id;
+        },
+      );
+      if (current !== generation) return;
+      job.value = value;
+      lastTrace.value = trace;
+      nextPoll(2000);
+      const backupId = value.result?.backupId;
+      if (backupId) {
+        backupReadError.value = "";
+        try {
+          const list = await opsRequest<{ items: Backup[] }>("/ops/backups");
+          if (current === generation)
+            backupReceipt.value = list.items.find(
+              (item) => item.id === backupId,
+            );
+        } catch (e) {
+          if (current === generation) backupReadError.value = consoleError(e);
+        }
+      }
+      return;
     }
+    const [s, j, b, a] = await Promise.allSettled([
+      opsRequest<OpsStatus>("/ops/status"),
+      opsRequest<{ items: Job[] }>("/ops/jobs"),
+      ["overview", "backups", "restore"].includes(page.value)
+        ? opsRequest<{ items: Backup[] }>("/ops/backups")
+        : undefined,
+      page.value === "deploy"
+        ? opsRequest<{ items: Artifact[] }>("/ops/artifacts")
+        : undefined,
+    ]);
+    if (current !== generation) return;
+    if (s.status === "fulfilled") status.value = s.value;
+    if (j.status === "fulfilled") {
+      jobs.value = j.value.items;
+      jobsLoaded.value = true;
+    }
+    if (b.status === "fulfilled" && b.value) {
+      backups.value = b.value.items;
+      backupsLoaded.value = true;
+    }
+    if (a.status === "fulfilled" && a.value) {
+      artifacts.value = a.value.items;
+      artifactsLoaded.value = true;
+    }
+    const errors = [s, j, b, a].flatMap((result) =>
+      result.status === "rejected" ? [consoleError(result.reason)] : [],
+    );
+    readError.value = [...new Set(errors)].join(" ");
+    if (page.value === "logs") await loadLogs(current);
+    if (
+      page.value === "restore" &&
+      !reference.value &&
+      typeof route.query.backup === "string"
+    )
+      reference.value = route.query.backup;
+  } catch (e) {
+    if (current !== generation) return;
+    readError.value = consoleError(e);
+    if (
+      page.value === "task" &&
+      !(e instanceof ApiError && [401, 403, 404].includes(e.status))
+    )
+      nextPoll(4000);
   } finally {
-    if (current === generation) busy.value = false;
+    if (current === generation) loading.value = false;
   }
 }
 async function prepare() {
-  if (!canAct.value || frozen.value || !validReference.value) return;
+  if (!canAct.value || frozen.value || loading.value || !validReference.value)
+    return;
   busy.value = true;
   error.value = "";
   confirmation.value = undefined;
@@ -198,13 +281,13 @@ async function prepare() {
       throw new Error("服务端返回的确认与所选操作不一致，请重新核对。");
     confirmation.value = result;
   } catch (e) {
-    error.value = describe(e);
+    error.value = consoleError(e);
   } finally {
     busy.value = false;
   }
 }
 async function submit() {
-  if (busy.value) return;
+  if (busy.value || loading.value) return;
   if (!pending.value) {
     if (
       !confirmation.value ||
@@ -214,6 +297,39 @@ async function submit() {
     )
       return;
     const c = confirmation.value;
+    const snapshot = c.restorePreview;
+    const review = await modal.value?.ask({
+      title: "确认" + actionLabels[c.action] + "？",
+      detail: [
+        "目标 " + c.target,
+        c.action === "RESTORE"
+          ? "备份 " + c.referenceId
+          : "构建版本 " +
+            (c.referenceId || status.value?.release.id || "当前未登记版本"),
+        c.impact,
+        snapshot
+          ? "覆盖范围 " +
+            snapshot.affectedComponents.join("、") +
+            "。预检核对文件 " +
+            snapshot.verifiedFileCount +
+            " 份。"
+          : "",
+        c.action === "BACKUP" ? "范围包括数据库、媒体文件及版本清单。" : "",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      action: "执行" + actionLabels[c.action],
+      danger: c.action !== "BACKUP",
+    });
+    if (
+      !review ||
+      confirmation.value !== c ||
+      expired.value ||
+      !canAct.value ||
+      busy.value ||
+      pending.value
+    )
+      return;
     const value: JobInput = {
       action: c.action,
       target: "business",
@@ -239,7 +355,7 @@ async function submit() {
     confirmation.value = undefined;
     await router.push(`/ops/tasks/${result.id}`);
   } catch (e) {
-    error.value = `${describe(e)} 原操作、确认ID和请求键已保留；请先按原请求核对，不要重新创建任务。`;
+    error.value = `${consoleError(e)} 原操作、确认ID和请求键已保留；请先按原请求核对，不要重新创建任务。`;
   } finally {
     busy.value = false;
   }
@@ -256,9 +372,12 @@ async function reconcile() {
     );
     if (
       match ||
-      confirm(
-        "最近任务中未找到这次请求。请核对目标、版本和时间。结束本机待确认请求不会撤销服务端任务，确认已核对？",
-      )
+      (await modal.value?.ask({
+        title: "结束本机待确认任务？",
+        detail:
+          "最近任务中未找到本次请求。请核对目标、版本和时间。结束本机记录后，服务端已受理的任务仍会继续。",
+        action: "结束本机记录",
+      }))
     ) {
       sessionStorage.removeItem(pendingKey);
       pending.value = undefined;
@@ -267,7 +386,7 @@ async function reconcile() {
       if (match) await router.push(`/ops/tasks/${match.id}`);
     }
   } catch (e) {
-    error.value = describe(e);
+    error.value = consoleError(e);
   } finally {
     busy.value = false;
   }
@@ -294,6 +413,7 @@ watch(
       stopPoll();
       status.value = undefined;
       jobs.value = [];
+      jobsLoaded.value = backupsLoaded.value = artifactsLoaded.value = false;
       job.value = undefined;
       artifacts.value = [];
       backups.value = [];
@@ -312,11 +432,20 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div :class="`ops-page ops-${page}`">
+    <ConsoleConfirm ref="modal" />
     <h1 class="console-title">
       {{
         page === "task" ? `任务 ${route.params.id} · 持久进度` : titles[page]
       }}
     </h1>
+    <ConsoleReadState
+      v-if="page !== 'task'"
+      :loading="loading"
+      :error="readError"
+      :stale="!!status || !!jobs.length"
+      label="正在读取运维记录…"
+      @retry="load"
+    />
     <p v-if="error" class="error" role="alert">
       {{ error }}
       <button v-if="ready && !pending" :disabled="busy" @click="load">
@@ -474,18 +603,19 @@ onBeforeUnmount(() => {
           <button :disabled="busy" @click="load">刷新任务</button>
         </div>
         <div class="console-table-wrap">
-          <table class="console-table">
-            <thead>
-              <tr>
-                <th>任务编号 / 时间</th>
-                <th>动作 / 目标</th>
-                <th>阶段</th>
-                <th>状态</th>
-                <th>操作</th>
+          <table class="console-table console-responsive-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">任务编号 / 时间</th>
+                <th scope="col" role="columnheader">动作 / 目标</th>
+                <th scope="col" role="columnheader">阶段</th>
+                <th scope="col" role="columnheader">状态</th>
+                <th scope="col" role="columnheader">操作</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               <tr
+                role="row"
                 v-for="row in jobs.filter(
                   (j) =>
                     page !== 'exceptions' ||
@@ -495,21 +625,21 @@ onBeforeUnmount(() => {
                 )"
                 :key="row.id"
               >
-                <td>
+                <td data-label="任务编号 / 时间" role="cell">
                   {{ row.id }}<small>{{ dateText(row.createdAt) }}</small>
                 </td>
-                <td>
+                <td data-label="动作 / 目标" role="cell">
                   {{ actionLabels[row.action] }} / {{ row.target
                   }}<small>{{ row.referenceId }}</small>
                 </td>
-                <td>
+                <td data-label="阶段" role="cell">
                   {{
                     phases[row.events.at(-1)?.phase || ""] ||
                     row.events.at(-1)?.phase ||
                     "等待执行"
                   }}
                 </td>
-                <td>
+                <td data-label="状态" role="cell">
                   <span
                     class="console-badge"
                     :class="{
@@ -518,22 +648,62 @@ onBeforeUnmount(() => {
                     >{{ jobLabels[row.state] }}</span
                   >
                 </td>
-                <td>
+                <td data-label="操作" role="cell">
                   <RouterLink :to="`/ops/tasks/${row.id}`"
                     >查看原任务</RouterLink
                   >
                 </td>
               </tr>
-              <tr v-if="!jobs.length">
-                <td colspan="5">暂无任务记录。</td>
+              <tr role="row" v-if="jobsLoaded && !jobs.length">
+                <td class="console-empty-cell" role="cell" colspan="5">
+                  暂无任务记录。
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
       <section v-if="page === 'logs'" class="console-panel ops-logs-panel">
+        <form class="console-filterbar" @submit.prevent="load">
+          <label class="console-inline-label"
+            >追踪号<input
+              v-model="logTrace"
+              placeholder="小写 UUID"
+              pattern="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+          /></label>
+          <label class="console-inline-label"
+            >条数<select v-model.number="logLimit">
+              <option :value="20">20</option>
+              <option :value="50">50</option>
+              <option :value="100">100</option>
+            </select></label
+          >
+          <label class="console-check"
+            ><input v-model="logOnlyErrors" type="checkbox" />仅错误请求</label
+          >
+          <button :disabled="loading">查询日志</button>
+        </form>
+        <ConsoleReadState
+          :error="logError"
+          :stale="!!logs"
+          :loading="loading"
+          label="正在读取日志…"
+          @retry="load"
+        />
+        <p
+          v-if="
+            logs &&
+            (logError ||
+              submittedLogQuery !==
+                opsLogQuery(logTrace, logOnlyErrors, logLimit))
+          "
+          class="hint"
+        >
+          下方记录来自上次成功查询。
+        </p>
         <h2>必要请求字段与任务事件</h2>
         <ConsoleTable
+          v-if="logs"
           :columns="['时间', '任务', '阶段']"
           :rows="
             logs?.taskEvents.map((e) => [
@@ -542,8 +712,10 @@ onBeforeUnmount(() => {
               phases[e.phase] || e.phase,
             ]) || []
           "
+          :copy-columns="[1]"
           empty="暂无任务阶段日志。"
         /><ConsoleTable
+          :copy-columns="[0]"
           :columns="['追踪编号', '动作 / 模块', '状态 / 错误码', '耗时ms']"
           :rows="
             logs?.businessRequests.map((r) => [
@@ -568,23 +740,33 @@ onBeforeUnmount(() => {
         >
           <h2>选择已登记发布包</h2>
           <div class="console-table-wrap">
-            <table class="console-table">
-              <thead>
-                <tr>
-                  <th>发布包</th>
-                  <th>SHA256</th>
-                  <th>模式指纹</th>
-                  <th>操作</th>
+            <table class="console-table console-responsive-table" role="table">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader">发布包</th>
+                  <th scope="col" role="columnheader">SHA256</th>
+                  <th scope="col" role="columnheader">模式指纹</th>
+                  <th scope="col" role="columnheader">操作</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="row in artifacts" :key="row.id">
-                  <td>{{ row.id }}</td>
-                  <td class="console-fingerprint">{{ row.sha256 }}</td>
-                  <td class="console-fingerprint">
+              <tbody role="rowgroup">
+                <tr role="row" v-for="row in artifacts" :key="row.id">
+                  <td data-label="发布包" role="cell">{{ row.id }}</td>
+                  <td
+                    data-label="SHA256"
+                    role="cell"
+                    class="console-fingerprint"
+                  >
+                    {{ row.sha256 }}
+                  </td>
+                  <td
+                    data-label="模式指纹"
+                    role="cell"
+                    class="console-fingerprint"
+                  >
                     {{ row.schemaFingerprint }}
                   </td>
-                  <td>
+                  <td data-label="操作" role="cell">
                     <button
                       :disabled="frozen"
                       @click="
@@ -596,8 +778,10 @@ onBeforeUnmount(() => {
                     </button>
                   </td>
                 </tr>
-                <tr v-if="!artifacts.length">
-                  <td colspan="4">暂无已登记包，请由维护人员在本机CLI登记。</td>
+                <tr role="row" v-if="artifactsLoaded && !artifacts.length">
+                  <td class="console-empty-cell" role="cell" colspan="4">
+                    暂无已登记包，请由维护人员在本机CLI登记。
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -609,29 +793,38 @@ onBeforeUnmount(() => {
         >
           <h2>备份记录（最多100份）</h2>
           <div class="console-table-wrap">
-            <table class="console-table">
-              <thead>
-                <tr>
-                  <th>备份 / 时点</th>
-                  <th>完整性清单</th>
-                  <th>模式指纹</th>
-                  <th>保留参考</th>
-                  <th>操作</th>
+            <table class="console-table console-responsive-table" role="table">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader">备份 / 时点</th>
+                  <th scope="col" role="columnheader">完整性清单</th>
+                  <th scope="col" role="columnheader">模式指纹</th>
+                  <th scope="col" role="columnheader">保留参考</th>
+                  <th scope="col" role="columnheader">操作</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="row in backups" :key="row.id">
-                  <td>
+              <tbody role="rowgroup">
+                <tr
+                  role="row"
+                  v-for="row in backups"
+                  :key="row.id"
+                  :class="{ 'console-match': row.id === route.query.backup }"
+                >
+                  <td data-label="备份 / 时点" role="cell">
                     {{ row.id }}<small>{{ dateText(row.createdAt) }}</small>
                   </td>
-                  <td>
+                  <td data-label="完整性清单" role="cell">
                     {{ row.complete ? "清单标记完整" : "不完整"
                     }}<small>文件SHA256在执行前由服务端核验</small>
                   </td>
-                  <td class="console-fingerprint">
+                  <td
+                    data-label="模式指纹"
+                    role="cell"
+                    class="console-fingerprint"
+                  >
                     {{ row.schemaFingerprint }}
                   </td>
-                  <td>
+                  <td data-label="保留参考" role="cell">
                     {{
                       row.withinRetentionWindow === true
                         ? "最近七份"
@@ -640,7 +833,7 @@ onBeforeUnmount(() => {
                           : "待核对"
                     }}
                   </td>
-                  <td>
+                  <td data-label="操作" role="cell">
                     <button
                       v-if="page === 'restore'"
                       :disabled="frozen || !row.complete"
@@ -657,8 +850,10 @@ onBeforeUnmount(() => {
                     >
                   </td>
                 </tr>
-                <tr v-if="!backups.length">
-                  <td colspan="5">暂无备份记录。</td>
+                <tr role="row" v-if="backupsLoaded && !backups.length">
+                  <td class="console-empty-cell" role="cell" colspan="5">
+                    暂无备份记录。
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -731,9 +926,7 @@ onBeforeUnmount(() => {
                 </dd>
                 <dt>已完成文件核对</dt>
                 <dd>
-                  {{
-                    confirmation.restorePreview.verifiedFileCount
-                  }}
+                  {{ confirmation.restorePreview.verifiedFileCount }}
                   个，其中媒体
                   {{ confirmation.restorePreview.mediaFileCount }} 个
                 </dd>
@@ -794,6 +987,14 @@ onBeforeUnmount(() => {
           <p>离机副本由维护人员导出和验收，步骤见运维手册。</p>
         </section>
       </template>
+      <ConsoleReadState
+        v-if="page === 'task'"
+        :error="readError ? (job ? '当前进度待确认。 ' : '') + readError : ''"
+        :stale="!!job"
+        :loading="loading && !job"
+        label="正在读取原任务…"
+        @retry="load"
+      />
       <template v-if="page === 'task' && job"
         ><section class="console-panel ops-task-summary">
           <span
@@ -805,6 +1006,24 @@ onBeforeUnmount(() => {
             {{ actionLabels[job.action] }} · {{ job.target }}
             {{ job.referenceId }}
           </h2>
+          <p>
+            当前阶段
+            {{
+              phases[job.events.at(-1)?.phase || ""] ||
+              job.events.at(-1)?.phase ||
+              "等待执行"
+            }}
+            · 最近更新
+            {{
+              dateText(
+                job.finishedAt ||
+                  job.events.at(-1)?.occurredAt ||
+                  job.startedAt ||
+                  job.createdAt,
+              )
+            }}
+          </p>
+          <p><CopyValue :value="job.id" label="任务编号" /></p>
           <p>
             提交 {{ dateText(job.createdAt) }} · 开始
             {{ job.startedAt ? dateText(job.startedAt) : "尚未开始" }} · 结束
@@ -841,7 +1060,11 @@ onBeforeUnmount(() => {
               {{ jobLabels[job.state] }}
             </h3>
             <p v-if="job.errorCode" class="error">
-              错误码：{{ job.errorCode }}
+              执行阶段 {{ job.events.at(-1)?.phase || "等待执行" }} · 错误码
+              <CopyValue :value="job.errorCode" label="错误码" />
+            </p>
+            <p v-if="lastTrace">
+              本次查询追踪号 <CopyValue :value="lastTrace" label="追踪号" />
             </p>
             <p v-if="job.protectionBackupId || job.result?.protectionBackupId">
               保护备份：{{
@@ -853,7 +1076,28 @@ onBeforeUnmount(() => {
                 业务健康检查：{{ job.result.healthy ? "通过" : "未通过" }}
               </p>
               <p v-if="job.result.backupId">
-                完整备份：{{ job.result.backupId }}
+                完整备份
+                <CopyValue :value="job.result.backupId" label="备份编号" />
+                <RouterLink
+                  :to="{
+                    path: '/ops/backups',
+                    query: { backup: job.result.backupId },
+                  }"
+                  >核对备份时间与保留状态</RouterLink
+                >
+              </p>
+              <p v-if="backupReceipt">
+                备份时间 {{ dateText(backupReceipt.createdAt) }} ·
+                {{
+                  backupReceipt.withinRetentionWindow === true
+                    ? "最近七份"
+                    : backupReceipt.withinRetentionWindow === false
+                      ? "早期快照"
+                      : "保留状态待核对"
+                }}
+              </p>
+              <p v-else-if="backupReadError" class="error" role="alert">
+                备份清单读取失败。{{ backupReadError }}
               </p>
               <p v-if="job.result.verifiedMediaReferences !== undefined">
                 已核对媒体引用 {{ job.result.verifiedMediaReferences }} 条
@@ -891,7 +1135,7 @@ onBeforeUnmount(() => {
             <p v-if="['QUEUED', 'RUNNING'].includes(job.state)">
               每2秒查询原任务，业务停止不会改变任务编号。切到后台时暂停轮询。
             </p>
-            <button :disabled="busy" @click="load">刷新原任务状态</button>
+            <button :disabled="loading" @click="load">刷新原任务状态</button>
             <p>
               <RouterLink to="/ops/exceptions">查看失败与冲突任务</RouterLink>
             </p>

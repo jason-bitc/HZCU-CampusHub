@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from "vue";
-import { message } from "../lib/api";
 import { dateText } from "../lib/content";
 import { adminRequest, adminSession } from "./client";
 import { useMutation } from "./governance";
 import type { Page } from "./governance";
 import ConsolePager from "./ConsolePager.vue";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import { consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 
 interface Contribution {
@@ -29,6 +30,7 @@ interface AuditEntry {
   reason?: string;
   contributionEventId?: string;
 }
+const emit = defineEmits<{ changed: [] }>();
 const props = defineProps<{
   caseId: number;
   revision: number;
@@ -57,7 +59,7 @@ async function load(contributionPage = 1, auditPage = 1) {
     records.value = contributions;
     audit.value = history;
   } catch (e) {
-    if (current === generation) loadError.value = message(e);
+    if (current === generation) loadError.value = consoleError(e);
   } finally {
     if (current === generation) loading.value = false;
   }
@@ -67,6 +69,7 @@ const mutation = useMutation(
   "CONTRIBUTION_INVALIDATE",
   async () => {
     await load(records.value?.page, audit.value?.page);
+    emit("changed");
   },
 );
 const { pending, busy, error, notice, allowed } = mutation;
@@ -85,9 +88,12 @@ function select(eventId: string) {
 async function invalidate() {
   if (!canSelect.value || !selected.value || !reason.value.trim()) return;
   if (
-    !window.confirm(
-      "确认标记这笔投币失效？处理会更新有效贡献和荣誉，并写入案件审计。",
-    )
+    !(await modal.value?.ask({
+      title: "确认标记这笔投币失效？",
+      detail: `案件 ${props.caseId} · 原投币事件 ${selected.value}。有效贡献和作者荣誉将重新计算，读者原流水和余额保留，并记录案件审计。\n\n原因：${reason.value.trim()}`,
+      action: "标记投币失效",
+      danger: true,
+    }))
   )
     return;
   await mutation.start(
@@ -118,20 +124,33 @@ watch(pending, (value, previous) => {
   }
 });
 onBeforeUnmount(() => generation++);
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <section
     class="console-panel console-history"
     aria-labelledby="case-contributions-title"
   >
+    <ConsoleConfirm ref="modal" />
     <h2 id="case-contributions-title">关联投币与案件审计</h2>
     <p class="console-muted">
       投币失效会重新计算文章有效币数、排序与作者荣誉。读者原流水和余额保留。
     </p>
     <p v-if="!canHandle" class="hint">请由处于处理阶段的案件认领人提交失效。</p>
-    <button :disabled="loading || busy" @click="load()">刷新投币与审计</button>
+    <button
+      :disabled="loading || busy"
+      @click="
+        load(records?.page, audit?.page);
+        emit('changed');
+      "
+    >
+      刷新投币与审计
+    </button>
     <p v-if="loading" role="status">正在读取投币与案件审计…</p>
-    <p v-if="loadError" class="error" role="alert">{{ loadError }}</p>
+    <p v-if="loadError" class="error" role="alert">
+      {{ loadError }}
+      <span v-if="records || audit">当前显示的是上次读取结果。</span>
+    </p>
     <MutationNotice
       :pending="pending"
       :busy="busy || loading"
@@ -141,24 +160,24 @@ onBeforeUnmount(() => generation++);
       @reconcile="mutation.reconcile"
     />
     <div v-if="records?.items.length" class="console-table-wrap">
-      <table class="console-table">
-        <thead>
-          <tr>
-            <th>投币流水</th>
-            <th>币数与时间</th>
-            <th>处置结果</th>
-            <th>操作</th>
+      <table class="console-table console-responsive-table" role="table">
+        <thead role="rowgroup">
+          <tr role="row">
+            <th scope="col" role="columnheader">投币流水</th>
+            <th scope="col" role="columnheader">币数与时间</th>
+            <th scope="col" role="columnheader">处置结果</th>
+            <th scope="col" role="columnheader">操作</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="record in records.items" :key="record.eventId">
-            <td>{{ record.eventId }}</td>
-            <td>
+        <tbody role="rowgroup">
+          <tr role="row" v-for="record in records.items" :key="record.eventId">
+            <td data-label="投币流水" role="cell">{{ record.eventId }}</td>
+            <td data-label="币数与时间" role="cell">
               {{ record.amount }} 币<small>{{
                 dateText(record.occurredAt)
               }}</small>
             </td>
-            <td>
+            <td data-label="处置结果" role="cell">
               <span>{{ record.effective ? "有效" : "已失效" }}</span>
               <template v-if="record.invalidation">
                 <small
@@ -171,7 +190,7 @@ onBeforeUnmount(() => generation++);
                 }}</small>
               </template>
             </td>
-            <td>
+            <td data-label="操作" role="cell">
               <button
                 v-if="record.effective && canHandle && allowed"
                 :disabled="!canSelect"

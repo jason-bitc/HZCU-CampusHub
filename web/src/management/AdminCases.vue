@@ -1,6 +1,18 @@
+<script lang="ts">
+let listOrigin:
+  | { path: string; id: string; top: number; y: number; epoch: number }
+  | undefined;
+</script>
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import type { LocationQueryRaw } from "vue-router";
 import { adminRequest, adminSession } from "./client";
 import { caseCategories, caseStates } from "./types";
@@ -8,6 +20,9 @@ import type { CasePage, CaseRow } from "./types";
 import { dateText } from "../lib/content";
 import { message } from "../lib/api";
 import AdminGate from "./AdminGate.vue";
+import { consoleError } from "./console-ux";
+import ConsoleReadState from "./ConsoleReadState.vue";
+import ConsolePager from "./ConsolePager.vue";
 import ConsoleTable from "./ConsoleTable.vue";
 const route = useRoute();
 const router = useRouter();
@@ -23,7 +38,11 @@ const stats = ref<number[]>([]);
 const statsError = ref("");
 const busy = ref(false);
 const error = ref("");
-const owner = ref("all");
+const owner = computed(() => value("owner") || "all");
+const listPanel = ref<HTMLElement>();
+const hasFilters = computed(
+  () => owner.value !== "all" || !!value("kind") || !!value("state"),
+);
 let generation = 0;
 function value(name: string) {
   return typeof route.query[name] === "string" ? route.query[name] : "";
@@ -57,8 +76,6 @@ async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  data.value = undefined;
-  stats.value = [];
   statsError.value = "";
   try {
     const p = new URLSearchParams({ page: value("page") || "1", size: "20" });
@@ -69,8 +86,11 @@ async function load() {
       adminRequest<Overview>("/admin/overview"),
     ]);
     if (current !== generation) return;
-    if (cases.status === "fulfilled") data.value = cases.value;
-    else error.value = message(cases.reason);
+    if (cases.status === "fulfilled") {
+      data.value = cases.value;
+      await nextTick();
+      if (current === generation) restoreOrigin();
+    } else error.value = consoleError(cases.reason);
     if (overview.status === "fulfilled") {
       const v = overview.value;
       stats.value = [
@@ -81,7 +101,7 @@ async function load() {
       ];
     } else statsError.value = message(overview.reason);
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   } finally {
     if (current === generation) busy.value = false;
   }
@@ -96,6 +116,41 @@ function turn(page: number) {
     },
   });
 }
+function restoreOrigin() {
+  const origin = listOrigin;
+  if (
+    !origin ||
+    origin.epoch !== adminSession.epoch ||
+    origin.path !== route.fullPath
+  )
+    return;
+  listOrigin = undefined;
+  requestAnimationFrame(() => {
+    if (route.fullPath !== origin.path) return;
+    const link = document.getElementById(origin.id);
+    if (!link) {
+      listPanel.value?.focus({ preventScroll: true });
+      window.scrollTo(0, origin.y);
+      return;
+    }
+    link.focus({ preventScroll: true });
+    window.scrollBy(0, link.getBoundingClientRect().top - origin.top);
+  });
+}
+onBeforeRouteLeave((to) => {
+  const id = to.params.id;
+  if (!id || !to.path.startsWith("/admin/cases/")) return;
+  const key = "case-link-" + id;
+  const link = document.getElementById(key);
+  if (link)
+    listOrigin = {
+      path: route.fullPath,
+      id: key,
+      top: link.getBoundingClientRect().top,
+      y: window.scrollY,
+      epoch: adminSession.epoch,
+    };
+});
 onMounted(load);
 watch(() => [route.query, adminSession.status], load);
 onBeforeUnmount(() => generation++);
@@ -121,7 +176,11 @@ onBeforeUnmount(() => generation++);
         ><strong>{{ preview ? [4, 2, 1][i] : (stats[i] ?? "—") }}</strong>
       </section>
     </div>
-    <section class="console-panel console-case-list">
+    <section
+      ref="listPanel"
+      tabindex="-1"
+      class="console-panel console-case-list"
+    >
       <div class="console-filterbar">
         <label class="console-inline-label"
           >类型<select
@@ -151,23 +210,28 @@ onBeforeUnmount(() => generation++);
             </option>
           </select></label
         ><label class="console-inline-label"
-          >负责人（当前页）<select v-model="owner" aria-label="当前页负责人">
+          >负责人（当前页）<select
+            :value="owner"
+            aria-label="当前页负责人"
+            @change="
+              change('owner', ($event.target as HTMLSelectElement).value)
+            "
+          >
             <option value="all">全部</option>
             <option value="mine">仅本人</option>
             <option value="free">未分配</option>
           </select></label
-        ><button
-          class="console-link"
-          :disabled="busy"
-          @click="change('snapshot', '')"
-        >
+        ><button class="console-link" :disabled="busy" @click="load">
           刷新当前状态
         </button>
       </div>
-      <p v-if="busy" role="status">正在读取案件快照…</p>
-      <p v-if="error" class="error" role="alert">
-        {{ error }} <button @click="load">重试当前查询</button>
-      </p>
+      <ConsoleReadState
+        :loading="busy"
+        :error="error"
+        :stale="!!data"
+        label="正在读取案件快照…"
+        @retry="load"
+      />
       <ConsoleTable
         v-if="preview"
         :columns="[
@@ -203,25 +267,27 @@ onBeforeUnmount(() => generation++);
         :targets="['/admin/cases/102', '/admin/cases/102', '/admin/cases/102']"
       />
       <div v-else class="console-table-wrap">
-        <table class="console-table">
-          <thead>
-            <tr>
-              <th>案件 / 类型</th>
-              <th>关联对象</th>
-              <th>提交时间</th>
-              <th>状态 / 负责人</th>
-              <th>操作</th>
+        <table class="console-table console-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">案件 / 类型</th>
+              <th scope="col" role="columnheader">关联对象</th>
+              <th scope="col" role="columnheader">提交时间</th>
+              <th scope="col" role="columnheader">状态 / 负责人</th>
+              <th scope="col" role="columnheader">操作</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="row in rows" :key="row.caseId">
-              <td>
+          <tbody role="rowgroup">
+            <tr v-for="row in rows" :key="row.caseId" role="row">
+              <td data-label="案件 / 类型" role="cell">
                 {{ row.caseId }} ·
                 {{ caseCategories[row.category] || row.category }}
               </td>
-              <td>{{ target(row) }}</td>
-              <td>{{ dateText(row.createdAt) }}</td>
-              <td>
+              <td data-label="关联对象" role="cell">{{ target(row) }}</td>
+              <td data-label="提交时间" role="cell">
+                {{ dateText(row.createdAt) }}
+              </td>
+              <td data-label="状态 / 负责人" role="cell">
                 {{ caseStates[row.state] }} /
                 {{
                   row.assigneeId === null
@@ -231,36 +297,39 @@ onBeforeUnmount(() => generation++);
                       : `管理员 ${row.assigneeId}`
                 }}
               </td>
-              <td>
-                <RouterLink :to="`/admin/cases/${row.caseId}`">{{
-                  row.state === "CLOSED" ? "查看处理记录" : "查看上下文"
-                }}</RouterLink>
+              <td data-label="操作" role="cell">
+                <RouterLink
+                  :id="'case-link-' + row.caseId"
+                  :to="{
+                    path: `/admin/cases/${row.caseId}`,
+                    query: { from: route.fullPath },
+                  }"
+                  >{{
+                    row.state === "CLOSED" ? "查看处理记录" : "查看上下文"
+                  }}</RouterLink
+                >
               </td>
             </tr>
-            <tr v-if="!busy && !error && !rows.length">
+            <tr v-if="!busy && !error && data && !rows.length" role="row">
               <td colspan="5" class="console-table-empty">
-                当前条件下没有案件。可调整筛选或刷新。
+                {{
+                  hasFilters
+                    ? "当前筛选没有匹配案件。可调整筛选或刷新。"
+                    : "尚无案件，收到举报或反馈后将在这里显示。"
+                }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <nav
+      <ConsolePager
         v-if="data && data.total > data.size"
-        class="pagination"
-        aria-label="案件分页"
-      >
-        <button :disabled="busy || data.page <= 1" @click="turn(data.page - 1)">
-          上一页</button
-        ><span
-          >第 {{ data.page }} / {{ Math.ceil(data.total / data.size) }} 页</span
-        ><button
-          :disabled="busy || data.page * data.size >= data.total"
-          @click="turn(data.page + 1)"
-        >
-          下一页
-        </button>
-      </nav>
+        :page="data.page"
+        :total="data.total"
+        :size="data.size"
+        :busy="busy || !!error"
+        @turn="turn"
+      />
       <p class="hint">
         列表按同一快照翻页；详情显示当前状态。处理后刷新列表以获取新快照。
       </p>
