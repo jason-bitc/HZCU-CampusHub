@@ -15,7 +15,7 @@
 - 真实 API 脚本 21 条 HTTP 记录。健康、分类目录、分页、岗位／专业／公司／主题组合、无匹配和文章均为 200，未公开文章为 404 NOT_FOUND，非法空岗位为 400 INVALID_PARAMETER。
 - 微信开发者工具 320 CSS 像素实际走查通过。读者 11 项，创作 6 项。Java 岗位及同专业、空结果、末章定位、实际收藏回读、列表滚动恢复、游客登录后返回同文章和章节、发布缺项显示和定位均已检查。
 - 320px 胶囊实测左缘 227、右缘 314、顶部 28、高 32。先上传测试图并保存，从第二会话更新同一草稿，再用旧修订号保存。模拟器出现真实 409，本机正文、新段落和图片引用保留。首次工具下载超时，使用模拟器运行时直接下载并重新验证成功。
-- 375 CSS 像素设备预设已定位，但切换后实际窗口仍报告 320，因此 375px 仍待补验。复现时在微信开发者工具模拟器底部的机型菜单切换 iPhone 12/13 mini，读取实际宽度后按表中路径复验。真机、真实邮箱和真实用户验收待执行。
+- 375 CSS 像素 iPhone 12/13 mini 模拟器通过 9 项。胶囊左缘 281、右缘 368、顶部 51、高 32。发现、长文、工作区、编辑、个人中心读取实际数据。检查搜索触控高度和主要容器横向边界，长文目录为 44×44，末章定位成功。复现可在模拟器底部机型菜单切换后按表中路径验证。真机、真实邮箱和真实用户验收待执行。
 
 ## 截图
 
@@ -26,3 +26,5 @@
 - [真实图片上传](visual-refresh-20261117/M21-image-uploaded.jpg) · [真实 409 保留输入](visual-refresh-20261117/M24-draft-conflict.jpg)
 - [个人中心改前](visual-refresh-20261117/before-native-me.jpg) · [个人中心改后](visual-refresh-20261117/after-native-me-320.jpg)
 - [工作区改前](visual-refresh-20261117/before-native-workspace.jpg) · [工作区改后](visual-refresh-20261117/after-native-workspace-320.jpg)
+
+- 375px [发现](visual-refresh-20261117/after-native-discover-375.jpg) · [长文](visual-refresh-20261117/after-native-article-375.jpg) · [工作区](visual-refresh-20261117/after-native-workspace-375.jpg) · [编辑](visual-refresh-20261117/after-native-editor-375.jpg) · [个人中心](visual-refresh-20261117/after-native-me-375.jpg)
