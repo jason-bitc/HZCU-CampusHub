@@ -5,13 +5,16 @@
   <page-state wx:elif="{{invalid || unavailable}}" status="unavailable" title="反馈不可用" description="{{error || '反馈链接无效'}}" action-text="返回我的反馈" bindaction="list" />
   <view wx:elif="{{id}}">
     <page-state wx:if="{{busy && !detail}}" status="loading" title="正在读取反馈进度" />
-    <page-state wx:elif="{{error}}" status="error" title="读取反馈失败" description="{{error}}" action-text="重试" bindaction="refresh" />
+    <page-state wx:elif="{{error && !detail}}" status="error" title="读取反馈失败" description="{{error}}" action-text="重试" bindaction="refresh" />
     <view wx:elif="{{detail}}">
       <view class="section-card">
-        <view class="status-heading"><text class="status-tag">{{detail.stateText}}</text></view>
+        <view class="status-heading"><text class="status-tag progress-{{detail.stateTone}}">{{detail.stateText}}</text></view>
         <text class="row-title">反馈编号 #{{detail.caseId}}</text>
         <text class="hint">{{detail.kindText}} · {{detail.categoryText}} · {{detail.createdText}}</text>
         <text class="hint">{{detail.targetText}} · 仅本人可查</text>
+        <text class="section-copy">{{detail.progress}}</text>
+        <text wx:if="{{detail.outcome}}" class="row-title">处理结果 · {{detail.outcome}}</text>
+        <view wx:if="{{error}}" class="notice" role="alert"><text>{{error}}。下方仍为上次读取的进度。</text><button class="button-text" bindtap="refresh">重试刷新</button></view>
       </view>
       <view class="section-card">
         <text class="row-title">处理进度</text>
@@ -34,7 +37,7 @@
     <text class="form-title">我的反馈</text>
     <button class="button-primary" bindtap="create">提交使用反馈</button>
     <button wx:for="{{items}}" wx:key="caseId" class="section-card feedback-link" data-id="{{item.caseId}}" bindtap="detail">
-      <view class="status-heading"><text class="row-title">{{item.kindText}} #{{item.caseId}}</text><text class="status-tag">{{item.stateText}}</text></view>
+      <view class="status-heading"><text class="row-title">{{item.kindText}} #{{item.caseId}}</text><text class="status-tag progress-{{item.stateTone}}">{{item.stateText}}</text></view>
       <text class="hint">{{item.categoryText}} · {{item.targetText}}</text><text class="hint">更新于 {{item.updatedText}}</text>
     </button>
     <page-state wx:if="{{loaded && !items.length && !error}}" status="empty" title="还没有反馈记录" description="举报及使用反馈的处理进度会显示在这里。" />

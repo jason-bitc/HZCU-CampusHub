@@ -33,8 +33,6 @@
         <template is="author-honor" data="{{honor: author.honor}}" wx:if="{{author && author.honor}}" />
         <text wx:if="{{authenticated && !author && !privateLoading && !memberError}}" class="hint">当前文章没有可访问的作者主页。</text>
         <text wx:if="{{privateLoading}}" class="hint">正在读取本人互动状态…</text>
-        <view wx:if="{{memberError}}"><text class="field-error">{{memberError}}</text><button class="button-secondary" bindtap="refreshMember">重新核对互动状态</button></view>
-        <text wx:if="{{pendingCoin}}" class="hint">投币结果待确认，点击底部“核对投币”会沿用原请求。</text>
       </view>
 
       <markdown-view id="article-reader" demo-mode="{{demoMode}}" body="{{article.body}}" asset-base-url="{{assetBaseUrl}}" source-links="{{article.sourceLinks}}" source-note="{{article.sourceNote}}" binddrawerchange="handleDrawerChange" bindsources="goToSources" />
@@ -59,22 +57,29 @@
   </view>
 
   <view wx:if="{{status === 'ready'}}" class="visitor-action-bar" role="toolbar" aria-label="文章互动操作">
-    <button class="visitor-action {{interaction.liked ? 'action-selected' : ''}}" data-kind="like" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="点赞">
+    <view wx:if="{{memberError || pendingCoin && !busyAction}}" class="interaction-feedback interaction-error" role="alert">
+      <text>{{memberError || '投币结果待确认，核对时会沿用原请求。'}}</text>
+      <button wx:if="{{memberError && !pendingCoin}}" class="button-text" bindtap="refreshMember" disabled="{{busyAction || privateLoading}}">核对状态</button>
+    </view>
+    <text wx:elif="{{actionNotice && !busyAction}}" class="interaction-feedback" role="status">{{actionNotice}}</text>
+    <view class="visitor-action-row">
+    <button class="visitor-action {{interaction.liked ? 'action-selected' : ''}}" data-kind="like" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !interaction}}" aria-pressed="{{!!interaction.liked}}" aria-label="{{interaction.liked ? '取消点赞' : '点赞'}}">
       <app-icon name="like" size="38" />
-      <text>{{interaction.liked ? '已赞' : '点赞'}} {{article.effectiveLikes}}</text>
+      <text>{{busyAction === 'like' ? '处理中…' : interaction.liked ? '已赞 ' + article.effectiveLikes : '点赞 ' + article.effectiveLikes}}</text>
     </button>
-    <button class="visitor-action" bindtap="coins" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="投币">
+    <button class="visitor-action" bindtap="coins" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !pendingCoin && !coinState || authenticated && !pendingCoin && !wallet}}" aria-label="{{pendingCoin ? '核对投币' : '投币'}}">
       <app-icon name="coin" size="38" />
-      <text>{{pendingCoin ? '核对投币' : '投币'}} {{article.effectiveCoins}}</text>
+      <text>{{busyAction === 'coin' ? '核对中…' : pendingCoin ? '核对投币' : '投币 ' + article.effectiveCoins}}</text>
     </button>
-    <button class="visitor-action {{interaction.favorited ? 'action-selected' : ''}}" data-kind="favorite" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="收藏">
+    <button class="visitor-action {{interaction.favorited ? 'action-selected' : ''}}" data-kind="favorite" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !interaction}}" aria-pressed="{{!!interaction.favorited}}" aria-label="{{interaction.favorited ? '取消收藏' : '收藏'}}">
       <app-icon name="star" size="38" />
-      <text>{{interaction.favorited ? '已收藏' : '收藏'}}</text>
+      <text>{{busyAction === 'favorite' ? '处理中…' : interaction.favorited ? '已收藏' : '收藏'}}</text>
     </button>
-    <button class="visitor-action" bindtap="comments" disabled="{{demoMode || busyAction || privateLoading}}" aria-label="评论">
+    <button class="visitor-action" bindtap="comments" disabled="{{demoMode || busyAction || coinChoosing || privateLoading}}" aria-label="评论">
       <app-icon name="comment" size="38" />
       <text>评论</text>
     </button>
+    </view>
   </view>
   <view class="bottom-safe"></view>
 </view>

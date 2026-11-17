@@ -1,1 +1,3 @@
 .certification-panel .field { margin-top: 20rpx; }
+.certification-entry { margin-top: 20rpx; }
+.certification-copy { display: block; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }

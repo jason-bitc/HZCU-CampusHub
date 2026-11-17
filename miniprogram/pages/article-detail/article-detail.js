@@ -7,7 +7,7 @@ const account = require('../../services/account');
 const session = require('../../services/session');
 const access = require('../../utils/member-page');
 const pending = require('../../utils/operation');
-const privateBlank = { authenticated: false, interaction: null, author: null, coinState: null, wallet: null, memberError: '', pendingCoin: null, busyAction: '', privateLoading: false };
+const privateBlank = { authenticated: false, interaction: null, author: null, coinState: null, wallet: null, memberError: '', actionNotice: '', pendingCoin: null, busyAction: '', coinChoosing: false, privateLoading: false };
 
 Page({
   data: {
@@ -49,8 +49,19 @@ Page({
     this.gate.next();
   },
 
-  onShow() { this.refreshMember(); },
+  async onShow() {
+    await this.refreshMember();
+    if (!this._loginBookmark || this.data.status !== 'ready') return;
+    const bookmark = this._loginBookmark;
+    this._loginBookmark = null;
+    wx.nextTick(() => {
+      const reader = this.selectComponent('#article-reader');
+      if (reader) reader.restorePosition(bookmark);
+      else wx.pageScrollTo({ scrollTop: bookmark.scrollTop, duration: 0 });
+    });
+  },
   async refreshMember() {
+    if (this.data.busyAction || this.data.coinChoosing) return;
     const round = this.memberRound = (this.memberRound || 0) + 1;
     if (!session.token() || config.demoMode) { this.setData(privateBlank); return; }
     this.setData({ privateLoading: true, memberError: '', author: null, interaction: null, coinState: null, wallet: null });
@@ -59,31 +70,56 @@ Page({
       this.setData({ authenticated: true });
       if (this.data.status !== 'ready') return;
       const id = this.data.articleId;
-      const state = await Promise.all([
+      const state = await Promise.allSettled([
         member.interaction(id),
         member.articleAuthor(id).catch((e) => { if (e.status === 404) return null; throw e; }),
         member.coinState(id),
         member.wallet()
       ]);
       if (round !== this.memberRound) return;
+      const value = (index) => state[index].status === 'fulfilled' ? state[index].value : null;
+      const problem = state.find((task) => task.status === 'rejected');
       this.setData({
-        interaction: state[0], author: state[1], coinState: state[2], wallet: state[3],
-        pendingCoin: pending.read(`coin:${id}`)
+        interaction: value(0), author: value(1), coinState: value(2), wallet: value(3),
+        pendingCoin: pending.read(`coin:${id}`), memberError: problem ? access.errorText(problem.reason) : ''
       });
       member.startReading(id).catch(() => {});
     } catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
     finally { if (round === this.memberRound) this.setData({ privateLoading: false }); }
   },
-  login: access.login,
+  login() {
+    if (this._loginBookmark) return;
+    const scrollTop = this._scrollTop || 0;
+    const reader = this.selectComponent('#article-reader');
+    this._loginBookmark = reader ? reader.capturePosition(scrollTop) : { scrollTop };
+    access.login.call(this, () => { this._loginBookmark = null; });
+  },
   async toggleInteraction(e) {
     if (!this.data.authenticated) { this.login(); return; }
-    if (!this.data.interaction || this.data.busyAction) return;
+    if (!this.data.interaction || this.data.busyAction || this.data.coinChoosing || this.data.privateLoading) return;
     const kind = e.currentTarget.dataset.kind; if (!['like', 'favorite'].includes(kind)) return;
     const round = this.memberRound; const target = kind === 'like' ? !this.data.interaction.liked : !this.data.interaction.favorited;
-    this.setData({ busyAction: kind, memberError: '' });
-    try { const result = await member[kind](this.data.articleId, target); if (round !== this.memberRound) return; this.setData(kind === 'like' ? { 'interaction.liked': result.liked, 'article.effectiveLikes': result.effectiveLikes } : { 'interaction.favorited': result.favorited }); }
-    catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
-    finally { if (round === this.memberRound) this.setData({ busyAction: '' }); }
+    const id = this.data.articleId;
+    this.setData({ busyAction: kind, memberError: '', actionNotice: '' });
+    try {
+      const result = await member[kind](id, target);
+      if (round !== this.memberRound) return;
+      this.setData(kind === 'like'
+        ? { 'interaction.liked': result.liked, 'article.effectiveLikes': result.effectiveLikes }
+        : { 'interaction.favorited': result.favorited });
+      this.setData({ actionNotice: kind === 'like' ? (result.liked ? '已点赞' : '已取消点赞') : (result.favorited ? '已收藏，可到收藏页查看' : '已取消收藏') });
+    } catch (error) {
+      if (round !== this.memberRound) return;
+      this.setData({ memberError: access.errorText(error) });
+    }
+    try {
+      const interaction = await member.interaction(id);
+      if (round === this.memberRound) this.setData({ interaction });
+    } catch (error) {
+      if (round === this.memberRound && !this.data.memberError) this.setData({ memberError: `暂时无法重新核对状态。${access.errorText(error)}` });
+    } finally {
+      if (round === this.memberRound) this.setData({ busyAction: '' });
+    }
   },
   report() {
     if (this.data.demoMode || this.data.status !== 'ready') return;
@@ -93,22 +129,34 @@ Page({
   author() { if (this.data.author) wx.navigateTo({ url: `/pages/author/author?id=${this.data.author.authorId}` }); },
   coins() {
     if (!this.data.authenticated) { this.login(); return; }
+    if (this.data.busyAction || this.data.coinChoosing || this.data.privateLoading) return;
     if (this.data.pendingCoin) { this.submitCoins(); return; }
     const state = this.data.coinState; const wallet = this.data.wallet;
-    if (!state || !wallet || this.data.busyAction) return;
+    if (!state || !wallet) return;
     const reasons = { NO_REAL_AUTHOR: '该文章没有关联真实作者，不能投币。', SELF_ARTICLE: '不能给自己的文章投币。', ARTICLE_COIN_LIMIT: '已达到这篇文章的累计投币额度。' };
     if (!state.eligible) { this.setData({ memberError: reasons[state.reason] || '当前文章暂不可投币' }); return; }
     const max = Math.min(2, state.remaining, wallet.balance);
     if (max < 1) { this.setData({ memberError: '硬币余额不足，可在“我的 → 我的硬币”查看奖励。' }); return; }
     const amounts = max >= 2 ? [1, 2] : [1];
-    wx.showActionSheet({ itemList: amounts.map((n) => `投 ${n} 币`), success: (choice) => {
+    const round = this.memberRound;
+    const release = () => { if (round === this.memberRound) this.setData({ coinChoosing: false }); };
+    this.setData({ coinChoosing: true, memberError: '', actionNotice: '' });
+    wx.showActionSheet({ itemList: amounts.map((n) => `投 ${n} 枚硬币`), fail: release, success: (choice) => {
+      if (round !== this.memberRound) return;
       const amount = amounts[choice.tapIndex];
-      wx.showModal({ title: `确认投 ${amount} 币？`, content: '将从你的硬币余额中扣除，不能自行撤回。投币不会购买内容，全文始终免费。', success: (r) => { if (!r.confirm || !this.data.authenticated) return; const value = { amount, requestId: pending.uuid() }; try { pending.write(`coin:${this.data.articleId}`, value); this.setData({ pendingCoin: value }); this.submitCoins(); } catch (_) { this.setData({ memberError: '无法保留投币请求，请稍后重试' }); } } });
+      wx.showModal({ title: `确认投 ${amount} 枚硬币？`, content: '将从你的硬币余额中扣除，不能自行撤回。投币不会购买内容，全文始终免费。', fail: release, success: (r) => {
+        if (round !== this.memberRound) return;
+        release();
+        if (!r.confirm || !this.data.authenticated) return;
+        const value = { amount, requestId: pending.uuid() };
+        try { pending.write(`coin:${this.data.articleId}`, value); this.setData({ pendingCoin: value }); this.submitCoins(); }
+        catch (_) { this.setData({ memberError: '无法保留投币请求，请稍后重试' }); }
+      } });
     } });
   },
   async submitCoins() {
-    if (!this.data.pendingCoin || this.data.busyAction) return; const round = this.memberRound; this.setData({ busyAction: 'coin', memberError: '' });
-    try { const value = this.data.pendingCoin; await member.coin(this.data.articleId, value.amount, value.requestId); if (round !== this.memberRound) return; pending.remove(`coin:${this.data.articleId}`); this.setData({ pendingCoin: null, busyAction: '' }); this.refreshMember(); const refreshedRound = this.memberRound; const article = await articlesApi.getArticle(this.data.articleId).promise; if (refreshedRound === this.memberRound && this.data.article) this.setData({ 'article.effectiveCoins': article.effectiveCoins }); }
+    if (!this.data.pendingCoin || this.data.busyAction) return; const round = this.memberRound; this.setData({ busyAction: 'coin', memberError: '', actionNotice: '' });
+    try { const value = this.data.pendingCoin; await member.coin(this.data.articleId, value.amount, value.requestId); if (round !== this.memberRound) return; pending.remove(`coin:${this.data.articleId}`); this.setData({ pendingCoin: null, busyAction: '', actionNotice: `已投 ${value.amount} 枚硬币` }); this.refreshMember(); const refreshedRound = this.memberRound; const article = await articlesApi.getArticle(this.data.articleId).promise; if (refreshedRound === this.memberRound && this.data.article) this.setData({ 'article.effectiveCoins': article.effectiveCoins }); }
     catch (error) { if (round === this.memberRound) { if (error.status === 400 || error.status === 409 && error.code !== 'REQUEST_KEY_REUSED') { pending.remove(`coin:${this.data.articleId}`); this.setData({ pendingCoin: null, memberError: access.errorText(error) }); } else this.setData({ memberError: `${access.errorText(error)}。未确认时重试会沿用原请求。` }); } }
     finally { if (round === this.memberRound) this.setData({ busyAction: '' }); }
   },
@@ -122,6 +170,7 @@ Page({
   },
 
   onPageScroll(event) {
+    this._scrollTop = event.scrollTop;
     const reader = this.selectComponent('#article-reader');
     if (reader) reader.updateReadingPosition(event.scrollTop);
   },

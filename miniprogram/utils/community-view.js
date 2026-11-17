@@ -5,11 +5,18 @@ const categories = {
   FEEDBACK: [{ value: 'BUG', label: '使用问题' }, { value: 'SUGGESTION', label: '建议' }, { value: 'OTHER', label: '其他' }]
 };
 const states = { OPEN: '已提交', PROCESSING: '处理中', NEEDS_ACTION: '待后续处理', CLOSED: '已完成' };
+const caseProgress = {
+  OPEN: '等待受理，处理结果会通过站内通知告知。',
+  PROCESSING: '管理员正在核查说明和证据。',
+  NEEDS_ACTION: '案件进入后续治理，完成后会更新处理结果。',
+  CLOSED: '案件处理已结束，可查看下方处理结果。'
+};
 const decisions = {
   NO_VIOLATION: '未发现违规', DUPLICATE: '重复举报', REQUIRES_GOVERNANCE: '进入后续治理',
   GOVERNANCE_COMPLETED: '已完成治理', ANSWERED: '已答复', RECORDED: '已记录'
 };
 const appealStates = { OPEN: '等待复核', ACCEPTED: '申诉已接受', REJECTED: '申诉已驳回' };
+const appealProgress = { OPEN: '复核结果会通过站内通知告知。', ACCEPTED: '复核已完成。', REJECTED: '复核已完成，可查看答复。' };
 const uuidPattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/;
 const sqlUtc = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?$/;
 
@@ -41,6 +48,7 @@ function caseRow(raw) {
     kindText: raw.kind === 'REPORT' ? '内容举报' : '使用反馈',
     categoryText: category ? category.label : '其他',
     stateText: states[raw.state] || '状态待核对',
+    stateTone: raw.state === 'CLOSED' ? 'done' : raw.state === 'OPEN' ? 'waiting' : 'active',
     targetText: targetText(raw.targetType, validId(raw.articleId), validId(raw.commentId)),
     createdText: formatDateTime(raw.createdAt), updatedText: formatDateTime(raw.updatedAt)
   };
@@ -53,9 +61,12 @@ function caseDetail(raw) {
     reply: typeof row.reply === 'string' ? row.reply : '',
     occurredText: formatDateTime(row.occurredAt)
   }));
+  const latest = (raw.history || []).slice().reverse().find((row) => decisions[row.outcome]);
   return Object.assign(caseRow(raw), {
     description: typeof raw.description === 'string' ? raw.description : '',
-    images: (raw.images || []).map(evidenceImage).filter(Boolean), history
+    images: (raw.images || []).map(evidenceImage).filter(Boolean), history,
+    progress: caseProgress[raw.state] || '可刷新查看处理状态。',
+    outcome: latest ? decisions[latest.outcome] : ''
   });
 }
 
@@ -68,9 +79,13 @@ function restriction(raw) {
 }
 
 function appeal(raw) {
+  const certification = raw.subject === 'CAMPUS_CERTIFICATION';
   return {
     id: validId(raw.id), restrictionId: validId(raw.restrictionId), restrictionRevision: raw.restrictionRevision,
     state: raw.state, stateText: appealStates[raw.state] || '状态待核对',
+    stateTone: raw.state === 'ACCEPTED' ? 'done' : raw.state === 'OPEN' ? 'waiting' : 'active',
+    contextText: certification ? '校园认证申诉' : '行为限制申诉',
+    progress: appealProgress[raw.state] || '可刷新查看复核状态。',
     reason: typeof raw.reason === 'string' ? raw.reason : '', reply: typeof raw.reply === 'string' ? raw.reply : '',
     updatedText: governanceTime(raw.updatedAt)
   };

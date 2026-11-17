@@ -1,1 +1,7 @@
 .notice-row .inline-actions { margin-top: 16rpx; }
+.notice-unread { border-color: var(--color-primary); background: var(--color-primary-soft); }
+.notice-title { display: flex; align-items: flex-start; gap: 12rpx; }
+.notice-title .row-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.unread-tag { flex: none; }
+.notice-outcome { display: block; color: var(--color-primary-dark); font-size: var(--font-sm); margin-top: 12rpx; }
+.notice-row .inline-actions { flex-wrap: wrap; }

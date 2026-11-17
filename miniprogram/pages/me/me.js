@@ -2,14 +2,23 @@ const api = require('../../services/member');
 const community = require('../../services/community');
 const articles = require('../../services/articles');
 const access = require('../../utils/member-page');
+const session = require('../../services/session');
 
 const emptyCounts = { articles: null, drafts: null, favorites: null, feedback: null };
-const blank = { profile: null, avatar: '', profileSummary: '', wallet: null, rewards: null, counts: emptyCounts };
+const blank = { profile: null, avatar: '', profileSummary: '', wallet: null, rewards: null, counts: emptyCounts, unreadCount: null };
 Page({
   data: Object.assign({ authStatus: 'checking', error: '', loading: false }, blank),
   onLoad() { access.attach(this, Object.assign({ loading: false }, blank)); },
   async onShow() {
-    if (!await access.enter(this, 'me')) return;
+    const ready = await access.enter(this, 'me');
+    if (!ready) {
+      if (session.reason() === 'restricted' && session.personalToken()) {
+        this.setData({ authStatus: 'limited' });
+        this.loadUnread();
+      }
+      return;
+    }
+    this.loadUnread();
     const epoch = this._epoch;
     this.setData({ loading: true });
     const results = await Promise.allSettled([
@@ -34,6 +43,13 @@ Page({
       profileSummary: [major ? major.name : '未填写专业', stage || '阶段未设置'].join(' · '),
       wallet: value(2), rewards: value(3), counts, loading: false, error: problem ? access.errorText(problem.reason) : ''
     });
+  },
+  async loadUnread() {
+    const epoch = this._epoch;
+    try {
+      const { unreadCount } = await api.call('/me/notifications', 'GET', { page: 1, size: 1 });
+      if (epoch === this._epoch) this.setData({ unreadCount });
+    } catch (_) { if (epoch === this._epoch) this.setData({ unreadCount: null }); }
   },
   onUnload() { access.leave(this); },
   login: access.login, discover: access.discover,
