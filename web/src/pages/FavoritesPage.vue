@@ -5,13 +5,16 @@ import { get, message, send } from "../lib/api";
 import { session } from "../lib/session";
 import { favoritesPage, lastFavoritesPage } from "../lib/favorites";
 import type { Favorite, Page } from "../types";
+import OperationFeedback from "../components/OperationFeedback.vue";
+import { operationFailure, type Feedback } from "../lib/feedback";
 import MemberGate from "../components/MemberGate.vue";
 import { dateText } from "../lib/content";
 const route = useRoute();
 const router = useRouter();
 const result = ref<Page<Favorite>>();
 const busy = ref(false);
-const changing = ref(false);
+const changing = ref<number>();
+const rowFeedback = ref<Record<number, Feedback>>({});
 const error = ref("");
 const notice = ref("");
 let generation = 0;
@@ -31,7 +34,6 @@ async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  result.value = undefined;
   try {
     const value = favoritesPage(
       await get<Page<Favorite>>(
@@ -57,17 +59,26 @@ async function load() {
 }
 async function remove(id: number) {
   if (busy.value || changing.value) return;
-  changing.value = true;
-  error.value = "";
+  changing.value = id;
+  delete rowFeedback.value[id];
   notice.value = "";
   try {
     await send(`/articles/${id}/favorite`, "DELETE");
     notice.value = "已取消收藏。";
+    if (result.value?.items.some((item) => item.articleId === id)) {
+      result.value.items = result.value.items.filter(
+        (item) => item.articleId !== id,
+      );
+      result.value.total = Math.max(0, result.value.total - 1);
+    }
     await load();
   } catch (e) {
-    error.value = `${message(e)} 取消结果尚未确认，可刷新收藏或再次取消。`;
+    rowFeedback.value[id] = operationFailure(
+      e,
+      "取消结果待确认，可刷新收藏或再次取消。",
+    );
   } finally {
-    changing.value = false;
+    changing.value = undefined;
   }
 }
 function turn(page: number) {
@@ -98,13 +109,13 @@ onBeforeUnmount(() => {
         <h1>我的收藏</h1>
         <p>收藏有帮助的经验，留给下一次阅读。</p>
       </div>
-      <button :disabled="busy || changing" @click="load">刷新收藏</button>
+      <button :disabled="busy || !!changing" @click="load">刷新收藏</button>
     </div>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <section v-if="error" class="panel" role="alert">
       <h2>收藏暂时读取或操作失败</h2>
-      <p>{{ error }}</p>
-      <button :disabled="busy || changing" @click="load">重试当前页</button>
+      <p>{{ error }} <span v-if="result">当前显示的是上次读取结果。</span></p>
+      <button :disabled="busy || !!changing" @click="load">重试当前页</button>
     </section>
     <p v-if="busy" role="status">正在读取第 {{ currentPage() }} 页收藏…</p>
     <section v-if="result" class="favorites-panel">
@@ -114,7 +125,7 @@ onBeforeUnmount(() => {
           >每页<select
             aria-label="每页收藏条数"
             :value="currentSize()"
-            :disabled="busy || changing"
+            :disabled="busy || !!changing"
             @change="resize(($event.target as HTMLSelectElement).value)"
           >
             <option :value="5">5 条</option>
@@ -156,11 +167,14 @@ onBeforeUnmount(() => {
                   >继续阅读</RouterLink
                 ><button
                   class="text-button"
-                  :disabled="busy || changing"
+                  :disabled="busy || !!changing"
                   @click="remove(item.articleId)"
                 >
-                  取消收藏
+                  {{
+                    changing === item.articleId ? "正在取消收藏…" : "取消收藏"
+                  }}
                 </button>
+                <OperationFeedback :feedback="rowFeedback[item.articleId]" />
               </td>
             </tr>
           </tbody>
@@ -177,7 +191,7 @@ onBeforeUnmount(() => {
         aria-label="收藏翻页"
       >
         <button
-          :disabled="busy || changing || currentPage() <= 1"
+          :disabled="busy || !!changing || currentPage() <= 1"
           @click="turn(currentPage() - 1)"
         >
           上一页</button
@@ -187,7 +201,7 @@ onBeforeUnmount(() => {
         ><button
           :disabled="
             busy ||
-            changing ||
+            !!changing ||
             currentPage() >= lastFavoritesPage(result.total, result.size)
           "
           @click="turn(currentPage() + 1)"

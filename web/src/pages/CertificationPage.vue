@@ -147,7 +147,9 @@ watch(() => session.status, load);
     </div>
     <p v-if="busy" role="status">正在读取或提交…</p>
     <p v-if="error" class="error" role="alert">
-      {{ error }} <button @click="load">刷新记录</button>
+      {{ error }}
+      <span v-if="certification || appeal">当前显示的是上次读取结果。</span>
+      <button @click="load">刷新记录</button>
     </p>
     <p v-if="notice" role="status">{{ notice }}</p>
     <section v-if="appeal" class="panel">
@@ -158,18 +160,33 @@ watch(() => session.status, load);
             : "行为限制申诉"
         }}
       </h2>
-      <p>
-        {{
-          appeal.state === "OPEN"
-            ? "等待复核"
-            : appeal.state === "ACCEPTED"
-              ? "申诉已接受"
-              : "申诉已驳回"
-        }}
-        · {{ dateText(appeal.updatedAt) }}
-      </p>
-      <p>{{ appeal.reason }}</p>
-      <p v-if="appeal.reply">复核答复 {{ appeal.reply }}</p>
+      <ol class="record-timeline">
+        <li>
+          <time
+            v-if="appeal.createdAt"
+            :datetime="appeal.createdAt"
+            class="meta"
+            >{{ dateText(appeal.createdAt) }}</time
+          >
+          <strong>提交申诉</strong>
+          <p class="long-content">{{ appeal.reason }}</p>
+        </li>
+        <li>
+          <time :datetime="appeal.updatedAt" class="meta">{{
+            dateText(appeal.updatedAt)
+          }}</time>
+          <strong>{{
+            appeal.state === "OPEN"
+              ? "等待复核"
+              : appeal.state === "ACCEPTED"
+                ? "申诉已接受"
+                : "申诉已驳回"
+          }}</strong>
+          <p v-if="appeal.reply" class="long-content">
+            复核答复 {{ appeal.reply }}
+          </p>
+        </li>
+      </ol>
       <RouterLink
         class="button"
         :to="
@@ -194,7 +211,7 @@ watch(() => session.status, load);
         <p v-if="certification.verifiedAt">
           最近验证 {{ dateText(certification.verifiedAt) }}
         </p>
-        <p v-if="certification.revocationReason">
+        <p v-if="certification.revocationReason" class="long-content">
           撤销理由 {{ certification.revocationReason }}
         </p>
         <p v-if="certification.revokedAt">

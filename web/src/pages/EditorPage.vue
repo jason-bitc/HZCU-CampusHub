@@ -18,13 +18,16 @@ import {
 } from "../lib/session";
 import {
   fromDraft,
-  publishErrors,
+  publishChecklist,
   sourceName,
   stateName,
 } from "../lib/content";
 import type { Catalog, Draft, Form, ImageAsset } from "../types";
 import MemberGate from "../components/MemberGate.vue";
 import MarkdownView from "../components/MarkdownView.vue";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
+import OperationFeedback from "../components/OperationFeedback.vue";
+import { operationFailure, type Feedback } from "../lib/feedback";
 
 interface PublishRequest {
   requestId: string;
@@ -50,6 +53,28 @@ const catalog = ref<Catalog>();
 const revision = ref(0);
 const saved = ref("");
 const busy = ref(false);
+const saving = ref(false);
+const uploading = ref(false);
+const publishing = ref(false);
+const saveFeedback = ref<Feedback>();
+const uploadFeedback = ref<Feedback>();
+const publishFeedback = ref<Feedback>();
+const confirmation = ref<InstanceType<typeof ConfirmDialog>>();
+const checklist = ref<HTMLElement>();
+const checkRequested = ref(false);
+const serverMissing = ref<string[]>([]);
+const issues = computed(() =>
+  form.value ? publishChecklist(form.value, serverMissing.value) : [],
+);
+const showAllDifferences = ref(false);
+const comparedFields = computed(() =>
+  showAllDifferences.value
+    ? comparison.value
+    : comparison.value.filter((field) => field.changed),
+);
+const previewPanel = ref<HTMLElement>();
+const publishTrigger = ref<HTMLButtonElement>();
+let active = true;
 const error = ref("");
 const notice = ref("");
 const preview = ref(false);
@@ -126,7 +151,7 @@ const comparison = computed(() => {
   }));
 });
 function checkpoint() {
-  if (!form.value || session.status !== "ready") return;
+  if (!form.value || recovery.value || session.status !== "ready") return;
   try {
     writePrivate(`draft:${id}`, {
       form: form.value,
@@ -181,11 +206,14 @@ function restoreBackup() {
   recovery.value = null;
   notice.value = "已恢复本机副本，尚未覆盖服务器草稿。";
 }
-function discardBackup() {
+async function discardBackup() {
   if (
-    !confirm(
-      "以服务器草稿继续？当前标签页保存的本机修改与待确认请求将被移除。请先下载副本。",
-    )
+    !(await confirmation.value?.ask({
+      title: "从服务器草稿继续？",
+      detail:
+        "本标签页的本机副本和待确认请求将被移除。你可以先取消并下载副本。",
+      action: "移除本机副本",
+    }))
   )
     return;
   recovery.value = null;
@@ -224,10 +252,10 @@ function downloadJson(value: unknown, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 async function save(): Promise<boolean> {
-  if (locked.value || !form.value) return false;
+  if (locked.value || uploading.value || !form.value) return false;
   busy.value = true;
-  error.value = "";
-  notice.value = "";
+  saving.value = true;
+  saveFeedback.value = undefined;
   try {
     if (new TextEncoder().encode(form.value.body).length > 1048576)
       throw new Error("正文超过 1MiB，请保留副本并缩短内容");
@@ -238,20 +266,24 @@ async function save(): Promise<boolean> {
     });
     apply(result);
     savedAt.value = new Date().toLocaleTimeString("zh-CN");
-    notice.value = "草稿已保存到服务器。";
+    saveFeedback.value = { kind: "success", text: "草稿已保存到服务器。" };
     checkpoint();
     return true;
   } catch (e) {
-    error.value = message(e);
+    saveFeedback.value = operationFailure(
+      e,
+      "保存结果待确认，本机输入已保留。",
+    );
     if (e instanceof ApiError && e.status === 409) {
       try {
         conflict.value = await get<Draft>(`/me/articles/${id}/draft`, true);
       } catch (r) {
-        error.value += ` ${message(r)}`;
+        saveFeedback.value.text += " " + message(r);
       }
     }
     return false;
   } finally {
+    saving.value = false;
     busy.value = false;
   }
 }
@@ -265,32 +297,56 @@ function prepareMerge() {
   checkpoint();
   notice.value = "本机编辑已保留，请对照下载的服务器版本手动合并，再保存。";
 }
-function useServer() {
-  if (!conflict.value || !confirm("替换编辑区为服务器版本？请先下载本机副本。"))
+async function useServer() {
+  if (
+    !conflict.value ||
+    !(await confirmation.value?.ask({
+      title: "使用服务器版本？",
+      detail:
+        "编辑区将替换为服务器草稿。需要保留当前输入时，请先取消并下载本机副本。",
+      action: "替换为服务器版本",
+    }))
+  )
     return;
   apply(conflict.value);
   conflict.value = undefined;
   pendingPublish.value = null;
   checkpoint();
 }
+async function showChecklist(fields: string[] = []) {
+  serverMissing.value = fields;
+  checkRequested.value = true;
+  await nextTick();
+  checklist.value?.focus();
+}
+async function locateField(field: string) {
+  if (field === "body") await changeMode(false);
+  const group = document.getElementById("draft-" + field);
+  const target = group?.querySelector<HTMLElement>("input") || group;
+  target?.focus({ preventScroll: true });
+  target?.scrollIntoView({ block: "center" });
+}
 async function publish() {
   if (pendingPublish.value) {
     await submitPublish();
     return;
   }
-  if (!form.value || locked.value) return;
+  if (!form.value || locked.value || uploading.value) return;
+  publishFeedback.value = undefined;
   if (pendingUpload.value) {
-    error.value = "请先核对待确认的图片上传，再发布文章。";
+    publishFeedback.value = {
+      kind: "pending",
+      text: "请先核对待确认的图片上传，再发布文章。",
+    };
     return;
   }
-  const missing = publishErrors(form.value);
-  if (missing.length) {
-    error.value = `发布前请${missing.join("、")}。`;
+  if (publishChecklist(form.value).length) {
+    await showChecklist();
     return;
   }
   if (dirty.value && !(await save())) return;
   busy.value = true;
-  error.value = "";
+  publishing.value = true;
   try {
     const result = await get<{
       canPublish: boolean;
@@ -298,25 +354,33 @@ async function publish() {
       blockedBy?: string;
     }>(`/me/articles/${id}/preview?expectedRevision=${revision.value}`, true);
     if (!result.canPublish) {
-      error.value =
-        result.blockedBy === "BEHAVIOR_RESTRICTED"
-          ? "当前账号发布受限，请查看限制与申诉。"
-          : result.missingFields.length
-            ? `发布条件未满足（${result.missingFields.join("、")}）。`
-            : "当前文章状态不允许发布。";
+      if (result.missingFields.length)
+        await showChecklist(result.missingFields);
+      if (result.blockedBy === "BEHAVIOR_RESTRICTED")
+        publishFeedback.value = {
+          kind: "denied",
+          text: "当前账号发布受限，请查看限制与申诉。",
+        };
+      else if (!issues.value.length)
+        publishFeedback.value = {
+          kind: "error",
+          text: "服务器未通过发布检查。请核对正文、分类和来源。",
+        };
       return;
     }
+    checkRequested.value = false;
     preview.value = true;
   } catch (e) {
-    error.value = message(e);
+    publishFeedback.value = operationFailure(e);
     if (e instanceof ApiError && e.code === "REVISION_CONFLICT") {
       try {
         conflict.value = await get<Draft>(`/me/articles/${id}/draft`, true);
       } catch (readError) {
-        error.value = message(readError);
+        publishFeedback.value = operationFailure(readError);
       }
     }
   } finally {
+    publishing.value = false;
     busy.value = false;
   }
 }
@@ -336,39 +400,53 @@ async function confirmPublish() {
     pendingPublish.value = value;
     await submitPublish();
   } catch (e) {
-    error.value = message(e);
+    publishFeedback.value = operationFailure(e);
   }
 }
 async function submitPublish() {
-  if (!pendingPublish.value || busy.value) return;
+  if (!pendingPublish.value || busy.value || uploading.value) return;
   busy.value = true;
-  error.value = "";
+  publishing.value = true;
+  publishFeedback.value = undefined;
+  let confirmed = false;
   try {
     await send(`/me/articles/${id}/publish`, "POST", pendingPublish.value);
+    confirmed = true;
     const result = await get<Draft>(`/me/articles/${id}/draft`, true);
     apply(result);
     pendingPublish.value = null;
     preview.value = false;
-    notice.value = `发布回执已确认；当前状态：${stateName[result.state]}。`;
+    publishFeedback.value = {
+      kind: "success",
+      text: `发布回执已确认，当前状态为${stateName[result.state]}。`,
+    };
     checkpoint();
   } catch (e) {
-    error.value = `${message(e)} 尚未确认发布结果，重试会使用原请求。`;
-    if (e instanceof ApiError && e.status === 409) {
+    publishFeedback.value = confirmed
+      ? {
+          kind: "pending",
+          text: "已收到发布回执，当前文章状态待刷新。可以使用原请求重新核对。",
+        }
+      : operationFailure(e, "发布结果待确认，重试会使用原请求。");
+    if (!confirmed && e instanceof ApiError && e.code === "REVISION_CONFLICT") {
       try {
         conflict.value = await get<Draft>(`/me/articles/${id}/draft`, true);
       } catch {
         /* Keep original request for retry. */
       }
     }
+    preview.value = false;
   } finally {
+    publishing.value = false;
     busy.value = false;
   }
 }
-async function upload(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file || locked.value) return;
-  busy.value = true;
-  error.value = "";
+async function upload(file?: File) {
+  if (!file || locked.value || uploading.value) return;
+  uploading.value = true;
+  uploadFeedback.value = undefined;
+  const epoch = session.epoch;
+  let sent = false;
   try {
     if (
       !["image/jpeg", "image/png"].includes(file.type) ||
@@ -387,6 +465,7 @@ async function upload(event: Event) {
     ]
       .map((n) => n.toString(16).padStart(2, "0"))
       .join("");
+    if (!active || epoch !== session.epoch) return;
     if (pendingUpload.value && pendingUpload.value.hash !== hash)
       throw new Error(
         "上次上传结果未确认，请重新选择同一张原图，保持原请求键重试。",
@@ -402,22 +481,85 @@ async function upload(event: Event) {
     const data = new FormData();
     data.set("requestId", pendingUpload.value.requestId);
     data.set("file", uploadFile);
+    sent = true;
     const image = await request<ImageAsset>(`/me/articles/${id}/images`, {
       method: "POST",
       auth: true,
       form: data,
     });
-    if (form.value)
+    if (!active || epoch !== session.epoch || !form.value) return;
+    const cursor = captureCursor();
+    if (!form.value.body.includes("](" + image.url + ")"))
       form.value.body += `\n\n![${file.name.replace(/[\[\]\\\r\n]/g, "")}](${image.url})\n`;
     pendingUpload.value = null;
     uploadFile = undefined;
-    notice.value = "图片已上传并插入正文，保存草稿后保留引用。";
+    uploadFeedback.value = {
+      kind: "success",
+      text: "图片已添加到当前正文末尾。请保存草稿保留引用。",
+    };
     checkpoint();
+    await nextTick();
+    if (!showReadingPreview.value) restoreCursor(cursor);
   } catch (e) {
-    error.value = message(e);
+    if (!active || epoch !== session.epoch) return;
+    if (
+      sent &&
+      e instanceof ApiError &&
+      [400, 413, 415, 422].includes(e.status)
+    ) {
+      pendingUpload.value = null;
+      uploadFile = undefined;
+      checkpoint();
+    }
+    uploadFeedback.value = operationFailure(
+      e,
+      sent && pendingUpload.value
+        ? "上传结果待确认，请使用同一张原图和原请求重试。"
+        : undefined,
+    );
   } finally {
-    busy.value = false;
+    uploading.value = false;
     if (uploadInput.value) uploadInput.value.value = "";
+  }
+}
+function captureCursor() {
+  const input = bodyInput.value;
+  return (
+    input && {
+      start: input.selectionStart,
+      end: input.selectionEnd,
+      direction: input.selectionDirection,
+      top: input.scrollTop,
+    }
+  );
+}
+function restoreCursor(cursor: ReturnType<typeof captureCursor>) {
+  const input = bodyInput.value;
+  if (!cursor || !input) return;
+  input.setSelectionRange(cursor.start, cursor.end, cursor.direction);
+  input.scrollTop = cursor.top;
+}
+let writingCursor: ReturnType<typeof captureCursor>;
+let previewScroll = 0;
+let sourcePageScroll: number | undefined;
+let previewPageScroll: number | undefined;
+async function changeMode(show: boolean) {
+  if (showReadingPreview.value === show) return;
+  if (show) {
+    writingCursor = captureCursor();
+    sourcePageScroll = window.scrollY;
+  } else {
+    previewScroll = previewPanel.value?.scrollTop || 0;
+    previewPageScroll = window.scrollY;
+  }
+  showReadingPreview.value = show;
+  await nextTick();
+  if (show && previewPanel.value) {
+    previewPanel.value.scrollTop = previewScroll;
+    if (previewPageScroll !== undefined) window.scrollTo(0, previewPageScroll);
+  } else {
+    restoreCursor(writingCursor);
+    if (sourcePageScroll !== undefined) window.scrollTo(0, sourcePageScroll);
   }
 }
 function insert(before: string, after = "") {
@@ -433,7 +575,13 @@ function insert(before: string, after = "") {
     form.value.body.slice(end);
 }
 function beforeUnload(e: BeforeUnloadEvent) {
-  if (dirty.value || pendingPublish.value || pendingUpload.value) {
+  if (
+    dirty.value ||
+    recovery.value ||
+    uploading.value ||
+    pendingPublish.value ||
+    pendingUpload.value
+  ) {
     checkpoint();
     e.preventDefault();
     e.returnValue = "";
@@ -443,13 +591,17 @@ watch(
   form,
   () => {
     if (dirty.value) checkpoint();
+    if (serverMissing.value.length) serverMissing.value = [];
   },
   { deep: true },
 );
 watch(preview, async (value) => {
   await nextTick();
   if (value) publishDialog.value?.showModal();
-  else publishDialog.value?.close();
+  else {
+    publishDialog.value?.close();
+    publishTrigger.value?.focus({ preventScroll: true });
+  }
 });
 watch(
   () => session.status,
@@ -463,13 +615,25 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
   window.removeEventListener("beforeunload", beforeUnload);
+  active = false;
   uploadFile = undefined;
 });
 onBeforeRouteLeave(() => {
-  if (dirty.value || pendingPublish.value || pendingUpload.value) {
+  if (
+    dirty.value ||
+    recovery.value ||
+    uploading.value ||
+    pendingPublish.value ||
+    pendingUpload.value
+  ) {
     checkpoint();
-    return confirm(
-      "有未保存或待确认的操作，已尽力保留本标签页副本。确认离开编辑器？",
+    return (
+      confirmation.value?.ask({
+        title: "离开创作页？",
+        detail:
+          "有未保存的输入或待确认操作。本标签页会保留已有副本，下次打开这篇草稿时可以继续。",
+        action: "离开创作页",
+      }) ?? false
     );
   }
   return true;
@@ -477,7 +641,8 @@ onBeforeRouteLeave(() => {
 </script>
 <template>
   <MemberGate title="登录后继续创作"
-    ><div class="breadcrumb">
+    ><ConfirmDialog ref="confirmation" />
+    <div class="breadcrumb">
       <RouterLink to="/workspace">我的工作区</RouterLink><span>/</span
       ><span>创作经验</span>
     </div>
@@ -491,11 +656,17 @@ onBeforeRouteLeave(() => {
         </p>
       </div>
       <div class="card-actions">
-        <button :disabled="locked || !dirty" @click="save">保存草稿</button
+        <button :disabled="locked || uploading || !dirty" @click="save">
+          保存草稿</button
         ><button
+          ref="publishTrigger"
           class="primary"
           :disabled="
-            busy || (readOnly && !pendingPublish) || !!conflict || !!recovery
+            busy ||
+            uploading ||
+            (readOnly && !pendingPublish) ||
+            !!conflict ||
+            !!recovery
           "
           @click="publish"
         >
@@ -503,10 +674,37 @@ onBeforeRouteLeave(() => {
         </button>
       </div>
     </div>
-    <p v-if="error" class="error" role="alert">{{ error }}</p>
+    <p v-if="error" class="error" role="alert">
+      {{ error }}
+      <button v-if="!form" class="text-button" @click="load">
+        重新读取草稿
+      </button>
+    </p>
     <p v-if="notice" class="success" role="status">{{ notice }}</p>
-    <p v-if="busy" role="status">正在处理，请保持当前页面…</p>
-    <WritingPrompts v-if="form && !readOnly" />
+    <OperationFeedback
+      :feedback="saveFeedback"
+      :processing="saving ? '正在保存草稿…' : undefined"
+    />
+    <OperationFeedback
+      :feedback="publishFeedback"
+      :processing="publishing ? '正在核对发布…' : undefined"
+    />
+    <section
+      v-if="checkRequested && issues.length"
+      ref="checklist"
+      tabindex="-1"
+      class="panel publish-checklist"
+      aria-label="发布前检查"
+    >
+      <h2>发布前还需完成 {{ issues.length }} 项</h2>
+      <ul>
+        <li v-for="issue in issues" :key="issue.field">
+          <button class="text-button" @click="locateField(issue.field)">
+            {{ issue.label }}
+          </button>
+        </li>
+      </ul>
+    </section>
     <section v-if="recovery" class="panel recovery-panel">
       <h2>发现本标签页保存的副本</h2>
       <p>
@@ -526,11 +724,21 @@ onBeforeRouteLeave(() => {
         本机修改基于修订 {{ revision }}，服务器已是修订
         {{ conflict.revision }}。两份内容均未自动覆盖。
       </p>
-      <div class="compare-grid">
+      <button
+        type="button"
+        :aria-pressed="showAllDifferences"
+        @click="showAllDifferences = !showAllDifferences"
+      >
+        {{ showAllDifferences ? "只看差异" : "查看全部字段" }}
+      </button>
+      <p v-if="!comparedFields.length">
+        服务器修订已变化，两份可编辑字段内容相同。
+      </p>
+      <div v-if="comparedFields.length" class="compare-grid">
         <div>
           <h3>本机编辑 · 基于修订 {{ revision }}</h3>
           <dl class="compare-fields">
-            <template v-for="field in comparison" :key="field.label"
+            <template v-for="field in comparedFields" :key="field.label"
               ><dt>
                 {{ field.label }}<span v-if="field.changed">有差异</span>
               </dt>
@@ -543,7 +751,7 @@ onBeforeRouteLeave(() => {
         <div>
           <h3>服务器版本 · 修订 {{ conflict.revision }}</h3>
           <dl class="compare-fields">
-            <template v-for="field in comparison" :key="field.label"
+            <template v-for="field in comparedFields" :key="field.label"
               ><dt>
                 {{ field.label }}<span v-if="field.changed">有差异</span>
               </dt>
@@ -571,6 +779,7 @@ onBeforeRouteLeave(() => {
         <fieldset :disabled="locked">
           <label
             >标题<input
+              id="draft-title"
               v-model="form.title"
               maxlength="200"
               placeholder="为这段经历起一个具体的标题"
@@ -580,14 +789,14 @@ onBeforeRouteLeave(() => {
           <button
             type="button"
             :aria-pressed="!showReadingPreview"
-            @click="showReadingPreview = false"
+            @click="changeMode(false)"
           >
             写正文
           </button>
           <button
             type="button"
             :aria-pressed="showReadingPreview"
-            @click="showReadingPreview = true"
+            @click="changeMode(true)"
           >
             看预览
           </button>
@@ -603,7 +812,11 @@ onBeforeRouteLeave(() => {
             ><button type="button" @click="insert('\n- ')">列表</button
             ><button type="button" @click="insert('\n```\n', '\n```\n')">
               代码</button
-            ><button type="button" @click="uploadInput?.click()">
+            ><button
+              type="button"
+              :disabled="uploading"
+              @click="uploadInput?.click()"
+            >
               {{ pendingUpload ? "选择原图重试" : "上传图片" }}</button
             ><button
               type="button"
@@ -616,14 +829,26 @@ onBeforeRouteLeave(() => {
               type="file"
               accept="image/png,image/jpeg"
               aria-label="上传正文图片"
-              @change="upload"
+              @change="upload(($event.target as HTMLInputElement).files?.[0])"
             />
           </div>
         </fieldset>
-        <p v-if="pendingUpload" class="notice">
-          图片
-          {{ pendingUpload.name }}
-          上传结果待确认。请重新选择相同原图，沿用原请求重试。
+        <OperationFeedback
+          :feedback="uploadFeedback"
+          :processing="
+            uploading ? '正在上传图片，可以继续编辑正文…' : undefined
+          "
+        />
+        <p v-if="pendingUpload && !uploading" class="notice">
+          {{ pendingUpload.name }} 的上传结果待确认。重试需沿用原图和原请求。
+          <button
+            v-if="uploadFile"
+            class="text-button"
+            :disabled="locked"
+            @click="upload(uploadFile)"
+          >
+            重试这张图片
+          </button>
         </p>
         <div
           class="writing-grid"
@@ -633,6 +858,7 @@ onBeforeRouteLeave(() => {
         >
           <label class="source-editor"
             >Markdown 编辑<textarea
+              id="draft-body"
               ref="bodyInput"
               v-model="form.body"
               :disabled="locked"
@@ -640,7 +866,11 @@ onBeforeRouteLeave(() => {
               placeholder="从当时的起点写起，记录准备、投递、面试和复盘…"
             ></textarea>
           </label>
-          <section class="preview-column" aria-label="正文安全预览">
+          <section
+            ref="previewPanel"
+            class="preview-column"
+            aria-label="正文安全预览"
+          >
             <h2>安全预览</h2>
             <MarkdownView :body="form.body" private-images />
           </section>
@@ -664,6 +894,7 @@ onBeforeRouteLeave(() => {
             <fieldset
               v-for="group in tagGroups"
               :key="group.field"
+              :id="'draft-' + group.field"
               class="tag-fieldset"
             >
               <legend>{{ group.label }}</legend>
@@ -680,11 +911,16 @@ onBeforeRouteLeave(() => {
             </fieldset>
             <label
               >经历发生阶段<input
+                id="draft-experienceStage"
                 v-model="form.experienceStage"
                 maxlength="64"
                 placeholder="例如：大三暑假" /></label
             ><label
-              >内容来源<select v-model="form.sourceType" aria-label="内容来源">
+              >内容来源<select
+                id="draft-sourceType"
+                v-model="form.sourceType"
+                aria-label="内容来源"
+              >
                 <option :value="null">请选择来源</option>
                 <option value="FIRST_HAND">亲历分享</option>
                 <option value="CURATED">资料整理</option>
@@ -692,6 +928,7 @@ onBeforeRouteLeave(() => {
               </select></label
             ><label
               >来源说明<textarea
+                id="draft-sourceNote"
                 v-model="form.sourceNote"
                 rows="3"
                 maxlength="2000"
@@ -731,8 +968,7 @@ onBeforeRouteLeave(() => {
           </fieldset>
         </section>
         <section class="panel">
-          <h2>写作提示</h2>
-          <p>当时起点 / 准备 / 投递面试 / 复盘，按需展开。</p>
+          <WritingPrompts v-if="!readOnly" />
           <p class="hint">
             支持完整 Markdown。HTML 按文字显示。图片为 JPEG / PNG，单张不超过
             10MiB。
@@ -745,7 +981,7 @@ onBeforeRouteLeave(() => {
       class="publish-dialog panel"
       aria-labelledby="publish-title"
       @close="preview = false"
-      @cancel="preview = false"
+      @cancel.prevent="!publishing && (preview = false)"
     >
       <h2 id="publish-title">确认公开这篇经验</h2>
       <p>{{ form?.title }} · 修订 {{ revision }}</p>
@@ -756,7 +992,8 @@ onBeforeRouteLeave(() => {
         请在编辑区核对完整安全预览。发布不会公开你的邮箱或关闭的联系方式。
       </p>
       <div class="card-actions">
-        <button :disabled="busy" @click="preview = false">返回编辑</button
+        <button autofocus :disabled="busy" @click="preview = false">
+          返回编辑</button
         ><button
           class="primary"
           :disabled="busy || !!pendingPublish"

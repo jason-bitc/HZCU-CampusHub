@@ -10,6 +10,7 @@ import {
   writePrivate,
 } from "../lib/session";
 import type { Page } from "../types";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
 import MemberGate from "../components/MemberGate.vue";
 import PrivateImage from "../components/PrivateImage.vue";
 
@@ -79,6 +80,7 @@ const outcomes: Record<string, string> = {
   ANSWERED: "已答复",
   RECORDED: "已记录",
 };
+const confirmation = ref<InstanceType<typeof ConfirmDialog>>();
 const listing = ref<Page<CaseRow> & { snapshot: number }>();
 const detail = ref<CaseDetail>();
 const pending = ref<Submission>();
@@ -124,7 +126,6 @@ function load(page = 1, reset = true) {
         imageIds.value = pending.value.imageIds.slice();
       }
     } else if (id) {
-      detail.value = undefined;
       detail.value = await get(`/me/cases/${id}`, true);
     } else {
       const previous =
@@ -202,11 +203,13 @@ function submit() {
     }
   });
 }
-function endPending() {
+async function endPending() {
   if (
-    !window.confirm(
-      "请先在我的反馈中核对提交结果。确认结束待确认记录，保留当前输入？",
-    )
+    !(await confirmation.value?.ask({
+      title: "结束待确认提交？",
+      detail: "请先在我的反馈与举报中核对提交结果。当前表单输入会保留。",
+      action: "结束本机记录",
+    }))
   )
     return;
   removePrivate(storageKey);
@@ -220,17 +223,32 @@ watch(
 </script>
 <template>
   <MemberGate title="登录后使用反馈与举报">
+    <ConfirmDialog ref="confirmation" />
     <div class="page-heading">
       <h1>{{ title }}</h1>
-      <RouterLink
-        class="button"
-        :to="creating || id ? '/me/cases' : '/me/cases/new'"
-        >{{ creating || id ? "我的反馈与举报" : "提交反馈" }}</RouterLink
-      >
+      <div class="card-actions">
+        <button
+          v-if="!creating"
+          :disabled="busy"
+          @click="load(listing?.page || 1)"
+        >
+          重新读取
+        </button>
+        <RouterLink
+          class="button"
+          :to="creating || id ? '/me/cases' : '/me/cases/new'"
+        >
+          {{ creating || id ? "我的反馈与举报" : "提交反馈" }}
+        </RouterLink>
+      </div>
     </div>
     <p v-if="busy" role="status">正在读取或提交…</p>
     <p v-if="error" class="error" role="alert">
-      {{ error }} <button v-if="!creating" @click="load()">重新读取</button>
+      {{ error }}
+      <span v-if="listing || detail">当前显示的是上次读取结果。</span>
+      <button v-if="!creating" @click="load(listing?.page || 1)">
+        重试读取
+      </button>
     </p>
     <template v-if="creating">
       <p v-if="invalidTarget" class="panel state-panel">
@@ -334,11 +352,20 @@ watch(
         />
       </div>
       <h3>处理记录</h3>
-      <ol>
-        <li v-for="row in detail.history" :key="row.revision">
-          {{ dateText(row.occurredAt) }} ·
-          {{ (row.outcome && outcomes[row.outcome]) || states[row.state] }}
-          <p v-if="row.reply">{{ row.reply }}</p>
+      <ol class="record-timeline">
+        <li
+          v-for="row in [...detail.history].sort(
+            (a, b) => a.revision - b.revision,
+          )"
+          :key="row.revision"
+        >
+          <time class="meta" :datetime="row.occurredAt">{{
+            dateText(row.occurredAt)
+          }}</time>
+          <strong>{{
+            (row.outcome && outcomes[row.outcome]) || states[row.state]
+          }}</strong>
+          <p v-if="row.reply" class="long-content">{{ row.reply }}</p>
         </li>
       </ol>
     </section>
