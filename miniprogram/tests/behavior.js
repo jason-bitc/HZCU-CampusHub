@@ -16,13 +16,15 @@ function load(relative, mocks = {}, globals = {}) {
 }
 function harness(relative, api, component = false) {
   let definition;
-  const wx = { nextTick: cb => cb(), pageScrollTo: () => {}, hideKeyboard: () => {}, setNavigationBarTitle: () => {}, stopPullDownRefresh: () => {}, showToast: () => {} };
+  const scrolls = [];
+  const wx = { nextTick: cb => cb(), pageScrollTo: (value) => scrolls.push(value), hideKeyboard: () => {}, setNavigationBarTitle: () => {}, stopPullDownRefresh: () => {}, showToast: () => {} };
   load(relative, { '../../services/articles': api, '../../config/env': { demoMode: false, pageSize: 2 } }, { wx, [component ? 'Component' : 'Page']: value => { definition = value; } });
   const instance = Object.assign({}, component ? definition.methods : definition);
   instance.data = JSON.parse(JSON.stringify(definition.data));
   instance.setData = (patch, callback) => { Object.assign(instance.data, patch); if (callback) callback(); };
   instance.definition = definition;
   instance.events = [];
+  instance.scrolls = scrolls;
   instance.triggerEvent = (name, detail) => instance.events.push({ name, detail });
   return instance;
 }
@@ -91,6 +93,30 @@ async function test(name, run) {
     page.handleStateAction(); assert.equal(calls[1].query.sort, 'recognized');
     calls[1].task.resolve({ items: [], total: 0, page: 1 }); await tick(); assert.equal(page.data.listStatus, 'empty');
   });
+  await test('区分无公开经验与筛选无匹配，清除条件保留排序', async () => {
+    const calls = [];
+    const api = { getCatalog: () => ({ promise: Promise.resolve({ jobs: [], majors: [], companies: [], topics: [] }), abort() {} }), listArticles(query) { calls.push(query); return { promise: Promise.resolve({ items: [], page: 1, total: 0 }), abort() {} }; } };
+    const p = harness('pages/discover/discover.js', api);
+    p.onLoad({}); await tick(); assert.equal(p.data.listStatus, 'empty');
+    p.selectSort({ currentTarget: { dataset: { sort: 'latest' } } });
+    p.updateFilters({ keyword: '没有匹配', jobId: 11 }); await tick();
+    assert.equal(p.data.listStatus, 'no-match');
+    assert.equal(p.data.chips.length, 2);
+    p.resetFilters(); await tick();
+    assert.equal(p.data.listStatus, 'empty'); assert.equal(calls.at(-1).sort, 'latest');
+  });
+  await test('刷新失败保留已加载页与条件，返回以离开时的位置为准', async () => {
+    const calls = [];
+    const api = { getCatalog: () => ({ promise: Promise.resolve({ jobs: [], majors: [], companies: [], topics: [] }), abort() {} }), listArticles(query) { const task = deferred(); calls.push({ query, task }); return task; } };
+    const p = harness('pages/discover/discover.js', api);
+    p.onLoad({}); p.updateFilters({ keyword: '保留这个词' });
+    calls[1].task.resolve({ items: [{ id: 1 }, { id: 2 }], page: 1, total: 4 }); await tick();
+    p.loadMore(); calls[2].task.resolve({ items: [{ id: 3 }], page: 2, total: 4 }); await tick();
+    const refresh = p.refreshResults(); calls[3].task.reject(new Error('offline')); await refresh;
+    assert.equal(p.data.page, 2); assert.equal(p.data.articles.length, 3); assert.equal(p.data.filters.keyword, '保留这个词');
+    p.onPageScroll({ scrollTop: 432 }); p.onHide(); p.onPageScroll({ scrollTop: 0 }); p.onShow();
+    assert.equal(p.scrolls.at(-1).scrollTop, 432); assert.equal(calls.length, 4);
+  });
   await test('筛选取消不应用，重置保留搜索词，公司必须选择有效标签', () => {
     const filter = harness('components/filter-panel/index.js', {}, true);
     filter.data.filters = { keyword: 'C++', jobId: 1, majorId: 11, companyId: 21 };
@@ -137,6 +163,22 @@ async function test(name, run) {
     assert.deepEqual(list.items.map(item => item.marker), ['3.', '•', '7.', '•', '4.']);
     assert.equal(parsed.nodes.find(item => item.type === 'code').text, '<int> value;');
     assert.equal(parsed.images.length, 1); assert.match(JSON.stringify(parsed.nodes), /后文/); assert.match(JSON.stringify(parsed.nodes.at(-1)), /全文末尾/);
+  });
+  await test('正文图片失败状态可恢复，重试期间不重复加载或预览', () => {
+    const c = harness('components/markdown-view/index.js', {}, true);
+    c.data.nodes = [{ type: 'image', originalSrc: 'http://127.0.0.1:8080/image.png', src: 'http://127.0.0.1:8080/image.png' }];
+    let updates = 0;
+    c.measureHeadings = () => {};
+    c.setData = (patch, done) => {
+      updates += 1;
+      for (const [key, value] of Object.entries(patch)) c.data.nodes[0][key.split('.').pop()] = value;
+      if (done) done();
+    };
+    const event = { currentTarget: { dataset: { index: 0 } } };
+    c.handleImageError(event); assert.equal(c.data.nodes[0].failed, true);
+    c.retryImage(event); c.retryImage(event); c.previewImage(event);
+    assert.equal(updates, 2); assert.equal(c.data.nodes[0].retrying, true);
+    c.handleImageLoad(event); assert.equal(c.data.nodes[0].retrying, false);
   });
   await test('正文观察器不递归更新父页面，目录检索/关闭事件正常', () => {
     const reader = harness('components/markdown-view/index.js', {}, true);

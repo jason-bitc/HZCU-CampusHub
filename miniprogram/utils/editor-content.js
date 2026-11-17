@@ -16,20 +16,22 @@ function moveBlock(body, index, delta) {
   return parts.map((part) => part.raw).join('\n\n');
 }
 function removeBlock(body, index) { const parts = blocks(body); return parts && parts[index] ? parts.filter((_, i) => i !== index).map((part) => part.raw).join('\n\n') : body; }
-function publishErrors(form) {
+function publishChecklist(form) {
   const errors = [];
-  if (!form.title.trim()) errors.push('填写标题');
-  if (!form.body.trim()) errors.push('添加正文或已上传的图片');
-  if (!form.jobIds.length) errors.push('选择岗位');
-  if (!form.majorIds.length) errors.push('选择文章适用专业');
-  if (!form.experienceStage.trim()) errors.push('填写经历发生时的阶段');
-  if (!['FIRST_HAND', 'CURATED', 'DEMO'].includes(form.sourceType)) errors.push('确认内容来源');
-  if (form.sourceType === 'CURATED' && !form.sourceNote.trim()) errors.push('补充整理内容的来源说明');
+  const add = (target, label) => errors.push({ target, label });
+  if (!form.title.trim()) add('draft-title', '填写标题');
+  if (!form.body.trim()) add('draft-body', '添加正文或已上传的图片');
+  if (!form.jobIds.length) add('draft-tags-jobIds', '选择岗位');
+  if (!form.majorIds.length) add('draft-tags-majorIds', '选择文章适用专业');
+  if (!form.experienceStage.trim()) add('draft-stage', '填写经历发生时的阶段');
+  if (!['FIRST_HAND', 'CURATED', 'DEMO'].includes(form.sourceType)) add('draft-source', '确认内容来源');
+  if (form.sourceType === 'CURATED' && !form.sourceNote.trim()) add('draft-source-note', '补充整理内容的来源说明');
   return errors;
 }
+function publishErrors(form) { return publishChecklist(form).map((issue) => issue.label); }
 function describe(form, catalog) {
   const names = (field, group) => form[field].map((id) => { const found = catalog && catalog[group].find((item) => item.id === id); return found ? found.name : `已停用标签 ${id}`; }).join('、') || '未选择';
   const sources = { FIRST_HAND: '亲历分享', CURATED: '资料整理', DEMO: '演示内容' };
   return [{ label: '标题', value: form.title || '未填写' }, { label: '摘要', value: form.summary || '未填写' }, { label: '岗位', value: names('jobIds', 'jobs') }, { label: '适用专业', value: names('majorIds', 'majors') }, { label: '公司', value: names('companyIds', 'companies') }, { label: '主题', value: names('topicIds', 'topics') }, { label: '经历阶段', value: form.experienceStage || '未填写' }, { label: '来源', value: sources[form.sourceType] || '未选择' }, { label: '来源说明', value: form.sourceNote || '未填写' }, { label: '资料链接', value: form.sourceLinks.map((r) => `${r.label}\n${r.url}`).join('\n\n') || '未添加' }, { label: '正文', value: form.body || '未填写' }];
 }
-module.exports = { formFromDraft, blocks, moveBlock, removeBlock, publishErrors, describe };
+module.exports = { formFromDraft, blocks, moveBlock, removeBlock, publishChecklist, publishErrors, describe };

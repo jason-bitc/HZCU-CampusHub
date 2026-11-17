@@ -16,6 +16,8 @@ Page({
     catalogError: '',
     catalogLoading: true,
     chips: [],
+    sameMajorAvailable: false,
+    searchError: '',
     articles: [],
     listStatus: 'loading',
     errorMessage: '',
@@ -26,6 +28,7 @@ Page({
     hasMore: false,
     loadingMore: false,
     loadMoreError: '',
+    refreshError: '',
     filterVisible: false,
     demoMode: config.demoMode,
     demoScenario: 'normal',
@@ -36,7 +39,7 @@ Page({
 
   onLoad(options) {
     this.profileRound = 0;
-    this._unsubscribe = session.subscribe(() => { this.profileRound += 1; this.setData({ signedIn: false, ownMajorId: 0, profileError: '' }); });
+    this._unsubscribe = session.subscribe(() => { this.profileRound += 1; this.setData({ signedIn: false, ownMajorId: 0, sameMajorAvailable: false, profileError: '' }); });
     this.gate = createRequestGate();
     this.activeRequest = null;
     this.catalogRequest = null;
@@ -51,11 +54,14 @@ Page({
     if (tabBar) tabBar.setData({ active: 'discover', hidden: this.data.filterVisible });
     this.loadOwnMajor();
     // Returning from detail leaves this page instance and its query/list intact.
-    if (this.hasShown && this.lastScrollTop > 0) {
-      wx.nextTick(() => wx.pageScrollTo({ scrollTop: this.lastScrollTop, duration: 0 }));
+    if (this.restoreScrollTop > 0) {
+      const scrollTop = this.restoreScrollTop;
+      this.restoreScrollTop = 0;
+      wx.nextTick(() => wx.pageScrollTo({ scrollTop, duration: 0 }));
     }
-    this.hasShown = true;
   },
+
+  onHide() { this.restoreScrollTop = this.lastScrollTop; },
 
   onPageScroll(event) {
     this.lastScrollTop = event.scrollTop;
@@ -71,19 +77,25 @@ Page({
 
   loadOwnMajor() {
     const round = ++this.profileRound;
-    if (!session.token() || config.demoMode) { this.setData({ signedIn: false, ownMajorId: 0 }); return; }
-    member.profile().then((profile) => { if (round === this.profileRound) this.setData({ signedIn: true, ownMajorId: profile.majorId || 0, profileError: '' }); }).catch((error) => { if (round === this.profileRound) this.setData({ ownMajorId: 0, profileError: error.message }); });
+    if (!session.token() || config.demoMode) { this.setData({ signedIn: false, ownMajorId: 0, sameMajorAvailable: false }); return; }
+    member.profile().then((profile) => {
+      if (round !== this.profileRound) return;
+      this.setData({ signedIn: true, ownMajorId: profile.majorId || 0, profileError: '' });
+      this.syncFilterPresentation();
+    }).catch((error) => {
+      if (round === this.profileRound) this.setData({ ownMajorId: 0, sameMajorAvailable: false, profileError: error.message });
+    });
   },
   login: access.login,
   editProfile() { wx.navigateTo({ url: '/pages/profile/profile' }); },
 
   onPullDownRefresh() {
-    const tasks = [this.loadCatalog(), this.fetchArticles(true)];
+    const tasks = [this.loadCatalog(), this.refreshResults()];
     Promise.all(tasks.map((task) => task.catch(() => {}))).then(() => wx.stopPullDownRefresh());
   },
 
   onReachBottom() {
-    this.loadMore();
+    if (!this.data.loadMoreError) this.loadMore();
   },
 
   refreshAll() {
@@ -93,12 +105,12 @@ Page({
 
   syncFilterPresentation(filters) {
     const current = filters || this.data.filters;
-    const chips = activeFilterChips(current, this.data.catalog).filter((item) => item.key !== 'jobId');
-    this.setData({ chips });
+    const chips = activeFilterChips(current, this.data.catalog);
+    this.setData({ chips, sameMajorAvailable: this.data.catalog.majors.some((major) => major.id === this.data.ownMajorId) });
   },
 
   setListTitle(status) {
-    wx.setNavigationBarTitle({ title: status === 'empty' ? '没有匹配的经验' : '城院帮' });
+    wx.setNavigationBarTitle({ title: status === 'no-match' ? '没有匹配的经验' : '城院帮' });
   },
 
   loadCatalog() {
@@ -116,12 +128,15 @@ Page({
     });
   },
 
-  fetchArticles(reset) {
+  refreshResults() { return this.fetchArticles(true, this.data.listStatus === 'ready'); },
+
+  fetchArticles(reset, retainList = false) {
     if (!reset) return this.loadMore();
     if (this.activeRequest) this.activeRequest.abort();
     const token = this.gate.next();
     const query = buildArticleQuery(this.data.filters, this.data.sort, 1, config.pageSize);
-    this.setData({
+    this.setData({ refreshError: '', loadingMore: false });
+    if (!retainList) this.setData({
       articles: [],
       listStatus: 'loading',
       errorMessage: '',
@@ -132,17 +147,18 @@ Page({
       loadingMore: false,
       loadMoreError: ''
     });
-    this.setListTitle('loading');
+    if (!retainList) this.setListTitle('loading');
     const operation = articlesApi.listArticles(query);
     this.activeRequest = operation;
     return operation.promise.then((page) => {
       if (!this.gate.isCurrent(token) || this.activeRequest !== operation) return;
       const items = mergeUniqueArticles([], page.items);
-      const status = items.length ? 'ready' : 'empty';
+      const status = items.length ? 'ready' : this.data.chips.length ? 'no-match' : 'empty';
       this.activeRequest = null;
       this.setData({
         articles: items,
         listStatus: status,
+        loadMoreError: '',
         page: page.page,
         total: page.total,
         hasMore: items.length < page.total && page.items.length > 0
@@ -151,6 +167,7 @@ Page({
     }).catch((error) => {
       if (!this.gate.isCurrent(token) || this.activeRequest !== operation) return;
       this.activeRequest = null;
+      if (retainList) { this.setData({ refreshError: access.errorText(error) }); return; }
       this.setData({
         articles: [],
         listStatus: 'error',
@@ -164,7 +181,7 @@ Page({
   },
 
   loadMore() {
-    if (this.data.listStatus !== 'ready' || !this.data.hasMore || this.data.loadingMore) return Promise.resolve();
+    if (this.data.listStatus !== 'ready' || !this.data.hasMore || this.activeRequest || this.data.loadingMore) return Promise.resolve();
     const token = this.gate.current();
     const nextPage = this.data.page + 1;
     const query = buildArticleQuery(this.data.filters, this.data.sort, nextPage, config.pageSize);
@@ -192,19 +209,19 @@ Page({
   updateFilters(filters) {
     const keywordError = validateKeyword(filters.keyword);
     if (keywordError) {
-      wx.showToast({ title: keywordError, icon: 'none' });
+      this.setData({ searchError: keywordError });
       return;
     }
     const next = Object.assign(emptyFilters(), filters, { keyword: cleanKeyword(filters.keyword) });
     const keywordInput = next.keyword === this.data.filters.keyword ? this.data.keywordInput : next.keyword;
-    this.setData({ filters: next, keywordInput });
+    this.setData({ filters: next, keywordInput, searchError: '' });
     this.syncFilterPresentation(next);
     wx.pageScrollTo({ scrollTop: 0, duration: 0 });
     this.fetchArticles(true);
   },
 
   handleKeywordInput(event) {
-    this.setData({ keywordInput: event.detail.value });
+    this.setData({ keywordInput: event.detail.value, searchError: '' });
   },
 
   submitSearch() {
@@ -273,7 +290,7 @@ Page({
   },
 
   handleStateAction() {
-    if (this.data.listStatus === 'error') {
+    if (['error', 'empty'].includes(this.data.listStatus)) {
       this.fetchArticles(true);
       return;
     }

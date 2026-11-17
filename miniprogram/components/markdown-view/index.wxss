@@ -276,4 +276,5 @@
 .toc-search { margin: 16rpx 24rpx; padding: 0 20rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); }
 .toc-search-input { height: var(--touch-target); font-size: var(--font-sm); }
 .toc-current { color: var(--color-primary-dark); background: var(--color-primary-soft); font-weight: 700; }
+.toc-current-label { display: inline-block; margin-left: 12rpx; font-size: var(--font-xs); }
 .toc-no-match { display: block; padding: 24rpx 0; color: var(--color-text-secondary); font-size: var(--font-sm); }

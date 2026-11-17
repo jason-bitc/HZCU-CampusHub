@@ -31,3 +31,6 @@
 .danger-action { color: var(--color-danger); }
 .load-end { display: block; padding: 24rpx; text-align: center; color: var(--color-text-secondary); font-size: 28rpx; }
 .demo-note { margin-bottom: 24rpx; padding: 20rpx; background: var(--color-warning-soft); color: var(--color-warning); font-size: 28rpx; }
+.status-tag.progress-waiting { color: #714a17; background: #fbf1dc; }
+.status-tag.progress-active { color: #315a53; background: #ecf3f0; }
+.status-tag.progress-done { color: var(--color-primary-dark); background: var(--color-primary-soft); }

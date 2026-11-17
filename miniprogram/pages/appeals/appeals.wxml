@@ -23,8 +23,9 @@
     <text wx:if="{{notice}}" class="success-note" role="status">{{notice}}</text>
     <text class="section-title">本人申诉记录</text>
     <view wx:for="{{records}}" wx:key="id" class="section-card">
-      <view class="status-heading"><text class="row-title">申诉 #{{item.id}}</text><text class="status-tag">{{item.stateText}}</text></view>
-      <text class="hint">决定 #{{item.restrictionId}} · 版本 {{item.restrictionRevision}} · {{item.updatedText}}</text>
+      <view class="status-heading"><text class="row-title">{{item.contextText}} #{{item.id}}</text><text class="status-tag progress-{{item.stateTone}}">{{item.stateText}}</text></view>
+      <text class="hint">{{item.updatedText}}</text>
+      <text wx:if="{{!item.reply}}" class="hint">{{item.progress}}</text>
       <text class="section-copy" user-select>{{item.reason}}</text>
       <text wx:if="{{item.reply}}" class="section-copy" user-select>复核答复：{{item.reply}}</text>
     </view>

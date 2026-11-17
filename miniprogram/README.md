@@ -4,6 +4,8 @@
 
 当前原型差距和分层验证见 [2026-11-07 原型对照](docs/PROTOTYPE-PARITY-20261107.md)。既有功能的接管记录见 [2026-11-06 接管记录](docs/TAKEOVER-20261106.md)。
 
+本轮发现、阅读、创作和通知的交互验收见 [小程序交互验收](docs/MINIPROGRAM-UX-ACCEPTANCE-20261116.md)。
+
 ## 运行
 
 1. 用已安装的微信开发者工具导入本目录 `miniprogram`，不是仓库根目录，`miniprogramRoot` 为 `./`。
@@ -80,7 +82,7 @@ node miniprogram/tests/member-behavior.js
 node miniprogram/tests/real-api.js http://127.0.0.1:8080
 ```
 
-前三组分别为源码/结构 10 项、游客行为 10 项、会员及社区行为 25 项。最后一条只对真实后端发送公开 GET。
+前三组分别为源码/结构 10 项、游客行为 14 项、会员及社区行为 31 项。最后一条只对真实后端发送公开 GET。
 
 以下是会新建明确DEMO测试内容的显式联调脚本，需要现有本机私密测试账号，不发邮件、不重置密码、不改原资料或联系设置，测试文章结束时下架：
 

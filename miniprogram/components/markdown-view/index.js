@@ -61,6 +61,7 @@ Component({
   methods: {
     openToc() {
       this.setData({ tocDrawerVisible: true, tocSearch: '', filteredHeadings: this.data.headings });
+      this.measureHeadings();
       this.triggerEvent('drawerchange', { visible: true });
     },
     closeToc() {
@@ -73,17 +74,28 @@ Component({
       const keyword = tocSearch.trim().toLowerCase();
       this.setData({ tocSearch, filteredHeadings: this.data.headings.filter((item) => item.text.toLowerCase().includes(keyword)) });
     },
-    measureHeadings() {
+    measureHeadings(bookmark) {
       wx.nextTick(() => {
         wx.createSelectorQuery().in(this).selectAll('.md-heading').boundingClientRect((rects) => {
           wx.createSelectorQuery().selectViewport().scrollOffset((viewport) => {
-            if (!viewport || !rects) return;
+            if (!viewport || !rects) {
+              if (bookmark) wx.pageScrollTo({ scrollTop: bookmark.scrollTop, duration: 0 });
+              return;
+            }
             this.anchorTops = rects.map((rect, index) => ({ id: this.data.headings[index] && this.data.headings[index].id, top: viewport.scrollTop + rect.top }));
-            this.updateReadingPosition(viewport.scrollTop);
+            const anchor = bookmark && this.anchorTops.find((row) => row.id === bookmark.headingId);
+            const scrollTop = bookmark ? Math.max(0, anchor ? anchor.top + bookmark.offset : bookmark.scrollTop) : viewport.scrollTop;
+            this.updateReadingPosition(scrollTop);
+            if (bookmark) wx.pageScrollTo({ scrollTop, duration: 0 });
           }).exec();
         }).exec();
       });
     },
+    capturePosition(scrollTop) {
+      const anchor = this.anchorTops && this.anchorTops.find((row) => row.id === this.data.currentHeadingId);
+      return anchor ? { scrollTop, headingId: anchor.id, offset: scrollTop - anchor.top } : { scrollTop };
+    },
+    restorePosition(bookmark) { this.measureHeadings(bookmark); },
     updateReadingPosition(scrollTop) {
       if (!this.anchorTops) return;
       let current = 0;
@@ -107,21 +119,26 @@ Component({
     },
     handleImageError(event) {
       const index = Number(event.currentTarget.dataset.index);
-      this.setData({ [`nodes[${index}].failed`]: true });
+      const node = this.data.nodes[index];
+      if (!node || node.type !== 'image' || node.failed) return;
+      this.setData({ [`nodes[${index}].failed`]: true, [`nodes[${index}].retrying`]: false }, () => this.measureHeadings());
+    },
+    handleImageLoad(event) {
+      const index = Number(event.currentTarget.dataset.index);
+      const node = this.data.nodes[index];
+      if (node && node.retrying) this.setData({ [`nodes[${index}].retrying`]: false });
       this.measureHeadings();
     },
-    handleImageLoad() { this.measureHeadings(); },
     retryImage(event) {
       const index = Number(event.currentTarget.dataset.index);
       const node = this.data.nodes[index];
-      if (!node || !node.originalSrc) return;
-      this.setData({ [`nodes[${index}].failed`]: false, [`nodes[${index}].src`]: '' });
-      wx.nextTick(() => this.setData({ [`nodes[${index}].src`]: node.originalSrc }));
+      if (!node || !node.originalSrc || !node.failed || node.retrying) return;
+      this.setData({ [`nodes[${index}].failed`]: false, [`nodes[${index}].retrying`]: true, [`nodes[${index}].src`]: node.originalSrc });
     },
     previewImage(event) {
       const index = Number(event.currentTarget.dataset.index);
       const node = this.data.nodes[index];
-      if (!node || !node.src || node.failed) return;
+      if (!node || !node.src || node.failed || node.retrying) return;
       const urls = this.data.nodes.filter((item) => item.type === 'image' && item.src && !item.failed).map((item) => item.src);
       wx.previewImage({ current: node.src, urls });
     },

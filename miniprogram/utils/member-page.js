@@ -23,6 +23,6 @@ function enterPersonal(page) {
   page.setData({ authStatus: signedIn ? 'ready' : 'guest' });
   return signedIn;
 }
-function login() { const pages = getCurrentPages(); const page = pages[pages.length - 1]; const route = page && page.route; const query = page && page.options || {}; const url = route ? `/${route}${Object.keys(query).length ? '?' + Object.keys(query).map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`).join('&') : ''}` : '/pages/me/me'; wx.navigateTo({ url: `/pages/account/account?returnTo=${encodeURIComponent(url)}` }); }
+function login(onFailure) { const pages = getCurrentPages(); const page = pages[pages.length - 1]; const route = page && page.route; const query = page && page.options || {}; const url = route ? `/${route}${Object.keys(query).length ? '?' + Object.keys(query).map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`).join('&') : ''}` : '/pages/me/me'; wx.navigateTo({ url: `/pages/account/account?returnTo=${encodeURIComponent(url)}`, fail: typeof onFailure === 'function' ? onFailure : undefined }); }
 function discover() { wx.switchTab({ url: '/pages/discover/discover' }); }
 module.exports = { attach, enter, enterPersonal, leave, login, discover, errorText };

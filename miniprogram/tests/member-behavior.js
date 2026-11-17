@@ -97,12 +97,23 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
     p.setData({ form });
     p.preview();
     assert.equal(p.data.preview, true);
-    assert.match(p.data.publishIssues.join(' '), /选择岗位/);
-    p.completePublishDetails();
+    assert.ok(p.data.publishIssues.some((issue) => issue.label === '选择岗位'));
+    p.completePublishDetails({ currentTarget: { dataset: { target: 'draft-tags-jobIds' } } });
     assert.equal(p.data.preview, false);
     assert.equal(p.data.detailsOpen, true);
-    assert.equal(moves.at(-1).selector, '#publish-details');
+    assert.equal(moves.at(-1).selector, '#draft-tags-jobIds');
     assert.equal(p.data.form.body, form.body);
+  });
+  await test('跳过或离开恢复提示时不覆盖本机副本，离开保护只跟随未保存状态变化', () => {
+    const writes = [], alerts = [];
+    const p = page('pages/editor/editor.js', { '../../utils/operation': { write: (...args) => writes.push(args), remove() {} } }, { enableAlertBeforeUnload: () => alerts.push('on'), disableAlertBeforeUnload: () => alerts.push('off') });
+    p._ownerId = 1;
+    p.setData({ articleId: 2, authStatus: 'ready', form: { body: 'cloud' }, recovery: { form: { body: 'local' } } });
+    p.onHide(); assert.equal(writes.length, 0); assert.equal(p.editable(), false);
+    p.keepServer(); assert.equal(writes[0][0], 'backup:2'); assert.equal(writes[0][1].form.body, 'local');
+    p.setData({ dirty: true }); p.syncLeaveAlert(); p.syncLeaveAlert();
+    p.setData({ dirty: false }); p.syncLeaveAlert(); p.syncLeaveAlert();
+    assert.deepEqual(alerts, ['on', 'off']);
   });
   await test('邮箱精确域名与Unicode密码字节校验，不截断或trim密码', () => {
     const v = require('../utils/validation'); assert.equal(v.email(' Test+1@stu.hzcu.edu.cn '), 'test+1@stu.hzcu.edu.cn'); assert.equal(v.email('a@stu.hzcu.edu.cn.evil'), ''); assert.equal(v.email('a..b@stu.hzcu.edu.cn'), ''); assert.equal(v.password('中'.repeat(25)), false); assert.equal(v.password(' 123456 '), true); assert.equal(v.password('😀'.repeat(19)), false);
@@ -129,6 +140,49 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
   });
   await test('投币成功刷新状态时释放按钮锁，重试只发送原金额与键', async () => {
     const sent = []; const p = page('pages/article-detail/article-detail.js', { '../../services/member': { coin: async (...args) => { sent.push(args); } }, '../../services/articles': { getArticle: () => ({ promise: Promise.resolve({ effectiveCoins: 1 }) }) }, '../../utils/operation': { remove() {} } }); p.memberRound = 1; p.refreshMember = () => { p.memberRound += 1; }; p.setData({ articleId: 1, article: {}, pendingCoin: { amount: 1, requestId: 'original-key' } }); await p.submitCoins(); assert.equal(p.data.busyAction, ''); assert.equal(p.data.pendingCoin, null); assert.deepEqual(sent[0], [1, 1, 'original-key']); assert.equal(p.data.article.effectiveCoins, 1);
+  });
+  await test('硬币选择与确认期间重复点击不会叠加弹窗', () => {
+    const sheets = [], confirmations = [];
+    const p = page('pages/article-detail/article-detail.js', {}, { showActionSheet: (args) => sheets.push(args), showModal: (args) => confirmations.push(args) });
+    p.memberRound = 1; p.setData({ authenticated: true, coinState: { eligible: true, remaining: 2 }, wallet: { balance: 2 } });
+    p.coins(); p.coins(); assert.equal(sheets.length, 1);
+    sheets[0].success({ tapIndex: 0 }); p.coins(); assert.equal(confirmations.length, 1); assert.equal(sheets.length, 1);
+    confirmations[0].success({ confirm: false }); assert.equal(p.data.coinChoosing, false);
+    p.coins(); assert.equal(sheets.length, 2);
+  });
+  await test('阅读登录返回等待互动加载后才按章节位置复位', async () => {
+    const opened = [], moved = [];
+    const p = page('pages/article-detail/article-detail.js', { '../../utils/member-page': { login: () => opened.push(true) } }, { nextTick: (callback) => callback() });
+    const reading = deferred();
+    p.selectComponent = () => ({ capturePosition: (scrollTop) => ({ scrollTop, headingId: 10, offset: 44 }), restorePosition: (value) => moved.push(value) });
+    p.refreshMember = () => reading.promise;
+    p._scrollTop = 700;
+    p.setData({ status: 'ready' });
+    p.login(); p.login(); assert.equal(opened.length, 1);
+    const returning = p.onShow(); assert.equal(moved.length, 0);
+    reading.resolve(); await returning;
+    assert.equal(moved[0].headingId, 10); assert.equal(moved[0].offset, 44);
+  });
+  await test('收藏重复点击只发一次写入，服务端回读完成后解除锁', async () => {
+    const mutation = deferred(), readback = deferred();
+    let writes = 0;
+    const p = page('pages/article-detail/article-detail.js', { '../../services/member': { favorite: () => { writes += 1; return mutation.promise; }, interaction: () => readback.promise } });
+    p.memberRound = 1; p.setData({ articleId: 2, authenticated: true, interaction: { favorited: false, liked: false } });
+    const event = { currentTarget: { dataset: { kind: 'favorite' } } };
+    const first = p.toggleInteraction(event); await p.toggleInteraction(event);
+    mutation.resolve({ favorited: true }); await tick();
+    assert.equal(writes, 1); assert.equal(p.data.busyAction, 'favorite');
+    readback.resolve({ favorited: true, liked: false }); await first;
+    assert.equal(p.data.busyAction, ''); assert.equal(p.data.interaction.favorited, true);
+  });
+  await test('通知刷新错误保留已读列表，打开目标成功后按原通知标记已读', async () => {
+    const calls = [];
+    const p = page('pages/notifications/notifications.js', { '../../services/member': { call: async (...args) => { calls.push(args); if (args[1] === 'GET') throw new Error('offline'); return { readAt: 'now' }; } } }, { navigateTo: (opts) => { assert.equal(opts.url, '/pages/certification/certification?appealId=7'); opts.success(); opts.complete(); } });
+    p._epoch = 1;
+    p.setData({ authStatus: 'ready', loaded: true, unreadCount: 1, items: [{ id: 3, url: '/pages/certification/certification?appealId=7', readAt: null }] });
+    await p.load(1); assert.equal(p.data.items.length, 1); assert.equal(p.data.loaded, true);
+    p.open({ currentTarget: { dataset: { id: 3 } } }); await tick();
+    assert.equal(calls[1][0], '/me/notifications/3/read'); assert.equal(p.data.items[0].readAt, 'now'); assert.equal(p.data.unreadCount, 0);
   });
   await test('既有复杂Markdown进入只读预览，完整原文保留且不能被轻量编辑覆盖', () => {
     const p = page('pages/editor/editor.js', {}); const body = '# original\n\n```cpp\n<int> keep;\n```\n\n- list'; const draft = { articleId: 1, revision: 3, state: 'DRAFT', content: { title: 'complex', summary: '', body, tags: { jobIds: [1], majorIds: [11], companyIds: [], topicIds: [] }, experienceStage: '', sourceType: null, sourceNote: '', sourceLinks: [] } }; p.setData({ authStatus: 'ready' }); p.applyDraft(draft); assert.equal(p.data.complexSource, true); assert.equal(p.data.preview, true); assert.equal(p.data.readOnly, true); p.input({ currentTarget: { dataset: { field: 'body' } }, detail: { value: 'overwrite' } }); assert.equal(p.data.form.body, body);

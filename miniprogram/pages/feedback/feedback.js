@@ -38,7 +38,7 @@ Page({
     } catch (e) {
       if (epoch === this._epoch) {
         const unavailable = !!this.data.id && e.status === 404;
-        this.setData({ detail: null, unavailable, error: unavailable ? '这条反馈不存在，或当前账号无法查看。' : e.status === 404 ? '暂时无法读取反馈记录，请重试。' : access.errorText(e) });
+        this.setData({ detail: unavailable ? null : this.data.detail, unavailable, error: unavailable ? '这条反馈不存在，或当前账号无法查看。' : e.status === 404 ? '暂时无法读取反馈记录，请重试。' : access.errorText(e) });
       }
     } finally { if (epoch === this._epoch) this.setData({ busy: false }); }
   },

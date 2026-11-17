@@ -6,15 +6,19 @@
     <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
     <text wx:if="{{notice}}" class="success-note">{{notice}}</text>
     <view wx:if="{{appeal}}" class="list-row">
-      <text class="row-title">{{appeal.state}} · {{appeal.time}}</text>
-      <text class="plain-text">{{appeal.reason}}</text>
-      <text wx:if="{{appeal.reply}}" class="plain-text">复核答复 {{appeal.reply}}</text>
+      <text class="status-tag">{{appeal.state}}</text>
+      <text class="hint">{{appeal.time}}</text>
+      <view class="certification-entry"><text class="field-label">我的申诉</text><text class="certification-copy" user-select>{{appeal.reason}}</text></view>
+      <view wx:if="{{appeal.reply}}" class="certification-entry"><text class="field-label">复核答复</text><text class="certification-copy" user-select>{{appeal.reply}}</text></view>
     </view>
     <view wx:if="{{record}}" class="certification-panel">
       <text class="section-title">{{record.stateText}}</text>
       <text wx:if="{{record.verifiedText}}" class="hint">最近验证 {{record.verifiedText}}</text>
-      <text wx:if="{{record.revocationReason}}" class="plain-text">撤销理由 {{record.revocationReason}}</text>
-      <text wx:if="{{record.revokedText}}" class="hint">撤销时间 {{record.revokedText}}</text>
+      <view wx:if="{{record.revocationReason}}" class="list-row certification-entry">
+        <text class="field-label">撤销原因</text>
+        <text class="certification-copy" user-select>{{record.revocationReason}}</text>
+        <text wx:if="{{record.revokedText}}" class="hint">撤销时间 {{record.revokedText}}</text>
+      </view>
       <view wx:if="{{record.canReverify}}" class="form-section">
         <text class="section-title">使用原校园邮箱重新认证</text>
         <button class="button-secondary" disabled="{{busy || wait > 0}}" bindtap="sendCode">{{wait ? wait + ' 秒后可重发' : '发送重新认证验证码'}}</button>
