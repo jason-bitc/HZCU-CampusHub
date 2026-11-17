@@ -135,18 +135,18 @@ onBeforeUnmount(() => {
         >
       </div>
       <div v-if="result.items.length" class="favorites-table-wrap">
-        <table class="favorites-table">
-          <thead>
-            <tr>
-              <th scope="col">内容</th>
-              <th scope="col">当前状态</th>
-              <th scope="col">最后更新</th>
-              <th scope="col">允许的操作</th>
+        <table class="favorites-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">内容</th>
+              <th role="columnheader" scope="col">当前状态</th>
+              <th role="columnheader" scope="col">最后更新</th>
+              <th role="columnheader" scope="col">允许的操作</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="item in result.items" :key="item.articleId">
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row" v-for="item in result.items" :key="item.articleId">
+              <td role="cell" data-label="内容">
                 <RouterLink
                   v-if="item.available"
                   :to="`/articles/${item.articleId}`"
@@ -156,11 +156,13 @@ onBeforeUnmount(() => {
                   此收藏暂不可用
                 </h2>
               </td>
-              <td>{{ item.available ? "可阅读" : "内容不可用" }}</td>
-              <td>
+              <td role="cell" data-label="当前状态">
+                {{ item.available ? "可阅读" : "内容不可用" }}
+              </td>
+              <td role="cell" data-label="最后更新">
                 {{ item.available ? dateText(item.article.updatedAt) : "—" }}
               </td>
-              <td>
+              <td role="cell" data-label="允许的操作">
                 <RouterLink
                   v-if="item.available"
                   :to="`/articles/${item.articleId}`"

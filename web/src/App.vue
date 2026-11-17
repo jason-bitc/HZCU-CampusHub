@@ -6,6 +6,7 @@ import { get, message } from "./lib/api";
 import type { Me } from "./types";
 import { surface } from "./surface";
 import BackToTop from "./components/BackToTop.vue";
+import "./member-theme.css";
 const route = useRoute();
 const consoleRoute = surface !== "user";
 const siteHeader = ref<HTMLElement>();
