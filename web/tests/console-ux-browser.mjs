@@ -9,7 +9,10 @@ import {
 } from "./isolated-console-fixture.mjs";
 
 const root = process.env.CAMPUSHUB_CONSOLE_FIXTURE;
-const output = resolve(root || ".", "console-ux-evidence");
+const output = resolve(
+  process.env.CAMPUSHUB_CONSOLE_REPORT_DIR ||
+    resolve(root || ".", "console-ux-evidence"),
+);
 const report = { checks: [], requests: [], errors: [] };
 const env = await isolatedConsole(root, report.requests);
 const { fixture, request } = env;
@@ -102,6 +105,14 @@ try {
   await page.locator("[name=admin-password]").fill(fixture.password);
   await button(page, "登录社区管理").click();
   await page.waitForURL("**/admin/cases");
+  const typeFilter = page.getByRole("combobox", { name: "案件类型" });
+  await typeFilter.selectOption("REPORT");
+  await page.waitForURL((url) => url.hash.includes("kind=REPORT"));
+  await button(page, "重置筛选").press("Enter");
+  await page.waitForURL((url) => url.hash === "#/admin/cases");
+  assert.equal(await typeFilter.inputValue(), "");
+  assert(await typeFilter.evaluate((el) => document.activeElement === el));
+  check("重置筛选清除路径条件并将键盘焦点返回类型");
   await page.getByRole("combobox", { name: "案件类型" }).selectOption("REPORT");
   await page.getByRole("combobox", { name: "案件状态" }).selectOption("OPEN");
   const origin = page.url();

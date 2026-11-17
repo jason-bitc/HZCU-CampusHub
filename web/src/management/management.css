@@ -1720,3 +1720,289 @@
     white-space: normal;
   }
 }
+/* Live admin and operations workspaces share the CampusHub theme. */
+.console-shell:not(.console-preview) {
+  --console-brand: #2563eb;
+  --console-brand-hover: #1d4ed8;
+  --console-page: #f5f6f8;
+  --console-surface: #fff;
+  --console-text: #172033;
+  --console-muted: #5d687a;
+  --console-line: #e3e8f0;
+  --console-border: var(--console-line);
+  --console-accent: #edf3ff;
+  --console-control: #c4cddc;
+  --console-success: #176749;
+  --console-warning: #875110;
+  --console-error: #9c2d32;
+  --console-radius: 12px;
+  --console-shadow: 0 1px 2px rgb(23 32 51 / 4%);
+  --console-motion: 180ms;
+  color: var(--console-text);
+}
+
+.console-shell:not(.console-preview) .console-sidebar {
+  background: var(--console-surface);
+  color: var(--console-muted);
+  border-inline-end: 1px solid var(--console-line);
+}
+.console-shell:not(.console-preview) .console-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--console-text);
+}
+.console-brand img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+.console-shell:not(.console-preview) .console-sidebar nav {
+  gap: 5px;
+  margin-top: 24px;
+}
+.console-shell:not(.console-preview) .console-sidebar nav a {
+  color: var(--console-muted);
+  min-height: 44px;
+  transition:
+    background var(--console-motion),
+    color var(--console-motion);
+}
+.console-shell:not(.console-preview) .console-sidebar nav a:hover,
+.console-shell:not(.console-preview) .console-sidebar nav a.active,
+.console-shell:not(.console-preview) .console-mode {
+  background: var(--console-accent);
+  color: var(--console-brand-hover);
+}
+.console-shell:not(.console-preview) .console-sidebar-footer button,
+.console-shell:not(.console-preview) a:is(.console-link, .console-case-action) {
+  color: var(--console-brand-hover);
+}
+.console-shell:not(.console-preview) .console-title {
+  color: var(--console-text);
+  font-size: clamp(22px, 2vw, 28px);
+  margin-bottom: 18px;
+}
+.console-shell:not(.console-preview) .console-panel {
+  background: var(--console-surface);
+  border-color: var(--console-line);
+  border-radius: var(--console-radius);
+  box-shadow: var(--console-shadow);
+}
+.console-shell:not(.console-preview) .console-panel :is(h2, h3) {
+  margin-bottom: 12px;
+}
+.console-shell:not(.console-preview) :is(.console-stat, .ops-overview) strong {
+  font-variant-numeric: tabular-nums;
+}
+.console-shell:not(.console-preview) :is(input, select, textarea) {
+  color: var(--console-text);
+  border-color: var(--console-control);
+}
+.console-shell:not(.console-preview) :is(button, .button) {
+  transition:
+    background var(--console-motion),
+    border-color var(--console-motion),
+    color var(--console-motion);
+}
+.console-shell:not(.console-preview) :is(button, .button):hover:not(:disabled) {
+  background: var(--console-accent);
+}
+.console-shell:not(.console-preview)
+  :is(.console-primary, .ops-logs-panel .console-filterbar > button) {
+  color: #fff;
+  background: var(--console-brand);
+  border-color: var(--console-brand);
+}
+.console-shell:not(.console-preview)
+  :is(.console-primary, .ops-logs-panel .console-filterbar > button):hover:not(
+    :disabled
+  ) {
+  background: var(--console-brand-hover);
+  border-color: var(--console-brand-hover);
+}
+.console-shell:not(.console-preview) .console-danger,
+.console-shell:not(.console-preview) .console-danger:hover:not(:disabled) {
+  background: #fceeee;
+  color: var(--console-error);
+  border-color: #f5cdd0;
+}
+.console-shell:not(.console-preview) .console-positive {
+  color: var(--console-success);
+}
+.console-shell:not(.console-preview) .console-warning-text {
+  color: var(--console-warning);
+}
+.console-shell:not(.console-preview) .console-negative {
+  color: var(--console-error);
+}
+.console-shell:not(.console-preview) .console-dialog::backdrop {
+  background: rgb(23 32 51 / 45%);
+}
+.console-shell:not(.console-preview) .console-match {
+  box-shadow: inset 0 0 0 2px var(--console-brand);
+}
+.console-shell:not(.console-preview)
+  :is(a, button, input, textarea, select, [tabindex="0"]):focus-visible {
+  outline: 2px solid var(--console-brand);
+  outline-offset: 3px;
+}
+.console-shell:not(.console-preview) .console-table th {
+  background: #f1f4f8;
+  color: #3e4b61;
+}
+.console-shell:not(.console-preview) .console-table :is(td, th) {
+  border-color: var(--console-line);
+}
+.console-shell:not(.console-preview) .console-filterbar {
+  gap: 12px;
+}
+.console-filter-actions {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ops-log-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.ops-log-stream,
+.console-panel .ops-log-empty {
+  margin: 0;
+  border: 1px solid var(--console-line);
+  border-radius: 8px;
+  background: #f8f9fc;
+}
+.ops-log-stream {
+  padding: 0;
+  max-height: 24rem;
+  overflow: auto;
+  list-style: none;
+  font:
+    12px/1.55 ui-monospace,
+    "Cascadia Code",
+    Consolas,
+    monospace;
+}
+.console-panel .ops-log-empty,
+.ops-log-record {
+  padding: 10px 12px;
+}
+.ops-log-record + .ops-log-record {
+  border-top: 1px solid var(--console-line);
+}
+.ops-log-meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-block-end: 4px;
+}
+.console-log-badge {
+  border-radius: 5px;
+  padding: 1px 5px;
+  color: var(--console-brand-hover);
+  background: var(--console-accent);
+}
+.console-log-error {
+  color: var(--console-error);
+  background: #fceeee;
+}
+@media (max-width: 1000px) {
+  .ops-log-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .console-shell:not(.console-preview) .console-responsive-table tr {
+    border-color: var(--console-line);
+  }
+  .console-shell:not(.console-preview) .console-responsive-table td::before {
+    color: var(--console-muted);
+  }
+  .console-shell:not(.console-preview) .console-top {
+    gap: 8px;
+  }
+  .console-shell:not(.console-preview)
+    .console-responsive-table
+    td
+    :is(a, button) {
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .console-shell:not(.console-preview)
+    :is(button, .button, .console-sidebar a) {
+    transition: none;
+  }
+}
+
+.console-case-state {
+  display: inline-flex;
+  margin-inline-end: 8px;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: var(--console-accent);
+  color: var(--console-brand-hover);
+  font-size: 12px;
+  font-weight: 600;
+}
+.console-case-state[data-state="PROCESSING"] {
+  background: #fff4e5;
+  color: var(--console-warning);
+}
+.console-case-state[data-state="CLOSED"] {
+  background: #e9f6ee;
+  color: var(--console-success);
+}
+.console-shell:not(.console-preview) .ops-logs-panel {
+  margin: 0 0 16px;
+}
+.console-shell:not(.console-preview) .console-stat strong {
+  color: var(--console-text);
+}
+.console-shell:not(.console-preview) .ops-health[data-health="up"] {
+  color: var(--console-success);
+}
+.console-shell:not(.console-preview) .ops-health[data-health="down"] {
+  color: var(--console-error);
+}
+.console-shell:not(.console-preview) .ops-health[data-health="unknown"] {
+  color: var(--console-muted);
+}
+.console-shell:not(.console-preview)
+  .console-badge:is([data-state="QUEUED"], [data-state="RUNNING"]) {
+  background: var(--console-accent);
+  color: var(--console-brand-hover);
+}
+.console-shell:not(.console-preview) .console-badge[data-state="SUCCEEDED"] {
+  background: #e9f6ee;
+  color: var(--console-success);
+}
+.console-shell:not(.console-preview) .console-badge[data-state="INTERRUPTED"],
+.console-shell:not(.console-preview)
+  .console-case-state[data-state="NEEDS_ACTION"] {
+  background: #fff4e5;
+  color: var(--console-warning);
+}
+@media (min-width: 761px) {
+  .console-shell:not(.console-preview)
+    .console-case-list
+    .console-table
+    tbody
+    tr {
+    height: 52px;
+  }
+}
+.console-case-owner {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.console-case-owner .console-case-state {
+  margin-inline-end: 0;
+}
