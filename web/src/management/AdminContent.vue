@@ -6,10 +6,11 @@ import { stateLabels, useMutation } from "./governance";
 import type { Article, Comment, Page } from "./governance";
 import type { CaseDetail } from "./types";
 import { dateText } from "../lib/content";
-import { message } from "../lib/api";
 import MarkdownView from "../components/MarkdownView.vue";
 import AdminGate from "./AdminGate.vue";
 import ConsolePager from "./ConsolePager.vue";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import { caseListPath, consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 const route = useRoute(),
   router = useRouter();
@@ -28,9 +29,14 @@ const reason = ref(""),
   error = ref(""),
   busy = ref(false),
   commentPage = ref(1);
+const contextError = ref("");
 let generation = 0;
 const page = computed(() => Math.max(1, Number(route.query.page) || 1));
 const caseId = computed(() => Number(route.query.case) || 0);
+const returnId = computed(() => {
+  const input = route.query.returnCase || route.query.case;
+  return typeof input === "string" && /^[1-9]\d*$/.test(input) ? input : "";
+});
 const caseRevision = computed(() => {
   const item = linkedCase.value;
   const target = selected.value;
@@ -56,39 +62,36 @@ async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  data.value = undefined;
-  article.value = undefined;
-  comments.value = undefined;
-  selected.value = undefined;
-  linkedCase.value = undefined;
   try {
     const query = new URLSearchParams({ page: String(page.value), size: "20" });
     if (typeof route.query.state === "string" && route.query.state)
       query.set("state", route.query.state);
-    const [result, item] = await Promise.all([
+    contextError.value = "";
+    const [result, item] = await Promise.allSettled([
       adminRequest<Page<Article>>(`/admin/articles?${query}`),
       caseId.value
         ? adminRequest<CaseDetail>(`/admin/cases/${caseId.value}`)
         : undefined,
     ]);
     if (current !== generation) return;
-    data.value = result;
-    linkedCase.value = item;
+    if (result.status === "fulfilled") data.value = result.value;
+    else error.value = consoleError(result.reason);
+    if (item.status === "fulfilled") linkedCase.value = item.value;
+    else {
+      linkedCase.value = undefined;
+      contextError.value = consoleError(item.reason);
+    }
     mutation.restore();
     if (/^[1-9]\d*$/.test(String(route.query.article || "")))
       await open(Number(route.query.article));
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   } finally {
     if (current === generation) busy.value = false;
   }
 }
 async function open(id: number) {
   const current = generation;
-  error.value = "";
-  article.value = undefined;
-  comments.value = undefined;
-  selected.value = undefined;
   try {
     const [a, c] = await Promise.all([
       adminRequest<Article>(`/admin/articles/${id}`),
@@ -103,14 +106,18 @@ async function open(id: number) {
     const comment = c.items.find((row) => row.id === commentId);
     if (comment) select("comments", comment);
     else if (!commentId) select("articles", a);
-    else
+    else {
+      selected.value = undefined;
       error.value = `案件关联评论 ${commentId} 不在当前页，请翻页后核对并选择目标。`;
+    }
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   }
 }
 function select(type: "articles" | "comments", row: Article | Comment) {
   if (mutation.pending.value) return;
+  const sameTarget =
+    selected.value?.type === type && selected.value.id === row.id;
   selected.value = {
     type,
     id: row.id,
@@ -118,12 +125,12 @@ function select(type: "articles" | "comments", row: Article | Comment) {
     state: row.state,
   };
   action.value = row.state === "ADMIN_HIDDEN" ? "RESTORE" : "HIDE";
-  reason.value = "";
+  if (!sameTarget) reason.value = "";
 }
 async function moderate() {
   const target = selected.value;
   const linked = caseRevision.value;
-  if (!target || frozen.value) return;
+  if (!target || frozen.value || error.value) return;
   if (caseId.value && linked === undefined) {
     error.value = "请选择该举报的对象，并核对案件仍由你处理。";
     return;
@@ -132,6 +139,16 @@ async function moderate() {
     error.value = "请填写处置依据。";
     return;
   }
+  const label = action.value === "HIDE" ? "隐藏" : "恢复";
+  if (
+    !(await modal.value?.ask({
+      title: `${label}${target.type === "articles" ? "文章" : "评论"} ${target.id}？`,
+      detail: `治理修订 ${target.revision}。${action.value === "HIDE" ? "当前公开内容将被隐藏。" : "恢复内容治理状态，保留作者原下架状态。"}该决定会记录在审计中。\n\n理由：${reason.value.trim()}`,
+      action: label + "选定内容",
+      danger: action.value === "HIDE",
+    }))
+  )
+    return;
   await mutation.start(
     `/admin/${target.type}/${target.id}/moderation`,
     "POST",
@@ -156,12 +173,23 @@ async function turnComments(p: number) {
 onMounted(load);
 watch(() => [route.query, adminSession.status], load);
 onBeforeUnmount(() => generation++);
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <h1 class="console-title">内容巡查</h1>
   <AdminGate>
+    <ConsoleConfirm ref="modal" />
     <p class="console-note">
       读取已有公开版本，作者草稿不进入巡查。隐藏与恢复均保留治理审计；恢复保留作者原下架状态。
+    </p>
+    <p v-if="returnId" class="console-note">
+      <RouterLink
+        :to="{
+          path: '/admin/cases/' + returnId,
+          query: { from: caseListPath(route.query.from), resume: 'target' },
+        }"
+        >返回原案件 {{ returnId }}</RouterLink
+      >
     </p>
     <p v-if="caseId" class="console-note">
       本次治理关联<RouterLink :to="`/admin/cases/${caseId}`"
@@ -171,17 +199,14 @@ onBeforeUnmount(() => generation++);
         >案件修订 {{ caseRevision }}。</span
       >
     </p>
-    <p v-if="error" class="error" role="alert">
-      {{ error }} <button :disabled="busy" @click="load">重新读取</button>
+    <p v-if="contextError" class="error" role="alert">
+      {{ contextError }}
+      <button :disabled="busy" @click="load">重读关联案件</button>
     </p>
-    <MutationNotice
-      :pending="mutation.pending.value"
-      :busy="mutation.busy.value"
-      :error="mutation.error.value"
-      :notice="mutation.notice.value"
-      @retry="mutation.submit"
-      @reconcile="mutation.reconcile"
-    />
+    <p v-if="error" class="error" role="alert">
+      {{ error }} <span v-if="data">当前显示的是上次读取结果。</span>
+      <button :disabled="busy" @click="load">重新读取</button>
+    </p>
     <section class="console-panel console-patrol">
       <div class="console-filterbar">
         <label class="console-inline-label"
@@ -217,25 +242,29 @@ onBeforeUnmount(() => generation++);
       </div>
       <p v-if="busy" role="status">正在读取巡查内容…</p>
       <div v-if="data" class="console-table-wrap">
-        <table class="console-table">
-          <thead>
-            <tr>
-              <th>内容 / 对象</th>
-              <th>状态</th>
-              <th>治理修订</th>
-              <th>更新时间</th>
-              <th>操作</th>
+        <table class="console-table console-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">内容 / 对象</th>
+              <th scope="col" role="columnheader">状态</th>
+              <th scope="col" role="columnheader">治理修订</th>
+              <th scope="col" role="columnheader">更新时间</th>
+              <th scope="col" role="columnheader">操作</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="row in data.items" :key="row.id">
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row" v-for="row in data.items" :key="row.id">
+              <td data-label="内容 / 对象" role="cell">
                 {{ row.title }}<small>文章 {{ row.id }}</small>
               </td>
-              <td>{{ stateLabels[row.state] || row.state }}</td>
-              <td>{{ row.revision }}</td>
-              <td>{{ dateText(row.updatedAt || "") }}</td>
-              <td>
+              <td data-label="状态" role="cell">
+                {{ stateLabels[row.state] || row.state }}
+              </td>
+              <td data-label="治理修订" role="cell">{{ row.revision }}</td>
+              <td data-label="更新时间" role="cell">
+                {{ dateText(row.updatedAt || "") }}
+              </td>
+              <td data-label="操作" role="cell">
                 <button
                   :disabled="frozen"
                   @click="
@@ -252,8 +281,8 @@ onBeforeUnmount(() => generation++);
                 </button>
               </td>
             </tr>
-            <tr v-if="!data.items.length">
-              <td colspan="5">没有符合条件的公开版本。</td>
+            <tr role="row" v-if="!data.items.length">
+              <td role="cell" colspan="5">没有符合条件的公开版本。</td>
             </tr>
           </tbody>
         </table>
@@ -291,28 +320,32 @@ onBeforeUnmount(() => generation++);
       </button>
       <h3>文章评论</h3>
       <div class="console-table-wrap">
-        <table class="console-table">
-          <thead>
-            <tr>
-              <th>评论 / 内容</th>
-              <th>状态</th>
-              <th>修订</th>
-              <th>操作</th>
+        <table class="console-table console-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">评论 / 内容</th>
+              <th scope="col" role="columnheader">状态</th>
+              <th scope="col" role="columnheader">修订</th>
+              <th scope="col" role="columnheader">操作</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="row in comments?.items" :key="row.id">
-              <td class="console-preserve">{{ row.id }} · {{ row.body }}</td>
-              <td>{{ stateLabels[row.state] || row.state }}</td>
-              <td>{{ row.revision }}</td>
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row" v-for="row in comments?.items" :key="row.id">
+              <td data-label="评论 / 内容" role="cell" class="console-preserve">
+                {{ row.id }} · {{ row.body }}
+              </td>
+              <td data-label="状态" role="cell">
+                {{ stateLabels[row.state] || row.state }}
+              </td>
+              <td data-label="修订" role="cell">{{ row.revision }}</td>
+              <td data-label="操作" role="cell">
                 <button :disabled="frozen" @click="select('comments', row)">
                   选择此评论处置
                 </button>
               </td>
             </tr>
-            <tr v-if="!comments?.items.length">
-              <td colspan="4">这篇文章暂无评论。</td>
+            <tr role="row" v-if="!comments?.items.length">
+              <td role="cell" colspan="4">这篇文章暂无评论。</td>
             </tr>
           </tbody>
         </table>
@@ -329,6 +362,23 @@ onBeforeUnmount(() => generation++);
     <div class="console-split console-followup">
       <form class="console-panel" @submit.prevent="moderate">
         <h2>处置确认</h2>
+        <MutationNotice
+          :pending="mutation.pending.value"
+          :busy="mutation.busy.value"
+          :error="mutation.error.value"
+          :notice="mutation.notice.value"
+          @retry="mutation.submit"
+          @reconcile="mutation.reconcile"
+        />
+
+        <button
+          v-if="mutation.error.value && !mutation.pending.value"
+          type="button"
+          :disabled="busy"
+          @click="load"
+        >
+          读取最新治理修订
+        </button>
         <p>
           对象：{{
             selected

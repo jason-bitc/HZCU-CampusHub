@@ -347,6 +347,8 @@ try {
       }
       return ok(receipt);
     }
+    if (path === "/admin/cases/901/contributions" || path === "/admin/cases/901/audit")
+      return ok({ items: [], page: 1, size: 20, total: 0 });
     throw new Error(`Unhandled contract mock path ${path}`);
   });
   await p.goto(`${adminBase}/#/admin/login`);
@@ -362,7 +364,7 @@ try {
   await p.getByRole("button", { name: "登录社区管理", exact: true }).click();
   await p.waitForURL("**/#/admin/cases");
   await p.getByRole("link", { name: "查看上下文", exact: true }).click();
-  await p.waitForURL("**/#/admin/cases/901");
+  await p.waitForURL((url) => url.hash.split("?")[0] === "#/admin/cases/901");
   await p.getByRole("button", { name: "受理此案件", exact: true }).click();
   await p
     .getByRole("combobox", { name: "处理结论", exact: true })
@@ -386,13 +388,15 @@ try {
   await p
     .getByRole("button", { name: "确认处理并留存记录", exact: true })
     .click();
+  await p
+    .getByRole("dialog")
+    .getByRole("button", { name: "提交处理决定" })
+    .click();
   await p.getByText(/原请求与输入已保留/).waitFor();
   await p.reload();
   await p.getByRole("button", { name: "按原请求核对", exact: true }).waitFor();
   await p.getByRole("button", { name: "按原请求核对", exact: true }).click();
-  await p
-    .getByText("操作回执已确认，当前状态以最新读取为准。", { exact: true })
-    .waitFor();
+  await p.getByText(/操作回执已确认。当前状态为已完成/).waitFor();
   const decisions = commands.filter((c) => c.action === "decisions");
   assert.equal(decisions.length, 2);
   assert.deepEqual(decisions[0], decisions[1]);
