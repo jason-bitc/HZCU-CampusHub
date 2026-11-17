@@ -1,7 +1,8 @@
 Component({
   options: { styleIsolation: 'apply-shared' },
   properties: {
-    article: { type: Object, value: {} }
+    article: { type: Object, value: {} },
+    feed: { type: Boolean, value: false }
   },
   methods: {
     handleTap() {

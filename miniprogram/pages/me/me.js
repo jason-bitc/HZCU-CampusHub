@@ -5,7 +5,7 @@ const access = require('../../utils/member-page');
 const session = require('../../services/session');
 
 const emptyCounts = { articles: null, drafts: null, favorites: null, feedback: null };
-const blank = { profile: null, avatar: '', profileSummary: '', wallet: null, rewards: null, counts: emptyCounts, unreadCount: null };
+const blank = { profile: null, profileSummary: '', wallet: null, rewards: null, counts: emptyCounts, unreadCount: null };
 Page({
   data: Object.assign({ authStatus: 'checking', error: '', loading: false }, blank),
   onLoad() { access.attach(this, Object.assign({ loading: false }, blank)); },
@@ -39,7 +39,7 @@ Page({
     if (feedback) counts.feedback = feedback.total;
     const problem = results.slice(0, 4).find((row) => row.status === 'rejected');
     this.setData({
-      profile, avatar: Array.from(profile && profile.nickname || '城')[0],
+      profile,
       profileSummary: [major ? major.name : '未填写专业', stage || '阶段未设置'].join(' · '),
       wallet: value(2), rewards: value(3), counts, loading: false, error: problem ? access.errorText(problem.reason) : ''
     });
