@@ -217,6 +217,17 @@ async function test(name, run) {
     assert.equal(reader.data.filteredHeadings.length, 1); assert.match(reader.data.filteredHeadings[0].text, /08/);
     reader.closeToc(); assert.equal(reader.events.at(-1).detail.visible, false);
   });
+  await test('目录跳转动画中开始登录，仍记住用户选中的章节', () => {
+    const reader = harness('components/markdown-view/index.js', {}, true);
+    reader.anchorTops = [{ id: 1, top: 120 }, { id: 2, top: 510 }];
+    reader.data.currentHeadingId = 1;
+    reader.jumpBookmark = { headingId: 2, offset: -20, until: Date.now() + 500 };
+    const bookmark = reader.capturePosition(150);
+    assert.equal(bookmark.headingId, 2);
+    assert.equal(bookmark.offset, -20);
+    reader.jumpBookmark.until = 0;
+    assert.equal(reader.capturePosition(150).headingId, 1);
+  });
   await test('取消演示请求后 Promise 结束，不让刷新永久等待', async () => {
     const demo = require('../services/demo-service');
     demo.setScenario('normal'); const operation = demo.listArticles({ page: 1, size: 2 });

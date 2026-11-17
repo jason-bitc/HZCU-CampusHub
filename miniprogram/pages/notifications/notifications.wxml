@@ -1,18 +1,23 @@
-<view class="member-page">
+<view class="member-page flow-page notifications-page">
   <page-state wx:if="{{authStatus === 'guest'}}" status="permission" title="登录后查看通知" action-text="登录校园账号" bindaction="login" />
   <view wx:elif="{{authStatus === 'ready'}}">
-    <text class="form-title">站内通知</text>
-    <text wx:if="{{loaded && total}}" class="hint" aria-live="polite">{{unreadCount ? unreadCount + ' 条未读' : '通知已全部读完'}}</text>
+    <view class="flow-heading">
+      <view>
+        <text class="form-title">站内通知</text>
+        <text wx:if="{{loaded && total}}" class="flow-meta" aria-live="polite">{{unreadCount ? unreadCount + ' 条未读' : '通知已全部读完'}}</text>
+      </view>
+      <button wx:if="{{loaded}}" class="button-text notice-refresh" bindtap="refresh" disabled="{{busy || readingId}}">{{busy ? '正在刷新…' : '刷新通知'}}</button>
+    </view>
     <page-state wx:if="{{busy && !loaded}}" status="loading" title="正在读取通知" />
     <page-state wx:elif="{{error && !loaded}}" status="error" title="暂时无法读取通知" description="{{error}}" action-text="重试" bindaction="refresh" />
     <page-state wx:elif="{{loaded && !total}}" status="empty" title="还没有通知" description="有回复或处理结果时会显示在这里。" />
     <text wx:if="{{error && loaded}}" class="field-error" role="alert">{{error}}。下方仍为上次读取的通知。</text>
-    <view wx:for="{{items}}" wx:key="id" class="list-row notice-row {{item.readAt ? '' : 'notice-unread'}}">
+    <view wx:for="{{items}}" wx:key="id" class="flow-card notice-row {{item.readAt ? '' : 'notice-unread'}}">
       <view class="notice-title"><text class="row-title">{{item.message}}</text><text wx:if="{{!item.readAt}}" class="status-tag unread-tag">未读</text></view>
       <text class="hint">{{item.time}}</text>
       <text wx:if="{{item.outcome}}" class="notice-outcome">处理结果 · {{item.outcome}}</text>
       <view class="inline-actions">
-        <button wx:if="{{item.url}}" class="button-secondary" data-id="{{item.id}}" bindtap="open" disabled="{{openingId || busy || readingId}}">{{openingId === item.id ? '正在打开…' : item.action}}</button>
+        <button wx:if="{{item.url}}" class="button-text notice-open" data-id="{{item.id}}" bindtap="open" disabled="{{openingId || busy || readingId}}">{{openingId === item.id ? '正在打开…' : item.action}}</button>
         <text wx:else class="hint">相关内容暂不可查看。</text>
         <button wx:if="{{!item.readAt}}" class="button-text" data-id="{{item.id}}" bindtap="read" disabled="{{busy || readingId}}">{{readingId === item.id ? '处理中…' : '标记已读'}}</button>
       </view>
@@ -23,6 +28,5 @@
       <text class="hint">第 {{page}} 页</text>
       <button class="button-secondary" bindtap="next" disabled="{{busy || page * 20 >= total}}">下一页</button>
     </view>
-    <button wx:if="{{loaded}}" class="button-secondary" bindtap="refresh" disabled="{{busy || readingId}}">{{busy ? '正在刷新…' : '刷新通知'}}</button>
   </view>
 </view>

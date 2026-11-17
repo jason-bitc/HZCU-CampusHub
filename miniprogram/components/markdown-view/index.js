@@ -76,22 +76,28 @@ Component({
     },
     measureHeadings(bookmark) {
       wx.nextTick(() => {
-        wx.createSelectorQuery().in(this).selectAll('.md-heading').boundingClientRect((rects) => {
-          wx.createSelectorQuery().selectViewport().scrollOffset((viewport) => {
-            if (!viewport || !rects) {
-              if (bookmark) wx.pageScrollTo({ scrollTop: bookmark.scrollTop, duration: 0 });
-              return;
-            }
-            this.anchorTops = rects.map((rect, index) => ({ id: this.data.headings[index] && this.data.headings[index].id, top: viewport.scrollTop + rect.top }));
-            const anchor = bookmark && this.anchorTops.find((row) => row.id === bookmark.headingId);
-            const scrollTop = bookmark ? Math.max(0, anchor ? anchor.top + bookmark.offset : bookmark.scrollTop) : viewport.scrollTop;
-            this.updateReadingPosition(scrollTop);
-            if (bookmark) wx.pageScrollTo({ scrollTop, duration: 0 });
-          }).exec();
-        }).exec();
+        const query = wx.createSelectorQuery().in(this);
+        query.selectAll('.md-heading').boundingClientRect();
+        query.selectViewport().scrollOffset();
+        query.exec(([rects, viewport]) => {
+          if (!viewport || !rects) {
+            if (bookmark) wx.pageScrollTo({ scrollTop: bookmark.scrollTop, duration: 0 });
+            return;
+          }
+          this.anchorTops = rects.map((rect, index) => ({ id: this.data.headings[index] && this.data.headings[index].id, top: viewport.scrollTop + rect.top }));
+          const anchor = bookmark && this.anchorTops.find((row) => row.id === bookmark.headingId);
+          const scrollTop = bookmark ? Math.max(0, anchor ? anchor.top + bookmark.offset : bookmark.scrollTop) : viewport.scrollTop;
+          this.updateReadingPosition(scrollTop);
+          if (bookmark) wx.pageScrollTo({ scrollTop, duration: 0 });
+        });
       });
     },
     capturePosition(scrollTop) {
+      // A TOC jump may still be animating when the reader starts signing in.
+      if (this.jumpBookmark && Date.now() < this.jumpBookmark.until) {
+        const { headingId, offset } = this.jumpBookmark;
+        return { scrollTop, headingId, offset };
+      }
       const anchor = this.anchorTops && this.anchorTops.find((row) => row.id === this.data.currentHeadingId);
       return anchor ? { scrollTop, headingId: anchor.id, offset: scrollTop - anchor.top } : { scrollTop };
     },
@@ -111,6 +117,7 @@ Component({
           if (!rect) return;
           wx.createSelectorQuery().selectViewport().scrollOffset((viewport) => {
             if (!viewport) return;
+            this.jumpBookmark = { headingId: id, offset: -20, until: Date.now() + 300 };
             this.setData({ currentHeadingId: id });
             wx.pageScrollTo({ scrollTop: Math.max(0, viewport.scrollTop + rect.top - 20), duration: 250 });
           }).exec();

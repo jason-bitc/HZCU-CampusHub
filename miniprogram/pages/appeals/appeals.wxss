@@ -1,6 +1,12 @@
+@import '../../styles/flow.wxss';
 @import '../../styles/sections.wxss';
 .appeal-reason { margin-top: 24rpx; }
 .appeal-card.selected { border: 2rpx solid var(--color-primary); }
 .appeal-footer { margin-top: 28rpx; }
 
 .appeal-navigation { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.appeal-navigation button { flex: 1; min-width: 0; }
+.appeals-page .record-section-title { display: block; margin: 12rpx 0 14rpx; font-size: 32rpx; font-weight: 650; }
+.appeals-page .record-answer { margin-top: 16rpx; padding-top: 14rpx; border-top: 1rpx solid var(--color-border); }
+.record-answer .section-copy { margin-top: 0; }
+.appeals-page .appeal-card.selected { outline: 1rpx solid var(--color-primary); }

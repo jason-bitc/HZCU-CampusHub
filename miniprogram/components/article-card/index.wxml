@@ -12,12 +12,13 @@
     <view class="feed-details">
       <view class="feed-meta">
         <text class="feed-source">{{article.sourceText}}</text>
-        <text wx:if="{{article.publishedText}}">{{article.publishedText}}</text>
+        <text wx:if="{{favoriteEntry && article.updatedText}}">更新于 {{article.updatedText}}</text>
+        <text wx:elif="{{article.publishedText}}">{{article.publishedText}}</text>
         <text>投币 {{article.effectiveCoins}}</text>
       </view>
       <text class="feed-author">作者资料认证后可见</text>
     </view>
-    <text class="feed-read" aria-hidden="true">阅读</text>
+    <text class="feed-read" aria-hidden="true">{{favoriteEntry ? '继续阅读' : '阅读'}}</text>
   </view>
   <view wx:else class="article-meta">
     <text class="meta-text">{{article.sourceText}} · 作者信息认证后可见</text>

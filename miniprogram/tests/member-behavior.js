@@ -13,6 +13,30 @@ function page(relative, mocks, wx = {}) { let definition; load(relative, mocks, 
 const results = [];
 async function test(name, run) { try { await run(); results.push({ name, pass: true }); } catch (e) { results.push({ name, pass: false, error: e.stack }); } }
 (async () => {
+  await test('收藏回到列表后刷新已读页，后续页失败保留原列表并按原范围重试', async () => {
+    const calls = [];
+    let failSecond = true;
+    const p = page('pages/favorites/favorites.js', {
+      '../../services/member': { async favorites(n) {
+        calls.push(n);
+        if (n === 2 && failSecond) throw new Error('临时失败');
+        return { total: 2, items: [{ articleId: n + 10, available: true }] };
+      } },
+      '../../utils/member-page': { enter: async () => true, errorText: (e) => e.message }
+    });
+    p.setData({ authStatus: 'ready', loaded: true, page: 2, total: 2, items: [{ articleId: 1 }, { articleId: 2 }] });
+    await p.onShow();
+    await tick();
+    assert.deepEqual(calls, [1, 2]);
+    assert.deepEqual(Array.from(p.data.items, (item) => item.articleId), [1, 2]);
+    assert.equal(p.data.page, 2);
+    failSecond = false;
+    p.retry();
+    await tick();
+    assert.deepEqual(calls, [1, 2, 1, 2]);
+    assert.deepEqual(Array.from(p.data.items, (item) => item.articleId), [11, 12]);
+    assert.equal(p.data.page, 2);
+  });
   await test('Bearer只发给明确的私有请求，无正文写入不产生data字段', async () => {
     const e = environment(); e.session.accept(login()); const sent = [];
     e.wx.request = (o) => { sent.push(o); o.success({ statusCode: 200, header: {}, data: { code: 'OK', data: {} } }); return { abort() {} }; };
