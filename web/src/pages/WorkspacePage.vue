@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { get, message, send } from "../lib/api";
 import {
@@ -10,6 +10,9 @@ import {
 } from "../lib/session";
 import { dateText, stateName } from "../lib/content";
 import type { Owned, Page } from "../types";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
+import OperationFeedback from "../components/OperationFeedback.vue";
+import { operationFailure, type Feedback } from "../lib/feedback";
 import MemberGate from "../components/MemberGate.vue";
 const router = useRouter();
 const route = useRoute();
@@ -19,6 +22,27 @@ const busy = ref(false);
 const error = ref("");
 const filter = ref("ALL");
 const pending = ref("");
+const confirmation = ref<InstanceType<typeof ConfirmDialog>>();
+const working = ref<Record<number, boolean>>({});
+const rowFeedback = ref<Record<number, Feedback>>({});
+const creating = ref(false);
+const createFeedback = ref<Feedback>();
+let loadVersion = 0;
+let asking = false;
+const transitions = {
+  unpublish: {
+    label: "下架",
+    detail: "下架后读者将无法访问这篇文章，草稿仍可编辑。",
+  },
+  restore: {
+    label: "恢复上次公开版本",
+    detail: "读者将可以访问上次公开的版本。当前草稿会继续单独保存。",
+  },
+  delete: {
+    label: "删除",
+    detail: "删除后，文章无法公开访问，也无法继续编辑或恢复。",
+  },
+};
 const states = [
   "ALL",
   "DRAFT",
@@ -47,6 +71,7 @@ function chooseFilter(state: string) {
 }
 async function load() {
   if (session.status !== "ready") return;
+  const version = ++loadVersion;
   busy.value = true;
   error.value = "";
   try {
@@ -56,6 +81,7 @@ async function load() {
       `/me/articles?page=${page.value}&size=20${requested}`,
       true,
     );
+    if (version !== loadVersion) return;
     if (!listing.items.length && page.value > 1) {
       const lastPage = Math.max(1, Math.ceil(listing.total / listing.size));
       if (lastPage < page.value) {
@@ -66,16 +92,17 @@ async function load() {
         );
       }
     }
-    result.value = listing;
+    if (version === loadVersion) result.value = listing;
   } catch (e) {
-    error.value = message(e);
+    if (version === loadVersion) error.value = message(e);
   } finally {
-    busy.value = false;
+    if (version === loadVersion) busy.value = false;
   }
 }
 async function create() {
-  busy.value = true;
-  error.value = "";
+  if (creating.value) return;
+  creating.value = true;
+  createFeedback.value = undefined;
   try {
     if (!pending.value) {
       const key = crypto.randomUUID();
@@ -89,45 +116,88 @@ async function create() {
     pending.value = "";
     await router.push(`/editor/${r.articleId}`);
   } catch (e) {
-    error.value = message(e);
+    createFeedback.value = operationFailure(
+      e,
+      "创建结果待确认，请沿用原请求重试。",
+    );
   } finally {
-    busy.value = false;
+    creating.value = false;
   }
 }
 async function transition(
   item: Owned,
-  action: "unpublish" | "restore" | "delete",
+  action: keyof typeof transitions,
+  origin: Event,
 ) {
-  if (busy.value) return;
-  if (
-    !confirm(
-      action === "restore"
-        ? "恢复上次公开版本？当前草稿的修改不会随之发布。"
-        : action === "delete"
-          ? "确认删除？删除后无法继续编辑或恢复。"
-          : "下架后，其他读者将无法读取这篇文章。确认下架？",
-    )
-  )
-    return;
-  busy.value = true;
-  error.value = "";
+  const id = item.articleId;
+  if (busy.value || asking || working.value[id]) return;
+  const change = transitions[action];
+  const title = item.title || "未命名草稿";
+  const previousButton = origin.currentTarget as HTMLElement;
+  asking = true;
   try {
-    if (action === "delete") {
-      await send(
-        `/me/articles/${item.articleId}?expectedRevision=${item.revision}`,
-        "DELETE",
-      );
-      removePrivate(`draft:${item.articleId}`);
-    } else {
-      await send(`/me/articles/${item.articleId}/${action}`, "POST", {
-        expectedRevision: item.revision,
-      });
-    }
-    await load();
-  } catch (e) {
-    error.value = `${message(e)} 请重新读取文章状态再操作。`;
+    if (
+      !(await confirmation.value?.ask(
+        {
+          title: change.label + "《" + title + "》？",
+          detail: change.detail,
+          action: "确认" + change.label,
+        },
+        previousButton,
+      ))
+    )
+      return;
   } finally {
-    busy.value = false;
+    asking = false;
+  }
+  working.value[id] = true;
+  delete rowFeedback.value[id];
+  try {
+    const receipt =
+      action === "delete"
+        ? await send<Pick<Owned, "state" | "revision">>(
+            `/me/articles/${id}?expectedRevision=${item.revision}`,
+            "DELETE",
+          )
+        : await send<Pick<Owned, "state" | "revision">>(
+            `/me/articles/${id}/${action}`,
+            "POST",
+            { expectedRevision: item.revision },
+          );
+    if (receipt.state === "DELETED") removePrivate(`draft:${id}`);
+    const row = result.value?.items.find((entry) => entry.articleId === id);
+    if (!row) return;
+    row.state = receipt.state;
+    row.revision = receipt.revision;
+    const actions = new Set(row.allowedActions || []);
+    actions.delete("UNPUBLISH");
+    actions.delete("RESTORE");
+    actions.delete("VIEW_PUBLIC");
+    if (row.state === "PUBLISHED") {
+      actions.add("VIEW_PUBLIC");
+      actions.add("UNPUBLISH");
+    } else if (
+      row.state === "AUTHOR_OFFLINE" &&
+      !result.value?.publishingRestricted
+    ) {
+      actions.add("RESTORE");
+    }
+    row.allowedActions = row.state === "DELETED" ? [] : [...actions];
+    rowFeedback.value[id] = {
+      kind: "success",
+      text: `当前状态为${stateName[receipt.state]}。`,
+    };
+    await nextTick();
+    const focus = document.getElementById("work-title-" + id);
+    if (!previousButton.isConnected && document.activeElement === document.body)
+      focus?.focus({ preventScroll: true });
+  } catch (e) {
+    rowFeedback.value[id] = operationFailure(
+      e,
+      "结果待确认。请重新读取文章状态。",
+    );
+  } finally {
+    working.value[id] = false;
   }
 }
 onMounted(load);
@@ -135,16 +205,21 @@ watch(() => session.status, load);
 </script>
 <template>
   <MemberGate title="登录后管理你的文章"
-    ><div class="page-heading">
+    ><ConfirmDialog ref="confirmation" />
+    <div class="page-heading">
       <div>
         <h1>每一次复盘，都值得留下</h1>
         <p>公开版本与草稿分别保存，编辑草稿不会改变正在展示的文章。</p>
       </div>
-      <button class="primary" :disabled="busy" @click="create">
+      <button class="primary" :disabled="creating" @click="create">
         {{ pending ? "继续上次创建" : "＋ 写一篇经验" }}
       </button>
     </div>
-    <p v-if="pending" class="notice">
+    <OperationFeedback
+      :feedback="createFeedback"
+      :processing="creating ? '正在创建草稿…' : undefined"
+    />
+    <p v-if="pending && !creating" class="notice">
       上次创建结果尚未确认，再次点击会沿用原请求。
     </p>
     <div class="workspace-tabs" aria-label="文章状态">
@@ -161,7 +236,7 @@ watch(() => session.status, load);
     <p v-if="error" class="error" role="alert">
       {{ error }} <button @click="load">重新读取状态</button>
     </p>
-    <p v-if="busy" role="status">正在读取或处理，请稍候…</p>
+    <p v-if="busy" role="status">正在读取文章列表…</p>
     <p v-if="result?.publishingRestricted" class="hint">
       当前账号发布受限。可保存草稿并查看<RouterLink to="/me/appeals"
         >限制与申诉</RouterLink
@@ -179,7 +254,9 @@ watch(() => session.status, load);
         <p class="state-label" :data-state="item.state">
           {{ stateName[item.state] }}<span>修订 {{ item.revision }}</span>
         </p>
-        <h2>{{ item.title || "未命名草稿" }}</h2>
+        <h2 :id="'work-title-' + item.articleId" tabindex="-1">
+          {{ item.title || "未命名草稿" }}
+        </h2>
         <p class="meta">{{ dateText(item.updatedAt) }}</p>
         <div class="card-actions">
           <RouterLink
@@ -208,8 +285,8 @@ watch(() => session.status, load);
             item.state === 'PUBLISHED'
           "
           class="text-button"
-          :disabled="busy"
-          @click="transition(item, 'unpublish')"
+          :disabled="busy || working[item.articleId]"
+          @click="transition(item, 'unpublish', $event)"
         >
           下架</button
         ><button
@@ -218,18 +295,35 @@ watch(() => session.status, load);
             item.state === 'AUTHOR_OFFLINE'
           "
           class="text-button"
-          :disabled="busy"
-          @click="transition(item, 'restore')"
+          :disabled="busy || working[item.articleId]"
+          @click="transition(item, 'restore', $event)"
         >
           恢复上次公开版本
         </button>
         <button
           v-if="item.allowedActions?.includes('DELETE')"
           class="text-button"
-          :disabled="busy"
-          @click="transition(item, 'delete')"
+          :disabled="busy || working[item.articleId]"
+          @click="transition(item, 'delete', $event)"
         >
           删除
+        </button>
+        <OperationFeedback
+          :feedback="rowFeedback[item.articleId]"
+          :processing="
+            working[item.articleId] ? '正在处理文章状态…' : undefined
+          "
+        />
+        <button
+          v-if="
+            rowFeedback[item.articleId] &&
+            rowFeedback[item.articleId]?.kind !== 'success'
+          "
+          class="text-button"
+          :disabled="busy"
+          @click="load"
+        >
+          重新读取状态
         </button>
         <p v-if="item.state === 'ADMIN_HIDDEN'" class="hint">
           管理员隐藏的文章不能自行修改、发布或恢复。

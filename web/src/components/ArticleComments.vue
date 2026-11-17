@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ConfirmDialog from "./ConfirmDialog.vue";
+import OperationFeedback from "./OperationFeedback.vue";
+import { operationFailure, type Feedback } from "../lib/feedback";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { get, message, request, send } from "../lib/api";
@@ -53,6 +56,13 @@ const upload = ref<{ file: File; requestId: string }>();
 const busy = ref(false);
 const error = ref("");
 const notice = ref("");
+const confirmation = ref<InstanceType<typeof ConfirmDialog>>();
+const composerFeedback = ref<Feedback>();
+const composerBusy = ref("");
+const deleting = ref<number>();
+const deletedMessage = ref("");
+const rowFeedback = ref<Record<number, Feedback>>({});
+let asking = false;
 const composer = ref<HTMLTextAreaElement>();
 let mounted = true;
 async function perform(action: () => Promise<void>) {
@@ -121,7 +131,10 @@ function markFile(event: Event) {
     !["image/jpeg", "image/png"].includes(file.type) ||
     file.size > 10 * 1024 * 1024
   ) {
-    error.value = "请选择不超过 10MiB 的 JPEG 或 PNG 图片。";
+    composerFeedback.value = {
+      kind: "error",
+      text: "请选择不超过 10MiB 的 JPEG 或 PNG 图片。",
+    };
     return;
   }
   upload.value = { file, requestId: crypto.randomUUID() };
@@ -130,7 +143,10 @@ function markFile(event: Event) {
 async function uploadImage() {
   const selected = upload.value;
   if (!selected) return;
-  await perform(async () => {
+  if (composerBusy.value) return;
+  composerBusy.value = "正在上传评论图片…";
+  composerFeedback.value = undefined;
+  try {
     const form = new FormData();
     form.set("file", selected.file);
     form.set("requestId", selected.requestId);
@@ -140,10 +156,24 @@ async function uploadImage() {
     );
     imageIds.value.push(image.imageId);
     upload.value = undefined;
-  });
+    composerFeedback.value = {
+      kind: "success",
+      text: "图片已添加到本条评论。",
+    };
+  } catch (e) {
+    composerFeedback.value = operationFailure(
+      e,
+      "图片上传待确认，重试会使用原图和原请求。",
+    );
+  } finally {
+    composerBusy.value = "";
+  }
 }
 async function submit() {
-  await perform(async () => {
+  if (composerBusy.value || busy.value) return;
+  composerBusy.value = "正在提交评论…";
+  composerFeedback.value = undefined;
+  try {
     notice.value = "";
     if (!pending.value) {
       if (upload.value || (!body.value.trim() && !imageIds.value.length))
@@ -172,23 +202,59 @@ async function submit() {
     notice.value = "评论已提交。";
     const root = receipt.rootCommentId;
     if (replies.value[root]) await readReplies(root, replies.value[root].page);
-    await readRoots();
-  });
+    await perform(() => readRoots());
+  } catch (e) {
+    composerFeedback.value = operationFailure(
+      e,
+      pending.value ? "评论提交结果待确认，原输入已保留。" : undefined,
+    );
+  } finally {
+    composerBusy.value = "";
+  }
 }
 async function remove(comment: Comment) {
-  if (!comment.canDelete || !window.confirm("确认删除这条本人评论？")) return;
-  await perform(async () => {
-    await send(`/comments/${comment.commentId}`, "DELETE");
-    const root = comment.rootCommentId;
-    if (replies.value[root]) await readReplies(root, replies.value[root].page);
-    await readRoots(roots.value?.page);
-  });
-}
-function releasePending() {
-  if (
-    !window.confirm(
-      "确定结束上次待确认请求？请先检查评论列表，避免重复发布。正文和图片保留在编辑区。",
+  if (!comment.canDelete || busy.value || deleting.value || asking) return;
+  asking = true;
+  try {
+    if (
+      !(await confirmation.value?.ask({
+        title: "删除评论 " + comment.commentId + "？",
+        detail: "该评论将停止公开显示。请确认删除的是你选择的这条评论。",
+        action: "删除评论",
+      }))
     )
+      return;
+  } finally {
+    asking = false;
+  }
+  deleting.value = comment.commentId;
+  deletedMessage.value = "";
+  delete rowFeedback.value[comment.commentId];
+  try {
+    await send(`/comments/${comment.commentId}`, "DELETE");
+    deletedMessage.value = "已删除评论 " + comment.commentId + "。";
+    await perform(async () => {
+      const root = comment.rootCommentId;
+      if (replies.value[root])
+        await readReplies(root, replies.value[root].page);
+      await readRoots(roots.value?.page);
+    });
+  } catch (e) {
+    rowFeedback.value[comment.commentId] = operationFailure(
+      e,
+      "删除结果待确认，请重新读取评论。",
+    );
+  } finally {
+    deleting.value = undefined;
+  }
+}
+async function releasePending() {
+  if (
+    !(await confirmation.value?.ask({
+      title: "结束待确认评论？",
+      detail: "请先检查评论列表，避免重复发布。正文和图片会保留在编辑区。",
+      action: "结束本机记录",
+    }))
   )
     return;
   removePrivate(key);
@@ -201,10 +267,13 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <section class="source-section" aria-label="文章评论">
+    <ConfirmDialog ref="confirmation" />
     <h2>评论</h2>
-    <p v-if="busy" class="hint" role="status">正在读取或提交评论…</p>
+    <p v-if="busy" class="hint" role="status">正在读取评论…</p>
+    <p v-if="deletedMessage" class="success" role="status">
+      {{ deletedMessage }}
+    </p>
     <p v-if="error" class="error" role="alert">{{ error }}</p>
-    <p v-if="notice" class="success" role="status">{{ notice }}</p>
     <button
       class="text-button"
       :disabled="busy"
@@ -264,11 +333,16 @@ onBeforeUnmount(() => {
             <button
               v-if="comment.canDelete"
               class="text-button"
-              :disabled="busy"
+              :disabled="busy || !!deleting"
               @click="remove(comment)"
             >
-              删除本人评论
-            </button>
+              删除本人评论</button
+            ><OperationFeedback
+              :feedback="rowFeedback[comment.commentId]"
+              :processing="
+                deleting === comment.commentId ? '正在删除评论…' : undefined
+              "
+            />
           </div>
         </template>
         <p v-else class="hint">这条评论已不可用。</p>
@@ -332,6 +406,11 @@ onBeforeUnmount(() => {
       </button>
     </nav>
     <form class="stack" @submit.prevent="submit">
+      <p v-if="notice" class="success" role="status">{{ notice }}</p>
+      <OperationFeedback
+        :feedback="composerFeedback"
+        :processing="composerBusy || undefined"
+      />
       <label for="comment-body">{{
         target
           ? `回复 ${target.commenter?.nickname || "校园用户"}`
@@ -356,7 +435,7 @@ onBeforeUnmount(() => {
         v-model="body"
         rows="4"
         maxlength="10000"
-        :disabled="busy || !!pending"
+        :disabled="!!composerBusy || busy || !!pending"
       />
       <div v-if="imageIds.length" class="card-actions">
         <div v-for="imageId in imageIds" :key="imageId">
@@ -364,7 +443,7 @@ onBeforeUnmount(() => {
           <button
             type="button"
             class="text-button"
-            :disabled="busy || !!pending"
+            :disabled="!!composerBusy || busy || !!pending"
             @click="imageIds = imageIds.filter((id) => id !== imageId)"
           >
             移除图片
@@ -376,15 +455,23 @@ onBeforeUnmount(() => {
         <input
           type="file"
           accept="image/jpeg,image/png"
-          :disabled="busy"
+          :disabled="!!composerBusy || busy"
           @change="markFile"
         />
       </label>
       <div v-if="upload" class="card-actions">
-        <button type="button" :disabled="busy" @click="uploadImage">
+        <button
+          type="button"
+          :disabled="!!composerBusy || busy"
+          @click="uploadImage"
+        >
           重试上传
         </button>
-        <button type="button" :disabled="busy" @click="upload = undefined">
+        <button
+          type="button"
+          :disabled="!!composerBusy || busy"
+          @click="upload = undefined"
+        >
           移除待上传图片
         </button>
       </div>
@@ -392,6 +479,7 @@ onBeforeUnmount(() => {
         <button
           class="primary"
           :disabled="
+            !!composerBusy ||
             busy ||
             (!!upload && !pending) ||
             (!pending && !body.trim() && !imageIds.length)
@@ -402,7 +490,7 @@ onBeforeUnmount(() => {
         <button
           v-if="pending"
           type="button"
-          :disabled="busy"
+          :disabled="!!composerBusy || busy"
           @click="releasePending"
         >
           结束待确认记录

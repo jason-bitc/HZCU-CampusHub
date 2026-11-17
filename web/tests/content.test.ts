@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   fromDraft,
   imagePath,
+  publishChecklist,
   publishErrors,
   safeLink,
 } from "../src/lib/content.ts";
@@ -56,4 +57,33 @@ test("complex Markdown and source links survive editing projection verbatim", ()
   assert.equal(fromDraft(reactive(value)).body, body);
   form.sourceType = "CURATED";
   assert.ok(publishErrors(form).includes("补充来源说明"));
+});
+
+test("publish checklist maps server-only body validation to the editor without duplicates", () => {
+  const form = {
+    title: "",
+    summary: "",
+    body: "##",
+    jobIds: [1],
+    majorIds: [11],
+    companyIds: [],
+    topicIds: [],
+    experienceStage: "大三",
+    sourceType: "CURATED",
+    sourceNote: "",
+    sourceLinks: [],
+  };
+  assert.deepEqual(
+    publishChecklist(form, [
+      "title",
+      "body或有效上传图片",
+      "sourceNote",
+      "sourceNote",
+    ]),
+    [
+      { field: "title", label: "填写标题" },
+      { field: "body", label: "添加正文或已上传图片" },
+      { field: "sourceNote", label: "补充来源说明" },
+    ],
+  );
 });

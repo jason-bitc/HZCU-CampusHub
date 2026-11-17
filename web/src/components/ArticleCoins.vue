@@ -2,9 +2,12 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { get, message, send } from "../lib/api";
 import { readPrivate, removePrivate, writePrivate } from "../lib/session";
+import ConfirmDialog from "./ConfirmDialog.vue";
 import type { Wallet } from "../types";
 
-const props = defineProps<{ articleId: number }>();
+const props = defineProps<{ articleId: number; articleTitle: string }>();
+const confirmation = ref<InstanceType<typeof ConfirmDialog>>();
+let asking = false;
 const emit = defineEmits<{ confirmed: [] }>();
 interface CoinState {
   spent: number;
@@ -55,14 +58,30 @@ async function load() {
   }
 }
 async function submit(amount?: number) {
-  if (busy.value) return;
+  if (busy.value || asking) return;
+  if (!pending.value) {
+    if (!state.value?.eligible || !amount || amount > max.value) return;
+    asking = true;
+    try {
+      if (
+        !(await confirmation.value?.ask({
+          title: `确认投 ${amount} 硬币？`,
+          detail: `硬币将投给《${props.articleTitle}》。投出后无法自行撤回。`,
+          action: `投 ${amount} 硬币`,
+        }))
+      )
+        return;
+    } finally {
+      asking = false;
+    }
+    if (!mounted || busy.value) return;
+  }
   error.value = "";
   notice.value = "";
   busy.value = true;
   try {
     if (!pending.value) {
-      if (!state.value?.eligible || !amount || amount > max.value) return;
-      if (!window.confirm(`确认投 ${amount} 币？提交后不能自行撤回。`)) return;
+      if (!amount) return;
       const value = { amount, requestId: crypto.randomUUID() };
       writePrivate(key, value);
       pending.value = value;
@@ -92,9 +111,11 @@ async function finishPending() {
   await load();
   if (!pending.value || !state.value) return;
   if (
-    !window.confirm(
-      "已读取最新额度与余额。确认结束本机待确认记录？已完成的投币仍然有效。",
-    )
+    !(await confirmation.value?.ask({
+      title: "结束待确认投币记录？",
+      detail: "已读取当前额度和余额。结束本机记录后，已完成的投币仍然有效。",
+      action: "结束本机记录",
+    }))
   )
     return;
   removePrivate(key);
@@ -107,6 +128,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="stack">
+    <ConfirmDialog ref="confirmation" />
     <p v-if="busy" class="hint" role="status">正在核对投币…</p>
     <p v-if="wallet && state" class="hint">
       余额 {{ wallet.balance }} 币 · 本篇已投 {{ state.spent }} 币 · 剩余额度

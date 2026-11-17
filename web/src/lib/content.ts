@@ -19,18 +19,39 @@ export function safeLink(raw: string): string {
 export function imagePath(raw: string): string {
   return /^\/api\/v1\/media\/images\/[a-f0-9-]{36}$/.test(raw) ? raw : "";
 }
+const publishFields = {
+  title: "填写标题",
+  body: "添加正文或已上传图片",
+  jobIds: "选择目标岗位",
+  majorIds: "选择文章适用专业",
+  experienceStage: "填写经历发生阶段",
+  sourceType: "确认内容来源",
+  sourceNote: "补充来源说明",
+} as const;
+type PublishField = keyof typeof publishFields;
+export function publishChecklist(form: Form, serverFields: string[] = []) {
+  const missing: Record<PublishField, boolean> = {
+    title: !form.title.trim(),
+    body: !form.body.trim(),
+    jobIds: !form.jobIds.length,
+    majorIds: !form.majorIds.length,
+    experienceStage: !form.experienceStage.trim(),
+    sourceType: !["FIRST_HAND", "CURATED", "DEMO"].includes(
+      form.sourceType || "",
+    ),
+    sourceNote: form.sourceType === "CURATED" && !form.sourceNote.trim(),
+  };
+  return (Object.keys(publishFields) as PublishField[])
+    .filter(
+      (field) =>
+        missing[field] ||
+        serverFields.includes(field) ||
+        (field === "body" && serverFields.includes("body或有效上传图片")),
+    )
+    .map((field) => ({ field, label: publishFields[field] }));
+}
 export function publishErrors(form: Form): string[] {
-  const errors: string[] = [];
-  if (!form.title.trim()) errors.push("填写标题");
-  if (!form.body.trim()) errors.push("添加正文或已上传图片");
-  if (!form.jobIds.length) errors.push("选择目标岗位");
-  if (!form.majorIds.length) errors.push("选择文章适用专业");
-  if (!form.experienceStage.trim()) errors.push("填写经历发生阶段");
-  if (!["FIRST_HAND", "CURATED", "DEMO"].includes(form.sourceType || ""))
-    errors.push("确认内容来源");
-  if (form.sourceType === "CURATED" && !form.sourceNote.trim())
-    errors.push("补充来源说明");
-  return errors;
+  return publishChecklist(form).map((issue) => issue.label);
 }
 export const stateName: Record<string, string> = {
   DRAFT: "草稿",

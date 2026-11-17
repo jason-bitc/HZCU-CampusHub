@@ -21,6 +21,7 @@ const route = useRoute();
 const router = useRouter();
 const catalog = ref<Catalog>();
 const result = ref<Page<Article>>();
+const resultPath = ref("/");
 const profile = ref<Profile>();
 const busy = ref(false);
 const error = ref("");
@@ -99,6 +100,7 @@ async function load() {
     const r = await get<Page<Article>>(`/articles?${params}`);
     if (current === generation) {
       result.value = r;
+      resultPath.value = route.fullPath;
     }
   } catch (e) {
     if (current === generation) error.value = message(e);
@@ -326,11 +328,14 @@ onBeforeUnmount(() => {
         <span class="state-icon" aria-hidden="true">!</span>
         <h2>暂时无法读取经验</h2>
         <p>{{ error }}</p>
+        <p v-if="result?.items.length">
+          下方显示的是上次读取成功的结果，当前条件尚未读到结果。
+        </p>
         <button @click="load">重试当前条件</button>
       </section>
-      <template v-else-if="!busy"
+      <template v-if="!busy && (!error || result?.items.length)"
         ><ArticleCard
-          :back-to="route.fullPath"
+          :back-to="resultPath"
           v-for="article in result?.items"
           :key="article.id"
           :article="article"
@@ -354,7 +359,7 @@ onBeforeUnmount(() => {
           <button v-if="applied.length" @click="clearFilters">清除条件</button>
         </section></template
       >
-      <div v-else class="loading-list" role="status">
+      <div v-if="busy" class="loading-list" role="status">
         <span class="sr-only">正在读取公开文章，请稍候。</span>
         <div
           v-for="index in 3"

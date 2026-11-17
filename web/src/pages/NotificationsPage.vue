@@ -4,6 +4,8 @@ import { get, message, send } from "../lib/api";
 import { dateText } from "../lib/content";
 import { session } from "../lib/session";
 import type { Page } from "../types";
+import OperationFeedback from "../components/OperationFeedback.vue";
+import { operationFailure, type Feedback } from "../lib/feedback";
 import MemberGate from "../components/MemberGate.vue";
 
 interface Target {
@@ -23,6 +25,10 @@ interface Notice {
 const result = ref<Page<Notice> & { unreadCount: number }>();
 const error = ref("");
 const busy = ref(false);
+const marking = ref<number>();
+const rowFeedback = ref<Record<number, Feedback>>({});
+const retryPage = ref(1);
+const countStale = ref(false);
 const outcomes: Record<string, string> = {
   HIDDEN: "已隐藏",
   RESTORED: "已恢复",
@@ -38,35 +44,50 @@ const outcomes: Record<string, string> = {
   REJECTED: "申诉已驳回",
   INVALIDATED: "已标记失效",
 };
-async function load(page = 1) {
-  if (busy.value || !["ready", "limited"].includes(session.status)) return;
+async function load(page = result.value?.page ?? 1, syncing = false) {
+  if (
+    busy.value ||
+    (!syncing && marking.value) ||
+    !["ready", "limited"].includes(session.status)
+  )
+    return;
   busy.value = true;
+  retryPage.value = page;
   error.value = "";
   try {
     result.value = await get(`/me/notifications?page=${page}&size=20`, true);
+    countStale.value = false;
   } catch (e) {
-    result.value = undefined;
     error.value = message(e);
   } finally {
     busy.value = false;
   }
 }
 async function mark(row: Notice) {
-  if (busy.value || row.readAt) return;
-  busy.value = true;
-  error.value = "";
+  if (busy.value || marking.value || row.readAt) return;
+  marking.value = row.id;
+  delete rowFeedback.value[row.id];
   try {
-    const receipt = await send<{ readAt: string }>(
+    const receipt = await send<{ readAt: string; unreadCount?: number }>(
       `/me/notifications/${row.id}/read`,
       "PUT",
     );
     row.readAt = receipt.readAt;
-    if (result.value)
-      result.value.unreadCount = Math.max(0, result.value.unreadCount - 1);
+    rowFeedback.value[row.id] = { kind: "success", text: "已标记为已读。" };
+    if (result.value && typeof receipt.unreadCount === "number") {
+      result.value.unreadCount = receipt.unreadCount;
+      countStale.value = false;
+    } else {
+      countStale.value = true;
+      await load(result.value?.page, true);
+    }
   } catch (e) {
-    error.value = message(e);
+    rowFeedback.value[row.id] = operationFailure(
+      e,
+      "标记结果待确认，可刷新通知或重试。",
+    );
   } finally {
-    busy.value = false;
+    marking.value = undefined;
   }
 }
 function destination(target: Target | null) {
@@ -105,24 +126,35 @@ watch(
 <template>
   <MemberGate allow-limited title="登录后查看站内通知">
     <div class="page-heading">
-      <h1>站内通知</h1>
-      <p v-if="result">{{ result.unreadCount }} 条未读</p>
+      <div>
+        <h1>站内通知</h1>
+        <p v-if="result">
+          {{ countStale ? "未读总数待同步" : result.unreadCount + " 条未读" }}
+        </p>
+      </div>
+      <button :disabled="busy || !!marking" @click="load()">刷新通知</button>
     </div>
-    <p v-if="busy" role="status">正在读取或更新通知…</p>
+    <p v-if="busy" role="status">正在读取通知…</p>
     <p v-if="error" class="error" role="alert">
-      {{ error }} <button @click="load()">刷新通知</button>
+      {{ error }}
+      <span v-if="result">当前显示的是上次读取结果。</span>
+      <button @click="load(retryPage)">重试读取</button>
     </p>
     <p v-if="result && !result.total" class="panel state-panel">暂无通知。</p>
     <article
       v-for="row in result?.items"
       :key="row.id"
-      class="panel restriction-row"
+      class="panel restriction-row notification-row"
+      :class="{ 'notification-unread': !row.readAt }"
     >
       <h2>{{ row.message }}</h2>
       <p class="meta">
-        {{ dateText(row.createdAt) }} · {{ row.readAt ? "已读" : "未读"
-        }}<span v-if="row.outcome && outcomes[row.outcome]">
-          · {{ outcomes[row.outcome] }}</span
+        <strong class="notice-read-state">{{
+          row.readAt ? "已读" : "未读"
+        }}</strong>
+        <span>{{ dateText(row.createdAt) }}</span>
+        <span v-if="row.outcome && outcomes[row.outcome]"
+          >处理结果 · {{ outcomes[row.outcome] }}</span
         >
       </p>
       <div class="card-actions">
@@ -133,10 +165,20 @@ watch(
           >查看相关内容</RouterLink
         >
         <span v-else class="hint">相关内容暂不可查看。</span>
-        <button v-if="!row.readAt" :disabled="busy" @click="mark(row)">
+        <button
+          v-if="!row.readAt"
+          :disabled="busy || !!marking"
+          @click="mark(row)"
+        >
           标记已读
         </button>
       </div>
+      <OperationFeedback
+        :feedback="rowFeedback[row.id]"
+        :processing="
+          marking === row.id && !row.readAt ? '正在标记已读…' : undefined
+        "
+      />
     </article>
     <nav
       v-if="result && result.total > result.size"
@@ -144,14 +186,16 @@ watch(
       aria-label="通知翻页"
     >
       <button
-        :disabled="busy || result.page <= 1"
+        :disabled="busy || !!marking || result.page <= 1"
         @click="load(result.page - 1)"
       >
         上一页
       </button>
       <span>第 {{ result.page }} 页</span>
       <button
-        :disabled="busy || result.page * result.size >= result.total"
+        :disabled="
+          busy || !!marking || result.page * result.size >= result.total
+        "
         @click="load(result.page + 1)"
       >
         下一页
