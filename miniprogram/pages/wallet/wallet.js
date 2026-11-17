@@ -1,6 +1,8 @@
 const api = require('../../services/member');
 const access = require('../../utils/member-page');
 const local = require('../../utils/operation');
+const { formatDateTime } = require('../../utils/format');
+const ledgerRows = (items) => items.map((item) => Object.assign({}, item, { occurredText: formatDateTime(item.occurredAt) }));
 const blank = { wallet: null, rewards: null, ledger: [], page: 0, total: 0, snapshot: null, readingSeconds: null, readySession: null, pendingLogin: null, pendingReading: null };
 Page({
   data: Object.assign({ authStatus: 'checking', busy: false, error: '', notice: '' }, blank),
@@ -18,7 +20,7 @@ Page({
       const rewards = result[1];
       const ledger = result[2];
       this.offset = Date.parse(rewards.serverTime) - Date.now();
-      this.setData({ wallet: result[0], rewards, ledger: ledger.items, snapshot: ledger.snapshot, total: ledger.total, page: 1 });
+      this.setData({ wallet: result[0], rewards, ledger: ledgerRows(ledger.items), snapshot: ledger.snapshot, total: ledger.total, page: 1 });
       this.tick();
     } catch (e) {
       if (epoch === this._epoch) this.setData({ error: access.errorText(e) });
@@ -26,7 +28,7 @@ Page({
       if (epoch === this._epoch) this.setData({ busy: false });
     }
   },
-  async more() { if (this.data.busy) return; const epoch = this._epoch; this.setData({ busy: true }); try { const result = await api.ledger(this.data.page + 1, this.data.snapshot); if (epoch === this._epoch) this.setData({ ledger: this.data.ledger.concat(result.items), total: result.total, page: result.page }); } catch (e) { if (epoch === this._epoch) this.setData({ error: access.errorText(e) }); } finally { if (epoch === this._epoch) this.setData({ busy: false }); } },
+  async more() { if (this.data.busy) return; const epoch = this._epoch; this.setData({ busy: true }); try { const result = await api.ledger(this.data.page + 1, this.data.snapshot); if (epoch === this._epoch) this.setData({ ledger: this.data.ledger.concat(ledgerRows(result.items)), total: result.total, page: result.page }); } catch (e) { if (epoch === this._epoch) this.setData({ error: access.errorText(e) }); } finally { if (epoch === this._epoch) this.setData({ busy: false }); } },
   async claim(e) {
     const kind = e.currentTarget.dataset.kind; if (!['login', 'reading'].includes(kind) || this.data.busy) return; const epoch = this._epoch; const field = kind === 'login' ? 'pendingLogin' : 'pendingReading';
     let op = this.data[field]; if (!op) { if (kind === 'reading' && !this.data.readySession) return; op = { requestId: local.uuid(), sessionId: kind === 'reading' ? this.data.readySession.sessionId : null }; try { local.write(`reward:${kind}`, op); } catch (_) { this.setData({ error: '无法保留领取请求，请稍后重试' }); return; } this.setData({ [field]: op }); }
