@@ -1,7 +1,7 @@
 .article-card {
   display: flex;
   flex-direction: column;
-  padding: 30rpx 28rpx 26rpx;
+  padding: 26rpx;
   border: 1rpx solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
@@ -17,9 +17,9 @@
 }
 
 .article-summary {
-  margin-top: 18rpx;
+  margin-top: 12rpx;
   color: var(--color-text-secondary);
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   line-height: 1.7;
   overflow-wrap: anywhere;
 }
@@ -47,7 +47,7 @@
 }
 
 .tag-muted {
-  background: #f0f2f1;
+  background: var(--color-bg);
   color: var(--color-text-secondary);
 }
 

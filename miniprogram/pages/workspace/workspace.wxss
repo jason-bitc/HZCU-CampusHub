@@ -1,7 +1,7 @@
 @import '../../styles/sections.wxss';
-.workspace-filters { gap: 8rpx; }
-.workspace-filters button { flex: 1 1 auto; padding: 8rpx 12rpx; font-size: 25rpx; white-space: nowrap; }
-.workspace-article.list-row { margin: 28rpx 0; border: 2rpx solid #9aafa6; }
+.workspace-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8rpx; padding: 8rpx; border-radius: var(--radius-md); background: #e9edf4; }
+.workspace-filters button { flex: 1 1 auto; padding: 8rpx 12rpx; font-size: 25rpx; white-space: normal; line-height: 1.4; }
+.workspace-article.list-row { margin: 28rpx 0; border: 1rpx solid var(--color-border); box-shadow: var(--shadow-card); }
 .workspace-title { margin: 12rpx 0 8rpx; }
 .workspace-secondary { margin-top: 4rpx; }
 .workspace-secondary .button-text { padding-left: 0; padding-right: 16rpx; }

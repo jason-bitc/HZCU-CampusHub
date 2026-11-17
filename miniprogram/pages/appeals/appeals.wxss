@@ -2,3 +2,5 @@
 .appeal-reason { margin-top: 24rpx; }
 .appeal-card.selected { border: 2rpx solid var(--color-primary); }
 .appeal-footer { margin-top: 28rpx; }
+
+.appeal-navigation { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }

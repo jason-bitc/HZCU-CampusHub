@@ -21,7 +21,7 @@
 }
 
 .article-container {
-  padding: 34rpx 32rpx 38rpx;
+  padding: 30rpx 26rpx 36rpx;
   border: 1rpx solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
@@ -232,3 +232,8 @@
 .visitor-action[disabled] { opacity: 0.64 !important; }
 
 .article-report { padding-left: 0; color: var(--color-text-secondary); font-size: 28rpx; }
+
+
+.reader-action-icon { display: flex; justify-content: center; align-items: center; width: 58rpx; height: 46rpx; border-radius: 14rpx; }
+.action-selected .reader-action-icon { background: var(--color-primary-soft); }
+.visitor-action:active .reader-action-icon { background: var(--color-bg); }

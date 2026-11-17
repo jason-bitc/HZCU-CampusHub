@@ -1,6 +1,6 @@
 <import src="../../templates/honor.wxml" />
 <view class="member-page my-page">
-  <view class="inline-actions">
+  <view wx:if="{{authStatus !== 'ready'}}" class="inline-actions account-quick">
     <button class="button-secondary" bindtap="notifications">站内通知<text wx:if="{{unreadCount > 0}}"> · {{unreadCount}} 未读</text></button>
     <button class="button-secondary" bindtap="certification">校园认证状态</button>
   </view>
@@ -13,17 +13,19 @@
       <text class="profile-avatar" aria-hidden="true">{{avatar || '城'}}</text>
       <view class="profile-copy">
         <text class="profile-name">{{profile ? profile.nickname : '校园同学'}}</text>
-        <text class="status-tag">校园邮箱已验证</text>
+        <text class="status-tag verified">校园邮箱已验证</text>
         <text wx:if="{{profileSummary}}" class="hint">{{profileSummary}}</text>
       </view>
       <app-icon name="chevron-right" size="34" />
     </button>
-    <view class="section-card my-entries" aria-label="我的内容与反馈">
-      <button data-filter="EXPERIENCES" bindtap="workspace"><text class="metric-value">{{counts.articles === null ? '查看' : counts.articles}}</text><text>我的经验</text></button>
-      <button data-filter="DRAFT" bindtap="workspace"><text class="metric-value">{{counts.drafts === null ? '查看' : counts.drafts}}</text><text>草稿</text></button>
-      <button bindtap="favorites"><text class="metric-value">{{counts.favorites === null ? '查看' : counts.favorites}}</text><text>收藏</text></button>
-      <button bindtap="feedback"><text class="metric-value">{{counts.feedback === null ? '查看' : counts.feedback}}</text><text>反馈进度</text></button>
+    <text class="service-heading" role="heading">内容与互动</text>
+    <view class="my-entries" aria-label="内容与互动">
+      <button data-filter="EXPERIENCES" bindtap="workspace"><view class="entry-icon tone-blue"><app-icon name="document" size="38" /></view><text>我的经验</text><text wx:if="{{counts.articles !== null}}" class="entry-count">{{counts.articles}} 篇</text></button>
+      <button data-filter="DRAFT" bindtap="workspace"><view class="entry-icon tone-violet"><app-icon name="create" size="38" /></view><text>草稿</text><text wx:if="{{counts.drafts !== null}}" class="entry-count">{{counts.drafts}} 篇</text></button>
+      <button bindtap="favorites"><view class="entry-icon tone-green"><app-icon name="favorite" size="38" /></view><text>收藏</text><text wx:if="{{counts.favorites !== null}}" class="entry-count">{{counts.favorites}} 篇</text></button>
+      <button bindtap="notifications"><view class="entry-icon tone-orange"><app-icon name="bell" size="38" /></view><text>通知</text><text wx:if="{{unreadCount > 0}}" class="entry-count">{{unreadCount}} 条未读</text></button>
     </view>
+    <text class="service-heading" role="heading">硬币与奖励</text>
     <button class="wallet-card" bindtap="wallet" aria-label="打开硬币和贡献">
       <view class="wallet-metrics">
         <view><text>可用硬币</text><text class="wallet-metric">{{wallet ? wallet.balance : '—'}}</text></view>
@@ -39,7 +41,13 @@
       <button class="menu-row" bindtap="wallet"><view><text class="row-title">贡献与账目</text><text class="hint">查看有效贡献及本人账目</text></view><text class="my-link-label">查看</text></button>
     </view>
   </view>
-  <view class="section-card my-links"><button class="menu-row" bindtap="settings"><text class="row-title">反馈、帮助与设置</text><text class="my-link-label">进入</text></button></view>
+  <text class="service-heading" role="heading">账户与服务</text>
+  <view class="section-card my-links">
+    <button wx:if="{{authStatus === 'ready'}}" class="menu-row" bindtap="certification"><text class="row-title">校园认证状态</text><app-icon name="chevron-right" size="28" /></button>
+    <button wx:if="{{authStatus === 'ready'}}" class="menu-row" bindtap="feedback"><text class="row-title">反馈进度</text><text class="my-link-label">{{counts.feedback === null ? '查看' : counts.feedback + ' 条'}}</text></button>
+    <button wx:if="{{authStatus === 'ready'}}" class="menu-row" bindtap="appeals"><text class="row-title">我的限制与申诉</text><app-icon name="chevron-right" size="28" /></button>
+    <button class="menu-row" bindtap="settings"><text class="row-title">反馈、帮助与设置</text><app-icon name="chevron-right" size="28" /></button>
+  </view>
   <text wx:if="{{loading}}" class="hint">正在读取个人中心…</text>
   <text wx:if="{{error && authStatus === 'ready'}}" class="field-error" role="alert">{{error}}</text>
   <button wx:if="{{error && authStatus === 'ready'}}" class="button-secondary" bindtap="onShow">重试读取个人中心</button>

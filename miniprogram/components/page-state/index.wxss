@@ -3,8 +3,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 500rpx;
-  padding: 64rpx 40rpx;
+  min-height: 370rpx;
+  margin-top: 22rpx;
+  padding: 44rpx 30rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
@@ -68,7 +73,7 @@
   height: 22rpx;
   margin-top: 18rpx;
   border-radius: 12rpx;
-  background: linear-gradient(90deg, #e9edeb 25%, #f5f7f6 50%, #e9edeb 75%);
+  background: linear-gradient(90deg, #e8edf4 25%, #f5f6f8 50%, #e8edf4 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.4s infinite linear;
 }
@@ -80,4 +85,12 @@
 @keyframes skeleton-loading {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
+}
+
+
+.state-icon { display: flex; align-items: center; justify-content: center; width: 88rpx; height: 88rpx; border-radius: 22rpx; background: var(--color-primary-soft); }
+.state-error .state-icon { background: var(--color-danger-soft); }
+.state-permission .state-icon, .state-unavailable .state-icon { background: var(--color-warning-soft); }
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
 }

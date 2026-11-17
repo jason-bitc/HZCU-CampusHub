@@ -64,19 +64,19 @@
     <text wx:elif="{{actionNotice && !busyAction}}" class="interaction-feedback" role="status">{{actionNotice}}</text>
     <view class="visitor-action-row">
     <button class="visitor-action {{interaction.liked ? 'action-selected' : ''}}" data-kind="like" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !interaction}}" aria-pressed="{{!!interaction.liked}}" aria-label="{{interaction.liked ? '取消点赞' : '点赞'}}">
-      <app-icon name="like" size="38" />
+      <view class="reader-action-icon"><app-icon name="like" size="38" /></view>
       <text>{{busyAction === 'like' ? '处理中…' : interaction.liked ? '已赞 ' + article.effectiveLikes : '点赞 ' + article.effectiveLikes}}</text>
     </button>
     <button class="visitor-action" bindtap="coins" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !pendingCoin && !coinState || authenticated && !pendingCoin && !wallet}}" aria-label="{{pendingCoin ? '核对投币' : '投币'}}">
-      <app-icon name="coin" size="38" />
+      <view class="reader-action-icon"><app-icon name="coin" size="38" /></view>
       <text>{{busyAction === 'coin' ? '核对中…' : pendingCoin ? '核对投币' : '投币 ' + article.effectiveCoins}}</text>
     </button>
     <button class="visitor-action {{interaction.favorited ? 'action-selected' : ''}}" data-kind="favorite" bindtap="toggleInteraction" disabled="{{demoMode || busyAction || coinChoosing || privateLoading || authenticated && !interaction}}" aria-pressed="{{!!interaction.favorited}}" aria-label="{{interaction.favorited ? '取消收藏' : '收藏'}}">
-      <app-icon name="star" size="38" />
+      <view class="reader-action-icon"><app-icon name="star" size="38" /></view>
       <text>{{busyAction === 'favorite' ? '处理中…' : interaction.favorited ? '已收藏' : '收藏'}}</text>
     </button>
     <button class="visitor-action" bindtap="comments" disabled="{{demoMode || busyAction || coinChoosing || privateLoading}}" aria-label="评论">
-      <app-icon name="comment" size="38" />
+      <view class="reader-action-icon"><app-icon name="comment" size="38" /></view>
       <text>评论</text>
     </button>
     </view>

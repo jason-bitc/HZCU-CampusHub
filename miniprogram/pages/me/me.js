@@ -63,5 +63,6 @@ Page({
   feedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }); },
   notifications() { wx.navigateTo({ url: '/pages/notifications/notifications' }); },
   certification() { wx.navigateTo({ url: '/pages/certification/certification' }); },
+  appeals() { wx.navigateTo({ url: '/pages/appeals/appeals' }); },
   settings() { wx.navigateTo({ url: '/pages/settings/settings' }); }
 });

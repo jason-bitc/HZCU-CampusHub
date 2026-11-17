@@ -14,11 +14,11 @@
 }
 
 .page-content {
-  padding: 0 28rpx;
+  padding: 0 26rpx;
 }
 
 .discover-header {
-  padding: 34rpx 4rpx 24rpx;
+  padding: 22rpx 0 20rpx;
 }
 
 .page-title {
@@ -29,6 +29,14 @@
   letter-spacing: -0.4rpx;
 }
 
+.discovery-tools {
+  padding: 18rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
 .search-box {
   display: flex;
   align-items: center;
@@ -36,7 +44,7 @@
   min-height: 96rpx;
   padding: 8rpx 22rpx;
   border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .search-input {
@@ -56,15 +64,15 @@
 }
 
 .job-scroll {
-  width: calc(100% + 56rpx);
-  margin: 24rpx -28rpx 0;
+  width: 100%;
+  margin: 16rpx 0 0;
   white-space: nowrap;
 }
 
 .job-row {
   display: inline-flex;
   gap: 14rpx;
-  padding: 0 28rpx 8rpx;
+  padding: 0 0 6rpx;
 }
 
 .job-chip {
@@ -73,16 +81,16 @@
   justify-content: center;
   min-height: var(--touch-target);
   padding: 0 22rpx;
-  border-radius: 8rpx;
-  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
   color: var(--color-text-secondary);
   font-size: var(--font-sm);
   white-space: nowrap;
 }
 
 .job-active {
-  background: var(--color-primary);
-  color: #ffffff;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
   font-weight: 600;
 }
 
@@ -122,40 +130,41 @@
 
 .sort-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 44rpx;
-  margin-top: 14rpx;
+  justify-content: space-between;
+  gap: 10rpx;
+  margin-top: 24rpx;
+}
+
+.sort-choice {
+  display: flex;
+  gap: 4rpx;
+  padding: 5rpx;
+  border-radius: var(--radius-md);
+  background: #e9edf4;
 }
 
 .sort-tab {
-  position: relative;
   min-height: var(--touch-target);
+  padding: 0 16rpx;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
   color: var(--color-text-secondary);
-  font-size: 29rpx;
-  font-weight: 500;
 }
 
 .sort-active {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   font-weight: 700;
-}
-
-.sort-active::after {
-  position: absolute;
-  right: 0;
-  bottom: 6rpx;
-  left: 0;
-  height: 5rpx;
-  border-radius: 5rpx;
-  background: var(--color-primary);
-  content: "";
 }
 
 .article-list {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
-  margin-top: 16rpx;
+  gap: 18rpx;
+  margin-top: 20rpx;
 }
 
 .empty-note {
@@ -181,16 +190,16 @@
   margin: 28rpx 0 24rpx;
   padding: 24rpx;
   border-radius: var(--radius-sm);
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
-  font-size: var(--font-sm);
-  line-height: 1.7;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-xs);
+  line-height: 1.65;
   text-align: center;
 }
 
-.search-submit { flex: none; min-height: var(--touch-target); padding: 0 8rpx; color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
+.search-submit { display: flex; flex: none; align-items: center; justify-content: center; min-height: var(--touch-target); padding: 0 20rpx; border-radius: var(--radius-sm); background: var(--color-primary); color: #fff; font-size: var(--font-sm); font-weight: 600; }
 .filter-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 4rpx 16rpx; margin-top: 12rpx; }
-.filter-entry { display: flex; align-items: center; gap: 12rpx; min-height: var(--touch-target); color: var(--color-primary); font-size: var(--font-sm); font-weight: 600; }
+.filter-entry { display: flex; align-items: center; gap: 10rpx; padding: 0 14rpx; min-height: var(--touch-target); border: 1rpx solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-primary-dark); font-size: var(--font-sm); font-weight: 600; }
 .same-major-entry { min-height: var(--touch-target); padding: 0 16rpx; border-radius: 8rpx; color: var(--color-primary); font-size: var(--font-xs); }
 .same-major-active { background: var(--color-primary-soft); font-weight: 600; }
 .clear-conditions { margin-left: auto; min-height: var(--touch-target); color: var(--color-text-secondary); font-size: var(--font-xs); }

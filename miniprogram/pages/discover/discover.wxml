@@ -8,6 +8,7 @@
     </view>
     <text wx:if="{{searchError}}" class="field-error" role="alert">{{searchError}}</text>
 
+    <view class="discovery-tools">
     <view class="search-box">
       <app-icon name="search" size="34" />
       <input class="search-input" value="{{keywordInput}}" maxlength="100" confirm-type="search" placeholder="搜索标题或摘要" placeholder-class="input-placeholder" aria-label="搜索经验标题或摘要" bindinput="handleKeywordInput" bindconfirm="submitSearch" />
@@ -34,9 +35,12 @@
     </view>
     <button wx:if="{{catalogError}}" class="catalog-warning" bindtap="loadCatalog">分类加载失败，筛选选项可能不完整。点击重试。</button>
 
-    <view class="sort-row" role="tablist">
+    </view>
+    <view class="sort-row">
+      <view class="sort-choice" role="tablist" aria-label="经验排序">
       <button class="sort-tab {{sort === 'recognized' ? 'sort-active' : ''}}" data-sort="recognized" bindtap="selectSort" role="tab" aria-selected="{{sort === 'recognized'}}">认可优先</button>
       <button class="sort-tab {{sort === 'latest' ? 'sort-active' : ''}}" data-sort="latest" bindtap="selectSort" role="tab" aria-selected="{{sort === 'latest'}}">最新发布</button>
+      </view>
       <text wx:if="{{listStatus === 'ready' || listStatus === 'no-match'}}" class="result-count" aria-live="polite">共 {{total}} 篇经验</text>
     </view>
 

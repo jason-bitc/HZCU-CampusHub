@@ -3,6 +3,11 @@
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看本人限制与申诉" action-text="登录校园账号" bindaction="login" />
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
   <view wx:else>
+    <view class="segmented appeal-navigation" role="tablist" aria-label="我的限制与申诉">
+      <button data-section="restrictions" bindtap="showSection" role="tab" aria-selected="{{visibleSection === 'restrictions'}}" class="{{visibleSection === 'restrictions' ? 'selected' : ''}}">当前行为限制</button>
+      <button data-section="records" bindtap="showSection" role="tab" aria-selected="{{visibleSection === 'records'}}" class="{{visibleSection === 'records' ? 'selected' : ''}}">申诉记录</button>
+    </view>
+    <view hidden="{{visibleSection !== 'restrictions'}}">
     <view wx:if="{{loaded && activeCount}}" class="limit-banner">部分行为当前受限。公开文章仍可阅读，草稿可保存，也可以提交本人申诉。</view>
     <view wx:elif="{{loaded}}" class="notice">当前没有生效的行为限制。</view>
     <view wx:for="{{restrictions}}" wx:key="id" class="section-card appeal-card {{selected.id === item.id ? 'selected' : ''}}">
@@ -19,8 +24,10 @@
       <text wx:if="{{pending}}" class="hint">上次提交结果待确认，可以继续核对原申诉。</text>
       <button class="button-primary form-section" bindtap="submit" loading="{{busy}}" disabled="{{busy || !pending && !loaded || !pending && !selected}}">{{pending ? '核对上次申诉' : '提交申诉'}}</button>
     </view>
+    </view>
     <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
     <text wx:if="{{notice}}" class="success-note" role="status">{{notice}}</text>
+    <view hidden="{{visibleSection !== 'records'}}">
     <text class="section-title">本人申诉记录</text>
     <view wx:for="{{records}}" wx:key="id" class="section-card">
       <view class="status-heading"><text class="row-title">{{item.contextText}} #{{item.id}}</text><text class="status-tag progress-{{item.stateTone}}">{{item.stateText}}</text></view>
@@ -31,6 +38,7 @@
     </view>
     <text wx:if="{{loaded && !records.length}}" class="hint">还没有申诉记录。</text>
     <button wx:if="{{records.length < total}}" class="button-secondary" bindtap="more" disabled="{{busy}}">继续加载申诉</button>
+    </view>
     <text wx:if="{{busy}}" class="load-end">正在读取或提交…</text>
     <button class="button-secondary form-section" bindtap="refresh" disabled="{{busy}}">重新读取处理状态</button>
     <view class="notice appeal-footer">解除行为限制不会自动恢复被隐藏的文章，内容恢复由社区处理人员另行核对。</view>

@@ -8,3 +8,10 @@
 .editor-footer { flex-direction: column; gap: 8rpx; }
 .editor-footer-status { color: var(--color-text-secondary); font-size: var(--font-xs); }
 .editor-footer-actions { display: flex; gap: 16rpx; }
+
+.editor-section { margin: 16rpx 0 20rpx; padding: 22rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.editor-section .field:first-child, .editor-section .section-title:first-child { margin-top: 0; }
+.editor-images .inline-actions { margin-top: 14rpx; }
+.editor-mode { display: flex; gap: 6rpx; padding: 6rpx; border-radius: var(--radius-md); background: #e9edf4; }
+.editor-mode button { flex: 1; min-height: var(--touch-target); border-radius: var(--radius-sm); color: var(--color-text-secondary); font-size: var(--font-sm); }
+.editor-mode .selected { color: var(--color-primary-dark); background: var(--color-surface); font-weight: 700; }
