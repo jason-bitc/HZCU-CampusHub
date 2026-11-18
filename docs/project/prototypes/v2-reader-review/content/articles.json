@@ -1,0 +1,265 @@
+[
+  {
+    "id": "A01",
+    "file": "articles/A01-java后端第一份实习.md",
+    "title": "第一份实习长文｜Java 后端从准备到投递",
+    "summary": "两位 Java 学生从 2025 年 3 月投出第一份简历到拿到 offer 的完整时间线，含项目、简历、笔试、一面、二面与保底选择，附投递前清单。",
+    "jobTags": [
+      "Java 后端"
+    ],
+    "majorTags": [
+      "计算机科学与技术",
+      "软件工程"
+    ],
+    "companyTags": [
+      "拼多多",
+      "招商银行",
+      "Soul"
+    ],
+    "topicTags": [
+      "第一份实习",
+      "简历与投递",
+      "面试流程",
+      "时间线"
+    ],
+    "experienceStage": "首份实习准备期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。依据三位学生的公开求职记录整理，非作者本人投稿；岗位、时间与结果按原帖归属，个别公司未具名。",
+    "sourceLinks": [
+      {
+        "label": "秋招结束，年终总结（牛客）",
+        "url": "https://www.nowcoder.com/feed/main/detail/7fbaab4f5c9349c0993188af94c94814"
+      },
+      {
+        "label": "26届双非本计科Java后端求职之路（牛客）",
+        "url": "https://www.nowcoder.com/discuss/905271096180568064"
+      },
+      {
+        "label": "杭州小厂实习面试（牛客）",
+        "url": "https://www.nowcoder.com/feed/main/detail/2f7d045a0899463db12abfe700cd0186"
+      }
+    ],
+    "sourceIds": [
+      "S14",
+      "S21",
+      "S23"
+    ],
+    "assets": []
+  },
+  {
+    "id": "A02",
+    "file": "articles/A02-cpp后端实习面试流程.md",
+    "title": "公司面试流程｜C++ 后端实习",
+    "summary": "海康威视与腾讯云 TEG 两场 C++ 后端实习面试的题面与流程，含一面四类问题、二面项目深挖、HR 面同天如何准备。",
+    "jobTags": [
+      "C++ 后端"
+    ],
+    "majorTags": [
+      "计算机科学与技术",
+      "软件工程"
+    ],
+    "companyTags": [
+      "海康威视",
+      "腾讯云"
+    ],
+    "topicTags": [
+      "面试流程",
+      "一面",
+      "C++"
+    ],
+    "experienceStage": "面试期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。两场后端面试来自作者公开面经；游戏引擎那份方向不同，单独标注。",
+    "sourceLinks": [
+      {
+        "label": "海康威视C++后端日常实习一二面（已oc）",
+        "url": "https://www.nowcoder.com/feed/main/detail/dec57cd4de644b3293f68f03132d12a7"
+      },
+      {
+        "label": "腾讯云(teg) C++日常实习面经",
+        "url": "https://www.nowcoder.com/discuss/792763208900628480"
+      },
+      {
+        "label": "大四老狗游戏引擎岗日常实习面经（Kernel 论坛）",
+        "url": "https://ucaskernel.com/d/884-da-si-lao-gou-you-xi-yin-qing-gang-ri-chang-shi-xi-mian-jing"
+      }
+    ],
+    "sourceIds": [
+      "S16",
+      "P12",
+      "S22"
+    ],
+    "assets": []
+  },
+  {
+    "id": "A03",
+    "file": "articles/A03-web前端项目复盘.md",
+    "title": "项目复盘｜Web 前端实习项目如何准备和讲述",
+    "summary": "三场前端面试的项目追问方式：归属、选型、完成度、异常四层，附项目复盘模板与组内自绘示意图。",
+    "jobTags": [
+      "Web 前端"
+    ],
+    "majorTags": [
+      "计算机科学与技术",
+      "软件工程"
+    ],
+    "companyTags": [
+      "中科闻歌",
+      "字节跳动"
+    ],
+    "topicTags": [
+      "项目复盘",
+      "前端",
+      "技术选型"
+    ],
+    "experienceStage": "面试期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。三场面试题面来自作者公开记录，正文未搬运原帖；示意图为组内自绘。",
+    "sourceLinks": [
+      {
+        "label": "中科闻歌前端暑期实习面经",
+        "url": "https://www.nowcoder.com/discuss/737291903661588480"
+      },
+      {
+        "label": "27日常实习 前端 面经",
+        "url": "https://www.nowcoder.com/discuss/812820108316852224"
+      },
+      {
+        "label": "杭州小厂前端实习面经",
+        "url": "https://www.nowcoder.com/feed/main/detail/0bd8bbe23d80457d9cfdf9dbdaceb5ce"
+      }
+    ],
+    "sourceIds": [
+      "S03",
+      "S05",
+      "S17"
+    ],
+    "assets": [
+      {
+        "path": "assets/A03/project-review-four-questions.png",
+        "alt": "前端项目复盘四问示意图：归属与分工、选型与动机、完成度怎么衡量、异常怎么办",
+        "licenseOrProvenance": "本项目组自行绘制，依据 S03、S05、S17 的公开面经整理，不含来源作者截图或个人信息"
+      }
+    ]
+  },
+  {
+    "id": "A04",
+    "file": "articles/A04-测试开发实习准备.md",
+    "title": "岗位准备｜测试开发实习",
+    "summary": "以网易伏羲测开与亿迅软件测试两场面试为例，划清测开、软测与 SDET 的职责边界，并给出准备清单。",
+    "jobTags": [
+      "测试开发"
+    ],
+    "majorTags": [
+      "计算机科学与技术",
+      "软件工程"
+    ],
+    "companyTags": [
+      "网易伏羲"
+    ],
+    "topicTags": [
+      "岗位准备",
+      "测试",
+      "职责边界"
+    ],
+    "experienceStage": "首份实习准备期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。两场面试为作者公开记录；SDET／QAE 的职责表述来自亚马逊官方校招说明。",
+    "sourceLinks": [
+      {
+        "label": "网易伏羲机器人-测开实习面经",
+        "url": "https://www.nowcoder.com/discuss/883690384444964864"
+      },
+      {
+        "label": "广东电信亿迅科技测试实习生面经（已oc）",
+        "url": "https://www.nowcoder.com/feed/main/detail/3086b74ba8004eb69356d6cc7fd2ff3d"
+      },
+      {
+        "label": "Interview prep for technical roles（Amazon Jobs）",
+        "url": "https://www.amazon.jobs/content/en/how-we-hire/university/additional-tech"
+      }
+    ],
+    "sourceIds": [
+      "S15",
+      "S06",
+      "S11"
+    ],
+    "assets": []
+  },
+  {
+    "id": "A05",
+    "file": "articles/A05-运维sre实习准备.md",
+    "title": "岗位准备｜运维／SRE 实习",
+    "summary": "蚌埠学院学生 12 分钟运维面试的完整内容：实验室项目、K8S 跨云踩坑、Prometheus 监控闭环与常见误区。",
+    "jobTags": [
+      "运维 / SRE"
+    ],
+    "majorTags": [
+      "计算机科学与技术"
+    ],
+    "companyTags": [
+      "晓多科技"
+    ],
+    "topicTags": [
+      "岗位准备",
+      "运维",
+      "监控"
+    ],
+    "experienceStage": "面试期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。面试细节来自作者公开面经；监控原理部分依据 Prometheus 官方文档。",
+    "sourceLinks": [
+      {
+        "label": "晓多科技 运维面经",
+        "url": "https://www.nowcoder.com/feed/main/detail/caf9e36332c1426fa3617d39ab63d657"
+      },
+      {
+        "label": "Prometheus Overview",
+        "url": "https://prometheus.io/docs/introduction/overview/"
+      }
+    ],
+    "sourceIds": [
+      "S19",
+      "N12"
+    ],
+    "assets": []
+  },
+  {
+    "id": "A10",
+    "file": "articles/A10-java后端失败复盘.md",
+    "title": "失败复盘｜Java 后端一轮面试后的调整",
+    "summary": "一次 5 分钟就结束的面试与两个月零 offer 的两种失败，拆开三种失败原因，给出复盘写法与下一步。",
+    "jobTags": [
+      "Java 后端"
+    ],
+    "majorTags": [
+      "计算机科学与技术"
+    ],
+    "companyTags": [
+      "快手"
+    ],
+    "topicTags": [
+      "失败复盘",
+      "面试调整",
+      "求职心态"
+    ],
+    "experienceStage": "面试期",
+    "sourceType": "CURATED",
+    "sourceNote": "城院帮资料整理。两篇为作者自述的失败复盘，岗位不同、结果归属清楚；“运气占八成”等判断按原文标注为主观感受。",
+    "sourceLinks": [
+      {
+        "label": "26届双非本计科Java后端求职之路",
+        "url": "https://www.nowcoder.com/discuss/905271096180568064"
+      },
+      {
+        "label": "分享｜暂时退坑了，力扣",
+        "url": "https://leetcode.cn/discuss/post/3962011/zan-shi-tui-keng-liao-li-kou-by-loving-b-jg4a/"
+      }
+    ],
+    "sourceIds": [
+      "S21",
+      "S24"
+    ],
+    "assets": []
+  }
+]
