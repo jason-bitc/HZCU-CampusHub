@@ -1,0 +1,377 @@
+﻿board,control,x,y,width,height,target
+00-review-entry,轻卡片 A,16,244,166,44,D01-discover-A
+00-review-entry,连续列表 B,193,244,166,44,D01-discover-B
+00-review-entry,模拟读取失败 · A,16,396,165,44,D08-error-A
+00-review-entry,模拟读取失败 · B,193,396,166,44,D08-error-B
+00-review-entry,首次加载,16,458,165,44,D11-loading-A
+00-review-entry,无公开经验,193,458,166,44,D12-zero-A
+00-review-entry,续页读取失败,16,520,165,44,D17-append-error-A
+00-review-entry,图片加载失败,193,520,166,44,R10-image-error
+00-review-entry,桌面阅读,16,582,165,44,R09-desktop
+00-review-entry,窄屏阅读,193,582,166,44,R09-responsive
+R14-full-article,〈,11,38,44,44,D01-discover-A
+D01-discover-A,输入关键词,16,107,278,44,D07-search-A
+D01-discover-A,搜索,291,107,68,44,D03-java-A
+D01-discover-A,岗位 ▾,16,162,113,44,D02-job-A
+D01-discover-A,进一步筛选,137,162,105,44,D04-filter-A
+D01-discover-A,认可排序,198,208,80,44,D01-discover-A
+D01-discover-A,最新排序,278,208,81,44,D13-latest-A
+D01-discover-A,向下浏览列表,16,685,343,56,D18-list-tail-A
+D01-discover-A,第一份实习长文｜Java 后端从准备到投递,27,263,321,137,R01-article-A
+D01-discover-A,失败复盘｜Java 后端一轮面试后的调整,27,418,321,114,R11-compare-A
+D01-discover-A,加载更多,115,681,145,44,D10-more-A
+D02-job-A,×,313,452,46,44,D01-discover-A
+D02-job-A,全部岗位,16,509,343,44,D01-discover-A
+D02-job-A,Java 后端,16,563,343,44,D03-java-A
+D03-java-A,输入关键词,16,107,278,44,D07-search-A
+D03-java-A,搜索,291,107,68,44,D03-java-A
+D03-java-A,岗位 ▾,16,162,113,44,D02-job-A
+D03-java-A,进一步筛选,137,162,105,44,D04-filter-A
+D03-java-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D03-java-A,清除条件,16,253,76,44,D01-discover-A
+D03-java-A,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-A
+D03-java-A,失败复盘｜Java 后端一轮面试后的调整,27,463,321,114,R11-compare-A
+D03-java-A,加载更多,115,594,145,44,D10-more-A
+D04-filter-A,×,313,361,46,44,D03-java-A
+D04-filter-A,计算机科学与技术,16,451,172,44,D14-major-A
+D04-filter-A,拼多多,16,534,108,44,D15-chosen-A
+D04-filter-A,去登录,284,579,75,44,R05-login-A
+D04-filter-A,重置,16,741,98,44,D04-filter-A
+D04-filter-A,应用,123,741,236,44,D03-java-A
+D05-applied-A,输入关键词,16,107,278,44,D07-search-A
+D05-applied-A,搜索,291,107,68,44,D03-java-A
+D05-applied-A,岗位 ▾,16,162,113,44,D02-job-A
+D05-applied-A,进一步筛选,137,162,105,44,D04-filter-A
+D05-applied-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D05-applied-A,移除 计算机科学与技术,101.0,208,122,44,D03-java-A
+D05-applied-A,移除 拼多多,228.0,208,62,44,D06-removed-A
+D05-applied-A,清除条件,16,253,76,44,D01-discover-A
+D05-applied-A,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-A
+D05-applied-A,加载更多,115,462,145,44,D10-more-A
+D06-removed-A,输入关键词,16,107,278,44,D07-search-A
+D06-removed-A,搜索,291,107,68,44,D03-java-A
+D06-removed-A,岗位 ▾,16,162,113,44,D02-job-A
+D06-removed-A,进一步筛选,137,162,105,44,D04-filter-A
+D06-removed-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D06-removed-A,移除 计算机科学与技术,101.0,208,122,44,D03-java-A
+D06-removed-A,清除条件,16,253,76,44,D01-discover-A
+D06-removed-A,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-A
+D06-removed-A,失败复盘｜Java 后端一轮面试后的调整,27,463,321,114,R11-compare-A
+D06-removed-A,加载更多,115,594,145,44,D10-more-A
+D07-search-A,×,313,491,46,44,D01-discover-A
+D07-search-A,搜索,279,558,72,44,D03-java-A
+D07-search-A,搜索,279,624,72,44,D09-empty-A
+D08-error-A,输入关键词,16,107,278,44,D07-search-A
+D08-error-A,搜索,291,107,68,44,D03-java-A
+D08-error-A,岗位 ▾,16,162,113,44,D02-job-A
+D08-error-A,进一步筛选,137,162,105,44,D04-filter-A
+D08-error-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D08-error-A,移除 计算机科学与技术,101.0,208,122,44,D03-java-A
+D08-error-A,移除 拼多多,228.0,208,62,44,D06-removed-A
+D08-error-A,清除条件,16,253,76,44,D01-discover-A
+D08-error-A,按原条件重试,241,349,104,44,D05-applied-A
+D08-error-A,第一份实习长文｜Java 后端从准备到投递,27,418,321,137,R01-article-A
+D08-error-A,加载更多,115,572,145,44,D10-more-A
+D09-empty-A,输入关键词,16,107,278,44,D07-search-A
+D09-empty-A,搜索,291,107,68,44,D03-java-A
+D09-empty-A,岗位 ▾,16,162,113,44,D02-job-A
+D09-empty-A,进一步筛选,137,162,105,44,D04-filter-A
+D09-empty-A,移除 深海考古,16,208,74,44,D01-discover-A
+D09-empty-A,清除条件,16,253,76,44,D01-discover-A
+D09-empty-A,清除条件,108,420,159,44,D01-discover-A
+D10-more-A,输入关键词,16,107,278,44,D07-search-A
+D10-more-A,搜索,291,107,68,44,D03-java-A
+D10-more-A,岗位 ▾,16,162,113,44,D02-job-A
+D10-more-A,进一步筛选,137,162,105,44,D04-filter-A
+D10-more-A,认可排序,198,208,80,44,D01-discover-A
+D10-more-A,最新排序,278,208,81,44,D13-latest-A
+D10-more-A,正在加载更多…,115,549,145,44,D10-more-A
+D11-loading-A,输入关键词,16,107,278,44,D07-search-A
+D11-loading-A,搜索,291,107,68,44,D03-java-A
+D11-loading-A,岗位 ▾,16,162,113,44,D02-job-A
+D11-loading-A,进一步筛选,137,162,105,44,D04-filter-A
+D11-loading-A,认可排序,198,208,80,44,D01-discover-A
+D11-loading-A,最新排序,278,208,81,44,D13-latest-A
+D12-zero-A,输入关键词,16,107,278,44,D07-search-A
+D12-zero-A,搜索,291,107,68,44,D03-java-A
+D12-zero-A,岗位 ▾,16,162,113,44,D02-job-A
+D12-zero-A,进一步筛选,137,162,105,44,D04-filter-A
+D12-zero-A,认可排序,198,208,80,44,D01-discover-A
+D12-zero-A,最新排序,278,208,81,44,D13-latest-A
+D12-zero-A,重新读取,108,375,159,44,D01-discover-A
+D13-latest-A,输入关键词,16,107,278,44,D07-search-A
+D13-latest-A,搜索,291,107,68,44,D03-java-A
+D13-latest-A,岗位 ▾,16,162,113,44,D02-job-A
+D13-latest-A,进一步筛选,137,162,105,44,D04-filter-A
+D13-latest-A,认可排序,198,208,80,44,D01-discover-A
+D13-latest-A,最新排序,278,208,81,44,D13-latest-A
+D13-latest-A,加载更多,115,681,145,44,D10-more-A
+D14-major-A,×,313,361,46,44,D03-java-A
+D14-major-A,✓ 计算机科学与技术,16,451,172,44,D14-major-A
+D14-major-A,拼多多,16,534,108,44,D15-chosen-A
+D14-major-A,去登录,284,579,75,44,R05-login-A
+D14-major-A,重置,16,741,98,44,D04-filter-A
+D14-major-A,应用,123,741,236,44,D06-removed-A
+D15-chosen-A,×,313,361,46,44,D03-java-A
+D15-chosen-A,✓ 计算机科学与技术,16,451,172,44,D14-major-A
+D15-chosen-A,✓ 拼多多,16,534,108,44,D15-chosen-A
+D15-chosen-A,去登录,284,579,75,44,R05-login-A
+D15-chosen-A,重置,16,741,98,44,D04-filter-A
+D15-chosen-A,应用,123,741,236,44,D05-applied-A
+D16-return-A,输入关键词,16,107,278,44,D07-search-A
+D16-return-A,搜索,291,107,68,44,D03-java-A
+D16-return-A,岗位 ▾,16,162,113,44,D02-job-A
+D16-return-A,进一步筛选,137,162,105,44,D04-filter-A
+D16-return-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D16-return-A,移除 计算机科学与技术,101.0,208,122,44,D03-java-A
+D16-return-A,清除条件,16,253,76,44,D01-discover-A
+D16-return-A,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-A
+D16-return-A,失败复盘｜Java 后端一轮面试后的调整,27,463,321,114,R11-compare-A
+D16-return-A,加载更多,115,594,145,44,D10-more-A
+D17-append-error-A,输入关键词,16,107,278,44,D07-search-A
+D17-append-error-A,搜索,291,107,68,44,D03-java-A
+D17-append-error-A,岗位 ▾,16,162,113,44,D02-job-A
+D17-append-error-A,进一步筛选,137,162,105,44,D04-filter-A
+D17-append-error-A,移除 Java 后端,16,208,80.0,44,D01-discover-A
+D17-append-error-A,清除条件,16,253,76,44,D01-discover-A
+D17-append-error-A,加载更多,115,594,145,44,D10-more-A
+D18-list-tail-A,输入关键词,16,107,278,44,D07-search-A
+D18-list-tail-A,搜索,291,107,68,44,D03-java-A
+D18-list-tail-A,岗位 ▾,16,162,113,44,D02-job-A
+D18-list-tail-A,进一步筛选,137,162,105,44,D04-filter-A
+D18-list-tail-A,认可排序,198,208,80,44,D01-discover-A
+D18-list-tail-A,最新排序,278,208,81,44,D13-latest-A
+D18-list-tail-A,加载更多,115,549,145,44,D10-more-A
+D19-more-done-A,输入关键词,16,107,278,44,D07-search-A
+D19-more-done-A,搜索,291,107,68,44,D03-java-A
+D19-more-done-A,岗位 ▾,16,162,113,44,D02-job-A
+D19-more-done-A,进一步筛选,137,162,105,44,D04-filter-A
+D19-more-done-A,认可排序,198,208,80,44,D01-discover-A
+D19-more-done-A,最新排序,278,208,81,44,D13-latest-A
+D19-more-done-A,加载更多,115,526,145,44,D10-more-A
+R01-article-A,〈,11,38,44,44,D16-return-A
+R01-article-A,目录,315,105,44,44,R03-toc-A
+R01-article-A,收藏,16,749,95,44,R04-prompt-A
+R01-article-A,评论,284,749,75,44,R08-end-A
+R01-article-A,滑动至中段,16,624,343,105,R02-middle-A
+R02-middle-A,〈,11,38,44,44,D16-return-A
+R02-middle-A,目录,315,105,44,44,R03-toc-A
+R02-middle-A,收藏,16,749,95,44,R04-prompt-A
+R02-middle-A,评论,284,749,75,44,R08-end-A
+R03-toc-A,×,313,351,46,44,R02-middle-A
+R03-toc-A,四、项目,16,543,343,44,R04-jump-A
+R04-jump-A,〈,11,38,44,44,D16-return-A
+R04-jump-A,目录,315,105,44,44,R03-toc-A
+R04-jump-A,收藏,16,749,95,44,R04-prompt-A
+R04-jump-A,评论,284,749,75,44,R08-end-A
+R04-prompt-A,继续阅读,43,427,100,44,R04-jump-A
+R04-prompt-A,登录校园账号,151,427,182,44,R05-login-A
+R05-login-A,〈,11,38,44,44,R04-jump-A
+R05-login-A,模拟登录成功,16,472,343,44,R06-restored-A
+R05-login-A,取消，返回文章,16,530,343,44,R04-jump-A
+R06-restored-A,〈,11,38,44,44,D16-return-A
+R06-restored-A,目录,315,105,44,44,R03-toc-A
+R06-restored-A,收藏,16,749,95,44,R07-saved-A
+R06-restored-A,评论,284,749,75,44,R08-end-A
+R07-saved-A,〈,11,38,44,44,D16-return-A
+R07-saved-A,目录,315,105,44,44,R03-toc-A
+R07-saved-A,已收藏,16,749,95,44,R06-restored-A
+R07-saved-A,评论,284,749,75,44,R08-end-A
+R08-end-A,〈,11,38,44,44,D16-return-A
+R08-end-A,目录,315,105,44,44,R03-toc-A
+R08-end-A,收藏,16,749,95,44,R07-saved-A
+R08-end-A,评论,284,749,75,44,R08-end-A
+R11-compare-A,〈,11,38,44,44,D16-return-A
+R11-compare-A,收藏,16,749,95,44,R04-prompt-A
+R11-compare-A,评论,284,749,75,44,R08-end-A
+D01-discover-B,输入关键词,16,107,278,44,D07-search-B
+D01-discover-B,搜索,291,107,68,44,D03-java-B
+D01-discover-B,岗位 ▾,16,162,113,44,D02-job-B
+D01-discover-B,进一步筛选,137,162,105,44,D04-filter-B
+D01-discover-B,认可排序,198,208,80,44,D01-discover-B
+D01-discover-B,最新排序,278,208,81,44,D13-latest-B
+D01-discover-B,向下浏览列表,16,685,343,56,D18-list-tail-B
+D01-discover-B,第一份实习长文｜Java 后端从准备到投递,27,263,321,137,R01-article-B
+D01-discover-B,失败复盘｜Java 后端一轮面试后的调整,27,408,321,114,R11-compare-B
+D01-discover-B,加载更多,115,651,145,44,D10-more-B
+D02-job-B,×,313,452,46,44,D01-discover-B
+D02-job-B,全部岗位,16,509,343,44,D01-discover-B
+D02-job-B,Java 后端,16,563,343,44,D03-java-B
+D03-java-B,输入关键词,16,107,278,44,D07-search-B
+D03-java-B,搜索,291,107,68,44,D03-java-B
+D03-java-B,岗位 ▾,16,162,113,44,D02-job-B
+D03-java-B,进一步筛选,137,162,105,44,D04-filter-B
+D03-java-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D03-java-B,清除条件,16,253,76,44,D01-discover-B
+D03-java-B,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-B
+D03-java-B,失败复盘｜Java 后端一轮面试后的调整,27,453,321,114,R11-compare-B
+D03-java-B,加载更多,115,574,145,44,D10-more-B
+D04-filter-B,×,313,361,46,44,D03-java-B
+D04-filter-B,计算机科学与技术,16,451,172,44,D14-major-B
+D04-filter-B,拼多多,16,534,108,44,D15-chosen-B
+D04-filter-B,去登录,284,579,75,44,R05-login-B
+D04-filter-B,重置,16,741,98,44,D04-filter-B
+D04-filter-B,应用,123,741,236,44,D03-java-B
+D05-applied-B,输入关键词,16,107,278,44,D07-search-B
+D05-applied-B,搜索,291,107,68,44,D03-java-B
+D05-applied-B,岗位 ▾,16,162,113,44,D02-job-B
+D05-applied-B,进一步筛选,137,162,105,44,D04-filter-B
+D05-applied-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D05-applied-B,移除 计算机科学与技术,101.0,208,122,44,D03-java-B
+D05-applied-B,移除 拼多多,228.0,208,62,44,D06-removed-B
+D05-applied-B,清除条件,16,253,76,44,D01-discover-B
+D05-applied-B,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-B
+D05-applied-B,加载更多,115,452,145,44,D10-more-B
+D06-removed-B,输入关键词,16,107,278,44,D07-search-B
+D06-removed-B,搜索,291,107,68,44,D03-java-B
+D06-removed-B,岗位 ▾,16,162,113,44,D02-job-B
+D06-removed-B,进一步筛选,137,162,105,44,D04-filter-B
+D06-removed-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D06-removed-B,移除 计算机科学与技术,101.0,208,122,44,D03-java-B
+D06-removed-B,清除条件,16,253,76,44,D01-discover-B
+D06-removed-B,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-B
+D06-removed-B,失败复盘｜Java 后端一轮面试后的调整,27,453,321,114,R11-compare-B
+D06-removed-B,加载更多,115,574,145,44,D10-more-B
+D07-search-B,×,313,491,46,44,D01-discover-B
+D07-search-B,搜索,279,558,72,44,D03-java-B
+D07-search-B,搜索,279,624,72,44,D09-empty-B
+D08-error-B,输入关键词,16,107,278,44,D07-search-B
+D08-error-B,搜索,291,107,68,44,D03-java-B
+D08-error-B,岗位 ▾,16,162,113,44,D02-job-B
+D08-error-B,进一步筛选,137,162,105,44,D04-filter-B
+D08-error-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D08-error-B,移除 计算机科学与技术,101.0,208,122,44,D03-java-B
+D08-error-B,移除 拼多多,228.0,208,62,44,D06-removed-B
+D08-error-B,清除条件,16,253,76,44,D01-discover-B
+D08-error-B,按原条件重试,241,349,104,44,D05-applied-B
+D08-error-B,第一份实习长文｜Java 后端从准备到投递,27,418,321,137,R01-article-B
+D08-error-B,加载更多,115,562,145,44,D10-more-B
+D09-empty-B,输入关键词,16,107,278,44,D07-search-B
+D09-empty-B,搜索,291,107,68,44,D03-java-B
+D09-empty-B,岗位 ▾,16,162,113,44,D02-job-B
+D09-empty-B,进一步筛选,137,162,105,44,D04-filter-B
+D09-empty-B,移除 深海考古,16,208,74,44,D01-discover-B
+D09-empty-B,清除条件,16,253,76,44,D01-discover-B
+D09-empty-B,清除条件,108,420,159,44,D01-discover-B
+D10-more-B,输入关键词,16,107,278,44,D07-search-B
+D10-more-B,搜索,291,107,68,44,D03-java-B
+D10-more-B,岗位 ▾,16,162,113,44,D02-job-B
+D10-more-B,进一步筛选,137,162,105,44,D04-filter-B
+D10-more-B,认可排序,198,208,80,44,D01-discover-B
+D10-more-B,最新排序,278,208,81,44,D13-latest-B
+D10-more-B,正在加载更多…,115,529,145,44,D10-more-B
+D11-loading-B,输入关键词,16,107,278,44,D07-search-B
+D11-loading-B,搜索,291,107,68,44,D03-java-B
+D11-loading-B,岗位 ▾,16,162,113,44,D02-job-B
+D11-loading-B,进一步筛选,137,162,105,44,D04-filter-B
+D11-loading-B,认可排序,198,208,80,44,D01-discover-B
+D11-loading-B,最新排序,278,208,81,44,D13-latest-B
+D12-zero-B,输入关键词,16,107,278,44,D07-search-B
+D12-zero-B,搜索,291,107,68,44,D03-java-B
+D12-zero-B,岗位 ▾,16,162,113,44,D02-job-B
+D12-zero-B,进一步筛选,137,162,105,44,D04-filter-B
+D12-zero-B,认可排序,198,208,80,44,D01-discover-B
+D12-zero-B,最新排序,278,208,81,44,D13-latest-B
+D12-zero-B,重新读取,108,375,159,44,D01-discover-B
+D13-latest-B,输入关键词,16,107,278,44,D07-search-B
+D13-latest-B,搜索,291,107,68,44,D03-java-B
+D13-latest-B,岗位 ▾,16,162,113,44,D02-job-B
+D13-latest-B,进一步筛选,137,162,105,44,D04-filter-B
+D13-latest-B,认可排序,198,208,80,44,D01-discover-B
+D13-latest-B,最新排序,278,208,81,44,D13-latest-B
+D13-latest-B,加载更多,115,651,145,44,D10-more-B
+D14-major-B,×,313,361,46,44,D03-java-B
+D14-major-B,✓ 计算机科学与技术,16,451,172,44,D14-major-B
+D14-major-B,拼多多,16,534,108,44,D15-chosen-B
+D14-major-B,去登录,284,579,75,44,R05-login-B
+D14-major-B,重置,16,741,98,44,D04-filter-B
+D14-major-B,应用,123,741,236,44,D06-removed-B
+D15-chosen-B,×,313,361,46,44,D03-java-B
+D15-chosen-B,✓ 计算机科学与技术,16,451,172,44,D14-major-B
+D15-chosen-B,✓ 拼多多,16,534,108,44,D15-chosen-B
+D15-chosen-B,去登录,284,579,75,44,R05-login-B
+D15-chosen-B,重置,16,741,98,44,D04-filter-B
+D15-chosen-B,应用,123,741,236,44,D05-applied-B
+D16-return-B,输入关键词,16,107,278,44,D07-search-B
+D16-return-B,搜索,291,107,68,44,D03-java-B
+D16-return-B,岗位 ▾,16,162,113,44,D02-job-B
+D16-return-B,进一步筛选,137,162,105,44,D04-filter-B
+D16-return-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D16-return-B,移除 计算机科学与技术,101.0,208,122,44,D03-java-B
+D16-return-B,清除条件,16,253,76,44,D01-discover-B
+D16-return-B,第一份实习长文｜Java 后端从准备到投递,27,308,321,137,R01-article-B
+D16-return-B,失败复盘｜Java 后端一轮面试后的调整,27,453,321,114,R11-compare-B
+D16-return-B,加载更多,115,574,145,44,D10-more-B
+D17-append-error-B,输入关键词,16,107,278,44,D07-search-B
+D17-append-error-B,搜索,291,107,68,44,D03-java-B
+D17-append-error-B,岗位 ▾,16,162,113,44,D02-job-B
+D17-append-error-B,进一步筛选,137,162,105,44,D04-filter-B
+D17-append-error-B,移除 Java 后端,16,208,80.0,44,D01-discover-B
+D17-append-error-B,清除条件,16,253,76,44,D01-discover-B
+D17-append-error-B,加载更多,115,574,145,44,D10-more-B
+D18-list-tail-B,输入关键词,16,107,278,44,D07-search-B
+D18-list-tail-B,搜索,291,107,68,44,D03-java-B
+D18-list-tail-B,岗位 ▾,16,162,113,44,D02-job-B
+D18-list-tail-B,进一步筛选,137,162,105,44,D04-filter-B
+D18-list-tail-B,认可排序,198,208,80,44,D01-discover-B
+D18-list-tail-B,最新排序,278,208,81,44,D13-latest-B
+D18-list-tail-B,加载更多,115,529,145,44,D10-more-B
+D19-more-done-B,输入关键词,16,107,278,44,D07-search-B
+D19-more-done-B,搜索,291,107,68,44,D03-java-B
+D19-more-done-B,岗位 ▾,16,162,113,44,D02-job-B
+D19-more-done-B,进一步筛选,137,162,105,44,D04-filter-B
+D19-more-done-B,认可排序,198,208,80,44,D01-discover-B
+D19-more-done-B,最新排序,278,208,81,44,D13-latest-B
+D19-more-done-B,加载更多,115,506,145,44,D10-more-B
+R01-article-B,〈,11,38,44,44,D16-return-B
+R01-article-B,目录,315,105,44,44,R03-toc-B
+R01-article-B,收藏,16,749,95,44,R04-prompt-B
+R01-article-B,评论,284,749,75,44,R08-end-B
+R01-article-B,滑动至中段,16,624,343,105,R02-middle-B
+R02-middle-B,〈,11,38,44,44,D16-return-B
+R02-middle-B,目录,315,105,44,44,R03-toc-B
+R02-middle-B,收藏,16,749,95,44,R04-prompt-B
+R02-middle-B,评论,284,749,75,44,R08-end-B
+R03-toc-B,×,313,351,46,44,R02-middle-B
+R03-toc-B,四、项目,16,543,343,44,R04-jump-B
+R04-jump-B,〈,11,38,44,44,D16-return-B
+R04-jump-B,目录,315,105,44,44,R03-toc-B
+R04-jump-B,收藏,16,749,95,44,R04-prompt-B
+R04-jump-B,评论,284,749,75,44,R08-end-B
+R04-prompt-B,继续阅读,43,427,100,44,R04-jump-B
+R04-prompt-B,登录校园账号,151,427,182,44,R05-login-B
+R05-login-B,〈,11,38,44,44,R04-jump-B
+R05-login-B,模拟登录成功,16,472,343,44,R06-restored-B
+R05-login-B,取消，返回文章,16,530,343,44,R04-jump-B
+R06-restored-B,〈,11,38,44,44,D16-return-B
+R06-restored-B,目录,315,105,44,44,R03-toc-B
+R06-restored-B,收藏,16,749,95,44,R07-saved-B
+R06-restored-B,评论,284,749,75,44,R08-end-B
+R07-saved-B,〈,11,38,44,44,D16-return-B
+R07-saved-B,目录,315,105,44,44,R03-toc-B
+R07-saved-B,已收藏,16,749,95,44,R06-restored-B
+R07-saved-B,评论,284,749,75,44,R08-end-B
+R08-end-B,〈,11,38,44,44,D16-return-B
+R08-end-B,目录,315,105,44,44,R03-toc-B
+R08-end-B,收藏,16,749,95,44,R07-saved-B
+R08-end-B,评论,284,749,75,44,R08-end-B
+R11-compare-B,〈,11,38,44,44,D16-return-B
+R11-compare-B,收藏,16,749,95,44,R04-prompt-B
+R11-compare-B,评论,284,749,75,44,R08-end-B
+R09-responsive,〈,11,38,44,44,D16-return-A
+R09-responsive,目录,330,105,44,44,R03-toc-A
+R09-responsive,收藏,16,749,95,44,R04-prompt-A
+R09-responsive,评论,299,749,75,44,R08-end-A
+R09-responsive,滑动至中段,16,624,358,105,R02-middle-A
+R10-image-error,〈,11,38,44,44,D16-return-A
+R10-image-error,重试图片,31,297,99,44,R10-image-ok
+R10-image-error,收藏,16,749,95,44,R04-prompt-A
+R10-image-error,评论,284,749,75,44,R08-end-A
+R10-image-ok,〈,11,38,44,44,D16-return-A
+R10-image-ok,收藏,16,749,95,44,R04-prompt-A
+R10-image-ok,评论,284,749,75,44,R08-end-A
+R12-no-toc,〈,11,38,44,44,D16-return-A
+R12-no-toc,收藏,16,749,95,44,R04-prompt-A
+R12-no-toc,评论,284,749,75,44,R08-end-A
+R13-unavailable,〈,11,38,44,44,D16-return-A
+R13-unavailable,返回发现,104,300,167,44,D16-return-A
