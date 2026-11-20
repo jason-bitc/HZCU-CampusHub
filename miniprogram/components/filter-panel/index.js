@@ -24,6 +24,8 @@ Component({
   data: {
     draft: emptyFilters(),
     selectedChips: [],
+    expandedOption: '',
+    topicName: '',
     companyInput: '',
     companySuggestions: [],
     companyError: ''
@@ -37,22 +39,33 @@ Component({
     }
   },
   methods: {
+    stopTouchMove() {},
     resetDraft(filters) {
       const draft = Object.assign(emptyFilters(), filters || {});
       const currentCompany = draft.companyId ? categoryName(this.data.catalog, 'companies', draft.companyId) : '';
       this.setData({
         draft,
         selectedChips: selectedFilterNames(draft, this.data.catalog),
+        expandedOption: '',
+        topicName: draft.topicId ? categoryName(this.data.catalog, 'topics', draft.topicId) : '',
         companyInput: currentCompany,
         companySuggestions: [],
         companyError: ''
       });
     },
     close() { this.triggerEvent('close'); },
+    toggleOption(event) {
+      const option = event.currentTarget.dataset.option;
+      this.setData({ expandedOption: this.data.expandedOption === option ? '' : option });
+    },
     sameMajor() { if (this.data.ownMajorId && this.data.catalog.majors.some((m) => m.id === this.data.ownMajorId)) this.updateDraft(Object.assign({}, this.data.draft, { majorId: this.data.ownMajorId })); else this.triggerEvent(this.data.signedIn ? 'profile' : 'login'); },
     retry() { this.triggerEvent('retry'); },
     updateDraft(draft) {
-      this.setData({ draft, selectedChips: selectedFilterNames(draft, this.data.catalog) });
+      this.setData({
+        draft,
+        selectedChips: selectedFilterNames(draft, this.data.catalog),
+        topicName: draft.topicId ? categoryName(this.data.catalog, 'topics', draft.topicId) : ''
+      });
     },
     clearSelected(event) {
       const key = event.currentTarget.dataset.key;

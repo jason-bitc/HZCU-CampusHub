@@ -4,8 +4,7 @@
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
   <view wx:else>
     <view class="flow-heading">
-      <view><text class="form-title">我的作品</text><text wx:if="{{loaded}}" class="flow-meta">当前已读取 {{visibleItems.length}} 篇</text></view>
-      <button class="button-primary" bindtap="create" disabled="{{busy}}">{{pendingCreate ? '继续创建' : '写一篇经验'}}</button>
+      <view><text class="form-title">我的经验</text><text class="flow-meta">{{filter === 'EXPERIENCES' ? '当前显示已发布过的经验。' : '查看作品状态或继续编辑草稿。'}}</text></view>
     </view>
     <view class="segmented flow-tabs workspace-filters" role="tablist" aria-label="文章状态">
       <button wx:for="{{filters}}" wx:key="id" class="{{filter === item.id ? 'selected' : ''}}" data-filter="{{item.id}}" role="tab" aria-selected="{{filter === item.id}}" bindtap="filter" disabled="{{busy}}">{{item.label}}</button>
@@ -36,5 +35,8 @@
     <text wx:if="{{busy}}" class="load-end">正在处理…</text>
     <button wx:elif="{{items.length < total}}" class="button-secondary" bindtap="more">继续加载 · {{items.length}} / {{total}}</button>
     <button wx:if="{{error}}" class="button-secondary" bindtap="refresh" disabled="{{busy}}">重新读取文章状态</button>
+    <view class="workspace-create-bar">
+      <button class="button-primary" bindtap="create" disabled="{{busy}}">{{pendingCreate ? '继续创建' : '写一篇经验'}}</button>
+    </view>
   </view>
 </view>

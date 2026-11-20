@@ -1,7 +1,20 @@
 @import '../../styles/sections.wxss';
 @import '../../styles/flow.wxss';
-.workspace-filters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.member-page.workspace-page { padding-bottom: calc(var(--tab-bar-height) + 132rpx + env(safe-area-inset-bottom)); }
+.workspace-filters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin-bottom: 24rpx; }
 .workspace-filters button { padding: 6rpx 4rpx; min-width: 0; white-space: normal; }
+.workspace-page .flow-meta { display: block; margin-top: 6rpx; }
+.workspace-create-bar {
+  position: fixed;
+  z-index: 80;
+  right: 0;
+  bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom));
+  left: 0;
+  padding: 16rpx var(--page-gutter);
+  border-top: 1rpx solid var(--color-border);
+  background: var(--color-surface);
+}
+.workspace-create-bar button { width: 100% !important; }
 .workspace-article-heading { display: flex; flex-wrap: wrap; align-items: start; gap: 8rpx 12rpx; }
 .workspace-title { flex: 1 1 68%; min-width: 0; margin: 0; overflow-wrap: anywhere; }
 .workspace-article-heading .status-tag { flex: none; }
