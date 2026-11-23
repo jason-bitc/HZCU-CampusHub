@@ -1,7 +1,7 @@
 {
-  "version": "1.5.1",
-  "id": "G04-SRS-20261105-03",
-  "date": "2026-11-05",
+  "version": "1.5.4",
+  "id": "G04-SRS-20261123-01",
+  "date": "2026-11-23",
   "sourceCommit": "7ffe55a210f895ba8a2478f98054087c570e1a8e",
   "sourceFiles": [
     {
@@ -72,34 +72,33 @@
     "1 引言": 7,
     "2 综合描述与需求获取": 9,
     "3 功能要求": 14,
-    "4 业务规则": 30,
-    "5 用户用例与界面原型": 32,
-    "6 数据模型与ER图": 40,
-    "7 功能模型与数据流图": 51,
-    "8 数据字典": 60,
-    "9 数据规范化": 78,
-    "10 功能层次与辅助分析图": 80,
-    "11 行为模型与状态转换图": 85,
-    "12 界面与外部接口要求": 91,
-    "13 非功能需求与质量验收": 92,
-    "14 需求验证与用户确认": 95,
-    "15 需求追踪与开发计划修订": 97,
-    "16 需求参数与变更管理": 103,
-    "参考资料": 105,
-    "附录A 国标条目与章节对应": 106,
-    "附录B 需求阶段11项评审对应与证据状态": 107,
-    "附录C 需求基线与接口实现边界": 108,
-    "附录D 可编辑模型与阶段附件索引": 109
+    "4 业务规则": 31,
+    "5 用户用例与界面原型": 33,
+    "6 数据模型与ER图": 44,
+    "7 功能模型与数据流图": 55,
+    "8 数据字典": 64,
+    "9 数据规范化": 83,
+    "10 功能层次与辅助分析图": 85,
+    "11 行为模型与状态转换图": 90,
+    "12 界面与外部接口要求": 97,
+    "13 非功能需求与质量验收": 98,
+    "14 需求验证与用户确认": 102,
+    "15 需求追踪与开发计划修订": 104,
+    "16 需求参数与变更管理": 110,
+    "参考资料": 112,
+    "附录A 国标条目与章节对应": 113,
+    "附录B 需求阶段11项评审对应与证据状态": 114,
+    "附录C 需求基线与接口实现边界": 115,
+    "附录D 可编辑模型与阶段附件索引": 116
   },
   "reviewMatrix": "统一SRS评审条目定位G04.csv",
   "productScopeChanged": false,
   "currentCaseModel": "OPEN/PROCESSING/NEEDS_ACTION/CLOSED",
-  "userResearchStatus": "尚无真实用户访谈/任务走查；组内讨论和公开网络资料调研已形成",
+  "userResearchStatus": "读者与作者各有候选。社区和运维代表待定。组外用户走查、实际联系方式及用户确认待登记。",
   "visualVerification": "按本次最终Word PDF渲染记录逐页核验，证据保存在任务工作目录",
   "applicationTestsRun": false,
   "linkedContentsEntries": 112,
   "wordHeadingBookmarksChecked": 192,
-  "visualPagesReviewed": 109,
   "figureReadabilityRepairs": [
     "DFD00",
     "DFD01",
@@ -116,7 +115,36 @@
   "ERNotation": "1:1 / 1:N / M:N; optional participation stated separately",
   "ERRelations": 28,
   "ERFigures": 13,
-  "latestChange": "ER记法与文字约束统一；实体、字段、功能与非功能需求不变",
-  "latestInputCommit": "766a2ec17f0c708164c0cfbe975be63f0582a7fb",
-  "latestVisualReview": "目录、封面、文档控制、ER章节与附件索引按本次导出逐页复核；其他章节结构和页码与上一基线一致"
+  "latestChange": "四类界面证据及用户类别、代表代号和邀约联系人登记",
+  "latestInputCommit": "a70d27f",
+  "latestVisualReview": "导出 Word 后核对更新章节、八幅图、目录跳转及在线画板链接。",
+  "currentReviewPages": {
+    "roles": 9,
+    "representatives": 12,
+    "reader": 37,
+    "author": 38,
+    "consoles": 39,
+    "moderation": 40,
+    "operations": 41,
+    "userWalkthrough": 102,
+    "reviewAppendix": 114
+  },
+  "artifactFiles": [
+    {
+      "file": "城院帮软件需求规格说明书G04.docx",
+      "sha256": "31773731ca6b5b099a7d4ac876c03bf672bc0cb20ac6da71a2f810e26d109827",
+      "bytes": 8696356
+    },
+    {
+      "file": "城院帮软件需求规格说明书G04.pdf",
+      "sha256": "7dfb1213ca8c4ea36904178f3ea85705849ed7f8e97e345c3922b4fbe9ccf4ed",
+      "bytes": 7392017
+    },
+    {
+      "file": "城院帮软件需求规格说明书G04.md",
+      "sha256": "96c802c759b452bb4d95b4dc3373823efc897af106ac0bb184a6d02b25bd7e20",
+      "bytes": 145303
+    }
+  ],
+  "renderedPages": 116
 }

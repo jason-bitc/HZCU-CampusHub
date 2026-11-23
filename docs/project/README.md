@@ -4,10 +4,10 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.1，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
+|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.4，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
-|[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
+|[prototypes](prototypes)|11月23日界面证据、在线画板、功能线框与全需求原型覆盖资料|
 |[meetings-research](meetings-research)|10月31日与11月5日会议、91.2／91.3综合评价、11月5日分项初评、反馈记录和网络调研来源|
 |[presentations](presentations)|需求汇报PPT、PDF、讲稿及豆包调整提示词|
 |[演示文章调研计划](meetings-research/演示文章/README.md)|首批完整求职文章选题、豆包提示词、收录格式及双端演示场景|
@@ -35,6 +35,8 @@
 需求阶段主件为[城院帮软件需求规格说明书G04.pdf](reports/城院帮软件需求规格说明书G04.pdf)，[Word](reports/城院帮软件需求规格说明书G04.docx)可编辑。第6章ER、第7章DFD、第8章完整数据字典、第11章状态图、第13章非功能需求及附录B评审对应均可通过目录跳转。原两份独立过程/模型报告已合并，旧原件从Git提交7ffe55a追溯；CSV和可编辑图保留为附件。
 
 [11项评审与PDF页码定位](models/统一SRS评审条目定位G04.csv)。
+
+第2.1、2.4节对应[用户类别和代表联络登记](meetings-research/用户代表邀约与原型走查G04.md)。第5.11–5.13节展示[小程序、网页、社区管理和独立运维界面](prototypes/界面原型20261123/README.md)。
 
 ER图使用1:1、1:N、M:N；[28项联系与参与约束](models/ER联系与参与约束G04.csv)与SRS表6-1同步。
 
