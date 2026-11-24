@@ -1,7 +1,7 @@
 {
-  "version": "1.5.4",
-  "id": "G04-SRS-20261123-01",
-  "date": "2026-11-23",
+  "version": "1.5.5",
+  "id": "G04-SRS-20261124-01",
+  "date": "2026-11-24",
   "sourceCommit": "7ffe55a210f895ba8a2478f98054087c570e1a8e",
   "sourceFiles": [
     {
@@ -50,7 +50,7 @@
       "bytes": 40938
     }
   ],
-  "pages": 109,
+  "pages": 112,
   "FR": 52,
   "NFR": 12,
   "entities": 27,
@@ -72,24 +72,24 @@
     "1 引言": 7,
     "2 综合描述与需求获取": 9,
     "3 功能要求": 14,
-    "4 业务规则": 31,
-    "5 用户用例与界面原型": 33,
-    "6 数据模型与ER图": 44,
-    "7 功能模型与数据流图": 55,
-    "8 数据字典": 64,
-    "9 数据规范化": 83,
-    "10 功能层次与辅助分析图": 85,
-    "11 行为模型与状态转换图": 90,
-    "12 界面与外部接口要求": 97,
-    "13 非功能需求与质量验收": 98,
-    "14 需求验证与用户确认": 102,
-    "15 需求追踪与开发计划修订": 104,
-    "16 需求参数与变更管理": 110,
-    "参考资料": 112,
-    "附录A 国标条目与章节对应": 113,
-    "附录B 需求阶段11项评审对应与证据状态": 114,
-    "附录C 需求基线与接口实现边界": 115,
-    "附录D 可编辑模型与阶段附件索引": 116
+    "4 业务规则": 30,
+    "5 用户用例与界面原型": 32,
+    "6 数据模型与ER图": 43,
+    "7 功能模型与数据流图": 54,
+    "8 数据字典": 63,
+    "9 数据规范化": 81,
+    "10 功能层次与辅助分析图": 83,
+    "11 行为模型与状态转换图": 88,
+    "12 界面与外部接口要求": 94,
+    "13 非功能需求与质量验收": 95,
+    "14 需求验证与用户确认": 98,
+    "15 需求追踪与开发计划修订": 100,
+    "16 需求参数与变更管理": 106,
+    "参考资料": 108,
+    "附录A 国标条目与章节对应": 109,
+    "附录B 需求阶段11项评审对应与证据状态": 110,
+    "附录C 需求基线与接口实现边界": 111,
+    "附录D 可编辑模型与阶段附件索引": 112
   },
   "reviewMatrix": "统一SRS评审条目定位G04.csv",
   "productScopeChanged": false,
@@ -115,35 +115,37 @@
   "ERNotation": "1:1 / 1:N / M:N; optional participation stated separately",
   "ERRelations": 28,
   "ERFigures": 13,
-  "latestChange": "四类界面证据及用户类别、代表代号和邀约联系人登记",
-  "latestInputCommit": "a70d27f",
-  "latestVisualReview": "导出 Word 后核对更新章节、八幅图、目录跳转及在线画板链接。",
+  "latestChange": "第6章采用 PowerDesigner 原生逻辑分区图，收录13幅图和 CDM、LDM、候选 PDM。",
+  "latestInputCommit": "03ea870",
+  "latestVisualReview": "PowerDesigner 图件与评审定位随 SRS V1.5.5 保存。",
   "currentReviewPages": {
     "roles": 9,
     "representatives": 12,
-    "reader": 37,
-    "author": 38,
-    "consoles": 39,
-    "moderation": 40,
-    "operations": 41,
-    "userWalkthrough": 102,
-    "reviewAppendix": 114
+    "reader": 36,
+    "author": 37,
+    "consoles": 38,
+    "moderation": 39,
+    "operations": 40,
+    "userWalkthrough": 98,
+    "reviewAppendix": 110,
+    "er": 43,
+    "dictionary": 63
   },
   "artifactFiles": [
     {
       "file": "城院帮软件需求规格说明书G04.docx",
-      "sha256": "31773731ca6b5b099a7d4ac876c03bf672bc0cb20ac6da71a2f810e26d109827",
-      "bytes": 8696356
+      "sha256": "73e48510d222434927df25d4ff59a28a15df38c0ea3d1e9df036132d7c68d262",
+      "bytes": 7221674
     },
     {
       "file": "城院帮软件需求规格说明书G04.pdf",
-      "sha256": "7dfb1213ca8c4ea36904178f3ea85705849ed7f8e97e345c3922b4fbe9ccf4ed",
-      "bytes": 7392017
+      "sha256": "27b566fad0814f3c3e60667fd45bed60b53a994c5b44a5a63b006a357c8e2350",
+      "bytes": 5127441
     },
     {
       "file": "城院帮软件需求规格说明书G04.md",
-      "sha256": "96c802c759b452bb4d95b4dc3373823efc897af106ac0bb184a6d02b25bd7e20",
-      "bytes": 145303
+      "sha256": "831b01f74a3ed63201a9181e22fd33bcc8322b4b09fff6998b18585272d95242",
+      "bytes": 145539
     }
   ],
   "renderedPages": 116
