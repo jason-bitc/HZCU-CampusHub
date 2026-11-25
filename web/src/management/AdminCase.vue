@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import { useRoute } from "vue-router";
 import {
   adminRequest,
@@ -15,13 +22,22 @@ import AdminGate from "./AdminGate.vue";
 import CaseContributions from "./CaseContributions.vue";
 import MarkdownView from "../components/MarkdownView.vue";
 import { dateText } from "../lib/content";
-import { message } from "../lib/api";
+import { ApiError } from "../lib/api";
+import { caseListPath, consoleError } from "./console-ux";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import ConsoleReadState from "./ConsoleReadState.vue";
 const route = useRoute();
 const id = Number(route.params.id);
 const preview = computed(() => route.query.preview === "1");
 const detail = ref<CaseDetail>();
 const context = ref<CaseContext>();
 const busy = ref(false);
+const reading = ref(false);
+const readError = ref("");
+const reviewRevision = ref<number>();
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
+const actionPanel = ref<HTMLElement>();
+const returnTo = computed(() => caseListPath(route.query.from));
 const error = ref("");
 const notice = ref("");
 const reply = ref("");
@@ -52,7 +68,14 @@ const choices = computed(() =>
         "GOVERNANCE_COMPLETED",
       ],
 );
-const frozen = computed(() => preview.value || busy.value || !!pending.value);
+const frozen = computed(
+  () =>
+    preview.value ||
+    busy.value ||
+    reading.value ||
+    !!pending.value ||
+    reviewRevision.value !== undefined,
+);
 async function load() {
   if (preview.value) {
     detail.value = exampleCase;
@@ -61,34 +84,49 @@ async function load() {
   }
   if (adminSession.status !== "ready") return;
   const current = ++generation;
-  busy.value = true;
-  error.value = "";
-  releaseImages();
-  detail.value = undefined;
-  context.value = undefined;
+  reading.value = true;
+  readError.value = "";
   try {
-    const [d, c] = await Promise.all([
+    const [d, c] = await Promise.allSettled([
       adminRequest<CaseDetail>(`/admin/cases/${id}`),
       adminRequest<CaseContext>(`/admin/cases/${id}/context`),
     ]);
-    if (current !== generation) return;
-    detail.value = d;
-    context.value = c;
-    pending.value = pendingCommand(id);
-    if (pending.value) {
-      reply.value = pending.value.body.reply || "";
-      internalNote.value = pending.value.body.internalNote || "";
-      reason.value = pending.value.body.reason || "";
-      outcome.value = pending.value.body.outcome || "";
-    }
-  } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current !== generation) return false;
+    if (d.status === "fulfilled") {
+      detail.value = d.value;
+      const stored = pendingCommand(id);
+      if (stored && !pending.value) {
+        reply.value = stored.body.reply || "";
+        internalNote.value = stored.body.internalNote || "";
+        reason.value = stored.body.reason || "";
+        outcome.value = stored.body.outcome || "";
+      }
+      pending.value = stored;
+    } else readError.value = consoleError(d.reason);
+    if (c.status === "fulfilled") context.value = c.value;
+    else
+      readError.value += (readError.value ? " " : "") + consoleError(c.reason);
+    return d.status === "fulfilled";
   } finally {
-    if (current === generation) busy.value = false;
+    if (current === generation) reading.value = false;
   }
 }
+async function useLatestRevision() {
+  if (busy.value || reading.value || !(await load()) || !detail.value) return;
+  if (
+    !(await modal.value?.ask({
+      title: "按最新案件修订继续？",
+      detail: `案件 ${id} 当前修订为 ${detail.value.revision}，状态为${caseStates[detail.value.state]}。请核对处理时间线，保留的选项和理由仍需重新提交。`,
+      action: "使用最新修订",
+    }))
+  )
+    return;
+  reviewRevision.value = undefined;
+  error.value = "";
+  notice.value = "已读取最新修订。请核对选项和理由后重新提交。";
+}
 async function act(action: CaseCommand["action"]) {
-  if (preview.value || busy.value || !detail.value) return;
+  if (frozen.value || !detail.value) return;
   if (pending.value) {
     await submit();
     return;
@@ -105,6 +143,13 @@ async function act(action: CaseCommand["action"]) {
       body.outcome = outcome.value;
       body.reply = reply.value;
       body.internalNote = internalNote.value;
+      const approved = await modal.value?.ask({
+        title: `复核案件 ${id} 的处理决定`,
+        detail: `${outcomes[outcome.value]} · 修订 ${body.expectedRevision}。公开答复将通知提交人。\n\n${reply.value}`,
+        action: "提交处理决定",
+        danger: true,
+      });
+      if (!approved || frozen.value) return;
     }
     if (action === "release") {
       if (!reason.value.trim()) throw new Error("请填写释放原因");
@@ -115,13 +160,14 @@ async function act(action: CaseCommand["action"]) {
     pending.value = command;
     await submit();
   } catch (e) {
-    error.value = message(e);
+    error.value = consoleError(e);
   }
 }
 async function submit() {
   if (!pending.value || preview.value || busy.value) return;
   busy.value = true;
   error.value = "";
+  notice.value = "";
   try {
     const command = pending.value;
     await adminRequest(
@@ -131,27 +177,49 @@ async function submit() {
     );
     forgetCommand(id);
     pending.value = null;
-    notice.value = "操作回执已确认，当前状态以最新读取为准。";
-    await load();
+    notice.value = "操作回执已确认。";
+    if ((await load()) && detail.value)
+      notice.value += `当前状态为${caseStates[detail.value.state]}，修订 ${detail.value.revision}。`;
+    else notice.value += "状态与时间线待重新读取。";
   } catch (e) {
-    error.value = `${message(e)} 原请求与输入已保留，可按原请求核对。`;
+    if (
+      e instanceof ApiError &&
+      e.status === 409 &&
+      e.code === "REVISION_CONFLICT"
+    ) {
+      reviewRevision.value = pending.value?.body.expectedRevision;
+      forgetCommand(id);
+      pending.value = null;
+      error.value =
+        consoleError(e) + " 处理选项和理由已保留，请读取最新修订并核对后继续。";
+    } else {
+      error.value = consoleError(e) + " 原请求与输入已保留，可按原请求核对。";
+    }
   } finally {
     busy.value = false;
   }
 }
 async function reconcile() {
   if (preview.value || busy.value) return;
-  await load();
+  if (!(await load())) return;
   if (
     detail.value &&
-    confirm(
-      "已读取最新状态和历史。请核对原操作是否执行；确认结束本机待确认请求？这不会撤销服务端操作。",
-    )
+    (await modal.value?.ask({
+      title: `结束案件 ${id} 的待确认请求？`,
+      detail:
+        "请核对最新状态和时间线。结束本机待确认记录后，服务端已执行的操作仍然有效。",
+      action: "结束本机记录",
+    }))
   ) {
     forgetCommand(id);
     pending.value = null;
     notice.value = "已结束原请求，请依据当前修订和处理历史继续。";
   }
+}
+function documentHistory() {
+  const timeline = document.getElementById("case-history");
+  timeline?.focus({ preventScroll: true });
+  timeline?.scrollIntoView({ block: "start" });
 }
 function releaseImages() {
   Object.values(images.value).forEach(URL.revokeObjectURL);
@@ -185,7 +253,7 @@ async function loadImages() {
       images.value = { ...images.value, [image]: url };
     }
   } catch (e) {
-    imageError.value = message(e);
+    imageError.value = consoleError(e);
   } finally {
     loadingImages.value = false;
   }
@@ -198,7 +266,13 @@ const markdownImages = computed(() =>
     ]),
   ),
 );
-onMounted(load);
+onMounted(async () => {
+  await load();
+  if (route.query.resume === "target") {
+    await nextTick();
+    actionPanel.value?.focus();
+  }
+});
 watch(() => adminSession.status, load);
 onBeforeUnmount(() => {
   generation++;
@@ -210,12 +284,24 @@ onBeforeUnmount(() => {
     案件 {{ preview ? "DEMO-C102" : id }} · 上下文与处理
   </h1>
   <AdminGate :preview="preview"
-    ><p v-if="error" class="error" role="alert">
-      {{ error }} <button v-if="!pending" @click="load">重新读取案件</button>
-    </p>
-    <p v-if="notice" class="success" role="status">{{ notice }}</p>
-    <p v-if="busy" role="status">正在读取或处理案件…</p>
-    <p v-if="detail?.articleId && !preview" class="console-note">
+    ><ConsoleConfirm ref="modal" />
+    <div v-if="!preview" class="card-actions console-case-return">
+      <RouterLink :to="returnTo">返回原案件列表</RouterLink>
+      <button :disabled="reading || busy" @click="load">重新读取案件</button>
+    </div>
+    <ConsoleReadState
+      :loading="reading"
+      :error="readError"
+      :stale="!!detail || !!context"
+      label="正在读取案件与证据…"
+      @retry="load"
+    />
+    <p
+      v-if="detail?.articleId && !preview"
+      ref="actionPanel"
+      tabindex="-1"
+      class="console-note"
+    >
       需要先执行内容治理时，<RouterLink
         :to="{
           path: '/admin/content',
@@ -223,6 +309,8 @@ onBeforeUnmount(() => {
             article: String(detail.articleId),
             comment: detail.commentId ? String(detail.commentId) : undefined,
             case: canHandle ? String(id) : undefined,
+            returnCase: String(id),
+            from: returnTo,
           },
         }"
         >前往对应文章与评论巡查</RouterLink
@@ -237,18 +325,28 @@ onBeforeUnmount(() => {
       </p>
       <div class="card-actions">
         <button :disabled="busy" @click="submit">按原请求核对</button
-        ><button :disabled="busy" @click="reconcile">
+        ><button :disabled="busy || reading" @click="reconcile">
           核对最新状态并结束本次请求
         </button>
       </div>
     </section>
-    <div v-if="detail && context" class="console-split console-case-split">
+    <div v-if="detail" class="console-split console-case-split">
       <section class="console-panel console-context">
         <h2>关联文章与必要上下文</h2>
+        <p class="hint">
+          举报对象
+          {{
+            detail.targetType === "COMMENT"
+              ? "评论 " + detail.commentId
+              : detail.targetType === "ARTICLE"
+                ? "文章 " + detail.articleId
+                : "使用反馈"
+          }}
+        </p>
         <span class="console-badge">{{
           preview ? "公开 · 待核查" : caseStates[detail.state]
         }}</span
-        ><template v-if="context.articleAvailable && context.article"
+        ><template v-if="context?.articleAvailable && context.article"
           ><h3 class="console-article-title">{{ context.article.title }}</h3>
           <p class="console-muted">{{ context.article.summary }}</p>
           <div class="console-context-preview">
@@ -264,11 +362,12 @@ onBeforeUnmount(() => {
             {{ context.article.currentState }}
           </p></template
         >
-        <p v-else class="console-muted">
-          本案未关联可读取的文章版本，未提供的历史内容不会补造。
+        <p v-else-if="context" class="console-muted">
+          本案没有可读取的关联文章版本。
         </p>
+        <p v-else class="console-muted">尚未读到关联上下文。请重试读取案件。</p>
         <div
-          v-for="comment in context.comments"
+          v-for="comment in context?.comments"
           :key="`${comment.role}:${comment.commentId}`"
           class="console-comment"
         >
@@ -296,7 +395,7 @@ onBeforeUnmount(() => {
           证据图片：{{ detail.images.length }} 张，仅案件处理范围可见。
         </p>
         <button
-          v-if="!preview && (detail.images.length || context.media.length)"
+          v-if="!preview && (detail.images.length || context?.media.length)"
           :disabled="loadingImages"
           @click="loadImages"
         >
@@ -314,6 +413,24 @@ onBeforeUnmount(() => {
         @submit.prevent="act('decisions')"
       >
         <h2>处理决定</h2>
+        <p v-if="busy" role="status">正在提交案件操作…</p>
+        <p v-if="notice" class="success" role="status">
+          {{ notice }}
+          <a href="#case-history" @click.prevent="documentHistory()"
+            >查看时间线</a
+          >
+        </p>
+        <p v-if="error" class="error" role="alert">
+          {{ error }}
+          <button
+            v-if="reviewRevision !== undefined"
+            type="button"
+            :disabled="reading || busy"
+            @click="useLatestRevision"
+          >
+            读取并复核最新修订
+          </button>
+        </p>
         <p v-if="!preview" class="console-muted">
           {{ caseStates[detail.state] }} · 修订 {{ detail.revision }} ·
           {{
@@ -404,8 +521,14 @@ onBeforeUnmount(() => {
       :case-id="id"
       :revision="detail.revision"
       :can-handle="canHandle"
+      @changed="load"
     />
-    <section v-if="detail && !preview" class="console-panel console-history">
+    <section
+      v-if="detail && !preview"
+      id="case-history"
+      tabindex="-1"
+      class="console-panel console-history"
+    >
       <h2>处理时间线</h2>
       <ol>
         <li v-for="entry in detail.history" :key="entry.revision">

@@ -1,3 +1,4 @@
+import { caseListPath, opsLogQuery } from "../src/management/console-ux.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
@@ -167,4 +168,25 @@ test("pending case action retains the original key revision and text across relo
   } finally {
     clearAdmin();
   }
+});
+
+test("case return paths retain list filters without entering another surface", () => {
+  const list = "/admin/cases?kind=REPORT&state=OPEN&page=2&snapshot=41";
+  assert.equal(caseListPath(list), list);
+  for (const path of [
+    "/ops/restore",
+    "//other.invalid/admin/cases",
+    "/admin/cases/41",
+    "/admin/cases#target",
+  ])
+    assert.equal(caseListPath(path), "/admin/cases");
+});
+
+test("ops log retries serialize the selected safe query fields", () => {
+  const id = "7e6955fe-8c45-41eb-aa0d-0b27851e92e9";
+  const query = new URLSearchParams(opsLogQuery(" " + id + " ", true, 20));
+  assert.equal(query.get("traceId"), id);
+  assert.equal(query.get("errorsOnly"), "true");
+  assert.equal(query.get("limit"), "20");
+  assert(!new URLSearchParams(opsLogQuery("", false, 100)).has("traceId"));
 });
