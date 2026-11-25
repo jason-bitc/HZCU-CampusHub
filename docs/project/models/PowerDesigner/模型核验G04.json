@@ -1,0 +1,14 @@
+{
+  "version": "16.5.0.3982",
+  "entities": 27,
+  "fields": 134,
+  "relations": 28,
+  "logicalRelations": 30,
+  "logicalViews": 13,
+  "physicalTables": 27,
+  "physicalReferences": 30,
+  "nativeLogicalExports": 13,
+  "srs": "V1.5.2",
+  "dataStructures": 11,
+  "formatRules": 9
+}
