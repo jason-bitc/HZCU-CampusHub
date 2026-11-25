@@ -2,11 +2,29 @@ package cn.edu.hzcu.campushub.coin;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
+import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.io.ClassPathResource;
 import cn.edu.hzcu.campushub.common.*;
 import java.util.UUID;
 
 class CoinInputTest {
+    @Test void projectConfigurationEnablesAllFourConfirmedHonorThresholds() throws Exception {
+        var configuration = new YamlPropertySourceLoader().load("project",new ClassPathResource("application.yml"));
+        new ApplicationContextRunner().withBean(HonorRules.class)
+                .withInitializer(context -> configuration.forEach(context.getEnvironment().getPropertySources()::addLast))
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    var rules = context.getBean(HonorRules.class);
+                    assertThat(rules.current(4)).isNull();
+                    assertThat(rules.current(5)).isEqualTo(new HonorRules.Honor("experience-sharer","经验分享者","sprout"));
+                    assertThat(rules.current(20)).isEqualTo(new HonorRules.Honor("helpful-peer","热心同行者","open-book"));
+                    assertThat(rules.current(50)).isEqualTo(new HonorRules.Honor("campus-supporter","校园助力者","star-book"));
+                    assertThat(rules.current(99).ruleId()).isEqualTo("campus-supporter");
+                    assertThat(rules.current(100)).isEqualTo(new HonorRules.Honor("campus-star","城院之星","lighthouse"));
+                });
+    }
+
     @Test void defaultsAndEveryRuleHaveBoundedStartupValidation(){
         var runner=new ApplicationContextRunner().withBean(CoinRules.class);
         runner.run(ctx->{assertThat(ctx).hasNotFailed();var r=ctx.getBean(CoinRules.class);assertThat(r.dailyMaximum()).isEqualTo(3);assertThat(r.readingSeconds()).isEqualTo(180);assertThat(r.articleLimit()).isEqualTo(2);});

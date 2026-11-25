@@ -54,8 +54,21 @@ web的Vite代理将/api/v1/ops转发8091，将其余/api转发8080；分别用CA
 ./scripts/Test-MySql.ps1
 ```
 
-需要mysql.exe、mysqldump.exe在PATH中。该脚本执行单元及真实campushub_test集成测试；新增运维测试实际启动专属临时业务JVM并执行测试库备份恢复，请独占测试库、不要放入正式数据。不会停止MySQL服务、原开发业务进程或操作campushub_dev。
+需要mysql.exe、mysqldump.exe在PATH中。该脚本执行单元及真实campushub_test集成测试。运维用例会启动临时业务进程并实际备份和恢复，因此须独占测试库并使用测试数据。故障注入用例需要测试账号可创建触发器。使用独立 MySQL 实例时可在启动该实例时指定 `--skip-log-bin`，原有 MySQL 服务继续按其配置运行。
 
 单元报告在target/surefire-reports，MySQL和实际运维报告在target/failsafe-reports。mvn package仅代表单元测试及打包，不能称MySQL或实际运维测试通过。运行日志、SQL备份、配置和target均不提交Git。
 
-本轮不是前端界面开发；网页、小程序真机、外部用户走查、性能压力、每日备份调度、离机副本及完整恢复时限仍按项目计划分别验收。
+### 本机负载验收
+
+构建应用包后，在 `server` 目录运行：
+
+```powershell
+python scripts/Run-BackendLoad.py --smoke
+python scripts/Run-BackendLoad.py
+```
+
+使用 Windows 的 Python 3.11+、Java 21 和 PATH 中的 MySQL 8 工具。脚本启动专用回环地址上的 MySQL 与业务进程，初始化 200 用户、2000 文章与 5000 评论的合成数据。正式运行约 51 分钟，包含 30 并发正常负载、10/30/50/100 并发压力、降载和 30 分钟稳定性。每个虚拟用户按固定比例执行阅读、评论、保存草稿与领取奖励，请求间隔 200 毫秒。
+
+`target/backend-load-*` 保存 JTL 字段格式的 CSV 请求样本、汇总结果与进程资源采样。汇总包含样本规模、应用包摘要、各阶段 P95、吞吐、错误分类，以及前后的钱包账本和文章公开版本一致性核对。`--smoke` 仅用来核对测试准备与请求协议。正式验收结果对应实际环境和负载配置。
+
+本轮结果见 [2026-11-16 后端收尾验收](verification/2026-11-16-backend-acceptance.md)。

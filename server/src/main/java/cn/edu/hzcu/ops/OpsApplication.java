@@ -44,8 +44,9 @@ public final class OpsApplication implements AutoCloseable {
     private static void method(HttpExchange e,String expected){if(!e.getRequestMethod().equals(expected))throw new Failure(405,"METHOD_NOT_ALLOWED");}
     private static void empty(HttpExchange e)throws IOException {if(e.getRequestBody().read()!=-1)throw new Failure(400,"INVALID_PARAMETER");}
     private Object dispatch(HttpExchange e)throws Exception {
-        if(e.getRequestURI().getRawQuery()!=null)throw new Failure(400,"INVALID_PARAMETER");
         String path=e.getRequestURI().getPath();
+        String query=e.getRequestURI().getRawQuery();
+        if(query!=null&&!path.equals("/api/v1/ops/logs"))throw new Failure(400,"INVALID_PARAMETER");
         if(path.equals("/health")){method(e,"GET");empty(e);return Map.of("status","UP","actorDomain","OPS_ADMIN");}
         if(path.equals("/api/v1/ops/auth/login")){
             method(e,"POST");var n=body(e,"login","password");return auth.login(text(n,"login"),text(n,"password"));
@@ -57,7 +58,7 @@ public final class OpsApplication implements AutoCloseable {
         if(path.equals("/api/v1/ops/status")){method(e,"GET");empty(e);return status();}
         if(path.equals("/api/v1/ops/artifacts")){method(e,"GET");empty(e);return Map.of("items",runner.artifacts());}
         if(path.equals("/api/v1/ops/backups")){method(e,"GET");empty(e);return Map.of("items",runner.backups());}
-        if(path.equals("/api/v1/ops/logs")){method(e,"GET");empty(e);return logs();}
+        if(path.equals("/api/v1/ops/logs")){method(e,"GET");empty(e);return logs(OpsLogReader.parseQuery(query));}
         if(path.equals("/api/v1/ops/confirmations")){
             method(e,"POST");
             var n=body(e,"action","target","referenceId");
@@ -76,7 +77,9 @@ public final class OpsApplication implements AutoCloseable {
     private Map<String,Object> status() throws IOException {
         var result=new LinkedHashMap<>(runner.status());
         var state=store.read();
-        result.put("recoveryRequired",state.path("recoveryRequired").asBoolean());
+        var recovery = jobs.recoveryStatus(state);
+        result.put("recoveryRequired", recovery.required());
+        result.put("recoveryIncident", recovery.incident());
         var schedule=new LinkedHashMap<String,Object>();
         schedule.put("enabled",dailyBackup!=null);
         schedule.put("timeZone",OpsDailyBackup.ZONE.getId());
@@ -85,13 +88,20 @@ public final class OpsApplication implements AutoCloseable {
         result.put("dailyBackup",schedule);
         return result;
     }
-    private Object logs()throws IOException {
-        var events=new ArrayList<Object>();for(var job:jobs.list())for(var event:job.path("events"))events.add(Map.of("jobId",job.path("id").asString(),"phase",event.path("phase").asString(),"occurredAt",event.path("occurredAt").asString()));
-        var requests=new ArrayList<Object>();Path path=config.runtimeRoot().resolve(".local-data/logs/campushub-runtime.log");
-        if(Files.isRegularFile(path)&&Files.size(path)<=20*1024*1024){OpsStore.rejectLinks(path);try(var lines=Files.lines(path)){var recent=lines.filter(s->s.contains("event=REQUEST")).toList();for(String line:recent.subList(Math.max(0,recent.size()-100),recent.size())){
-            var safe=new LinkedHashMap<String,String>();var m=java.util.regex.Pattern.compile("(?<![A-Za-z])(traceId|action|status|code|durationMs|module)=([A-Za-z0-9_-]{1,64})(?= |$)").matcher(line);while(m.find())safe.put(m.group(1),m.group(2));if(!safe.isEmpty())requests.add(safe);
-        }}}
-        return Map.of("taskEvents",events.subList(Math.max(0,events.size()-200),events.size()),"businessRequests",requests);
+    private Object logs(OpsLogReader.Query query) {
+        var events = new ArrayList<Object>();
+        for (var job : jobs.list()) {
+            var phases = job.path("events");
+            for (int i = phases.size() - 1; i >= 0 && events.size() < 200; i--) {
+                var phase = phases.get(i);
+                events.add(Map.of("jobId", job.path("id").asString(), "phase", phase.path("phase").asString(),
+                        "occurredAt", phase.path("occurredAt").asString()));
+            }
+            if (events.size() == 200) break;
+        }
+        Collections.reverse(events);
+        var business = OpsLogReader.read(config.runtimeRoot().resolve(".local-data/logs"), query);
+        return Map.of("taskEvents",events,"businessRequests",business.requests(),"businessLogCoverage",business.coverage());
     }
     private void handle(HttpExchange e)throws IOException {
         String trace=UUID.randomUUID().toString();int status=200;String code="OK";Object data=null;
@@ -121,9 +131,14 @@ public final class OpsApplication implements AutoCloseable {
         if(args.length==4&&args[0].equals("--register")){var config=OpsConfig.load(Path.of(args[1]));try(var store=new OpsStore(config.controlRoot())){new OpsRunner(config).register(args[2],Path.of(args[3]));}System.out.println("OPS_ARTIFACT_REGISTERED");return;}
         if(args.length==2&&args[0].equals("--reconcile")){
             var config=OpsConfig.load(Path.of(args[1]));var console=System.console();if(console==null)throw new IOException("OPS_RECONCILE_REQUIRES_CONSOLE");
-            try(var store=new OpsStore(config.controlRoot())){console.printf("%s%n",OpsStore.JSON.writeValueAsString(new OpsRunner(config).status()));
+            try(var store=new OpsStore(config.controlRoot())){
+                var status = new LinkedHashMap<>(new OpsRunner(config).status());
+                var journal = store.read();
+                status.put("recoveryRequired", journal.path("recoveryRequired").asBoolean());
+                status.put("recoveryIncident", journal.path("recoveryRequired").asBoolean() ? OpsStore.recoveryIncident(journal,null) : null);
+                console.printf("%s%n",OpsStore.JSON.writeValueAsString(status));
                 if(!"RECONCILED".equals(console.readLine("After checking DB, media, process and protection backup, type RECONCILED: ")))throw new IOException("OPS_RECONCILE_CANCELLED");
-                store.change(n->n.put("recoveryRequired",false).put("manualReconciliationAt",Instant.now().toString()));}return;
+                store.reconcile();}return;
         }
         if(args.length==2&&args[0].equals("--init")){OpsAuth.initialize(Path.of(args[1]));System.out.println("OPS_SETUP_COMPLETED");return;}
         if(args.length!=2||!args[0].equals("--config"))throw new IllegalArgumentException(
