@@ -15,6 +15,8 @@ Page({
     catalog: { jobs: [], majors: [], companies: [], topics: [] },
     catalogError: '',
     catalogLoading: true,
+    jobChoices: [{ id: 0, name: '全部岗位' }],
+    jobChoiceIndex: 0,
     chips: [],
     sameMajorAvailable: false,
     searchError: '',
@@ -106,7 +108,12 @@ Page({
   syncFilterPresentation(filters) {
     const current = filters || this.data.filters;
     const chips = activeFilterChips(current, this.data.catalog);
-    this.setData({ chips, sameMajorAvailable: this.data.catalog.majors.some((major) => major.id === this.data.ownMajorId) });
+    const jobChoices = [{ id: 0, name: '全部岗位' }, ...this.data.catalog.jobs];
+    const jobChoiceIndex = jobChoices.findIndex((job) => job.id === current.jobId);
+    this.setData({
+      chips, jobChoices, jobChoiceIndex: Math.max(0, jobChoiceIndex),
+      sameMajorAvailable: this.data.catalog.majors.some((major) => major.id === this.data.ownMajorId)
+    });
   },
 
   setListTitle(status) {
@@ -236,9 +243,9 @@ Page({
   },
 
   selectJob(event) {
-    const id = Number(event.currentTarget.dataset.id) || 0;
-    const jobId = this.data.filters.jobId === id ? 0 : id;
-    this.updateFilters(Object.assign({}, this.data.filters, { jobId }));
+    const job = this.data.jobChoices[Number(event.detail.value)];
+    if (!job || job.id === this.data.filters.jobId) return;
+    this.updateFilters(Object.assign({}, this.data.filters, { jobId: job.id }));
   },
 
   selectSort(event) {

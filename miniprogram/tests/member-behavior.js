@@ -13,6 +13,30 @@ function page(relative, mocks, wx = {}) { let definition; load(relative, mocks, 
 const results = [];
 async function test(name, run) { try { await run(); results.push({ name, pass: true }); } catch (e) { results.push({ name, pass: false, error: e.stack }); } }
 (async () => {
+  await test('收藏回到列表后刷新已读页，后续页失败保留原列表并按原范围重试', async () => {
+    const calls = [];
+    let failSecond = true;
+    const p = page('pages/favorites/favorites.js', {
+      '../../services/member': { async favorites(n) {
+        calls.push(n);
+        if (n === 2 && failSecond) throw new Error('临时失败');
+        return { total: 2, items: [{ articleId: n + 10, available: true }] };
+      } },
+      '../../utils/member-page': { enter: async () => true, errorText: (e) => e.message }
+    });
+    p.setData({ authStatus: 'ready', loaded: true, page: 2, total: 2, items: [{ articleId: 1 }, { articleId: 2 }] });
+    await p.onShow();
+    await tick();
+    assert.deepEqual(calls, [1, 2]);
+    assert.deepEqual(Array.from(p.data.items, (item) => item.articleId), [1, 2]);
+    assert.equal(p.data.page, 2);
+    failSecond = false;
+    p.retry();
+    await tick();
+    assert.deepEqual(calls, [1, 2, 1, 2]);
+    assert.deepEqual(Array.from(p.data.items, (item) => item.articleId), [11, 12]);
+    assert.equal(p.data.page, 2);
+  });
   await test('Bearer只发给明确的私有请求，无正文写入不产生data字段', async () => {
     const e = environment(); e.session.accept(login()); const sent = [];
     e.wx.request = (o) => { sent.push(o); o.success({ statusCode: 200, header: {}, data: { code: 'OK', data: {} } }); return { abort() {} }; };
@@ -76,6 +100,38 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
     let writes = 0; const localForm = { title: 'local', summary: '', body: '# local\n\n保留原文', jobIds: [1], majorIds: [11], companyIds: [], topicIds: [], experienceStage: '过去', sourceType: 'DEMO', sourceNote: '', sourceLinks: [] };
     const draft = { articleId: 1, state: 'DRAFT', revision: 9, content: { ...localForm, title: 'server', body: '# server', tags: { jobIds: [1], majorIds: [11], companyIds: [], topicIds: [] } } };
     const p = page('pages/editor/editor.js', { '../../services/member': { saveDraft: async () => { writes += 1; throw { code: 'REVISION_CONFLICT', message: 'conflict' }; }, draft: async () => draft }, '../../utils/operation': { write() {}, read() {}, remove() {} } }); p._epoch = 1; p._ownerId = 1; p.setData({ articleId: 1, authStatus: 'ready', form: localForm, revision: 3, dirty: true }); await p.save(); assert.equal(writes, 1); assert.equal(p.data.form.body, localForm.body); assert.equal(p.data.revision, 3); assert.equal(p.data.conflict.latest.revision, 9);
+  });
+  await test('上传过程中可继续写正文，失败重试使用原图原请求且追加到最新内容', async () => {
+    const gate = deferred();
+    const requests = [];
+    const p = page('pages/editor/editor.js', {
+      '../../services/member': {
+        uploadArticle: async (...args) => {
+          requests.push(args);
+          if (requests.length === 1) return gate.promise;
+          return { url: '/api/v1/media/images/test-photo' };
+        }
+      },
+      '../../utils/operation': { write() {}, remove() {} }
+    });
+    p._epoch = 1;
+    p._ownerId = 1;
+    p.setData({
+      authStatus: 'ready', articleId: 3,
+      form: { title: '原题', body: '原文', jobIds: [], majorIds: [], companyIds: [], topicIds: [], sourceLinks: [] },
+      uploads: [{ filePath: 'wxfile://fixture.png', requestId: 'original-upload', state: 'waiting', error: '' }]
+    });
+    const uploading = p.uploadWaiting();
+    assert.equal(p.data.uploading, true);
+    p.input({ currentTarget: { dataset: { field: 'body' } }, detail: { value: '上传中写入的正文' } });
+    assert.equal(await p.save(), false);
+    gate.reject(new Error('network'));
+    await uploading;
+    assert.equal(p.data.uploads[0].state, 'failed');
+    await p.retryUpload({ currentTarget: { dataset: { index: 0 } } });
+    assert.deepEqual(requests[0], requests[1]);
+    assert.equal(p.data.uploads[0].state, 'done');
+    assert.equal(p.data.form.body, '上传中写入的正文\n\n![图片](/api/v1/media/images/test-photo)');
   });
   await test('发布网络不确定时重试保留同一键和修订，不再次保存草稿', async () => {
     const calls = []; const op = { expectedRevision: 2, requestId: 'preserved-key' }; const p = page('pages/editor/editor.js', { '../../services/member': { publish: async (id, body) => { calls.push({ id, body: structuredClone(body) }); throw new Error('network'); } }, '../../utils/operation': { write() {}, remove() {} } }); p._epoch = 1; p.setData({ articleId: 1, authStatus: 'ready', pendingPublish: op }); await p.retryPublish(); await p.retryPublish(); assert.equal(calls.length, 2); assert.deepEqual(calls[0], calls[1]); assert.equal(p.data.pendingPublish.requestId, 'preserved-key');

@@ -196,6 +196,10 @@ try {
     .getByRole("textbox", { name: /公开答复/ })
     .fill("隔离验收反馈答复");
   await admin.getByRole("button", { name: "确认处理并留存记录" }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "提交处理决定" })
+    .click();
   await admin.getByText("隔离验收反馈答复", { exact: false }).last().waitFor();
   await reader.goto(`${userUrl}/me/notifications`);
   const notice = reader
@@ -236,6 +240,10 @@ try {
     .getByRole("textbox", { name: "归并理由" })
     .fill("验收验证同类型启用标签归并");
   await admin.getByRole("button", { name: "确认归并", exact: true }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: /^归并到/ })
+    .click();
   await source.getByText(/已归并至分类/).waitFor();
   await shot(admin, "A06-merge.png");
   pass("社区分类真实归并并重新读取来源、目标及状态");
@@ -257,6 +265,10 @@ try {
       .getByRole("textbox", { name: "撤销理由" })
       .fill("隔离验收测试撤销与本人申诉");
     await admin.getByRole("button", { name: "确认撤销认证" }).click();
+    await admin
+      .getByRole("dialog")
+      .getByRole("button", { name: "撤销校园认证" })
+      .click();
   }
   await admin.getByText(/已撤销 · 修订/).waitFor();
   await signIn(candidate, fixture.candidateEmail, "/me/certification");
@@ -356,6 +368,7 @@ try {
     );
     await admin.getByRole("textbox", { name: "必填理由" }).fill(reason);
     await admin.getByRole("button", { name: action }).click();
+    await admin.getByRole("dialog").getByRole("button", { name: /选定内容$/ }).click();
     const receipt = await (await received).json();
     assert.equal(receipt.code, "OK", receipt.traceId);
     return receipt.data;

@@ -1,4 +1,5 @@
-<view class="member-page">
+<view class="member-page flow-page settings-page">
+  <text class="section-title">使用规则与账号</text>
   <view class="section-card">
     <view wx:for="{{rules}}" wx:key="id" class="settings-item">
       <button class="settings-row" data-id="{{item.id}}" bindtap="toggle" aria-expanded="{{expanded === item.id}}">
@@ -9,6 +10,7 @@
     <button class="settings-row" bindtap="profile"><view><text class="row-title">资料与隐私</text><text class="hint">修改本人资料及联系开关。</text></view><app-icon name="chevron-right" size="34" /></button>
     <button class="settings-row" bindtap="reset"><view><text class="row-title">找回或重设密码</text><text class="hint">通过本人校园邮箱验证码核验。</text></view><app-icon name="chevron-right" size="34" /></button>
   </view>
+  <text class="section-title">帮助与社区服务</text>
   <view class="section-card">
     <button class="settings-row" bindtap="feedback"><view><text class="row-title">使用反馈</text><text class="hint">反馈问题或建议。</text></view><app-icon name="chevron-right" size="34" /></button>
     <button class="settings-row" bindtap="records"><view><text class="row-title">我的反馈</text><text class="hint">查看本人举报和反馈的处理进度。</text></view><app-icon name="chevron-right" size="34" /></button>

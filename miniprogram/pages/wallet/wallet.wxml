@@ -1,4 +1,53 @@
 <import src="../../templates/honor.wxml" />
-<view class="member-page"><page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" /><page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看硬币" action-text="登录校园账号" bindaction="login" /><page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
-  <view wx:else><view wx:if="{{wallet && rewards}}"><text class="wallet-balance">可用余额 {{wallet.balance}} 币</text><text class="hint">收到的有效贡献 {{wallet.receivedContribution}} 币。不可购买、提现或兑换现金，投币不能自行撤回。</text><template is="author-honor" data="{{honor: wallet.honor}}" wx:if="{{wallet.honor}}" /><text wx:else class="hint">当前暂无作者荣誉。</text><text class="section-title">今日奖励 · {{rewards.businessDate}}</text><text class="hint">登录 {{rewards.rules.loginReward}} 币，阅读满 {{rewards.rules.readingSeconds}} 秒可领 {{rewards.rules.readingReward}} 币。每日各一次，服务端判断资格。</text><view class="form-actions"><button class="button-secondary" data-kind="login" bindtap="claim" disabled="{{busy || !pendingLogin && !rewards.login.eligible}}">{{pendingLogin ? '核对上次登录奖励' : rewards.login.claimed ? '今日登录奖励已领' : '领取今日登录奖励'}}</button><button class="button-secondary" data-kind="reading" bindtap="claim" disabled="{{busy || !pendingReading && !readySession || rewards.reading.claimed && !pendingReading}}">{{pendingReading ? '核对上次阅读奖励' : rewards.reading.claimed ? '今日阅读奖励已领' : '领取今日阅读奖励'}}</button></view><text wx:if="{{readingSeconds !== null && !rewards.reading.claimed}}" class="hint">{{readingSeconds > 0 ? '最近阅读会话还需约 ' + readingSeconds + ' 秒' : '已有达到计时门槛的阅读会话，领取时由服务端再次核验'}}</text><text wx:elif="{{!rewards.reading.claimed}}" class="hint">登录后阅读一篇公开文章，阅读会话将由服务端计时。</text><text class="section-title">本人账目</text><view wx:for="{{ledger}}" wx:key="eventId" class="list-row"><text class="row-title">{{item.action === 'LOGIN_REWARD' ? '登录奖励' : item.action === 'READING_REWARD' ? '阅读奖励' : '文章投币'}} · {{item.delta > 0 ? '+' : ''}}{{item.delta}}</text><text class="hint">{{item.occurredAt}} · 当时余额 {{item.balanceAfter}}</text><text wx:if="{{item.articleId}}" class="hint">文章编号 {{item.articleId}}</text></view><text wx:if="{{!ledger.length}}" class="hint">还没有账目记录。</text><button wx:if="{{ledger.length < total}}" class="button-secondary" bindtap="more" disabled="{{busy}}">继续读取本次账目快照</button></view><text wx:if="{{error}}" class="field-error">{{error}}</text><text wx:if="{{notice}}" class="success-note">{{notice}}</text><button class="button-text form-section" bindtap="load" loading="{{busy}}" disabled="{{busy}}">刷新钱包与资格</button></view>
+<view class="member-page flow-page wallet-page">
+  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看硬币" action-text="登录校园账号" bindaction="login" />
+  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
+  <view wx:else>
+    <view class="flow-heading">
+      <text class="form-title">我的硬币</text>
+      <button class="button-text wallet-refresh" bindtap="load" loading="{{busy}}" disabled="{{busy}}">刷新钱包</button>
+    </view>
+    <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
+    <text wx:if="{{notice}}" class="success-note" role="status">{{notice}}</text>
+    <page-state wx:if="{{busy && !wallet}}" compact status="loading" title="正在读取钱包" />
+    <view wx:if="{{wallet && rewards}}">
+      <view class="flow-card wallet-overview">
+        <view class="wallet-metric"><text class="wallet-value">{{wallet.balance}}</text><text class="flow-meta">可用硬币</text></view>
+        <view class="wallet-metric"><text class="wallet-value">{{wallet.receivedContribution}}</text><text class="flow-meta">累计有效贡献</text></view>
+      </view>
+      <view wx:if="{{wallet.honor}}"><template is="author-honor" data="{{honor: wallet.honor}}" /></view>
+      <text wx:else class="hint">当前暂无作者荣誉。</text>
+      <text class="section-title">今日奖励</text>
+      <view class="flow-card reward-card">
+        <view class="reward-row">
+          <view><text class="row-title">登录奖励</text><text class="hint">{{rewards.rules.loginReward}} 硬币 · 每日一次</text></view>
+          <text wx:if="{{rewards.login.claimed && !pendingLogin}}" class="status-tag">已领取</text>
+          <button wx:else class="button-text" data-kind="login" bindtap="claim" disabled="{{busy || !pendingLogin && !rewards.login.eligible}}">{{pendingLogin ? '核对请求' : rewards.login.eligible ? '领取' : '未达条件'}}</button>
+        </view>
+        <view class="reward-row">
+          <view><text class="row-title">阅读奖励</text><text class="hint">满 {{rewards.rules.readingSeconds}} 秒可领 {{rewards.rules.readingReward}} 硬币</text></view>
+          <text wx:if="{{rewards.reading.claimed && !pendingReading}}" class="status-tag">已领取</text>
+          <button wx:else class="button-text" data-kind="reading" bindtap="claim" disabled="{{busy || !pendingReading && !readySession}}">{{pendingReading ? '核对请求' : readySession ? '领取' : '未达条件'}}</button>
+        </view>
+        <text wx:if="{{busy}}" class="hint" role="status">正在处理，请稍候…</text>
+        <text wx:if="{{readingSeconds !== null && !rewards.reading.claimed}}" class="hint">{{readingSeconds > 0 ? '最近阅读会话还需约 ' + readingSeconds + ' 秒' : '已有达到计时门槛的阅读会话，领取时由服务端再次核验'}}</text>
+        <text wx:elif="{{!rewards.reading.claimed}}" class="hint">登录后阅读一篇公开文章，阅读会话将由服务端计时。</text>
+      </view>
+      <text class="section-title">本人账目</text>
+      <view class="flow-card ledger-card">
+        <view wx:for="{{ledger}}" wx:key="eventId" class="ledger-entry">
+          <view class="ledger-copy">
+            <text class="row-title">{{item.action === 'LOGIN_REWARD' ? '登录奖励' : item.action === 'READING_REWARD' ? '阅读奖励' : '文章投币'}}</text>
+            <text class="hint">{{item.occurredText}} · 余额 {{item.balanceAfter}}</text>
+            <text wx:if="{{item.articleId}}" class="hint">文章编号 {{item.articleId}}</text>
+          </view>
+          <text class="ledger-value {{item.delta > 0 ? 'ledger-income' : ''}}">{{item.delta > 0 ? '+' : ''}}{{item.delta}}</text>
+        </view>
+        <text wx:if="{{!ledger.length}}" class="hint">还没有账目记录。</text>
+        <button wx:if="{{ledger.length < total}}" class="button-text" bindtap="more" disabled="{{busy}}">继续读取账目</button>
+      </view>
+      <text class="hint">硬币不可购买、提现或兑换现金，投币不能自行撤回。</text>
+    </view>
+  </view>
 </view>

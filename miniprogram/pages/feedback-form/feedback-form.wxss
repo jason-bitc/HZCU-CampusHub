@@ -1,5 +1,10 @@
+@import '../../styles/flow.wxss';
 @import '../../styles/sections.wxss';
 .feedback-form .field { margin-top: 34rpx; }
 .feedback-form .feedback-attachments { margin-top: 38rpx; }
 .feedback-form .feedback-note { margin-top: 28rpx; }
 .feedback-form .form-footer .button-primary { flex: 1.35; }
+.flow-page.feedback-form-page { padding-bottom: calc(172rpx + env(safe-area-inset-bottom)); }
+.report-fields .field:first-child { margin-top: 0; }
+.feedback-attachments .section-card { padding: 16rpx 0; margin: 0; border-top: 1rpx solid var(--color-border); border-radius: 0; }
+.feedback-form-page .form-footer button { min-width: 0; }

@@ -135,6 +135,7 @@ async function operation(page, path, ref) {
   await page.getByRole("button", { name: "读取操作确认", exact: true }).click();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: /^确认.+并创建任务$/ }).click();
+  await page.getByRole("dialog").getByRole("button", { name: /^执行/ }).click();
   return waitTask(page);
 }
 try {
@@ -343,6 +344,10 @@ try {
   await admin
     .getByRole("button", { name: "确认处理并留存记录", exact: true })
     .click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "提交处理决定" })
+    .click();
   await admin.getByRole("heading", { name: "上次操作结果待确认" }).waitFor();
   await admin
     .getByRole("alert")
@@ -390,6 +395,10 @@ try {
     { times: 1 },
   );
   await admin.getByRole("button", { name: "确认隐藏", exact: true }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "隐藏选定内容" })
+    .click();
   await admin.getByRole("alert").filter({ hasText: "原请求已保留" }).waitFor();
   await admin.reload();
   await admin
@@ -422,6 +431,10 @@ try {
   await admin
     .getByRole("button", { name: "确认处理并留存记录", exact: true })
     .click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "提交处理决定" })
+    .click();
   await admin.getByText(/修订.*已执行治理并闭案/).waitFor();
   await pass(
     "case closure refuses absent governance, then succeeds after recorded hide",
@@ -429,6 +442,10 @@ try {
   await go(admin, 5174, `/admin/content?article=${articleId}`);
   await admin.getByLabel("必填理由").fill("【DEMO】恢复测试文章");
   await admin.getByRole("button", { name: "确认恢复", exact: true }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "恢复选定内容" })
+    .click();
   await admin
     .getByRole("status")
     .filter({ hasText: "恢复内容：服务端回执已确认" })
@@ -439,10 +456,18 @@ try {
   await commentRow.getByRole("button", { name: "选择此评论处置" }).click();
   await admin.getByLabel("必填理由").fill("【DEMO】隐藏测试评论");
   await admin.getByRole("button", { name: "确认隐藏", exact: true }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "隐藏选定内容" })
+    .click();
   await commentRow.getByText("管理员隐藏", { exact: true }).waitFor();
   await commentRow.getByRole("button", { name: "选择此评论处置" }).click();
   await admin.getByLabel("必填理由").fill("【DEMO】恢复测试评论");
   await admin.getByRole("button", { name: "确认恢复", exact: true }).click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "恢复选定内容" })
+    .click();
   await commentRow.getByText("公开", { exact: true }).waitFor();
   await pass(
     "actual article and comment restore plus comment hide reflect server revisions",
@@ -492,6 +517,10 @@ try {
     .fill("【DEMO】验证评论限制");
   await admin
     .getByRole("button", { name: "确认限制所选行为", exact: true })
+    .click();
+  await admin
+    .getByRole("dialog")
+    .getByRole("button", { name: "提交限制变更" })
     .click();
   await admin
     .getByRole("status")
@@ -592,6 +621,7 @@ try {
     await route.abort("failed");
   });
   await ops.getByRole("button", { name: /^确认.+并创建任务$/ }).click();
+  await ops.getByRole("dialog").getByRole("button", { name: /^执行/ }).click();
   await ops
     .getByRole("alert")
     .filter({ hasText: "原操作、确认ID和请求键已保留" })

@@ -1,1 +1,7 @@
+@import '../../styles/flow.wxss';
 .conflict-copy { font-size: 26rpx; white-space: pre-wrap; word-break: break-all; }
+.profile-section .section-title { margin: 0 0 14rpx; }
+.profile-section .field { margin-top: 16rpx; }
+.profile-section .field-textarea { min-height: 156rpx; }
+.profile-section .menu-row { min-height: var(--touch-target); gap: 12rpx; }
+.profile-section .form-section { margin-top: 16rpx !important; }

@@ -1,7 +1,10 @@
-.notice-row .inline-actions { margin-top: 16rpx; }
-.notice-unread { border-color: var(--color-primary); background: var(--color-primary-soft); }
+@import '../../styles/sections.wxss';
+@import '../../styles/flow.wxss';
 .notice-title { display: flex; align-items: flex-start; gap: 12rpx; }
 .notice-title .row-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .unread-tag { flex: none; }
-.notice-outcome { display: block; color: var(--color-primary-dark); font-size: var(--font-sm); margin-top: 12rpx; }
-.notice-row .inline-actions { flex-wrap: wrap; }
+.notice-unread .unread-tag { background: var(--color-primary-soft); color: var(--color-primary-dark); }
+.notice-outcome { display: block; margin-top: 6rpx; color: var(--color-primary-dark); font-size: 26rpx; }
+.notice-row .inline-actions { gap: 6rpx 16rpx; margin-top: 8rpx; }
+.notice-row .button-text, .notice-refresh { padding: 0; font-size: 26rpx; }
+.notice-row .button-text:not(.notice-open) { color: var(--color-text-secondary); }

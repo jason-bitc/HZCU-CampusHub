@@ -204,151 +204,189 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="HLD04" name="HLD04 城院帮模块层次图">
-    <mxGraphModel grid="1" page="1" pageWidth="1680" pageHeight="740">
+  <diagram id="HLD04" name="HLD04 城院帮模块层次与 IPO 图号（H 图）">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="780">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="e0" value="" edge="1" parent="1" source="root" target="g0" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
+        <mxCell id="HLD04_11" value="城院帮模块层次与 IPO 图号（H 图）" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="581" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_12" value="0 系统 · 1.0–5.0 功能分组对应 DFD P1–P5 · 6.0 公共支撑由 FR-P01–P03 导出" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="685" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_13" value="连线表示分解关系 · 模块框内为层级号与 IPO 图号 · 子模块层续页见 HLD26" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="589" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD04_15" value="城院帮  0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="600.0" y="188" width="300" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_16" value="1.0 身份与权限（P1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#C5D3DA;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_17" value="M1 认证与会话  1.1&#10;IPO HLD29" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="86" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_18" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="169.0" y="356" as="sourcePoint" />
+            <mxPoint x="169.0" y="412" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD04_19" value="2.0 经验内容（P2）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#C5D3DA;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="292" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_20" value="M2 公开阅读  2.1&#10;IPO HLD18" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="318" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_21" value="M3 草稿与发布  2.2&#10;IPO HLD22" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="318" y="522" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_22" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="401.0" y="356" as="sourcePoint" />
+            <mxPoint x="304" y="557.0" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="840" y="281" />
-              <mxPoint x="230" y="281" />
+              <mxPoint x="401.0" y="382" />
+              <mxPoint x="304" y="382" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e1" value="" edge="1" parent="1" source="g0" target="a0" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
+        <mxCell id="HLD04_23" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="304" y="447.0" as="sourcePoint" />
+            <mxPoint x="318" y="447.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD04_24" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="304" y="557.0" as="sourcePoint" />
+            <mxPoint x="318" y="557.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD04_25" value="3.0 交流与激励（P3）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#C5D3DA;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="524" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_26" value="M4 交流与联系  3.1&#10;IPO HLD30·HLD31" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="550" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_27" value="M5 奖励与账本  3.2&#10;IPO HLD23" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="550" y="522" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_28" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="633.0" y="356" as="sourcePoint" />
+            <mxPoint x="536" y="557.0" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="77" y="445" />
-              <mxPoint x="77" y="524" />
+              <mxPoint x="633.0" y="382" />
+              <mxPoint x="536" y="382" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e2" value="" edge="1" parent="1" source="g0" target="b0" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="77" y="445" />
-              <mxPoint x="77" y="639" />
-            </Array>
+        <mxCell id="HLD04_29" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="536" y="447.0" as="sourcePoint" />
+            <mxPoint x="550" y="447.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e3" value="" edge="1" parent="1" source="root" target="g1" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="840" y="281" />
-              <mxPoint x="636" y="281" />
-            </Array>
+        <mxCell id="HLD04_30" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="536" y="557.0" as="sourcePoint" />
+            <mxPoint x="550" y="557.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e4" value="" edge="1" parent="1" source="g1" target="a1" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="483" y="445" />
-              <mxPoint x="483" y="524" />
-            </Array>
+        <mxCell id="HLD04_31" value="4.0 社区治理（P4）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#C5D3DA;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="756" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_32" value="M6 社区治理  4.1&#10;IPO HLD24·HLD27" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="782" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_33" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="865.0" y="356" as="sourcePoint" />
+            <mxPoint x="865.0" y="412" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e5" value="" edge="1" parent="1" source="g1" target="b1" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="483" y="445" />
-              <mxPoint x="483" y="639" />
-            </Array>
+        <mxCell id="HLD04_34" value="5.0 独立运维（P5）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#C5D3DA;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="988" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_35" value="M7 独立运维  5.1&#10;IPO HLD25·HLD28" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1014" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_36" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1097.0" y="356" as="sourcePoint" />
+            <mxPoint x="1097.0" y="412" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e6" value="" edge="1" parent="1" source="root" target="g2" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="840" y="281" />
-              <mxPoint x="1042" y="281" />
-            </Array>
+        <mxCell id="HLD04_37" value="6.0 公共支撑（FR-P）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#526775;fontSize=13;align=left;verticalAlign=top;spacing=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="310" width="218" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_38" value="M8 导航与状态  6.1&#10;IPO HLD32" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1246" y="412" width="192" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD04_39" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1329.0" y="356" as="sourcePoint" />
+            <mxPoint x="1329.0" y="412" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e7" value="" edge="1" parent="1" source="g2" target="a2" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="889" y="445" />
-              <mxPoint x="889" y="524" />
-            </Array>
+        <mxCell id="HLD04_40" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750.0" y="240" as="sourcePoint" />
+            <mxPoint x="750.0" y="274" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e8" value="" edge="1" parent="1" source="g2" target="b2" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="889" y="445" />
-              <mxPoint x="889" y="639" />
-            </Array>
+        <mxCell id="HLD04_41" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="169.0" y="274" as="sourcePoint" />
+            <mxPoint x="1329.0" y="274" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e9" value="" edge="1" parent="1" source="root" target="g3" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="840" y="281" />
-              <mxPoint x="1448" y="281" />
-            </Array>
+        <mxCell id="HLD04_42" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="169.0" y="274" as="sourcePoint" />
+            <mxPoint x="169.0" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e10" value="" edge="1" parent="1" source="g3" target="a3" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="1295" y="445" />
-              <mxPoint x="1295" y="524" />
-            </Array>
+        <mxCell id="HLD04_43" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="401.0" y="274" as="sourcePoint" />
+            <mxPoint x="401.0" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e11" value="" edge="1" parent="1" source="g3" target="b3" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
-            <Array as="points">
-              <mxPoint x="1295" y="445" />
-              <mxPoint x="1295" y="639" />
-            </Array>
+        <mxCell id="HLD04_44" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="633.0" y="274" as="sourcePoint" />
+            <mxPoint x="633.0" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="root" value="城院帮" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="640" y="177" width="400" height="72" as="geometry" />
+        <mxCell id="HLD04_45" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="865.0" y="274" as="sourcePoint" />
+            <mxPoint x="865.0" y="310" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="g0" value="H1 身份与公共交互" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="65" y="331" width="330" height="78" as="geometry" />
+        <mxCell id="HLD04_46" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1097.0" y="274" as="sourcePoint" />
+            <mxPoint x="1097.0" y="310" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="a0" value="M1 认证与会话" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="99" y="488" width="296" height="72" as="geometry" />
+        <mxCell id="HLD04_47" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1329.0" y="274" as="sourcePoint" />
+            <mxPoint x="1329.0" y="310" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="b0" value="M8 导航与状态" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="99" y="603" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="g1" value="H2 经验内容" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="471" y="331" width="330" height="78" as="geometry" />
-        </mxCell>
-        <mxCell id="a1" value="M2 公开阅读" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="505" y="488" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="b1" value="M3 草稿与发布" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="505" y="603" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="g2" value="H3 交流与激励" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="877" y="331" width="330" height="78" as="geometry" />
-        </mxCell>
-        <mxCell id="a2" value="M4 交流与联系" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="911" y="488" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="b2" value="M5 奖励与账本" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="911" y="603" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="g3" value="H4 治理与运维" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1283" y="331" width="330" height="78" as="geometry" />
-        </mxCell>
-        <mxCell id="a3" value="M6 社区治理" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1317" y="488" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="b3" value="M7 独立运维" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1317" y="603" width="296" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="n0" value="城院帮模块层次图" vertex="1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=43;fontColor=#233d51;fontStyle=1;">
-          <mxGeometry x="58" y="30" width="1592" height="53" as="geometry" />
-        </mxCell>
-        <mxCell id="n1" value="各节点的 M 编号与 IPO、接口及需求追踪保持一致" vertex="1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontColor=#233d51;fontStyle=0;">
-          <mxGeometry x="58" y="94" width="1592" height="36" as="geometry" />
+        <mxCell id="HLD04_48" value="M8 无独立 DFD 处理，承接 FR-P01–P03 公共交互需求并消费已授权接口结果，故以虚线单列。各模块 IPO 见图号；原子模块与图号对应关系见 HLD26。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="700" width="1119" height="25" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
@@ -1326,79 +1364,115 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="HLD18" name="HLD18 HIPO 编号与 IPO 卡">
-    <mxGraphModel grid="1" page="1" pageWidth="1680" pageHeight="720">
+  <diagram id="HLD18" name="HLD18 公开阅读 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="856">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="e0" value="" edge="1" parent="1" source="m2" target="h0" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
+        <mxCell id="HLD18_11" value="公开阅读 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_12" value="M2 公开阅读（2.1）· P2.1–P2.3 · FR-R01–FR-R06 · §6.2.3 变换分析" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="602" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_13" value="上层调用：公开区列表／详情页｜下层：M2.1–M2.3｜关联存储：D2｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="656" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD18_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_18" value="M2.1 请求验证（2.1.1）&#10;区分列表与详情，检查请求格式和范围，形成规范查询" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_19" value="M2.2 公开查询（2.1.2）&#10;按公开状态筛选，列表执行排序和分页，详情定位公开版本" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="354" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_20" value="M2.3 结果组装（2.1.3）&#10;列表项裁剪和分页元数据，详情组装正文、来源和可用公开媒体" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="491" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="312" as="sourcePoint" />
+            <mxPoint x="735.0" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD18_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="449" as="sourcePoint" />
+            <mxPoint x="735.0" y="491" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD18_23" value="请求字段&#10;岗位／专业／公司关键词、排序、分页参数，或 article_id（列表与详情两种入口）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="275.0" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="840" y="283" />
-              <mxPoint x="292" y="283" />
+              <mxPoint x="478" y="288.0" />
+              <mxPoint x="478" y="275.0" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e1" value="" edge="1" parent="1" source="m2" target="h1" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
+        <mxCell id="HLD18_25" value="D2 读取&#10;公开文章记录、公开版本指针、分类与媒体引用（I06）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="358" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="404.0" as="sourcePoint" />
+            <mxPoint x="520" y="401.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD18_27" value="列表响应&#10;列表项（可为空）与分页元数据" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="502.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="538.5" as="sourcePoint" />
+            <mxPoint x="1030" y="538.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD18_29" value="详情响应&#10;全文与公开媒体链接" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="598.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="538.5" as="sourcePoint" />
+            <mxPoint x="1030" y="634.5" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="840" y="283" />
-              <mxPoint x="840" y="283" />
+              <mxPoint x="988" y="538.5" />
+              <mxPoint x="988" y="634.5" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e2" value="" edge="1" parent="1" source="m2" target="h2" style="endArrow=block;endFill=1;strokeColor=#536878;fontSize=23;labelBackgroundColor=#ffffff;">
-          <mxGeometry as="geometry" relative="1">
+        <mxCell id="HLD18_31" value="错误回执&#10;参数无效或内容不可用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="694.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD18_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="275.0" as="sourcePoint" />
+            <mxPoint x="1030" y="730.5" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="840" y="283" />
-              <mxPoint x="1388" y="283" />
+              <mxPoint x="988" y="275.0" />
+              <mxPoint x="988" y="730.5" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="m2" value="M2 公开阅读" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="590" y="170" width="500" height="72" as="geometry" />
-        </mxCell>
-        <mxCell id="h0" value="M2.1 查询输入" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="62" y="325" width="460" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="c00" value="I 关键词、分类与页号" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="62" y="421" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c01" value="P 校验格式和范围" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="62" y="498" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c02" value="O 规范查询或输入错误" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="62" y="575" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="h1" value="M2.2 公开查询" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="610" y="325" width="460" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="c10" value="I 规范查询或文章标识" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="610" y="421" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c11" value="P 筛公开状态与版本" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="610" y="498" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c12" value="O 页数据或公开记录" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="610" y="575" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="h2" value="M2.3 公开投影" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f1f6;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1158" y="325" width="460" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="c20" value="I 公开版本与字段白名单" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1158" y="421" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c21" value="P 组装正文及媒体引用" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1158" y="498" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="c22" value="O 结果或不可用提示" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9f2ed;strokeColor=#233d51;fontSize=32;fontColor=#233d51;">
-          <mxGeometry x="1158" y="575" width="460" height="59" as="geometry" />
-        </mxCell>
-        <mxCell id="n0" value="HIPO 编号与 IPO 卡" vertex="1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=43;fontColor=#233d51;fontStyle=1;">
-          <mxGeometry x="58" y="30" width="1592" height="53" as="geometry" />
-        </mxCell>
-        <mxCell id="n1" value="层次关系见 HLD04  ·  其余模块的 IPO 见总体设计报告" vertex="1" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontColor=#233d51;fontStyle=0;">
-          <mxGeometry x="58" y="94" width="1592" height="36" as="geometry" />
+        <mxCell id="HLD18_33" value="M2.1 的规范查询交给 M2.2，公开记录交给 M2.3；模块内部交接不再列入输入输出栏。私有版本、作者隐私和失效内容不进入公开投影。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="810" width="997" height="25" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
@@ -1499,5 +1573,2041 @@
         </mxCell>
       </root>
     </mxGraphModel>
+  </diagram>
+  <diagram id="HLD20" name="HLD20 M1–M4 模块 IPO 索引与边界上下文">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="614">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD20_11" value="M1–M4 模块 IPO 索引与边界上下文" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="581" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_12" value="一模块一图 · 图号与 HLD04／HLD26 对应 · 上下文供详细设计与测试追溯" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="644" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_13" value="细化状态标明已出 IPO 的子模块；◇ 原子模块交接详细设计" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="465" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD20_15" value="模块（层级号）" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="72" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_16" value="IPO 图号" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="322" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_17" value="上层调用" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="492" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_18" value="关联存储" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="732" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_19" value="接口与需求" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="902" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_20" value="细化状态" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1152" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_21" value="M1 认证与会话（1.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="248" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_22" value="HLD29" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="248" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_23" value="小程序／网页登录入口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="248" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_24" value="D1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="248" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_25" value="FR-A01–A02、A04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="248" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_26" value="M1.1–M1.3 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="248" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_27" value="M2 公开阅读（2.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="322" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_28" value="HLD18" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="322" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_29" value="公开区列表／详情页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="322" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_30" value="D2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="322" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_31" value="FR-R01–R06" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="322" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_32" value="M2.1–M2.3 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="322" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_33" value="M3 草稿与发布（2.2）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="396" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_34" value="HLD22" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="396" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_35" value="两端创作工作区" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="396" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_36" value="D2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="396" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_37" value="FR-C01–C08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="396" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_38" value="M3.2 已细化；M3.1 ◇ 交接详设" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="396" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_39" value="M4 交流与联系（3.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="470" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_40" value="HLD30、HLD31" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="470" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_41" value="会员区文章页／作者页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="470" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_42" value="D1、D2、D3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="470" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_43" value="FR-I01–I07" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="470" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_44" value="M4.1、M4.2 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="470" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD20_45" value="上层调用指发起该模块请求的页面或进程入口；关联存储为 DFD 数据存储编号。接口字段级定义见 §6.2.5 与详细设计报告。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="568" width="900" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD21" name="HLD21 M5–M8 模块 IPO 索引与边界上下文">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="618">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD21_11" value="M5–M8 模块 IPO 索引与边界上下文" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="581" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_12" value="一模块一图 · 图号与 HLD04／HLD26 对应 · 上下文供详细设计与测试追溯" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="644" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_13" value="细化状态标明已出 IPO 的子模块；◇ 原子模块交接详细设计" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="465" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD21_15" value="模块（层级号）" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="72" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_16" value="IPO 图号" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="322" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_17" value="上层调用" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="492" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_18" value="关联存储" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="732" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_19" value="接口与需求" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="902" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_20" value="细化状态" style="text;html=1;fontSize=13;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1152" y="205" width="200" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_21" value="M5 奖励与账本（3.2）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="248" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_22" value="HLD23" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="248" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_23" value="会员区奖励／投币入口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="248" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_24" value="D4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="248" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_25" value="FR-G01–G04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="248" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_26" value="M5.2 已细化；M5.1 ◇ 交接详设" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="248" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_27" value="M6 社区治理（4.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="322" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_28" value="HLD24、HLD27" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="322" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_29" value="会员区举报入口／管理网页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="322" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_30" value="D5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="322" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_31" value="FR-M01–M03、M07" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="322" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_32" value="M6.1、M6.2 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="322" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_33" value="M7 独立运维（5.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="396" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_34" value="HLD25、HLD28" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="396" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_35" value="独立运维网页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="396" width="234" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_36" value="D6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="396" width="164" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_37" value="FR-O01–O08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="396" width="244" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_38" value="M7.1–M7.3 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="396" width="294" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_39" value="M8 导航与状态（6.1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="470" width="244" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_40" value="HLD32" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="310" y="470" width="164" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_41" value="两端页面层" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="470" width="234" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_42" value="端侧状态及已授权接口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="470" width="164" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_43" value="FR-P01–P03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="470" width="244" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_44" value="M8.1、M8.2 已细化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="470" width="294" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD21_45" value="上层调用指发起该模块请求的页面或进程入口；关联存储为 DFD 数据存储编号。接口字段级定义见 §6.2.5 与详细设计报告。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="572" width="900" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD22" name="HLD22 文章发布 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="846">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD22_11" value="文章发布 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_12" value="M3.2 发布控制（2.2.2）· P2.1–P2.3 · FR-C04–FR-C08 · §5.2.1 发布冲突" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="636" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_13" value="上层调用：M3 创作工作区｜下层：M3.2.1–M3.2.3｜关联存储：D2｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="648" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_18" value="M3.2.1 核对身份与请求&#10;校验权属及允许的状态，核对请求回执；新请求检查发布权限及修订" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_19" value="M3.2.2 校验草稿和资源&#10;检查发布必填项、分类以及图片归属与可用性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="375" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_20" value="M3.2.3 提交公开版本&#10;同一事务写入新版本、公开指针、请求回执及审计" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="491" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="333" as="sourcePoint" />
+            <mxPoint x="735.0" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="449" as="sourcePoint" />
+            <mxPoint x="735.0" y="491" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_23" value="请求字段&#10;作者会话、article_id、expectedRevision、requestId、发布确认" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_25" value="D2 读取&#10;本人草稿、分类、图片归属、既有公开版本与修订号" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="376.0" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="412.0" as="sourcePoint" />
+            <mxPoint x="520" y="412.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_27" value="发布回执&#10;新版本号、修订号；事务提交成功后才对公开阅读可见" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="492.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="528.0" as="sourcePoint" />
+            <mxPoint x="1030" y="528.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_29" value="拒绝回执&#10;权限或版本冲突、缺项或资源错误；同键返回原回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="588.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="624.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="624.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_31" value="D2 写入&#10;article_version、公开指针、请求回执与审计" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="684.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD22_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="528.0" as="sourcePoint" />
+            <mxPoint x="1030" y="720.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="528.0" />
+              <mxPoint x="988" y="720.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD22_33" value="原回执或校验失败结束当前请求。草稿保存与媒体管理（M3.1）为独立原子模块，交接详细设计。判定表见 §5.2.1。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="800" width="842" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD23" name="HLD23 文章投币 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="867">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD23_11" value="文章投币 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_12" value="M5.2 投币控制（3.2.2）· P3.1、P3.3–P3.4 · FR-G03、FR-G04 · §5.2.2 重复投币" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="705" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_13" value="上层调用：会员区投币入口｜下层：M5.2.1–M5.2.3｜关联存储：D4｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="650" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_18" value="M5.2.1 核对请求与回执&#10;查已提交回执，核对同键请求语义；同键同语义成功后可重放" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_19" value="M5.2.2 核对文章和钱包&#10;按文章再验可见性，核对作者、额度和余额，计算扣币指令" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="375" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_20" value="M5.2.3 记账与回执&#10;同一事务更新余额并追加账本事件与审计" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="512" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="333" as="sourcePoint" />
+            <mxPoint x="735.0" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="470" as="sourcePoint" />
+            <mxPoint x="735.0" y="512" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_23" value="请求字段&#10;认证主体、article_id、amount、requestId" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="249.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="285.5" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_25" value="D4 读取&#10;钱包余额、业务日额度、单篇投币数、既有请求回执（I14）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="376.5" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="422.5" as="sourcePoint" />
+            <mxPoint x="520" y="422.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_27" value="投币回执&#10;新余额与账本记录，或重放原回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="513.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="549.0" as="sourcePoint" />
+            <mxPoint x="1030" y="549.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_29" value="拒绝回执&#10;重复冲突、额度或余额不足、目标不可见" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="609.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="422.5" as="sourcePoint" />
+            <mxPoint x="1030" y="645.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="422.5" />
+              <mxPoint x="988" y="645.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_31" value="D4 写入&#10;coin_wallet、coin_event（I13）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="705.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD23_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="549.0" as="sourcePoint" />
+            <mxPoint x="1030" y="741.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="549.0" />
+              <mxPoint x="988" y="741.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD23_33" value="重复请求、额度不足和事务失败均可从回执或账本核查。奖励任务领取（M5.1）为独立原子模块，交接详细设计。判定表见 §5.2.2。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="821" width="954" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD24" name="HLD24 举报受理 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="603">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD24_11" value="举报受理 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_12" value="M6.1 举报受理（4.1.1）· P4.1 · FR-M01 · §5.2.3 处置冲突" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="518" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_13" value="上层调用：会员区举报入口（提交者）｜关联存储：D5，读 D1／D2｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="650" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_18" value="M6.1 收件并关联证据&#10;验证目标与证据归属，保存案件和关联上下文；只登记案件，不改变内容状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_19" value="请求字段&#10;认证提交者、举报对象 ID、理由、证据引用、requestId" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_20" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_21" value="D1／D2 读取&#10;提交者身份、对象归属与可见性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="358" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="394.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="394.0" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_23" value="受理回执&#10;案件 ID、初始状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_25" value="拒绝回执&#10;无权或对象不可用；同键返回原回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="345.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="381.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="381.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_27" value="D5 写入&#10;案件记录、证据关联（I27）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="441.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD24_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="477.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="477.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD24_29" value="受理与处置是两个角色、两个时点的请求：提交者受理见本图，管理员处置见 HLD27。判定表见 §5.2.3。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="557" width="763" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD25" name="HLD25 运维任务提交与执行 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="856">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD25_11" value="运维任务提交与执行 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="397" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_12" value="M7.1–M7.2（5.1.1–5.1.2）· P5.1–P5.2 · FR-O02、FR-O06–FR-O08 · §5.2.4 恢复失败" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="753" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_13" value="上层调用：独立运维网页｜下层：M7.1、M7.2.1–M7.2.2｜关联存储：D6｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="691" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_18" value="M7.1 授权与确认（5.1.1）&#10;核对运维授权和受控备份，绑定恢复范围并签发短期确认" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_19" value="M7.2.1 接收并持久化任务&#10;核对请求回执、确认绑定、有效期与互斥条件，生成独立运维任务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="354" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_20" value="M7.2.2 执行、核验与回退&#10;执行前复核，保留保护副本，恢复数据库和媒体等内容，核验健康；执行失败尝试保护回退" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="491" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="312" as="sourcePoint" />
+            <mxPoint x="735.0" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="449" as="sourcePoint" />
+            <mxPoint x="735.0" y="491" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_23" value="请求字段&#10;运维会话、动作码、固定目标、备份引用、确认标识、requestId" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="275.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="288.0" />
+              <mxPoint x="478" y="275.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_25" value="D6 读取&#10;受控备份清单、互斥条件与既有任务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="365.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="401.5" as="sourcePoint" />
+            <mxPoint x="520" y="401.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_27" value="受理回执&#10;确认标识与有效期、任务 ID；同语义重试返回原任务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="365.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="401.5" as="sourcePoint" />
+            <mxPoint x="1030" y="401.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_29" value="阶段事件&#10;执行进度、核验结果、回退结果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="502.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="538.5" as="sourcePoint" />
+            <mxPoint x="1030" y="538.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_31" value="拒绝回执&#10;不可用／不兼容、确认失效或互斥" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="598.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="275.0" as="sourcePoint" />
+            <mxPoint x="1030" y="634.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="275.0" />
+              <mxPoint x="988" y="634.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_33" value="D6 写入&#10;任务记录、阶段事件、保护副本标识" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="694.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD25_34" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="538.5" as="sourcePoint" />
+            <mxPoint x="1030" y="730.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="538.5" />
+              <mxPoint x="988" y="730.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD25_35" value="回退失败进入人工恢复。任务状态查询是独立请求，见 HLD28；业务停机时仍可查询。判定表见 §5.2.4。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="810" width="763" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD26" name="HLD26 模块子层分解（H 图续页）">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="1237">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD26_11" value="模块子层分解（H 图续页）" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="432" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_12" value="HLD04 的第四层分解 · 原子模块与 IPO 图一一对应 · 标 ◇ 的原子模块交接详细设计细化" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="759" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_13" value="框内为模块名与层级号 · 括号内为对应 IPO 图号" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="379" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_15" value="M1 认证与会话 1.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="70" y="200" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_16" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="232.5" y="249" as="sourcePoint" />
+            <mxPoint x="86" y="265" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="232.5" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_17" value="M1.1 挑战签发 1.1.1&#10;（HLD29）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="106" y="283" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_18" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="265" as="sourcePoint" />
+            <mxPoint x="86" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_19" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="316.0" as="sourcePoint" />
+            <mxPoint x="106" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_20" value="M1.2 校验与会话 1.1.2&#10;（HLD29）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="106" y="371" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_21" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="265" as="sourcePoint" />
+            <mxPoint x="86" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_22" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="404.0" as="sourcePoint" />
+            <mxPoint x="106" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_23" value="M1.3 状态与退出 1.1.3&#10;（HLD29）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="106" y="459" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_24" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="265" as="sourcePoint" />
+            <mxPoint x="86" y="492.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_25" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="492.0" as="sourcePoint" />
+            <mxPoint x="106" y="492.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_26" value="M2 公开阅读 2.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="430" y="200" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_27" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="592.5" y="249" as="sourcePoint" />
+            <mxPoint x="446" y="265" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="592.5" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_28" value="M2.1 请求验证 2.1.1&#10;（HLD18）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="283" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_29" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="265" as="sourcePoint" />
+            <mxPoint x="446" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_30" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="316.0" as="sourcePoint" />
+            <mxPoint x="466" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_31" value="M2.2 公开查询 2.1.2&#10;（HLD18）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="371" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_32" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="265" as="sourcePoint" />
+            <mxPoint x="446" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_33" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="404.0" as="sourcePoint" />
+            <mxPoint x="466" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_34" value="M2.3 结果组装 2.1.3&#10;（HLD18）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="459" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_35" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="265" as="sourcePoint" />
+            <mxPoint x="446" y="492.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_36" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="492.0" as="sourcePoint" />
+            <mxPoint x="466" y="492.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_37" value="M3 草稿与发布 2.2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="790" y="200" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_38" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="952.5" y="249" as="sourcePoint" />
+            <mxPoint x="806" y="265" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="952.5" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_39" value="M3.1 草稿与媒体 2.2.1 ◇&#10;（详设）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="826" y="283" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_40" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="265" as="sourcePoint" />
+            <mxPoint x="806" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_41" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="316.0" as="sourcePoint" />
+            <mxPoint x="826" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_42" value="M3.2 发布控制 2.2.2&#10;（HLD22）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="826" y="371" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_43" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="265" as="sourcePoint" />
+            <mxPoint x="806" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_44" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="404.0" as="sourcePoint" />
+            <mxPoint x="826" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_45" value="M3.2.1 核对身份与请求" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="862" y="459" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_46" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="437" as="sourcePoint" />
+            <mxPoint x="842" y="481.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_47" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="481.5" as="sourcePoint" />
+            <mxPoint x="862" y="481.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_48" value="M3.2.2 校验草稿和资源" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="862" y="518" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_49" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="437" as="sourcePoint" />
+            <mxPoint x="842" y="540.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_50" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="540.5" as="sourcePoint" />
+            <mxPoint x="862" y="540.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_51" value="M3.2.3 提交公开版本" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="862" y="577" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_52" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="437" as="sourcePoint" />
+            <mxPoint x="842" y="599.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_53" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="599.5" as="sourcePoint" />
+            <mxPoint x="862" y="599.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_54" value="M4 交流与联系 3.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="200" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_55" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1312.5" y="249" as="sourcePoint" />
+            <mxPoint x="1166" y="265" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1312.5" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_56" value="M4.1 评论互动 3.1.1&#10;（HLD30）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1186" y="283" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_57" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="265" as="sourcePoint" />
+            <mxPoint x="1166" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_58" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="316.0" as="sourcePoint" />
+            <mxPoint x="1186" y="316.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_59" value="M4.2 作者与联系 3.1.2&#10;（HLD31）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1186" y="371" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_60" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="265" as="sourcePoint" />
+            <mxPoint x="1166" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_61" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="404.0" as="sourcePoint" />
+            <mxPoint x="1186" y="404.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_62" value="M5 奖励与账本 3.2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="70" y="674" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_63" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="232.5" y="723" as="sourcePoint" />
+            <mxPoint x="86" y="739" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="232.5" y="739" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_64" value="M5.1 奖励任务 3.2.1 ◇&#10;（详设）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="106" y="757" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_65" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="739" as="sourcePoint" />
+            <mxPoint x="86" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_66" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="790.0" as="sourcePoint" />
+            <mxPoint x="106" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_67" value="M5.2 投币控制 3.2.2&#10;（HLD23）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="106" y="845" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_68" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="739" as="sourcePoint" />
+            <mxPoint x="86" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_69" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="86" y="878.0" as="sourcePoint" />
+            <mxPoint x="106" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_70" value="M5.2.1 核对请求与回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="142" y="933" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_71" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="911" as="sourcePoint" />
+            <mxPoint x="122" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_72" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="955.5" as="sourcePoint" />
+            <mxPoint x="142" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_73" value="M5.2.2 核对文章和钱包" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="142" y="992" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_74" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="911" as="sourcePoint" />
+            <mxPoint x="122" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_75" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="1014.5" as="sourcePoint" />
+            <mxPoint x="142" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_76" value="M5.2.3 记账与回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="142" y="1051" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_77" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="911" as="sourcePoint" />
+            <mxPoint x="122" y="1073.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_78" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="122" y="1073.5" as="sourcePoint" />
+            <mxPoint x="142" y="1073.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_79" value="M6 社区治理 4.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="430" y="674" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_80" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="592.5" y="723" as="sourcePoint" />
+            <mxPoint x="446" y="739" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="592.5" y="739" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_81" value="M6.1 举报受理 4.1.1&#10;（HLD24）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="757" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_82" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="739" as="sourcePoint" />
+            <mxPoint x="446" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_83" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="790.0" as="sourcePoint" />
+            <mxPoint x="466" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_84" value="M6.2 处置控制 4.1.2&#10;（HLD27）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="845" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_85" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="739" as="sourcePoint" />
+            <mxPoint x="446" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_86" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="446" y="878.0" as="sourcePoint" />
+            <mxPoint x="466" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_87" value="M6.2.1 调取上下文并认领" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="502" y="933" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_88" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="911" as="sourcePoint" />
+            <mxPoint x="482" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_89" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="955.5" as="sourcePoint" />
+            <mxPoint x="502" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_90" value="M6.2.2 决策与必要处置" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="502" y="992" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_91" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="911" as="sourcePoint" />
+            <mxPoint x="482" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_92" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="1014.5" as="sourcePoint" />
+            <mxPoint x="502" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_93" value="M6.2.3 回执与可见记录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="502" y="1051" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_94" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="911" as="sourcePoint" />
+            <mxPoint x="482" y="1073.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_95" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="482" y="1073.5" as="sourcePoint" />
+            <mxPoint x="502" y="1073.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_96" value="M7 独立运维 5.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="790" y="674" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_97" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="952.5" y="723" as="sourcePoint" />
+            <mxPoint x="806" y="739" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="952.5" y="739" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_98" value="M7.1 授权与确认 5.1.1&#10;（HLD25）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="826" y="757" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_99" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="739" as="sourcePoint" />
+            <mxPoint x="806" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_100" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="790.0" as="sourcePoint" />
+            <mxPoint x="826" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_101" value="M7.2 任务执行 5.1.2&#10;（HLD25）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="826" y="845" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_102" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="739" as="sourcePoint" />
+            <mxPoint x="806" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_103" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="878.0" as="sourcePoint" />
+            <mxPoint x="826" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_104" value="M7.2.1 接收并持久化任务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="862" y="933" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_105" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="911" as="sourcePoint" />
+            <mxPoint x="842" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_106" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="955.5" as="sourcePoint" />
+            <mxPoint x="862" y="955.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_107" value="M7.2.2 执行核验与回退" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="862" y="992" width="249" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_108" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="911" as="sourcePoint" />
+            <mxPoint x="842" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_109" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="842" y="1014.5" as="sourcePoint" />
+            <mxPoint x="862" y="1014.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_110" value="M7.3 状态查询 5.1.3&#10;（HLD28）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="826" y="1073" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_111" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="739" as="sourcePoint" />
+            <mxPoint x="806" y="1106.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_112" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="806" y="1106.0" as="sourcePoint" />
+            <mxPoint x="826" y="1106.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_113" value="M8 导航与状态 6.1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="674" width="325" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_114" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1312.5" y="723" as="sourcePoint" />
+            <mxPoint x="1166" y="739" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1312.5" y="739" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_115" value="M8.1 导航与个人入口 6.1.1&#10;（HLD32）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1186" y="757" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_116" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="739" as="sourcePoint" />
+            <mxPoint x="1166" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_117" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="790.0" as="sourcePoint" />
+            <mxPoint x="1186" y="790.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_118" value="M8.2 状态与通知展示 6.1.2&#10;（HLD32）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1186" y="845" width="285" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD26_119" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="739" as="sourcePoint" />
+            <mxPoint x="1166" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_120" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1166" y="878.0" as="sourcePoint" />
+            <mxPoint x="1186" y="878.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD26_121" value="◇ M3.1 草稿与媒体、M5.1 奖励任务为常规读写原子模块，过程细节交接详细设计报告；其余原子模块均有独立 IPO 图。层级号与 HLD04 一致。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1191" width="1051" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD27" name="HLD27 治理处置 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="963">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD27_11" value="治理处置 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_12" value="M6.2 处置控制（4.1.2）· P4.2–P4.3 · FR-M02、FR-M03、FR-M07 · §5.2.3 处置冲突" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="747" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_13" value="上层调用：社区管理网页（管理员）｜下层：M6.2.1–M6.2.3｜关联存储：D5，读写 D2／D3" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="723" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_18" value="M6.2.1 调取上下文并认领&#10;核对管理域权限，读取对应文章／评论、证据及当前受理人，按规则认领" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_19" value="M6.2.2 决策与必要处置&#10;核对当前受理人和修订，记录案件决策；需隐藏或恢复时走独立内容治理操作" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="375" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_20" value="M6.2.3 回执与可见记录&#10;核实已发生的治理操作，登记案件状态和允许查看的反馈" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="512" width="430" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="333" as="sourcePoint" />
+            <mxPoint x="735.0" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="470" as="sourcePoint" />
+            <mxPoint x="735.0" y="512" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_23" value="请求字段&#10;管理会话、案件 ID、expectedRevision、处置动作与理由" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_25" value="D5 读取&#10;案件上下文、当前修订、受控证据（I28）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="358" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="394.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="394.0" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_27" value="D2／D3 读取&#10;对象内容与评论当前状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="454" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="490.0" as="sourcePoint" />
+            <mxPoint x="520" y="422.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="490.0" />
+              <mxPoint x="478" y="422.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_29" value="处置回执&#10;案件决策、状态与受权审计事件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="513.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="549.0" as="sourcePoint" />
+            <mxPoint x="1030" y="549.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_31" value="拒绝回执&#10;认领冲突、修订冲突或无权" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="609.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="645.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="645.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_33" value="D5 写入&#10;案件状态、治理事件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="705.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_34" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="549.0" as="sourcePoint" />
+            <mxPoint x="1030" y="741.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="549.0" />
+              <mxPoint x="988" y="741.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_35" value="D2／D3 写入&#10;内容隐藏／恢复状态（经独立治理操作）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="801.0" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD27_36" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="422.5" as="sourcePoint" />
+            <mxPoint x="1030" y="837.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="422.5" />
+              <mxPoint x="988" y="837.0" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD27_37" value="案件判定为需治理时保留 NEEDS_ACTION；只有证实相应操作后才登记治理已完成。判定表见 §5.2.3。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="917" width="754" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD28" name="HLD28 运维任务状态查询 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="507">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD28_11" value="运维任务状态查询 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="363" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_12" value="M7.3 状态查询（5.1.3）· P5.3 · FR-O01、FR-O07" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="449" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_13" value="上层调用：独立运维网页｜关联存储：D6｜与 HLD25 为不同请求、不同时点" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="601" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD28_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_18" value="M7.3 查询阶段及终态（5.1.3）&#10;受理后可从独立入口查询；读取并脱敏任务和阶段事件，区分受理、执行与终态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_19" value="请求字段&#10;运维会话、任务 ID 或状态过滤条件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="249.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_20" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="285.5" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD28_21" value="D6 读取&#10;持久任务、阶段事件、脱敏日志" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="345.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="381.5" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="381.5" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD28_23" value="状态响应&#10;阶段、失败原因、回退结果或已核验的恢复结果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD28_25" value="拒绝回执&#10;无权或任务不存在" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="345.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD28_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="381.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="381.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD28_27" value="独立入口不依赖业务进程；进程重启后状态与错误仍可追溯（FR-O07）。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="461" width="541" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD29" name="HLD29 认证与会话 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="740">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD29_11" value="认证与会话 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="261" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_12" value="M1 认证与会话（1.1）· P1 · FR-A01、FR-A02、FR-A04" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_13" value="上层调用：小程序／网页登录入口｜下层：M1.1–M1.3｜关联存储：D1，外部 E4 邮件" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="673" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_18" value="M1.1 挑战签发与投递（1.1.1）&#10;入口：挑战请求。校验邮箱域与限流，签发挑战并经 E4 投递" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_19" value="M1.2 校验与会话建立（1.1.2）&#10;入口：登录请求。核对验证码域、时效与错误次数，登记或关联账号，建立会话" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="375" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_20" value="M1.3 状态查询与退出（1.1.3）&#10;入口：状态／退出请求。返回本人认证状态；退出使原令牌失效" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="512" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_21" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="333" as="sourcePoint" />
+            <mxPoint x="735.0" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="470" as="sourcePoint" />
+            <mxPoint x="735.0" y="512" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_23" value="请求字段&#10;校园邮箱（挑战入口）；邮箱＋验证码（登录入口）；会话令牌（状态／退出入口）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_25" value="D1 读取&#10;账号登记、挑战摘要、会话状态（I03／I04）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="386.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="422.5" as="sourcePoint" />
+            <mxPoint x="520" y="422.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_27" value="E4 邮件服务&#10;验证码投递回执（F07／F08）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="482.5" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="518.5" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="518.5" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_29" value="挑战回执&#10;签发结果与有效期" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_31" value="会话回执&#10;认证资料或会话令牌" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="386.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_32" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="422.5" as="sourcePoint" />
+            <mxPoint x="1030" y="422.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_33" value="拒绝回执&#10;验证码错误／过期、限流、失效令牌" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="482.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_34" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="422.5" as="sourcePoint" />
+            <mxPoint x="1030" y="518.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="422.5" />
+              <mxPoint x="988" y="518.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_35" value="D1 写入&#10;挑战摘要、会话登记与失效（I02）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="578.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD29_36" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="559.5" as="sourcePoint" />
+            <mxPoint x="1030" y="614.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="559.5" />
+              <mxPoint x="988" y="614.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD29_37" value="三个子模块各为独立入口，按模块职责链展示并共享 D1 账号状态；相邻的挑战→校验为两次请求。管理域与运维域凭据分域校验（FR-A06）。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="694" width="1034" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD30" name="HLD30 评论互动 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="616">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD30_11" value="评论互动 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_12" value="M4.1 评论互动（3.1.1）· P3.1–P3.2、P3.4 · FR-I01–FR-I04" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="529" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_13" value="上层调用：会员区文章页｜关联存储：D3，读 D1／D2｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="548" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_18" value="M4.1 评论互动（3.1.1）&#10;校验身份与目标可见性；写入评论／回复、点赞或收藏并维护计数；重试不重复计数；返回最新状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_19" value="请求字段&#10;认证会话、article_id／评论 ID、正文或图片引用、点赞／收藏动作、requestId" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_20" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_21" value="D1／D2 读取&#10;认证状态、文章可见性（I07–I10）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="358" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="394.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="394.0" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_23" value="D3 读取&#10;既有评论、计数与收藏状态（I12）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="454" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="490.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="490.0" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_25" value="互动回执&#10;评论、计数或收藏状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_27" value="拒绝回执&#10;访客受限、目标不可见、图片失败" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="345.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="381.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="381.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_29" value="D3 写入&#10;评论、认可、收藏记录（I11）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="441.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD30_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="477.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="477.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD30_31" value="评论管理边界（FR-I02）的删除与处置走 M6 治理；隐藏内容按受控规则处理。作者主页与联系方式见 HLD31。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="570" width="815" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD31" name="HLD31 作者主页与联系方式 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="699">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD31_11" value="作者主页与联系方式 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="397" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_12" value="M4.2 作者与联系（3.1.2）· P3.2、P3.4 · FR-I05–FR-I07" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="499" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_13" value="上层调用：会员区作者页／本人设置｜关联存储：D1，读 D2｜交接：§6.2.5" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="593" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_18" value="M4.2 作者与联系（3.1.2）&#10;校验认证与授权；按开关投影允许公开的作者资料；返回联系方式或拒绝原因；仅本人可维护设置" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_19" value="请求字段&#10;认证会话、作者 ID；本人联系开关与自愿站外联系设置" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_20" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_21" value="D1／D2 读取&#10;作者允许公开的资料、联系开关与自愿联系内容" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="358" width="380" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="394.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="478" y="394.0" />
+              <mxPoint x="478" y="285.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_23" value="主页响应&#10;允许公开的作者资料" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_25" value="联系响应&#10;自愿公开的站外联系方式或关闭原因" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="345.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="381.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="381.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_27" value="拒绝回执&#10;未认证或联系关闭" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="441.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="477.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="477.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_29" value="D1 写入&#10;本人联系开关与自愿联系设置" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="537.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD31_30" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="573.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="988" y="285.5" />
+              <mxPoint x="988" y="573.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD31_31" value="关闭联系后新请求不可读（FR-I06）；站外联系仅作者自愿公开（FR-I07）。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="653" width="566" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD32" name="HLD32 导航与状态 IPO">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="560">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD32_11" value="导航与状态 IPO" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="261" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_12" value="M8 导航与状态（6.1）· FR-P01–FR-P03 · 承接 P3.4／P4.3 结果展示" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="605" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_13" value="上层调用：两端页面层｜下层：M8.1–M8.2｜数据：端侧状态及已授权接口结果" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="621" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1440" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_15" value="输入 I（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="74" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_16" value="处理 P" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_17" value="输出 O（模块边界）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="195" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_18" value="M8.1 导航与个人入口（6.1.1）&#10;入口：页面导航。判断入口可用性，装配菜单、收藏、案件和通知视图" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="238" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_19" value="M8.2 状态与通知展示（6.1.2）&#10;入口：状态渲染。区分加载、空、失败、不可用；保留可恢复输入，给出重登或重试提示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="375" width="430" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_20" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735.0" y="333" as="sourcePoint" />
+            <mxPoint x="735.0" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_21" value="端侧状态&#10;当前路由、会话状态、本人工作区与分页操作（FR-P01）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="242" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_22" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="288.0" as="sourcePoint" />
+            <mxPoint x="520" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_23" value="已授权接口结果&#10;草稿、收藏、案件与通知数据（FR-P02、FR-I04、FR-M07）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="376.5" width="380" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_24" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="422.5" as="sourcePoint" />
+            <mxPoint x="520" y="422.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_25" value="页面导航&#10;菜单、本人列表与通知视图" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="249.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_26" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="285.5" as="sourcePoint" />
+            <mxPoint x="1030" y="285.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_27" value="状态提示&#10;加载、空、失败、不可用与恢复提示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="386.5" width="410" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD32_28" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="422.5" as="sourcePoint" />
+            <mxPoint x="1030" y="422.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD32_29" value="M8 不汇集业务写入，仅消费已授权接口结果；端侧会话与私有显示隔离。M8 由 FR-P01–P03 导出，无独立 DFD 处理，见 HLD04 说明。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="514" width="1004" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD33" name="HLD33 交流激励的设计精化 DFD">
+    <mxGraphModel grid="1" page="1" pageWidth="1680" pageHeight="860">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HLD33_11" value="交流激励的设计精化 DFD" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="34" width="409" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_12" value="DFD31 的交流与激励分支 · M4／M5／M8 的处理分配依据" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="86" width="522" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_13" value="P3.1 授权后分流：交流走 P3.2，奖励投币走 P3.3；结果统一经 P3.4 投影" style="text;html=1;fontSize=13;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="118" width="572" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_14" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="156" as="sourcePoint" />
+            <mxPoint x="1620" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_15" value="E1 平台用户" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="70" y="248" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_16" value="P3.1&#10;认证与对象校验" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="350" y="231" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_17" value="P3.2&#10;交流数据处理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="720" y="231" width="260" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_18" value="P3.4&#10;结果组织" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="231" width="240" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_19" value="P3.3&#10;奖励投币一致性处理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="330" y="442" width="300" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_20" value="F01.3" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="293" as="sourcePoint" />
+            <mxPoint x="350" y="293" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_21" value="已授权交流输入" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="278" as="sourcePoint" />
+            <mxPoint x="720" y="278" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_22" value="已授权奖励投币请求" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="355" as="sourcePoint" />
+            <mxPoint x="480" y="442" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_23" value="交流及联系展示结果" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="980" y="293" as="sourcePoint" />
+            <mxPoint x="1300" y="293" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_24" value="单次入账或拒绝结果" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="508" as="sourcePoint" />
+            <mxPoint x="1420" y="355" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1420" y="508" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_25" value="F02.3" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1420" y="231" as="sourcePoint" />
+            <mxPoint x="180" y="248" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1420" y="188" />
+              <mxPoint x="180" y="188" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_26" value="D1 账号认证资料" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="280" y="678" width="190" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_27" value="D2 经验版本与文件" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="480" y="678" width="190" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_28" value="D3 评论认可收藏" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="760" y="678" width="190" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_29" value="D4 奖励币与贡献" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="678" width="200" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_30" value="D5 举报反馈与处置" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="678" width="220" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="HLD33_31" value="I07／I08" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="343" as="sourcePoint" />
+            <mxPoint x="280" y="706" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="240" y="388" />
+              <mxPoint x="240" y="706" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_32" value="I09／I10" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="338" as="sourcePoint" />
+            <mxPoint x="670" y="706" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="700" y="378" />
+              <mxPoint x="700" y="706" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_33" value="I11／I12" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="355" as="sourcePoint" />
+            <mxPoint x="855" y="678" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_34" value="I13／I14" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="558" as="sourcePoint" />
+            <mxPoint x="1100" y="678" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_35" value="I27" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="980" y="318" as="sourcePoint" />
+            <mxPoint x="1400" y="678" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_36" value="I28" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1450" y="678" as="sourcePoint" />
+            <mxPoint x="1460" y="351" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HLD33_37" value="M4 承接 P3.2（评论互动 HLD30、作者与联系 HLD31），M5 承接 P3.3（投币 HLD23），M8 承接入口与 P3.4 结果展示（HLD32）。I19／I20 与 P4 的治理关联保留在 SRS DFD31 原图。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="810" width="1367" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HLD34" name="HLD34 文章发布业务流程（泳道与判定）">
+    <mxGraphModel grid="1" page="1" pageWidth="1500" pageHeight="1500"><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="HLD34_11" value="文章发布业务流程（泳道与判定）" style="text;html=1;fontSize=26;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="60" y="34" width="530" height="54" as="geometry"/></mxCell><mxCell id="HLD34_12" value="HLD34 · 可视化 §5.2.1 发布冲突判定表 · 作者端／M3／D2 三泳道" style="text;html=1;fontSize=14;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="60" y="86" width="582" height="30" as="geometry"/></mxCell><mxCell id="HLD34_13" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="126" as="sourcePoint"/><mxPoint x="1440" y="126" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_14" value="作者端（小程序／网页）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="280.0" y="159" width="218" height="28" as="geometry"/></mxCell><mxCell id="HLD34_15" value="M3 草稿与发布（业务后端）" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="750.0" y="159" width="253" height="28" as="geometry"/></mxCell><mxCell id="HLD34_16" value="D2 经验内容库" style="text;html=1;fontSize=14;fontColor=#203A4B;align=left;verticalAlign=top;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1220.0" y="159" width="200" height="28" as="geometry"/></mxCell><mxCell id="HLD34_17" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="500" y="188" as="sourcePoint"/><mxPoint x="500" y="1422" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_18" value="" style="endArrow=none;html=1;strokeColor=#C5D3DA;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1000" y="188" as="sourcePoint"/><mxPoint x="1000" y="1422" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_19" value="开始：提交发布请求&#10;草稿ID·修订号·请求键·媒体" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="210" width="360" height="72" as="geometry"/></mxCell><mxCell id="HLD34_20" value="M3.2.1 校验认证与草稿权属" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="560.0" y="330" width="380" height="64" as="geometry"/></mxCell><mxCell id="HLD34_21" value="认证／权属满足？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1"><mxGeometry x="590.0" y="432.0" width="320" height="96" as="geometry"/></mxCell><mxCell id="HLD34_22" value="同请求键且语义一致？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1"><mxGeometry x="590.0" y="572.0" width="320" height="96" as="geometry"/></mxCell><mxCell id="HLD34_23" value="同键异义 或 修订号过期？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1"><mxGeometry x="590.0" y="712.0" width="320" height="96" as="geometry"/></mxCell><mxCell id="HLD34_24" value="M3.2.3 校验输入与图片归属&#10;固化版本" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="560.0" y="860" width="380" height="72" as="geometry"/></mxCell><mxCell id="HLD34_25" value="事务更新公开指针＋媒体＋回执" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=1;bottom=1;left=0;right=0;fillColor=#FAF3E0;strokeColor=#BEAA78;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1040.0" y="980" width="360" height="72" as="geometry"/></mxCell><mxCell id="HLD34_26" value="事务提交成功？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#EDF4F6;strokeColor=#203A4B;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1070.0" y="1082.0" width="300" height="96" as="geometry"/></mxCell><mxCell id="HLD34_27" value="公开版本对 M2 可见" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2F1EE;strokeColor=#96B8B0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="1040.0" y="1230" width="360" height="60" as="geometry"/></mxCell><mxCell id="HLD34_28" value="结束：发布成功回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="1340" width="360" height="72" as="geometry"/></mxCell><mxCell id="HLD34_29" value="拒绝回执：禁止读改他人草稿" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="448" width="360" height="64" as="geometry"/></mxCell><mxCell id="HLD34_30" value="返回已登记回执（版本数保持）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="588" width="360" height="64" as="geometry"/></mxCell><mxCell id="HLD34_31" value="拒绝冲突：旧公开版本仍可读" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="728" width="360" height="64" as="geometry"/></mxCell><mxCell id="HLD34_32" value="回滚＋失败回执" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7F9;strokeColor=#B2C6D0;fontSize=13;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1"><mxGeometry x="100.0" y="1098" width="360" height="64" as="geometry"/></mxCell><mxCell id="HLD34_33" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="282" as="sourcePoint"/><mxPoint x="750" y="330" as="targetPoint"/><Array as="points"><mxPoint x="280" y="300"/><mxPoint x="750" y="300"/></Array></mxGeometry></mxCell><mxCell id="HLD34_34" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="750" y="394" as="sourcePoint"/><mxPoint x="750" y="432" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_35" value="是" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="750" y="528" as="sourcePoint"/><mxPoint x="750" y="572" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_36" value="否" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="590" y="480" as="sourcePoint"/><mxPoint x="460.0" y="480" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_37" value="否" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="750" y="668" as="sourcePoint"/><mxPoint x="750" y="712" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_38" value="是" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="590" y="620" as="sourcePoint"/><mxPoint x="460.0" y="620" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_39" value="否" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="750" y="808" as="sourcePoint"/><mxPoint x="750" y="860" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_40" value="是" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="590" y="760" as="sourcePoint"/><mxPoint x="460.0" y="760" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_41" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="940.0" y="896" as="sourcePoint"/><mxPoint x="1220" y="980" as="targetPoint"/><Array as="points"><mxPoint x="1220" y="896"/></Array></mxGeometry></mxCell><mxCell id="HLD34_42" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1220" y="1052" as="sourcePoint"/><mxPoint x="1220" y="1082" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_43" value="是" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1220" y="1178" as="sourcePoint"/><mxPoint x="1220" y="1230" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_44" value="否" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1070" y="1130" as="sourcePoint"/><mxPoint x="460.0" y="1130" as="targetPoint"/></mxGeometry></mxCell><mxCell id="HLD34_45" value="" style="endArrow=block;html=1;strokeColor=#6B808D;endFill=1;rounded=0;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1220" y="1290" as="sourcePoint"/><mxPoint x="460.0" y="1376" as="targetPoint"/><Array as="points"><mxPoint x="1220" y="1376"/></Array></mxGeometry></mxCell><mxCell id="HLD34_46" value="泳道为角色／模块边界，菱形为判定（对应 §5.2.1），圆角端框为起止或回执终点。异常路径就地返回回执并结束；仅事务提交成功后公开版本才对 M2 可见。" style="text;html=1;fontSize=12;fontColor=#526775;align=left;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="60" y="1448" width="1143" height="25" as="geometry"/></mxCell></root></mxGraphModel>
   </diagram>
 </mxfile>

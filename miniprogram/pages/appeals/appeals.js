@@ -6,7 +6,7 @@ const view = require('../../utils/community-view');
 const scope = 'appeal:input';
 const blank = { restrictions: [], records: [], total: 0, page: 0, loaded: false, activeCount: 0, selected: null, reason: '', pending: null, uncertain: false, notice: '' };
 Page({
-  data: Object.assign({ authStatus: 'checking', busy: false, error: '' }, blank),
+  data: Object.assign({ authStatus: 'checking', busy: false, error: '', visibleSection: 'restrictions' }, blank),
   onLoad(options) {
     this._preferredScope = ['PUBLISH', 'COMMENT'].includes(options.scope) ? options.scope : '';
     access.attach(this, blank, (why) => {
@@ -68,6 +68,10 @@ Page({
       this.setData({ restrictions: display, activeCount: active.length, records: [...records.values()], total: result.total, page: result.page, selected, loaded: true, error });
     } catch (e) { if (epoch === this._epoch) this.setData({ loaded: false, error: e.status === 404 ? '暂时无法读取处理记录，请稍后重试。' : access.errorText(e) }); }
     finally { if (epoch === this._epoch) this.setData({ busy: false }); }
+  },
+  showSection(e) {
+    const section = e.currentTarget.dataset.section;
+    if (section === 'restrictions' || section === 'records') this.setData({ visibleSection: section });
   },
   refresh() { return this.load(true); },
   more() { if (this.data.records.length < this.data.total) return this.load(false); },
