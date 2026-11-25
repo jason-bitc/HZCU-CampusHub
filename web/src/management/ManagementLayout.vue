@@ -87,7 +87,8 @@ onMounted(init);
       <RouterLink
         class="console-brand"
         :to="ops ? '/ops/overview' : '/admin/cases'"
-        >城院帮</RouterLink
+        ><img v-if="!preview" src="/campushub-logo.png" alt="" />
+        <span>城院帮</span></RouterLink
       >
       <p class="console-domain">{{ ops ? "独立运维" : "社区管理" }}</p>
       <nav :aria-label="ops ? '运维导航' : '社区管理导航'">

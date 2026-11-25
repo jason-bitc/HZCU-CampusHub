@@ -40,6 +40,7 @@ const busy = ref(false);
 const error = ref("");
 const owner = computed(() => value("owner") || "all");
 const listPanel = ref<HTMLElement>();
+const kindFilter = ref<HTMLSelectElement>();
 const hasFilters = computed(
   () => owner.value !== "all" || !!value("kind") || !!value("state"),
 );
@@ -63,6 +64,10 @@ function change(key: string, text: string) {
   if (text) Object.assign(q, { [key]: text });
   else delete q[key];
   void router.push({ path: "/admin/cases", query: q });
+}
+async function resetFilters() {
+  await router.push({ path: "/admin/cases", query: {} });
+  kindFilter.value?.focus({ preventScroll: true });
 }
 function target(row: CaseRow) {
   return row.targetType === "COMMENT"
@@ -184,6 +189,7 @@ onBeforeUnmount(() => generation++);
       <div class="console-filterbar">
         <label class="console-inline-label"
           >类型<select
+            ref="kindFilter"
             aria-label="案件类型"
             :value="value('kind')"
             @change="change('kind', ($event.target as HTMLSelectElement).value)"
@@ -221,9 +227,19 @@ onBeforeUnmount(() => generation++);
             <option value="mine">仅本人</option>
             <option value="free">未分配</option>
           </select></label
-        ><button class="console-link" :disabled="busy" @click="load">
-          刷新当前状态
-        </button>
+        >
+        <div class="console-filter-actions">
+          <button
+            :class="{ 'console-primary': !preview }"
+            :disabled="busy"
+            @click="load"
+          >
+            刷新当前状态
+          </button>
+          <button v-if="!preview && hasFilters" @click="resetFilters">
+            重置筛选
+          </button>
+        </div>
       </div>
       <ConsoleReadState
         :loading="busy"
@@ -288,14 +304,18 @@ onBeforeUnmount(() => generation++);
                 {{ dateText(row.createdAt) }}
               </td>
               <td data-label="状态 / 负责人" role="cell">
-                {{ caseStates[row.state] }} /
-                {{
-                  row.assigneeId === null
-                    ? "未分配"
-                    : row.assigneeId === adminSession.me?.adminId
-                      ? "本人"
-                      : `管理员 ${row.assigneeId}`
-                }}
+                <span class="console-case-owner"
+                  ><span class="console-case-state" :data-state="row.state">{{
+                    caseStates[row.state]
+                  }}</span>
+                  {{
+                    row.assigneeId === null
+                      ? "未分配"
+                      : row.assigneeId === adminSession.me?.adminId
+                        ? "本人"
+                        : `管理员 ${row.assigneeId}`
+                  }}</span
+                >
               </td>
               <td data-label="操作" role="cell">
                 <RouterLink
