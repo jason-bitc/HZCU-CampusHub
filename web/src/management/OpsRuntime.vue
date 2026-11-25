@@ -538,9 +538,15 @@ onBeforeUnmount(() => {
         ><div class="console-stat-grid ops-overview-stats">
           <section class="console-panel console-stat">
             <span>业务服务</span
-            ><strong>{{
-              status ? (status.healthy ? "健康" : "未通过健康检查") : "未读取"
-            }}</strong>
+            ><strong
+              class="ops-health"
+              :data-health="
+                status ? (status.healthy ? 'up' : 'down') : 'unknown'
+              "
+              >{{
+                status ? (status.healthy ? "健康" : "未通过健康检查") : "未读取"
+              }}</strong
+            >
             <p>
               {{
                 status?.managedProcessRunning
@@ -588,6 +594,117 @@ onBeforeUnmount(() => {
           </div>
         </section></template
       >
+      <section v-if="page === 'logs'" class="console-panel ops-logs-panel">
+        <form class="console-filterbar" @submit.prevent="load">
+          <label class="console-inline-label"
+            >追踪号<input
+              v-model="logTrace"
+              placeholder="小写 UUID"
+              pattern="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+          /></label>
+          <label class="console-inline-label"
+            >条数<select v-model.number="logLimit">
+              <option :value="20">20</option>
+              <option :value="50">50</option>
+              <option :value="100">100</option>
+            </select></label
+          >
+          <label class="console-check"
+            ><input v-model="logOnlyErrors" type="checkbox" />仅错误请求</label
+          >
+          <button :disabled="loading">查询日志</button>
+        </form>
+        <ConsoleReadState
+          :error="logError"
+          :stale="!!logs"
+          :loading="loading"
+          label="正在读取日志…"
+          @retry="load"
+        />
+        <p
+          v-if="
+            logs &&
+            (logError ||
+              submittedLogQuery !==
+                opsLogQuery(logTrace, logOnlyErrors, logLimit))
+          "
+          class="hint"
+        >
+          下方记录来自上次成功查询。
+        </p>
+        <h2>必要请求字段与任务事件</h2>
+        <div v-if="logs" class="ops-log-groups">
+          <section aria-labelledby="ops-task-log-heading">
+            <h3 id="ops-task-log-heading">任务阶段日志</h3>
+            <ol
+              v-if="logs.taskEvents.length"
+              class="ops-log-stream"
+              aria-labelledby="ops-task-log-heading"
+              tabindex="0"
+            >
+              <li
+                v-for="(event, index) in logs.taskEvents"
+                :key="index"
+                class="ops-log-record"
+              >
+                <div class="ops-log-meta">
+                  <time :datetime="event.occurredAt">{{
+                    dateText(event.occurredAt)
+                  }}</time>
+                  <span class="console-log-badge">{{
+                    phases[event.phase] || event.phase
+                  }}</span>
+                </div>
+                <CopyValue :value="event.jobId" label="任务 ID" />
+              </li>
+            </ol>
+            <p v-else class="ops-log-empty">暂无任务阶段日志。</p>
+          </section>
+          <section aria-labelledby="ops-request-log-heading">
+            <h3 id="ops-request-log-heading">业务安全请求日志</h3>
+            <ol
+              v-if="logs.businessRequests.length"
+              class="ops-log-stream"
+              aria-labelledby="ops-request-log-heading"
+              tabindex="0"
+            >
+              <li
+                v-for="(request, index) in logs.businessRequests"
+                :key="index"
+                class="ops-log-record"
+              >
+                <div class="ops-log-meta">
+                  <strong
+                    >{{ request.action || "—" }} /
+                    {{ request.module || "—" }}</strong
+                  >
+                  <span
+                    class="console-log-badge"
+                    :class="{
+                      'console-log-error': Number(request.status) >= 400,
+                    }"
+                  >
+                    {{ request.status || "—" }} / {{ request.code || "—" }}
+                  </span>
+                  <span v-if="request.durationMs"
+                    >{{ request.durationMs }} ms</span
+                  >
+                </div>
+                <CopyValue
+                  v-if="request.traceId"
+                  :value="request.traceId"
+                  label="追踪编号"
+                />
+                <span v-else>追踪编号 —</span>
+              </li>
+            </ol>
+            <p v-else class="ops-log-empty">暂无业务安全请求日志。</p>
+          </section>
+        </div>
+        <p class="console-muted">
+          仅展示合同提供的有限字段，不读取原始日志、SQL、凭据或运行目录。
+        </p>
+      </section>
       <section
         v-if="['overview', 'logs', 'exceptions'].includes(page)"
         class="console-panel ops-task-list"
@@ -642,6 +759,7 @@ onBeforeUnmount(() => {
                 <td data-label="状态" role="cell">
                   <span
                     class="console-badge"
+                    :data-state="row.state"
                     :class="{
                       negative: ['FAILED', 'INTERRUPTED'].includes(row.state),
                     }"
@@ -662,74 +780,6 @@ onBeforeUnmount(() => {
             </tbody>
           </table>
         </div>
-      </section>
-      <section v-if="page === 'logs'" class="console-panel ops-logs-panel">
-        <form class="console-filterbar" @submit.prevent="load">
-          <label class="console-inline-label"
-            >追踪号<input
-              v-model="logTrace"
-              placeholder="小写 UUID"
-              pattern="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-          /></label>
-          <label class="console-inline-label"
-            >条数<select v-model.number="logLimit">
-              <option :value="20">20</option>
-              <option :value="50">50</option>
-              <option :value="100">100</option>
-            </select></label
-          >
-          <label class="console-check"
-            ><input v-model="logOnlyErrors" type="checkbox" />仅错误请求</label
-          >
-          <button :disabled="loading">查询日志</button>
-        </form>
-        <ConsoleReadState
-          :error="logError"
-          :stale="!!logs"
-          :loading="loading"
-          label="正在读取日志…"
-          @retry="load"
-        />
-        <p
-          v-if="
-            logs &&
-            (logError ||
-              submittedLogQuery !==
-                opsLogQuery(logTrace, logOnlyErrors, logLimit))
-          "
-          class="hint"
-        >
-          下方记录来自上次成功查询。
-        </p>
-        <h2>必要请求字段与任务事件</h2>
-        <ConsoleTable
-          v-if="logs"
-          :columns="['时间', '任务', '阶段']"
-          :rows="
-            logs?.taskEvents.map((e) => [
-              dateText(e.occurredAt),
-              e.jobId,
-              phases[e.phase] || e.phase,
-            ]) || []
-          "
-          :copy-columns="[1]"
-          empty="暂无任务阶段日志。"
-        /><ConsoleTable
-          :copy-columns="[0]"
-          :columns="['追踪编号', '动作 / 模块', '状态 / 错误码', '耗时ms']"
-          :rows="
-            logs?.businessRequests.map((r) => [
-              r.traceId || '—',
-              `${r.action || '—'} / ${r.module || '—'}`,
-              `${r.status || '—'} / ${r.code || '—'}`,
-              r.durationMs || '—',
-            ]) || []
-          "
-          empty="暂无业务安全请求日志。"
-        />
-        <p class="console-muted">
-          仅展示合同提供的有限字段，不读取原始日志、SQL、凭据或运行目录。
-        </p>
       </section>
       <template
         v-if="['deploy', 'restart', 'backups', 'restore'].includes(page)"

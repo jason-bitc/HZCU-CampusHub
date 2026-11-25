@@ -24,14 +24,16 @@ assert(
   !restoreOnly || /^[a-f0-9-]{36}$/.test(restoreOnly),
   "Pass the isolated backup identifier.",
 );
-const out = resolve(
-  root,
-  packaged
-    ? "ops-evidence-packaged-failed"
-    : restoreOnly
-      ? "ops-restore-repeat"
-      : "ops-evidence",
-);
+const out =
+  process.env.CAMPUSHUB_OPS_REPORT_DIR ||
+  resolve(
+    root,
+    packaged
+      ? "ops-evidence-packaged-failed"
+      : restoreOnly
+        ? "ops-restore-repeat"
+        : "ops-evidence",
+  );
 await mkdir(out, { recursive: true });
 const base = "http://127.0.0.1:5175/#/ops";
 const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -188,6 +190,17 @@ try {
       fullPage: true,
     });
     report.checks.push("独立运维在业务不可用时成功登录并打开日志");
+    const taskLogs = page.getByRole("heading", { name: "任务阶段日志" });
+    const businessLogs = page.getByRole("heading", {
+      name: "业务安全请求日志",
+    });
+    await taskLogs.waitFor();
+    await businessLogs.waitFor();
+    const streams = page.locator(".ops-log-stream");
+    for (const stream of await streams.all()) {
+      await stream.focus();
+      assert(await stream.evaluate((el) => el === document.activeElement));
+    }
     await page.getByRole("checkbox", { name: "仅错误请求" }).check();
     await page.route("**/api/v1/ops/logs?*", (r) => r.abort("failed"), {
       times: 1,
