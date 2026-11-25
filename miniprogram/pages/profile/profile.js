@@ -2,7 +2,7 @@ const api = require('../../services/member');
 const access = require('../../utils/member-page');
 const stages = ['UNSET', 'ENROLLED', 'GRADUATED'];
 const types = ['WECHAT', 'QQ', 'WEB'];
-const blank = { profile: null, contact: null, conflict: null, nickname: '', bio: '', majorId: null, majorName: '暂不填写', stageIndex: 0, contactValue: '', enabled: false };
+const blank = { profile: null, contact: null, conflict: null, nickname: '', bio: '', majorId: null, majorName: '暂不填写', stageIndex: 0, contactValue: '', enabled: false, feedbackKind: '' };
 Page({
   data: Object.assign({ authStatus: 'checking', busy: false, error: '', notice: '', majors: [], stageNames: ['未设置', '在校', '毕业'], typeNames: ['微信', 'QQ', '网站链接'], typeIndex: 0 }, blank),
   onLoad() { access.attach(this, blank); },
@@ -30,6 +30,7 @@ Page({
   async save(e) {
     if (this.data.busy || this.data.conflict) return;
     const kind = e.currentTarget.dataset.kind; const isProfile = kind === 'profile'; if (!this.data.profile || !this.data.contact) return;
+    this.setData({ feedbackKind: kind, error: '', notice: '' });
     const body = isProfile ? { expectedRevision: this.data.profile.revision, nickname: this.data.nickname, majorId: this.data.majorId, currentStage: stages[this.data.stageIndex], bio: this.data.bio } : { expectedRevision: this.data.contact.revision, enabled: this.data.enabled, type: this.data.contactValue.trim() ? types[this.data.typeIndex] : null, value: this.data.contactValue.trim() ? this.data.contactValue : null };
     if (isProfile && (!body.nickname.trim() || Array.from(body.nickname.trim()).length > 40)) { this.setData({ error: '昵称须为 1–40 个字符' }); return; }
     if (!isProfile && body.enabled && !body.value) { this.setData({ error: '开启联系前请填写联系方式' }); return; }

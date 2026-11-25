@@ -85,7 +85,11 @@ Page({
       });
       member.startReading(id).catch(() => {});
     } catch (error) { if (round === this.memberRound) this.setData({ memberError: access.errorText(error) }); }
-    finally { if (round === this.memberRound) this.setData({ privateLoading: false }); }
+    finally {
+      if (round === this.memberRound) {
+        await new Promise((resolve) => this.setData({ privateLoading: false }, resolve));
+      }
+    }
   },
   login() {
     if (this._loginBookmark) return;

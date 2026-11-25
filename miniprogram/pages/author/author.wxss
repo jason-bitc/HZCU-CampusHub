@@ -1,1 +1,3 @@
+@import '../../styles/flow.wxss';
 .author-bio { margin: 24rpx 0; white-space: pre-wrap; }
+.author-summary .form-title { margin-top: 0; } .author-page article-card { display: block; margin-block: 18rpx; }

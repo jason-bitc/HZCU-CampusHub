@@ -1,0 +1,30 @@
+# G04 小程序视觉改造验收
+
+基线为 main 134f8f7，包含 PR #42。工程维持原生微信小程序，使用 demoMode:false 和本机 8080 业务服务。本次采用浅灰页面、白卡、蓝色主操作和柔和状态色，次要文字取 #5D687A 以保持阅读对比度。
+
+| 页面与需求工作范围 | 改前 | 改后与复现 |
+| --- | --- | --- |
+| M01–M04 发现、搜索与筛选，WBS 5.4.2，FR-R01–R04 | 搜索、筛选、排序缺少明显分区，列表标题与元信息视觉权重接近 | 搜索独立一行，已选条件浅色标签，排序用分段区域。搜索 Java 岗位，切换同专业，查看标签，再用无匹配关键词触发对应反馈。 |
+| M05–M06 长文及互动，WBS 5.4.2／5.8，FR-R05–R06、FR-I01–I04 | 正文、互动操作的视觉节奏接近，窄屏动作把标签挤在一起 | 打开 2005 号完整演示文章，从目录跳到末章，收藏后返回。阅读器保留实测 44×44 CSS 像素方框目录，正文与底部动作独立分区。 |
+| M20–M24 作者工作区、草稿与发布，WBS 5.6／5.7，FR-C01–C09、FR-P01 | 作者状态和编辑器入口样式接近，图片上传和保存视觉关联过强 | 工作区使用分段状态。编辑器将标题、正文、图片、发布信息分组，继续输入时上传按图片单独反馈。新建草稿，发起不完整预览，从检查项进入对应区块。 |
+| M16、M29–M31 个人服务、限制与申诉、通知，WBS 5.7–5.9，FR-A04–A05、FR-M01、FR-M04、FR-P01–P02 | 个人入口主要靠文本，钱包使用深色卡片 | 白色资料卡及账本、双色状态标签、四列高频入口，其他设置垂直排列。“我的限制与申诉”进入独立页，以当前限制及申诉记录分区查看。 |
+
+## 验证记录
+
+- 自动化共 56 项。run.js 10 项，behavior.js 14 项，member-behavior.js 32 项。新增一个图片上传失败并以相同 requestId 重试的回归，同时检查最新正文与图片链接。
+- 真实 API 脚本 21 条 HTTP 记录。健康、分类目录、分页、岗位／专业／公司／主题组合、无匹配和文章均为 200，未公开文章为 404 NOT_FOUND，非法空岗位为 400 INVALID_PARAMETER。
+- 微信开发者工具 320 CSS 像素实际走查通过。读者 11 项，创作 6 项。Java 岗位及同专业、空结果、末章定位、实际收藏回读、列表滚动恢复、游客登录后返回同文章和章节、发布缺项显示和定位均已检查。
+- 320px 胶囊实测左缘 227、右缘 314、顶部 28、高 32。先上传测试图并保存，从第二会话更新同一草稿，再用旧修订号保存。模拟器出现真实 409，本机正文、新段落和图片引用保留。首次工具下载超时，使用模拟器运行时直接下载并重新验证成功。
+- 375 CSS 像素 iPhone 12/13 mini 模拟器通过 9 项。胶囊左缘 281、右缘 368、顶部 51、高 32。发现、长文、工作区、编辑、个人中心读取实际数据。检查搜索触控高度和主要容器横向边界，长文目录为 44×44，末章定位成功。复现可在模拟器底部机型菜单切换后按表中路径验证。真机、真实邮箱和真实用户验收待执行。
+
+## 截图
+
+- [发现改前](visual-refresh-20261117/before-native-discover.jpg) · [发现改后](visual-refresh-20261117/after-native-discover-final-320.jpg) · [筛选后](visual-refresh-20261117/M02-filter-applied.jpg)
+- [阅读改前](visual-refresh-20261117/before-native-article.jpg) · [收藏后](visual-refresh-20261117/M06-reader-favorite.jpg)
+- [发布检查清单](visual-refresh-20261117/M22-publish-checklist.jpg)
+
+- [真实图片上传](visual-refresh-20261117/M21-image-uploaded.jpg) · [真实 409 保留输入](visual-refresh-20261117/M24-draft-conflict.jpg)
+- [个人中心改前](visual-refresh-20261117/before-native-me.jpg) · [个人中心改后](visual-refresh-20261117/after-native-me-320.jpg)
+- [工作区改前](visual-refresh-20261117/before-native-workspace.jpg) · [工作区改后](visual-refresh-20261117/after-native-workspace-320.jpg)
+
+- 375px [发现](visual-refresh-20261117/after-native-discover-375.jpg) · [长文](visual-refresh-20261117/after-native-article-375.jpg) · [工作区](visual-refresh-20261117/after-native-workspace-375.jpg) · [编辑](visual-refresh-20261117/after-native-editor-375.jpg) · [个人中心](visual-refresh-20261117/after-native-me-375.jpg)

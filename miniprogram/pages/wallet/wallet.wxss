@@ -1,1 +1,15 @@
-.wallet-balance { margin: 24rpx 0; font-size: 40rpx; font-weight: 700; }
+@import '../../styles/sections.wxss';
+@import '../../styles/flow.wxss';
+.wallet-refresh, .reward-row button { padding: 0; font-size: 26rpx; }
+.wallet-overview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); text-align: center; }
+.wallet-metric { min-width: 0; overflow-wrap: anywhere; }
+.wallet-metric + .wallet-metric { border-left: 1rpx solid var(--color-border); }
+.wallet-value { display: block; font-size: 48rpx; line-height: 1.15; font-weight: 700; font-variant-numeric: tabular-nums; }
+.reward-card, .ledger-card { padding-top: 6rpx; padding-bottom: 10rpx; }
+.reward-row, .ledger-entry { display: flex; align-items: center; justify-content: space-between; gap: 10rpx 16rpx; padding: 16rpx 0; }
+.reward-row + .reward-row, .ledger-entry + .ledger-entry { border-top: 1rpx solid var(--color-border); }
+.reward-row button, .reward-row .status-tag, .ledger-value { flex: none; }
+.reward-row .hint, .ledger-entry .hint { font-size: 25rpx; }
+.ledger-copy { flex: 1; min-width: 0; }
+.ledger-value { color: var(--color-text); font-size: 34rpx; font-weight: 650; font-variant-numeric: tabular-nums; }
+.ledger-income { color: var(--color-success); }

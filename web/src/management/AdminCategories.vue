@@ -4,9 +4,10 @@ import { useRoute, useRouter } from "vue-router";
 import { adminRequest, adminSession } from "./client";
 import { kinds, useMutation } from "./governance";
 import type { Category, Page } from "./governance";
-import { message } from "../lib/api";
 import AdminGate from "./AdminGate.vue";
 import ConsolePager from "./ConsolePager.vue";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import { consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 const route = useRoute(),
   router = useRouter();
@@ -34,7 +35,6 @@ async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  data.value = undefined;
   try {
     const p = new URLSearchParams({
       page: String(Math.max(1, Number(route.query.page) || 1)),
@@ -45,17 +45,16 @@ async function load() {
     if (current !== generation) return;
     data.value = result;
     mutation.restore();
-    if (!mutation.pending.value) merging.value = undefined;
     if (editing.value) {
       const fresh = result.items.find((row) => row.id === editing.value?.id);
-      if (fresh) edit(fresh);
+      if (fresh) editing.value = fresh;
       else {
         editing.value = undefined;
         showForm.value = false;
       }
     }
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   } finally {
     if (current === generation) busy.value = false;
   }
@@ -71,14 +70,16 @@ function edit(row?: Category) {
   reason.value = "";
   showForm.value = true;
 }
-async function chooseMerge(row: Category) {
+async function chooseMerge(row: Category, preserve = false) {
   if (frozen.value || row.canonicalId || !mutation.allowed.value) return;
   const current = generation;
   showForm.value = false;
   merging.value = row;
-  targets.value = [];
-  canonical.value = undefined;
-  mergeReason.value = "";
+  if (!preserve) {
+    targets.value = [];
+    canonical.value = undefined;
+    mergeReason.value = "";
+  }
   busy.value = true;
   error.value = "";
   try {
@@ -97,19 +98,33 @@ async function chooseMerge(row: Category) {
     }
     if (current === generation) targets.value = [...options.values()];
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   } finally {
     if (current === generation) busy.value = false;
   }
+}
+async function refreshMerge() {
+  const id = merging.value?.id;
+  await load();
+  if (error.value || !id) return;
+  const row = data.value?.items.find((item) => item.id === id);
+  if (!row || row.canonicalId) {
+    error.value = "源分类已经变更或离开当前列表，请核对列表中的状态。";
+    return;
+  }
+  await chooseMerge(row, true);
 }
 async function merge() {
   const from = merging.value;
   const to = targets.value.find((row) => row.id === canonical.value);
   if (!from || !to || frozen.value || !mergeReason.value.trim()) return;
   if (
-    !window.confirm(
-      `确认把“${from.name}”归并到“${to.name}”？原文章引用由服务端保留。`,
-    )
+    !(await modal.value?.ask({
+      title: "确认归并同义分类？",
+      detail: `源分类 ${from.name}（${from.id}，修订 ${from.revision}）将归入 ${to.name}（${to.id}，修订 ${to.revision}）。归并作用于当前分类及公开目录，原文章引用仍由服务端保留。\n\n归并理由：${mergeReason.value.trim()}`,
+      action: "归并到 " + to.name,
+      danger: true,
+    }))
   )
     return;
   await mutation.start(
@@ -123,7 +138,8 @@ async function merge() {
     },
     "归并同义分类",
   );
-  if (!mutation.pending.value) merging.value = undefined;
+  if (!mutation.pending.value && mutation.notice.value)
+    merging.value = undefined;
 }
 async function save() {
   if (frozen.value) return;
@@ -148,7 +164,7 @@ async function save() {
     },
     editing.value ? "更新分类" : "创建分类",
   );
-  if (!mutation.pending.value) showForm.value = false;
+  if (!mutation.pending.value && mutation.notice.value) showForm.value = false;
 }
 function turn(page: number) {
   void router.push({ query: { ...route.query, page: String(page) } });
@@ -156,10 +172,12 @@ function turn(page: number) {
 onMounted(load);
 watch(() => [route.query, adminSession.status], load);
 onBeforeUnmount(() => generation++);
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <h1 class="console-title">岗位、专业、公司与主题</h1>
   <AdminGate>
+    <ConsoleConfirm ref="modal" />
     <p v-if="error" class="error" role="alert">
       {{ error }} <button :disabled="busy" @click="load">重新读取</button>
     </p>
@@ -194,23 +212,23 @@ onBeforeUnmount(() => generation++);
       </div>
       <p v-if="busy" role="status">正在读取分类…</p>
       <div v-if="data" class="console-table-wrap">
-        <table class="console-table">
-          <thead>
-            <tr>
-              <th>标准名称</th>
-              <th>类型</th>
-              <th>状态</th>
-              <th>排序 / 修订</th>
-              <th>操作</th>
+        <table class="console-table console-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">标准名称</th>
+              <th scope="col" role="columnheader">类型</th>
+              <th scope="col" role="columnheader">状态</th>
+              <th scope="col" role="columnheader">排序 / 修订</th>
+              <th scope="col" role="columnheader">操作</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="row in data.items" :key="row.id">
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row" v-for="row in data.items" :key="row.id">
+              <td data-label="标准名称" role="cell">
                 {{ row.name }}<small>分类 {{ row.id }}</small>
               </td>
-              <td>{{ kinds[row.kind] }}</td>
-              <td>
+              <td data-label="类型" role="cell">{{ kinds[row.kind] }}</td>
+              <td data-label="状态" role="cell">
                 {{
                   row.canonicalId
                     ? `已归并至分类 ${row.canonicalId}`
@@ -219,8 +237,10 @@ onBeforeUnmount(() => generation++);
                       : "已停用"
                 }}
               </td>
-              <td>{{ row.displayOrder }} / {{ row.revision }}</td>
-              <td>
+              <td data-label="排序 / 修订" role="cell">
+                {{ row.displayOrder }} / {{ row.revision }}
+              </td>
+              <td data-label="操作" role="cell">
                 <button
                   v-if="!row.canonicalId"
                   :disabled="frozen || !mutation.allowed.value"
@@ -237,8 +257,8 @@ onBeforeUnmount(() => generation++);
                 </button>
               </td>
             </tr>
-            <tr v-if="!data.items.length">
-              <td colspan="5">当前分类暂无标签。</td>
+            <tr role="row" v-if="!data.items.length">
+              <td role="cell" colspan="5">当前分类暂无标签。</td>
             </tr>
           </tbody>
         </table>
@@ -256,6 +276,17 @@ onBeforeUnmount(() => generation++);
       <form v-if="merging" class="console-panel" @submit.prevent="merge">
         <h2>归并同义分类</h2>
         <p>来源 {{ merging.name }} · 修订 {{ merging.revision }}</p>
+        <p class="hint">
+          归并影响公开目录的同义分类，历史文章关联由服务端保留。
+        </p>
+        <button
+          v-if="mutation.error.value && !mutation.pending.value"
+          :disabled="busy"
+          type="button"
+          @click="refreshMerge"
+        >
+          重新读取归并对象
+        </button>
         <fieldset :disabled="frozen">
           <label
             >保留的同类标签<select v-model="canonical" required>

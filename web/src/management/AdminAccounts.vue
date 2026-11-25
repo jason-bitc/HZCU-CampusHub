@@ -4,11 +4,12 @@ import { useRoute, useRouter } from "vue-router";
 import { adminRequest, adminSession } from "./client";
 import { stateLabels, useMutation } from "./governance";
 import type { Appeal, Page, Restriction, User } from "./governance";
-import { message } from "../lib/api";
 import { dateText } from "../lib/content";
 import AdminGate from "./AdminGate.vue";
 import AdminCertification from "./AdminCertification.vue";
 import ConsolePager from "./ConsolePager.vue";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import { consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 const route = useRoute(),
   router = useRouter();
@@ -46,10 +47,8 @@ async function load() {
   const current = ++generation;
   busy.value = true;
   error.value = "";
-  users.value = undefined;
-  appeals.value = undefined;
   try {
-    const [u, a] = await Promise.all([
+    const [u, a] = await Promise.allSettled([
       adminRequest<Page<User>>(
         `/admin/users?page=${Math.max(1, Number(route.query.users) || 1)}&size=10`,
       ),
@@ -58,27 +57,29 @@ async function load() {
       ),
     ]);
     if (current !== generation) return;
-    users.value = u;
-    appeals.value = a;
+    if (u.status === "fulfilled") users.value = u.value;
+    else error.value = consoleError(u.reason);
+    if (a.status === "fulfilled") appeals.value = a.value;
+    else error.value += (error.value ? " " : "") + consoleError(a.reason);
     mutation.restore();
     decision.restore();
-    if (appeal.value)
-      appeal.value = a.items.find((row) => row.id === appeal.value?.id);
-    if (user.value) await readUser(user.value);
+    if (appeal.value && a.status === "fulfilled")
+      appeal.value = a.value.items.find((row) => row.id === appeal.value?.id);
+    if (user.value) await readUser(user.value, true);
   } catch (e) {
-    if (current === generation) error.value = message(e);
+    if (current === generation) error.value = consoleError(e);
   } finally {
     if (current === generation) busy.value = false;
   }
 }
-async function readUser(row: User) {
+async function readUser(row: User, preserveError = false) {
   const current = generation,
     read = ++userRead;
+  if (user.value?.id !== row.id) restrictions.value = [];
   user.value = row;
-  restrictions.value = [];
   restrictionsReady.value = false;
   readingUser.value = true;
-  error.value = "";
+  if (!preserveError) error.value = "";
   try {
     const result = await adminRequest<{ items: Restriction[] }>(
       `/admin/users/${row.id}/restrictions`,
@@ -88,7 +89,8 @@ async function readUser(row: User) {
       restrictionsReady.value = true;
     }
   } catch (e) {
-    if (current === generation && read === userRead) error.value = message(e);
+    if (current === generation && read === userRead)
+      error.value += (error.value ? " " : "") + consoleError(e);
   } finally {
     if (read === userRead) readingUser.value = false;
   }
@@ -99,6 +101,15 @@ async function set(enabled: boolean) {
     error.value = "请填写限制或解除的事实依据。";
     return;
   }
+  if (
+    !(await modal.value?.ask({
+      title: (enabled ? "限制" : "解除限制") + "账号 " + user.value.id + "？",
+      detail: `${scope.value === "PUBLISH" ? "发布及恢复上架" : "新评论及回复"} · ${enabled ? "该账号将失去对应操作权限。" : "该账号可再次使用对应操作。"}决定写入处理历史。\n\n理由：${reason.value.trim()}`,
+      action: "提交限制变更",
+      danger: true,
+    }))
+  )
+    return;
   await mutation.start(
     `/admin/users/${user.value.id}/restrictions`,
     "POST",
@@ -134,10 +145,12 @@ function turn(key: string, page: number) {
 onMounted(load);
 watch(() => [route.query, adminSession.status], load);
 onBeforeUnmount(() => generation++);
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <h1 class="console-title">账号限制与申诉复核</h1>
   <AdminGate>
+    <ConsoleConfirm ref="modal" />
     <p class="console-note">
       发布与评论分别限制；阅读、草稿保存和本人申诉继续可用。接受申诉只解除申诉关联版本的限制，不自动恢复隐藏内容。
     </p>
@@ -165,28 +178,28 @@ onBeforeUnmount(() => generation++);
       <section class="console-panel console-account-limit">
         <h2>限制范围</h2>
         <div v-if="users" class="console-table-wrap">
-          <table class="console-table">
-            <thead>
-              <tr>
-                <th>账号</th>
-                <th>状态</th>
-                <th>操作</th>
+          <table class="console-table console-responsive-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">账号</th>
+                <th scope="col" role="columnheader">状态</th>
+                <th scope="col" role="columnheader">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="row in users.items" :key="row.id">
-                <td>
+            <tbody role="rowgroup">
+              <tr role="row" v-for="row in users.items" :key="row.id">
+                <td data-label="账号" role="cell">
                   {{ row.nickname }}<small>用户 {{ row.id }}</small>
                 </td>
-                <td>{{ row.accountState }}</td>
-                <td>
+                <td data-label="状态" role="cell">{{ row.accountState }}</td>
+                <td data-label="操作" role="cell">
                   <button :disabled="frozen" @click="readUser(row)">
                     查看限制
                   </button>
                 </td>
               </tr>
-              <tr v-if="!users.items.length">
-                <td colspan="3">暂无账号。</td>
+              <tr role="row" v-if="!users.items.length">
+                <td role="cell" colspan="3">暂无账号。</td>
               </tr>
             </tbody>
           </table>
@@ -255,17 +268,17 @@ onBeforeUnmount(() => generation++);
       <section class="console-panel console-account-limit">
         <h2>本人申诉与复核</h2>
         <div v-if="appeals" class="console-table-wrap">
-          <table class="console-table">
-            <thead>
-              <tr>
-                <th>申诉 / 限制版本</th>
-                <th>状态</th>
-                <th>操作</th>
+          <table class="console-table console-responsive-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">申诉 / 限制版本</th>
+                <th scope="col" role="columnheader">状态</th>
+                <th scope="col" role="columnheader">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="row in appeals.items" :key="row.id">
-                <td>
+            <tbody role="rowgroup">
+              <tr role="row" v-for="row in appeals.items" :key="row.id">
+                <td data-label="申诉 / 限制版本" role="cell">
                   {{ row.id }} /
                   {{
                     row.subject === "CAMPUS_CERTIFICATION"
@@ -273,8 +286,10 @@ onBeforeUnmount(() => generation++);
                       : `限制 ${row.restrictionId} v${row.restrictionRevision}`
                   }}
                 </td>
-                <td>{{ stateLabels[row.state] || row.state }}</td>
-                <td>
+                <td data-label="状态" role="cell">
+                  {{ stateLabels[row.state] || row.state }}
+                </td>
+                <td data-label="操作" role="cell">
                   <button
                     :disabled="frozen"
                     @click="
@@ -287,8 +302,8 @@ onBeforeUnmount(() => generation++);
                   </button>
                 </td>
               </tr>
-              <tr v-if="!appeals.items.length">
-                <td colspan="3">暂无申诉。</td>
+              <tr role="row" v-if="!appeals.items.length">
+                <td role="cell" colspan="3">暂无申诉。</td>
               </tr>
             </tbody>
           </table>

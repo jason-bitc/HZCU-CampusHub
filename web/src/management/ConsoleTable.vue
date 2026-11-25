@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CopyValue from "./CopyValue.vue";
 import { useRoute } from "vue-router";
 withDefaults(
   defineProps<{
@@ -7,6 +8,7 @@ withDefaults(
     rows: string[][];
     targets?: string[];
     empty?: string;
+    copyColumns?: number[];
     rowHeight?: number;
   }>(),
   { empty: "接口待接入，暂无可核验记录。", rowHeight: 84 },
@@ -22,26 +24,34 @@ function tone(text: string) {
 </script>
 <template>
   <div class="console-table-wrap">
-    <table class="console-table">
-      <thead>
-        <tr>
+    <table class="console-table console-responsive-table" role="table">
+      <thead role="rowgroup">
+        <tr role="row">
           <th
             v-for="(column, index) in columns"
             :key="column"
             scope="col"
+            role="columnheader"
             :style="{ width: widths?.[index] }"
           >
             {{ column }}
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody role="rowgroup">
         <tr
           v-for="(row, r) in rows"
+          role="row"
           :key="r"
           :style="{ height: `${rowHeight}px` }"
         >
-          <td v-for="(value, c) in row" :key="c" :class="tone(value)">
+          <td
+            v-for="(value, c) in row"
+            :key="c"
+            :class="tone(value)"
+            :data-label="columns[c]"
+            role="cell"
+          >
             <RouterLink
               v-if="targets?.[r] && c === row.length - 1"
               :to="{
@@ -49,11 +59,16 @@ function tone(text: string) {
                 query: route.query.preview === '1' ? { preview: '1' } : {},
               }"
               >{{ value }}</RouterLink
-            ><template v-else>{{ value }}</template>
+            ><CopyValue
+              v-else-if="copyColumns?.includes(c) && value !== '—'"
+              :value="value"
+              :label="columns[c] || '编号'"
+            />
+            <template v-else>{{ value }}</template>
           </td>
         </tr>
-        <tr v-if="!rows.length">
-          <td :colspan="columns.length" class="console-table-empty">
+        <tr v-if="!rows.length" role="row">
+          <td :colspan="columns.length" class="console-table-empty" role="cell">
             {{ empty }}
           </td>
         </tr>

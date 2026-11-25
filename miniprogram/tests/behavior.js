@@ -154,6 +154,33 @@ async function test(name, run) {
     assert.equal(calls.at(-1).majorId, undefined);
     assert.equal(page.data.keywordInput, '待提交的新搜索');
   });
+  await test('岗位选择器以分类 ID 更新请求，保留其他条件并同步选中项', async () => {
+    const calls = [];
+    const catalog = { jobs: [{ id: 49, name: 'Java 后端' }, { id: 12, name: '前端' }], majors: [], companies: [], topics: [] };
+    const api = {
+      getCatalog: () => ({ promise: Promise.resolve(catalog), abort() {} }),
+      listArticles(query) {
+        calls.push(query);
+        return { promise: Promise.resolve({ items: [], page: 1, total: 0 }), abort() {} };
+      }
+    };
+    const page = harness('pages/discover/discover.js', api);
+    page.onLoad({});
+    await tick();
+    page.updateFilters({ keyword: '实习', companyId: 21 });
+    page.selectJob({ detail: { value: '1' } });
+    assert.equal(page.data.jobChoiceIndex, 1);
+    assert.equal(calls.at(-1).jobId, 49);
+    assert.equal(calls.at(-1).keyword, '实习');
+    assert.equal(calls.at(-1).companyId, 21);
+    const count = calls.length;
+    page.selectJob({ detail: { value: '1' } });
+    assert.equal(calls.length, count);
+    page.selectJob({ detail: { value: '0' } });
+    assert.equal(page.data.jobChoiceIndex, 0);
+    assert.equal(calls.at(-1).jobId, undefined);
+    assert.equal(calls.at(-1).companyId, 21);
+  });
   await test('非固定章数、重复标题、六级标题、混合嵌套列表与全文末尾保留', () => {
     const body = Array.from({ length: 13 }, (_, index) => '## 相同标题\n\n章节' + index).join('\n\n') + '\n\n###### 深层标题\n\n3. 父项\n  - 子项\n    7. 孙项\n  - 第二子项\n4. 尾项\n\n~~~cpp\n<int> value;\n~~~\n\n前文![图](/api/v1/media/demo)后文\n\n全文末尾';
     const parsed = parseMarkdown(body, { assetBaseUrl: 'http://127.0.0.1:8080' });
@@ -189,6 +216,17 @@ async function test(name, run) {
     reader.searchToc({ detail: { value: '08' } });
     assert.equal(reader.data.filteredHeadings.length, 1); assert.match(reader.data.filteredHeadings[0].text, /08/);
     reader.closeToc(); assert.equal(reader.events.at(-1).detail.visible, false);
+  });
+  await test('目录跳转动画中开始登录，仍记住用户选中的章节', () => {
+    const reader = harness('components/markdown-view/index.js', {}, true);
+    reader.anchorTops = [{ id: 1, top: 120 }, { id: 2, top: 510 }];
+    reader.data.currentHeadingId = 1;
+    reader.jumpBookmark = { headingId: 2, offset: -20, until: Date.now() + 500 };
+    const bookmark = reader.capturePosition(150);
+    assert.equal(bookmark.headingId, 2);
+    assert.equal(bookmark.offset, -20);
+    reader.jumpBookmark.until = 0;
+    assert.equal(reader.capturePosition(150).headingId, 1);
   });
   await test('取消演示请求后 Promise 结束，不让刷新永久等待', async () => {
     const demo = require('../services/demo-service');
