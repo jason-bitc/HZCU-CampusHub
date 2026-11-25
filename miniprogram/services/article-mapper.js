@@ -33,6 +33,7 @@ function mapSummary(raw) {
     sourceText: sourceLabel(raw.sourceType),
     publishedAt: raw.publishedAt || '',
     publishedText: formatDate(raw.publishedAt),
+    updatedText: raw.updatedAt ? formatDate(raw.updatedAt) : '',
     effectiveCoins: raw.counts && Number(raw.counts.effectiveCoins) >= 0 ? Number(raw.counts.effectiveCoins) : 0,
     effectiveLikes: raw.counts && Number(raw.counts.effectiveLikes) >= 0 ? Number(raw.counts.effectiveLikes) : 0
   };

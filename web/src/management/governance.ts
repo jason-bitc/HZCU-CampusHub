@@ -1,3 +1,4 @@
+import type { ConfirmationCopy } from "./console-ux";
 import { computed, ref } from "vue";
 import { adminRequest, adminSession } from "./client.ts";
 import { ApiError, message } from "../lib/api.ts";
@@ -143,11 +144,19 @@ export function useMutation(
       pending.value = null;
       notice.value = `${command.label}：服务端回执已确认。`;
     } catch (e) {
-      error.value = `${message(e)}${e instanceof ApiError ? ` [${e.code}]` : ""} 原请求已保留，请按原请求核对，或读取最新状态后结束本机待确认记录。`;
+      const rejected =
+        e instanceof ApiError &&
+        (e.code === "REVISION_CONFLICT" ||
+          [400, 403, 404, 422].includes(e.status));
+      if (rejected) {
+        sessionStorage.removeItem(key(surface));
+        pending.value = null;
+      }
+      error.value = `${e instanceof ApiError && e.status === 403 ? "权限不足。 " : ""}${message(e)}${e instanceof ApiError ? ` [${e.code}]` : ""}${rejected ? " 当前输入已保留，请核对最新状态后重新确认。" : " 原请求已保留，可按原请求核对。"}`;
     } finally {
       busy.value = false;
     }
-    if (!pending.value) await refresh();
+    if (!pending.value && notice.value) await refresh();
   }
   async function start(
     path: string,
@@ -171,13 +180,16 @@ export function useMutation(
       error.value = message(e);
     }
   }
-  async function reconcile() {
-    if (busy.value) return;
+  async function reconcile(ask: (copy: ConfirmationCopy) => Promise<boolean>) {
+    if (busy.value || !pending.value) return;
     await refresh();
     if (
-      confirm(
-        "请核对最新状态和审计记录。结束本机待确认请求不会撤销服务端操作；继续编辑将使用最新修订和新请求键。确认结束？",
-      )
+      await ask({
+        title: "结束待确认的治理操作？",
+        detail:
+          "请核对最新修订和审计记录。服务端已经执行的操作仍然有效。继续编辑时将使用重新读取的修订。",
+        action: "结束本机记录",
+      })
     ) {
       sessionStorage.removeItem(key(surface));
       pending.value = null;

@@ -1,45 +1,108 @@
 <import src="../../templates/honor.wxml" />
 <view class="member-page my-page">
-  <view class="inline-actions">
-    <button class="button-secondary" bindtap="notifications">站内通知<text wx:if="{{unreadCount > 0}}"> · {{unreadCount}} 未读</text></button>
-    <button class="button-secondary" bindtap="certification">校园认证状态</button>
-  </view>
-  <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
-  <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
-  <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重新核验" bindaction="onShow" />
-  <page-state wx:elif="{{authStatus === 'limited'}}" status="permission" title="当前校园认证受限" description="可查看认证原因、本人通知和申诉答复。" action-text="查看认证原因" secondary-text="继续阅读" bindaction="certification" bindsecondary="discover" />
-  <view wx:else>
-    <button class="section-card identity-card" bindtap="profile" aria-label="资料与隐私">
-      <text class="profile-avatar" aria-hidden="true">{{avatar || '城'}}</text>
+  <block wx:if="{{authStatus === 'ready'}}">
+    <button class="identity-card pressable" bindtap="profile" aria-label="打开个人资料与联系设置">
+      <image class="profile-mark" src="/assets/campushub-logo.png" mode="aspectFit" aria-hidden="true" />
       <view class="profile-copy">
-        <text class="profile-name">{{profile ? profile.nickname : '校园同学'}}</text>
-        <text class="status-tag">校园邮箱已验证</text>
-        <text wx:if="{{profileSummary}}" class="hint">{{profileSummary}}</text>
+        <text class="profile-name">{{profile ? profile.nickname : '校园账号'}}</text>
+        <view class="profile-detail" wx:if="{{profileSummary}}">
+          <text>{{profileSummary}}</text>
+        </view>
+        <text class="status-tag verified">校园邮箱已验证</text>
       </view>
-      <app-icon name="chevron-right" size="34" />
+      <app-icon name="chevron-right" size="32" />
     </button>
-    <view class="section-card my-entries" aria-label="我的内容与反馈">
-      <button data-filter="EXPERIENCES" bindtap="workspace"><text class="metric-value">{{counts.articles === null ? '查看' : counts.articles}}</text><text>我的经验</text></button>
-      <button data-filter="DRAFT" bindtap="workspace"><text class="metric-value">{{counts.drafts === null ? '查看' : counts.drafts}}</text><text>草稿</text></button>
-      <button bindtap="favorites"><text class="metric-value">{{counts.favorites === null ? '查看' : counts.favorites}}</text><text>收藏</text></button>
-      <button bindtap="feedback"><text class="metric-value">{{counts.feedback === null ? '查看' : counts.feedback}}</text><text>反馈进度</text></button>
+
+    <text class="service-heading" role="heading">我的数据</text>
+    <view class="overview-card">
+      <view class="overview-metrics">
+        <view class="overview-metric">
+          <text class="metric-value">{{wallet ? wallet.balance : '—'}}</text>
+          <text class="metric-label">可用硬币</text>
+        </view>
+        <view class="overview-metric">
+          <text class="metric-value">{{counts.favorites === null ? '—' : counts.favorites}}</text>
+          <text class="metric-label">收藏经验</text>
+        </view>
+        <view class="overview-metric">
+          <text class="metric-value">{{wallet ? wallet.receivedContribution : '—'}}</text>
+          <text class="metric-label">累计有效贡献</text>
+        </view>
+      </view>
+      <view wx:if="{{wallet && wallet.honor}}" class="overview-honor"><template is="author-honor" data="{{honor: wallet.honor}}" /></view>
     </view>
-    <button class="wallet-card" bindtap="wallet" aria-label="打开硬币和贡献">
-      <view class="wallet-metrics">
-        <view><text>可用硬币</text><text class="wallet-metric">{{wallet ? wallet.balance : '—'}}</text></view>
-        <view><text>累计有效贡献</text><text class="wallet-metric">{{wallet ? wallet.receivedContribution : '—'}}</text></view>
-      </view>
-      <text class="wallet-caption">钱包余额与作者贡献分别计算</text><template is="author-honor" data="{{honor: wallet.honor}}" wx:if="{{wallet && wallet.honor}}" />
-    </button>
-    <view class="section-card my-links">
+
+    <text class="service-heading" role="heading">内容与互动</text>
+    <view class="my-entries" aria-label="内容与互动">
+      <button class="pressable" data-filter="EXPERIENCES" bindtap="workspace">
+        <view class="entry-icon tone-blue"><app-icon name="document" size="38" /></view>
+        <text>我的经验</text>
+        <text wx:if="{{counts.articles !== null}}" class="entry-count">{{counts.articles}} 篇</text>
+      </button>
+      <button class="pressable" data-filter="DRAFT" bindtap="workspace">
+        <view class="entry-icon tone-violet"><app-icon name="create" size="38" /></view>
+        <text>草稿</text>
+        <text wx:if="{{counts.drafts !== null}}" class="entry-count">{{counts.drafts}} 篇</text>
+      </button>
+      <button class="pressable" bindtap="favorites">
+        <view class="entry-icon tone-green"><app-icon name="favorite" size="38" /></view>
+        <text>收藏</text>
+      </button>
+      <button class="pressable" bindtap="notifications">
+        <view class="entry-icon tone-orange"><app-icon name="bell" size="38" /></view>
+        <text>通知</text>
+        <text wx:if="{{unreadCount > 0}}" class="entry-count unread-count">{{unreadCount}} 条未读</text>
+      </button>
+    </view>
+
+    <text class="service-heading" role="heading">硬币与奖励</text>
+    <view class="service-card">
       <button class="menu-row" bindtap="wallet">
-        <view><text class="row-title">每日奖励</text><text class="hint">{{rewards ? '登录 ' + rewards.rules.loginReward + ' 币，阅读满 ' + rewards.rules.readingSeconds + ' 秒可领 ' + rewards.rules.readingReward + ' 币' : '查看今日资格与领取条件'}}</text></view>
+        <view class="service-copy">
+          <text class="row-title">每日奖励</text>
+          <text class="hint">{{rewards ? '登录 ' + rewards.rules.loginReward + ' 币，阅读满 ' + rewards.rules.readingSeconds + ' 秒可领 ' + rewards.rules.readingReward + ' 币' : '查看今日资格与领取条件'}}</text>
+        </view>
         <text class="my-link-label">去领取</text>
       </button>
-      <button class="menu-row" bindtap="wallet"><view><text class="row-title">贡献与账目</text><text class="hint">查看有效贡献及本人账目</text></view><text class="my-link-label">查看</text></button>
+      <button class="menu-row" bindtap="wallet">
+        <view class="service-copy">
+          <text class="row-title">贡献与账目</text>
+          <text class="hint">查看有效贡献及本人账目</text>
+        </view>
+        <app-icon name="chevron-right" size="28" />
+      </button>
     </view>
+
+    <text class="service-heading" role="heading">社区服务</text>
+    <view class="service-card">
+      <button class="menu-row" bindtap="feedback">
+        <text class="row-title">反馈进度</text>
+        <text wx:if="{{counts.feedback !== null}}" class="my-link-label">{{counts.feedback}} 条</text>
+        <app-icon wx:else name="chevron-right" size="28" />
+      </button>
+      <button class="menu-row" bindtap="appeals">
+        <text class="row-title">我的限制与申诉</text><app-icon name="chevron-right" size="28" />
+      </button>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="inline-actions account-quick">
+      <button class="button-secondary" bindtap="notifications">站内通知<text wx:if="{{unreadCount > 0}}"> · {{unreadCount}} 未读</text></button>
+      <button class="button-secondary" bindtap="certification">校园认证状态</button>
+    </view>
+    <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
+    <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后继续" description="管理收藏、分享经验，和校园同学交流。公开文章仍可免费阅读。" action-text="登录校园账号" secondary-text="继续阅读" bindaction="login" bindsecondary="discover" />
+    <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重新核验" bindaction="onShow" />
+    <page-state wx:elif="{{authStatus === 'limited'}}" status="permission" title="当前校园认证受限" description="可查看认证原因、本人通知和申诉答复。" action-text="查看认证原因" secondary-text="继续阅读" bindaction="certification" bindsecondary="discover" />
+  </block>
+
+  <text class="service-heading" role="heading">账户与设置</text>
+  <view class="service-card">
+    <button wx:if="{{authStatus === 'ready'}}" class="menu-row" bindtap="profile"><text class="row-title">个人资料与联系设置</text><app-icon name="chevron-right" size="28" /></button>
+    <button wx:if="{{authStatus === 'ready'}}" class="menu-row" bindtap="certification"><text class="row-title">校园认证状态</text><app-icon name="chevron-right" size="28" /></button>
+    <button wx:if="{{authStatus === 'limited'}}" class="menu-row" bindtap="appeals"><text class="row-title">我的限制与申诉</text><app-icon name="chevron-right" size="28" /></button>
+    <button class="menu-row" bindtap="settings"><text class="row-title">反馈、帮助与设置</text><app-icon name="chevron-right" size="28" /></button>
   </view>
-  <view class="section-card my-links"><button class="menu-row" bindtap="settings"><text class="row-title">反馈、帮助与设置</text><text class="my-link-label">进入</text></button></view>
   <text wx:if="{{loading}}" class="hint">正在读取个人中心…</text>
   <text wx:if="{{error && authStatus === 'ready'}}" class="field-error" role="alert">{{error}}</text>
   <button wx:if="{{error && authStatus === 'ready'}}" class="button-secondary" bindtap="onShow">重试读取个人中心</button>

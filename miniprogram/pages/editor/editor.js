@@ -13,7 +13,7 @@ const tagFields = [
   { name: 'topics', field: 'topicIds', label: '主题（可选）' }
 ];
 const stateNames = { DRAFT: '草稿', PUBLISHED: '已发布', AUTHOR_OFFLINE: '作者已下架', ADMIN_HIDDEN: '管理员已隐藏', DELETED: '已删除' };
-const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, saving: false, confirmingPublish: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false, detailsOpen: false, publishIssues: [] };
+const blank = { form: null, revision: 0, articleState: '', stateText: '', readOnly: false, complexSource: false, uploads: [], uploading: false, recovery: null, conflict: null, pendingPublish: null, reconciled: null, preview: false, blocks: [], blockSupported: true, dirty: false, saving: false, confirmingPublish: false, tagGroups: [], sourceIndex: 0, tocDrawerVisible: false, hasBackup: false, publishRestricted: false, prompts: null, promptsError: '', loadingPrompts: false, detailsOpen: false, publishIssues: [] };
 Page({
   data: Object.assign({ authStatus: 'checking', articleId: 0, busy: false, cloudSaved: false, error: '', notice: '', catalog: null, tagGroups: [], assetBaseUrl: config.apiBaseUrl, webHandoff: !!config.webBaseUrl, tocDrawerVisible: false, sourceNames: ['请选择来源', '亲历分享', '资料整理', '演示内容'], sourceIndex: 0, hintsVisible: false, orderVisible: false }, blank),
   onLoad(options) {
@@ -98,7 +98,7 @@ Page({
   removeBlock(e) { if (!this.editable()) return; const index = Number(e.currentTarget.dataset.index); wx.showModal({ title: '移除这一段？', content: '只移除草稿中的文字或图片引用，保存前可通过本机副本核对。', success: (r) => { if (r.confirm && this.editable()) this.updateForm(Object.assign({}, this.data.form, { body: content.removeBlock(this.data.form.body, index) })); } }); },
   addText() { if (this.editable()) this.updateForm(Object.assign({}, this.data.form, { body: this.data.form.body + '\n\n新段落，请在正文中编辑。' })); },
   async chooseImages() {
-    if (!this.editable() || this._choosingMedia) return;
+    if (!this.editable() || this.data.uploading || this._choosingMedia) return;
     const epoch = this._epoch;
     this._choosingMedia = true;
     try { const selected = await media.choose(); if (epoch !== this._epoch) return; for (const file of selected) { try { await media.validate(file); if (epoch !== this._epoch) return; const entry = { filePath: file.tempFilePath, requestId: local.uuid(), state: 'waiting', error: '', image: null }; this.setData({ uploads: this.data.uploads.concat(entry) }); this.checkpoint(); } catch (error) { this.setData({ error: error.message }); } } await this.uploadWaiting(); }
@@ -106,17 +106,53 @@ Page({
     finally { this._choosingMedia = false; }
   },
   async uploadWaiting() {
-    if (!this.editable()) return; this.setData({ busy: true }); const epoch = this._epoch;
-    try { for (let i = 0; i < this.data.uploads.length; i += 1) { const entry = this.data.uploads[i]; if (entry.state !== 'waiting') continue; this.setData({ [`uploads[${i}].state`]: 'uploading' });
-      try { const image = await api.uploadArticle(this.data.articleId, entry.filePath, entry.requestId); if (epoch !== this._epoch) return; this.setData({ [`uploads[${i}].state`]: 'done', [`uploads[${i}].image`]: image }); this.updateForm(Object.assign({}, this.data.form, { body: `${this.data.form.body}\n\n![图片](${image.url})` })); }
-      catch (error) { if (epoch !== this._epoch) return; this.setData({ [`uploads[${i}].state`]: 'failed', [`uploads[${i}].error`]: access.errorText(error) }); }
-      this.checkpoint();
-    } } finally { if (epoch === this._epoch) { this.setData({ busy: false }); this.checkpoint(); this.syncLeaveAlert(); } }
+    if (!this.editable() || this.data.uploading) return;
+    const epoch = this._epoch;
+    this.setData({ uploading: true });
+    try {
+      for (let index = 0; index < this.data.uploads.length; index += 1) {
+        const file = this.data.uploads[index];
+        if (file.state !== 'waiting') continue;
+        this.setData({ [`uploads[${index}].state`]: 'uploading' });
+        this.checkpoint();
+        try {
+          const image = await api.uploadArticle(this.data.articleId, file.filePath, file.requestId);
+          if (epoch !== this._epoch) return;
+          this.setData({ [`uploads[${index}].state`]: 'done', [`uploads[${index}].image`]: image, [`uploads[${index}].error`]: '' });
+          const body = this.data.form.body;
+          const imageRef = `![图片](${image.url})`;
+          if (!body.includes('](' + image.url + ')')) this.updateForm(Object.assign({}, this.data.form, { body: body + '\n\n' + imageRef }));
+        } catch (error) {
+          if (epoch !== this._epoch) return;
+          this.setData({ [`uploads[${index}].state`]: 'failed', [`uploads[${index}].error`]: access.errorText(error) });
+        }
+        this.checkpoint();
+      }
+    } finally {
+      if (epoch === this._epoch) {
+        this.setData({ uploading: false });
+        this.checkpoint();
+        this.syncLeaveAlert();
+      }
+    }
   },
-  retryUpload(e) { if (!this.editable()) return; const i = Number(e.currentTarget.dataset.index); this.setData({ [`uploads[${i}].state`]: 'waiting' }); this.uploadWaiting(); },
-  removeUpload(e) { if (!this.editable()) return; this.setData({ uploads: this.data.uploads.filter((_, i) => i !== Number(e.currentTarget.dataset.index)) }); if (!this.hasUnsavedChanges()) local.remove(`draft:${this.data.articleId}`, this._ownerId); this.checkpoint(); this.syncLeaveAlert(); },
+  retryUpload(e) {
+    if (!this.editable() || this.data.uploading) return;
+    const index = Number(e.currentTarget.dataset.index);
+    const file = this.data.uploads[index];
+    if (!file || file.state !== 'failed') return;
+    this.setData({ [`uploads[${index}].state`]: 'waiting' });
+    return this.uploadWaiting();
+  },
+  removeUpload(e) {
+    if (!this.editable() || this.data.uploading) return;
+    this.setData({ uploads: this.data.uploads.filter((_, i) => i !== Number(e.currentTarget.dataset.index)) });
+    if (!this.hasUnsavedChanges()) local.remove(`draft:${this.data.articleId}`, this._ownerId);
+    this.checkpoint();
+    this.syncLeaveAlert();
+  },
   async save() {
-    if (!this.editable()) return false;
+    if (!this.editable() || this.data.uploading) return false;
     const form = this.data.form; if (bytes(form.body) > 1048576) { this.setData({ error: '正文超过 1MiB，请保留副本后缩短内容' }); return false; }
     const epoch = this._epoch; const stored = this.checkpoint(); this.setData({ busy: true, saving: true, error: '', notice: '' });
     try { const draft = await api.saveDraft(this.data.articleId, Object.assign({ expectedRevision: this.data.revision }, form)); if (epoch !== this._epoch) return false; this.applyDraft(draft); this.setData({ notice: `已保存到云端 · 修订 ${draft.revision}`, cloudSaved: true }); local.remove(`draft:${this.data.articleId}`); this.checkpoint(); return true; }
@@ -155,6 +191,8 @@ Page({
   copy() { if (this.data.form) wx.setClipboardData({ data: JSON.stringify(this.data.form, null, 2) }); },
   copyBody() { if (this.data.form) wx.setClipboardData({ data: this.data.form.body }); },
   copyRecovery() { if (this.data.recovery) wx.setClipboardData({ data: JSON.stringify(this.data.recovery.form, null, 2) }); },
+  showWriting() { if (this.data.preview && !this.data.complexSource) this.preview(); },
+  showPreview() { if (!this.data.preview) this.preview(); },
   preview() {
     if (!this.data.form || this.data.busy) return;
     const preview = !this.data.preview;
@@ -172,7 +210,7 @@ Page({
   drawer(e) { this.setData({ tocDrawerVisible: e.detail.visible }); },
   previewSources() { wx.createSelectorQuery().select('#preview-sources').boundingClientRect((rect) => { if (rect) wx.createSelectorQuery().selectViewport().scrollOffset((view) => { if (view) wx.pageScrollTo({ scrollTop: view.scrollTop + rect.top - 20, duration: 200 }); }).exec(); }).exec(); },
   requestPublish() {
-    if (!this.editable() || this.data.confirmingPublish) return;
+    if (!this.editable() || this.data.uploading || this.data.confirmingPublish) return;
     const missing = content.publishErrors(this.data.form); if (missing.length) { this.setData({ error: `发布前请：${missing.join('、')}` }); return; }
     if (this.data.uploads.some((f) => f.state !== 'done')) { this.setData({ error: '仍有图片尚未上传成功，请重试或移除失败项' }); return; }
     const epoch = this._epoch;
@@ -181,7 +219,7 @@ Page({
     wx.showModal({ title: '公开发布这篇经验？', content: '标题、正文、分类、来源及正文图片将可被游客免费阅读。请勿包含不愿公开的个人信息。', confirmText: '确认发布', fail: release, success: async (r) => {
       if (epoch !== this._epoch) return;
       release();
-      if (!r.confirm || !this.editable()) return;
+      if (!r.confirm || !this.editable() || this.data.uploading) return;
       if (this.data.dirty && !await this.save()) return;
       const pendingPublish = { expectedRevision: this.data.revision, requestId: local.uuid() };
       this.setData({ pendingPublish }); this.checkpoint(); this.syncLeaveAlert(); this.retryPublish();

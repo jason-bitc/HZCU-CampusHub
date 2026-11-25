@@ -1,1 +1,6 @@
-.favorite-item { margin: 24rpx 0; }
+@import '../../styles/sections.wxss';
+@import '../../styles/flow.wxss';
+.favorite-item { padding: 0; overflow: hidden; }
+.unavailable-favorite { padding: 24rpx 28rpx 10rpx; }
+.favorite-footer { display: flex; align-items: center; justify-content: space-between; margin: 0 28rpx; border-top: 1rpx solid var(--color-border); }
+.favorite-footer .favorite-remove { padding: 0 0 0 12rpx; color: var(--color-text-secondary); font-size: 26rpx; }

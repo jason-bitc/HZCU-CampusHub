@@ -2,8 +2,9 @@
 import { onMounted, ref } from "vue";
 import { adminRequest } from "./client";
 import { useMutation } from "./governance";
-import { message } from "../lib/api";
 import { dateText } from "../lib/content";
+import ConsoleConfirm from "./ConsoleConfirm.vue";
+import { consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 
 const props = defineProps<{ userId: number; nickname: string }>();
@@ -31,8 +32,7 @@ async function load() {
   try {
     current.value = await adminRequest(endpoint);
   } catch (e) {
-    current.value = undefined;
-    loadError.value = message(e);
+    loadError.value = consoleError(e);
   } finally {
     loading.value = false;
   }
@@ -61,9 +61,12 @@ async function revoke() {
   )
     return;
   if (
-    !window.confirm(
-      `确认撤销“${props.nickname}”的校园认证？对方可查看原因、申请复核或使用原邮箱重新认证。`,
-    )
+    !(await modal.value?.ask({
+      title: `撤销 ${props.nickname} 的校园认证？`,
+      detail: `账号 ${props.userId} · 认证修订 ${snapshot.revision}。撤销后将限制校园认证功能。本人可在个人中心的校园认证、通知和申诉入口查看原因、申请复核或重新认证。\n\n撤销理由：${reason.value.trim()}`,
+      action: "撤销校园认证",
+      danger: true,
+    }))
   )
     return;
   await mutation.start(
@@ -72,15 +75,18 @@ async function revoke() {
     { expectedRevision: snapshot.revision, reason: reason.value.trim() },
     "撤销校园认证",
   );
-  if (!pending.value) reason.value = "";
+  if (!pending.value && notice.value) reason.value = "";
 }
+const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <section class="console-followup">
+    <ConsoleConfirm ref="modal" />
     <h3>校园认证 · {{ nickname }}（{{ userId }}）</h3>
     <p v-if="loading" role="status">正在读取校园认证…</p>
     <p v-if="loadError" class="error" role="alert">
-      {{ loadError }} <button @click="load">刷新认证</button>
+      {{ loadError }} <span v-if="current">当前显示的是上次读取结果。</span>
+      <button @click="load">刷新认证</button>
     </p>
     <MutationNotice
       :pending="pending"

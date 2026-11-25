@@ -1613,3 +1613,110 @@
 .ops-overview .ops-task-list {
   margin-top: 24px;
 }
+
+.console-shell .console-dialog {
+  width: min(560px, calc(100vw - 28px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  overflow: auto;
+  text-align: start;
+}
+.console-dialog::backdrop {
+  background: rgb(16 43 35 / 52%);
+}
+.console-dialog h2 {
+  margin-block-start: 0;
+}
+.console-case-return,
+.console-feedback {
+  margin-block: 12px;
+}
+.console-shell .console-preserve,
+.console-copy,
+.console-shell .console-title,
+.console-shell .console-table td {
+  overflow-wrap: anywhere;
+}
+.console-copy {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  max-width: 100%;
+}
+.console-copy code {
+  user-select: all;
+}
+.console-shell .console-copy button {
+  width: auto;
+  padding: 3px 8px;
+  min-height: 28px;
+}
+.console-dialog button:focus-visible,
+.console-case-return a:focus-visible,
+.console-table a:focus-visible {
+  outline: 2px solid #137763;
+  outline-offset: 3px;
+}
+.console-match {
+  box-shadow: inset 0 0 0 2px #17826c;
+}
+@media (max-width: 760px) {
+  .console-shell:not(.console-preview)
+    .console-account-limit
+    .console-responsive-table,
+  .console-shell:not(.console-preview) .console-responsive-table {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 0;
+    table-layout: auto;
+  }
+  .console-shell:not(.console-preview) .console-responsive-table thead {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .console-shell:not(.console-preview) .console-responsive-table tbody {
+    display: grid;
+    gap: 8px;
+  }
+  .console-shell:not(.console-preview) .console-responsive-table tr {
+    display: block;
+    height: auto !important;
+    min-width: 0;
+    border: 1px solid #dce6e0;
+    border-radius: 8px;
+    padding: 6px 10px;
+  }
+  .console-shell:not(.console-preview) .console-responsive-table td {
+    display: grid;
+    height: auto;
+    min-height: 0;
+    grid-template-columns: minmax(78px, 32%) minmax(0, 1fr);
+    align-items: start;
+    gap: 6px;
+    min-width: 0;
+    width: auto;
+    padding: 7px 0;
+    border: 0;
+    white-space: normal;
+  }
+  .console-shell:not(.console-preview) .console-responsive-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #3f5c51;
+  }
+  .console-shell:not(.console-preview) .console-responsive-table td[colspan] {
+    display: block;
+  }
+  .console-shell:not(.console-preview)
+    .console-responsive-table
+    td
+    :is(button, a) {
+    max-width: 100%;
+    justify-self: start;
+    white-space: normal;
+  }
+}

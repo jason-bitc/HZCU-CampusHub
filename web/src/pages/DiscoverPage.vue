@@ -333,14 +333,16 @@ onBeforeUnmount(() => {
         </p>
         <button @click="load">重试当前条件</button>
       </section>
-      <template v-if="!busy && (!error || result?.items.length)"
-        ><ArticleCard
-          :back-to="resultPath"
-          v-for="article in result?.items"
-          :key="article.id"
-          :article="article"
-          show-favorite
-        />
+      <template v-if="!busy && (!error || result?.items.length)">
+        <div v-if="result?.items.length" class="discovery-results">
+          <ArticleCard
+            v-for="article in result.items"
+            :key="article.id"
+            :back-to="resultPath"
+            :article="article"
+            show-favorite
+          />
+        </div>
         <section
           v-if="result && !result.items.length"
           class="panel state-panel"
@@ -354,8 +356,16 @@ onBeforeUnmount(() => {
             <circle cx="21" cy="21" r="12" />
             <path d="m30 30 9 9M15 21h12" />
           </svg>
-          <h2>当前条件下还没有经验</h2>
-          <p>可以减少筛选条件，或清除条件重新查找。</p>
+          <h2>
+            {{ applied.length ? "当前条件下还没有经验" : "还没有公开经验" }}
+          </h2>
+          <p>
+            {{
+              applied.length
+                ? "可以减少筛选条件，或清除条件重新查找。"
+                : "有新经验公开后会在这里显示。"
+            }}
+          </p>
           <button v-if="applied.length" @click="clearFilters">清除条件</button>
         </section></template
       >
