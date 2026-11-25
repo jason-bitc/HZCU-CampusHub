@@ -3,6 +3,10 @@ package cn.edu.hzcu.campushub.audit;
 import ch.qos.logback.classic.*;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import java.nio.file.*;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
@@ -25,10 +29,25 @@ class SafeFileLogsTest {
             for(int i=0;i<40;i++)logs.doAppend(event());assertThat(logs.failedWrites()).isZero();
         }
         finally{logs.destroy();}
-        var files=Files.list(root);try(files){assertThat(files.map(p->p.getFileName().toString()).toList()).containsExactlyInAnyOrder("runtime.lock","campushub-runtime.log","campushub-runtime.1.log","campushub-runtime.2.log");}
+        var files=Files.list(root);try(files){assertThat(files.map(p->p.getFileName().toString()).toList()).containsExactlyInAnyOrder("runtime.lock","campushub-runtime.log","campushub-runtime.1.log","campushub-runtime.2.log","runtime-retained");}
         for(String name:List.of("campushub-runtime.log","campushub-runtime.1.log","campushub-runtime.2.log"))assertThat(Files.size(root.resolve(name))).isLessThanOrEqualTo(1024);
         String before=Files.readString(root.resolve("campushub-runtime.log"));var reboot=new SafeFileLogs(true,root.toString(),2048,2);reboot.afterPropertiesSet();try{reboot.doAppend(event());}finally{reboot.destroy();}
         assertThat(Files.readString(root.resolve("campushub-runtime.log"))).startsWith(before);
+    }
+    @Test void displacedRuntimeSegmentSurvivesUntilThirtyDaysAndCleanupLeavesOtherFiles() throws Exception {
+        Instant archivedAt = Instant.parse("2030-01-01T00:00:00Z");
+        Path oldest = Files.writeString(root.resolve("campushub-runtime.2.log"),"original-segment");
+        new RuntimeLogHistory(root,Clock.fixed(archivedAt,ZoneOffset.UTC)).preserve(oldest);
+        Path retained = root.resolve("runtime-retained");
+        Path archive;
+        try (var entries = Files.list(retained)) { archive = entries.findFirst().orElseThrow(); }
+        Path other = Files.writeString(retained.resolve("campushub-runtime-notes.log"),"manual-notes");
+
+        new RuntimeLogHistory(root,Clock.fixed(archivedAt.plus(Duration.ofDays(30)).minusMillis(1),ZoneOffset.UTC)).cleanup();
+        assertThat(Files.readString(archive)).isEqualTo("original-segment");
+        new RuntimeLogHistory(root,Clock.fixed(archivedAt.plus(Duration.ofDays(30)),ZoneOffset.UTC)).cleanup();
+        assertThat(archive).doesNotExist();
+        assertThat(Files.readString(other)).isEqualTo("manual-notes");
     }
     @Test void fileFailurePreservesOriginalAndRecoveryIsObservable()throws Exception{
         var logs=new SafeFileLogs(true,root.toString(),1024,2);logs.afterPropertiesSet();

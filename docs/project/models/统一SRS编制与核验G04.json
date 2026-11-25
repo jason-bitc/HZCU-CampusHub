@@ -1,7 +1,7 @@
 {
-  "version": "1.5.1",
-  "id": "G04-SRS-20261105-03",
-  "date": "2026-11-05",
+  "version": "1.5.5",
+  "id": "G04-SRS-20261124-01",
+  "date": "2026-11-24",
   "sourceCommit": "7ffe55a210f895ba8a2478f98054087c570e1a8e",
   "sourceFiles": [
     {
@@ -50,7 +50,7 @@
       "bytes": 40938
     }
   ],
-  "pages": 109,
+  "pages": 112,
   "FR": 52,
   "NFR": 12,
   "entities": 27,
@@ -74,32 +74,31 @@
     "3 功能要求": 14,
     "4 业务规则": 30,
     "5 用户用例与界面原型": 32,
-    "6 数据模型与ER图": 40,
-    "7 功能模型与数据流图": 51,
-    "8 数据字典": 60,
-    "9 数据规范化": 78,
-    "10 功能层次与辅助分析图": 80,
-    "11 行为模型与状态转换图": 85,
-    "12 界面与外部接口要求": 91,
-    "13 非功能需求与质量验收": 92,
-    "14 需求验证与用户确认": 95,
-    "15 需求追踪与开发计划修订": 97,
-    "16 需求参数与变更管理": 103,
-    "参考资料": 105,
-    "附录A 国标条目与章节对应": 106,
-    "附录B 需求阶段11项评审对应与证据状态": 107,
-    "附录C 需求基线与接口实现边界": 108,
-    "附录D 可编辑模型与阶段附件索引": 109
+    "6 数据模型与ER图": 43,
+    "7 功能模型与数据流图": 54,
+    "8 数据字典": 63,
+    "9 数据规范化": 81,
+    "10 功能层次与辅助分析图": 83,
+    "11 行为模型与状态转换图": 88,
+    "12 界面与外部接口要求": 94,
+    "13 非功能需求与质量验收": 95,
+    "14 需求验证与用户确认": 98,
+    "15 需求追踪与开发计划修订": 100,
+    "16 需求参数与变更管理": 106,
+    "参考资料": 108,
+    "附录A 国标条目与章节对应": 109,
+    "附录B 需求阶段11项评审对应与证据状态": 110,
+    "附录C 需求基线与接口实现边界": 111,
+    "附录D 可编辑模型与阶段附件索引": 112
   },
   "reviewMatrix": "统一SRS评审条目定位G04.csv",
   "productScopeChanged": false,
   "currentCaseModel": "OPEN/PROCESSING/NEEDS_ACTION/CLOSED",
-  "userResearchStatus": "尚无真实用户访谈/任务走查；组内讨论和公开网络资料调研已形成",
+  "userResearchStatus": "读者与作者各有候选。社区和运维代表待定。组外用户走查、实际联系方式及用户确认待登记。",
   "visualVerification": "按本次最终Word PDF渲染记录逐页核验，证据保存在任务工作目录",
   "applicationTestsRun": false,
   "linkedContentsEntries": 112,
   "wordHeadingBookmarksChecked": 192,
-  "visualPagesReviewed": 109,
   "figureReadabilityRepairs": [
     "DFD00",
     "DFD01",
@@ -116,7 +115,38 @@
   "ERNotation": "1:1 / 1:N / M:N; optional participation stated separately",
   "ERRelations": 28,
   "ERFigures": 13,
-  "latestChange": "ER记法与文字约束统一；实体、字段、功能与非功能需求不变",
-  "latestInputCommit": "766a2ec17f0c708164c0cfbe975be63f0582a7fb",
-  "latestVisualReview": "目录、封面、文档控制、ER章节与附件索引按本次导出逐页复核；其他章节结构和页码与上一基线一致"
+  "latestChange": "第6章采用 PowerDesigner 原生逻辑分区图，收录13幅图和 CDM、LDM、候选 PDM。",
+  "latestInputCommit": "03ea870",
+  "latestVisualReview": "PowerDesigner 图件与评审定位随 SRS V1.5.5 保存。",
+  "currentReviewPages": {
+    "roles": 9,
+    "representatives": 12,
+    "reader": 36,
+    "author": 37,
+    "consoles": 38,
+    "moderation": 39,
+    "operations": 40,
+    "userWalkthrough": 98,
+    "reviewAppendix": 110,
+    "er": 43,
+    "dictionary": 63
+  },
+  "artifactFiles": [
+    {
+      "file": "城院帮软件需求规格说明书G04.docx",
+      "sha256": "73e48510d222434927df25d4ff59a28a15df38c0ea3d1e9df036132d7c68d262",
+      "bytes": 7221674
+    },
+    {
+      "file": "城院帮软件需求规格说明书G04.pdf",
+      "sha256": "27b566fad0814f3c3e60667fd45bed60b53a994c5b44a5a63b006a357c8e2350",
+      "bytes": 5127441
+    },
+    {
+      "file": "城院帮软件需求规格说明书G04.md",
+      "sha256": "831b01f74a3ed63201a9181e22fd33bcc8322b4b09fff6998b18585272d95242",
+      "bytes": 145539
+    }
+  ],
+  "renderedPages": 116
 }

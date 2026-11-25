@@ -5,7 +5,7 @@ import argparse,csv,hashlib,json,re,sys,zipfile,xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 DOCS=ROOT/'docs/project'
 MANIFEST=DOCS/'MANIFEST.sha256.csv'
-SUFFIXES={'.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg'}
+SUFFIXES={'.md','.pdf','.docx','.pptx','.mpp','.json','.csv','.xml','.txt','.drawio','.dot','.svg','.png','.jpg','.jpeg','.cdm','.ldm','.pdm'}
 def files():return sorted(p for p in DOCS.rglob('*') if p.is_file() and p!=MANIFEST)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 

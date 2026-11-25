@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import cn.edu.hzcu.campushub.common.RequestTrace;
@@ -26,6 +28,7 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
     private final Path root;
     private final long maxBytes;
     private final int archives;
+    private final RuntimeLogHistory history;
     private FileChannel lockChannel;
     private FileLock lock;
     private Logger logger;
@@ -33,10 +36,15 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
     private volatile boolean healthy=true;
     private volatile boolean diagnosticHealthy=true;
     public static final Set<String> ACTIONS=Set.of("ARTICLE_AUTHOR","AUTHOR_CONTACT","AUTHOR_ARTICLES","AUTHOR_HOME","CONTACT_SETTINGS","OWN_PROFILE","OWN_ARTICLES","IMAGE","AUTH","OWN_IDENTITY","PUBLIC_ARTICLES","CATALOG","HEALTH","OTHER","COMMENT_LIST","COMMENT_CREATE","COMMENT_DELETE","COMMENT_REPLIES","COMMENT_IMAGE_UPLOAD","COMMENT_IMAGE_READ","AUTH_REGISTER_CODE","AUTH_REGISTER","AUTH_LOGIN","AUTH_LOGOUT","AUTH_RESET_CODE","AUTH_PASSWORD_RESET","AUTH_CERTIFICATION_READ","AUTH_REVERIFY_CODE","AUTH_REVERIFY","IDENTITY_READ","PROFILE_READ","PROFILE_UPDATE","DRAFT_CREATE","DRAFT_LIST","DRAFT_READ","DRAFT_SAVE","ARTICLE_IMAGE_UPLOAD","WRITING_PUBLISH","WRITING_PREVIEW","WRITING_UNPUBLISH","WRITING_RESTORE","WRITING_DELETE","CONTACT_READ","CONTACT_UPDATE","ARTICLE_LIST","ARTICLE_DETAIL","LIKE_SET","LIKE_CANCEL","FAVORITE_SET","FAVORITE_CANCEL","INTERACTION_READ","FAVORITES_LIST","COIN_BALANCE","COIN_LEDGER","REWARDS_READ","LOGIN_REWARD","READING_START","READING_REWARD","COIN_STATE","ARTICLE_COIN","CASE_IMAGE_UPLOAD","CASE_IMAGE_READ","CASE_SUBMIT","CASE_LIST","CASE_DETAIL","ADMIN_LOGIN","ADMIN_LOGOUT","ADMIN_ME","ADMIN_CASE_LIST","ADMIN_CASE_DETAIL","ADMIN_CASE_CONTEXT","ADMIN_CASE_AUDIT","ADMIN_CASE_MEDIA","ADMIN_CASE_CLAIM","ADMIN_CASE_RELEASE","ADMIN_CASE_DECISION","ADMIN_OTHER","ADMIN_OVERVIEW","ADMIN_MODERATION","ADMIN_PATROL","ADMIN_CATEGORY","ADMIN_GOVERNANCE_READ","ADMIN_RESTRICTION","ADMIN_CERTIFICATION_READ","ADMIN_CERTIFICATION_REVOKE","ADMIN_APPEAL","RESTRICTION_READ","APPEAL","ADMIN_CONTRIBUTION_READ","ADMIN_CONTRIBUTION_INVALIDATE","NOTIFICATION_LIST","NOTIFICATION_MARK_READ","RULES_READ","WRITING_PROMPTS_READ");
+    @Autowired
     public SafeFileLogs(@Value("${campushub.logs.enabled}") boolean enabled,@Value("${campushub.logs.root}") String directory,
             @Value("${campushub.logs.max-bytes}") long maxBytes,@Value("${campushub.logs.archives}") int archives){
+        this(enabled, directory, maxBytes, archives, Clock.systemUTC());
+    }
+    SafeFileLogs(boolean enabled, String directory, long maxBytes, int archives, Clock clock) {
         if(maxBytes<1024||maxBytes>100L*1024*1024||archives<1||archives>30)throw new IllegalArgumentException("Invalid runtime-log limits");
         this.enabled=enabled;this.root=Path.of(directory).toAbsolutePath().normalize();this.maxBytes=maxBytes;this.archives=archives;
+        this.history = new RuntimeLogHistory(root, clock);
     }
     @Override public void afterPropertiesSet(){
         if(!enabled)return;
@@ -49,6 +57,8 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
             lockChannel=FileChannel.open(lockPath,StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS);
             lock=lockChannel.tryLock();if(lock==null)throw new IOException();
             probe=Files.createTempFile(root,"probe-",".tmp");Files.writeString(probe,"probe");Files.delete(probe);probe=null;
+            history.validate();
+            history.cleanup();
             var context=(LoggerContext)LoggerFactory.getILoggerFactory();setContext(context);setName("campushub-safe-runtime");start();
             logger=context.getLogger("cn.edu.hzcu.campushub");logger.addAppender(this);
         }catch(IOException|RuntimeException e){
@@ -82,6 +92,10 @@ public class SafeFileLogs extends AppenderBase<ILoggingEvent> implements Initial
         try{
             Path current=checked(channel,0);
             if(Files.exists(current)&&Files.size(current)+bytes.length>maxBytes){
+                if (channel.equals("runtime")) {
+                    Path oldest = checked(archives);
+                    if (Files.exists(oldest, LinkOption.NOFOLLOW_LINKS)) history.preserve(oldest);
+                }
                 for(int i=archives;i>=1;i--){Path source=checked(channel,i-1),target=checked(channel,i);if(Files.exists(source))Files.move(source,target,StandardCopyOption.REPLACE_EXISTING);}
             }
             Files.write(checked(channel,0),bytes,StandardOpenOption.CREATE,StandardOpenOption.APPEND,LinkOption.NOFOLLOW_LINKS);if(channel.equals("diagnostic"))diagnosticHealthy=true;else healthy=true;

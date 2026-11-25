@@ -6,7 +6,6 @@ import { get, message } from "./lib/api";
 import type { Me } from "./types";
 import { surface } from "./surface";
 import BackToTop from "./components/BackToTop.vue";
-import "./member-theme.css";
 const route = useRoute();
 const consoleRoute = surface !== "user";
 const siteHeader = ref<HTMLElement>();
@@ -59,46 +58,67 @@ onBeforeUnmount(() => headerObserver?.disconnect());
             class="brand-logo"
             src="/campushub-logo.png"
             alt=""
-            width="44"
-            height="34"
+            width="34"
+            height="33"
           />
           <span class="brand-copy">
             <span class="brand-name">城院帮</span>
-            <span class="brand-tagline">校园经验</span>
           </span>
         </RouterLink>
         <nav aria-label="主导航">
           <RouterLink to="/" :class="{ active: route.path === '/' }"
-            >发现经验</RouterLink
+            >发现</RouterLink
+          ><RouterLink to="/favorites" active-class="active"
+            >我的收藏</RouterLink
           ><RouterLink to="/workspace" active-class="active"
-            >我的工作区</RouterLink
-          ><RouterLink to="/favorites" active-class="active">收藏</RouterLink
-          ><RouterLink to="/me/appeals" active-class="active"
-            >我的限制与申诉</RouterLink
+            >创作工作区</RouterLink
+          ><RouterLink
+            to="/me"
+            :class="{
+              active: route.path === '/me' || route.path.startsWith('/me/'),
+            }"
+            >个人中心</RouterLink
           >
         </nav>
-        <RouterLink
-          class="account-link"
-          :to="
-            session.status === 'ready'
-              ? '/me'
-              : session.status === 'limited'
-                ? '/me/certification'
-                : '/account'
-          "
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="8" r="3.5" />
-            <path d="M5 20c.7-4 3.1-6 7-6s6.3 2 7 6" />
-          </svg>
-          <span>{{
-            ["ready", "limited"].includes(session.status)
-              ? "我的账号"
-              : session.status === "checking"
-                ? "核验会话…"
-                : "校园账号登录"
-          }}</span>
-        </RouterLink>
+        <div class="header-actions">
+          <RouterLink
+            class="button primary header-write"
+            :to="
+              session.status === 'ready'
+                ? '/workspace?new=1'
+                : '/account?next=%2Fworkspace'
+            "
+            >写经验</RouterLink
+          ><RouterLink
+            class="account-link"
+            :to="
+              session.status === 'ready'
+                ? '/me'
+                : session.status === 'limited'
+                  ? '/me/certification'
+                  : '/account'
+            "
+            :aria-label="
+              ['ready', 'limited'].includes(session.status)
+                ? '个人中心'
+                : session.status === 'checking'
+                  ? '正在核验会话'
+                  : '校园账号登录'
+            "
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M5 20c.7-4 3.1-6 7-6s6.3 2 7 6" />
+            </svg>
+            <span class="sr-only">{{
+              ["ready", "limited"].includes(session.status)
+                ? "个人中心"
+                : session.status === "checking"
+                  ? "核验会话…"
+                  : "校园账号登录"
+            }}</span>
+          </RouterLink>
+        </div>
       </div>
     </header>
     <div v-if="session.message" class="global-notice" role="status">

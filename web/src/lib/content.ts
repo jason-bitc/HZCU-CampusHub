@@ -73,3 +73,30 @@ export function dateText(date: string) {
       }).format(new Date(date))
     : "";
 }
+// 时间线等窄列使用的短格式：MM-DD HH:mm。
+export function shortDateText(date: string | null | undefined) {
+  if (!date) return "";
+  const value = new Date(date);
+  if (Number.isNaN(value.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(value.getMonth() + 1)}-${pad(value.getDate())} ${pad(
+    value.getHours(),
+  )}:${pad(value.getMinutes())}`;
+}
+// 经验卡片使用的短日期：M月D日。
+export function cardDate(date: string | null | undefined) {
+  if (!date) return "";
+  const value = new Date(date);
+  if (Number.isNaN(value.getTime())) return "";
+  return `${value.getMonth() + 1}月${value.getDate()}日`;
+}
+// 列表窄列使用的日期：YYYY-MM-DD HH:mm。
+export function compactDateText(date: string | null | undefined) {
+  if (!date) return "";
+  const value = new Date(date);
+  if (Number.isNaN(value.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(
+    value.getDate(),
+  )} ${pad(value.getHours())}:${pad(value.getMinutes())}`;
+}

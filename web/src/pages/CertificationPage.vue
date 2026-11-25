@@ -142,7 +142,7 @@ watch(() => session.status, load);
 </script>
 <template>
   <MemberGate allow-limited title="登录后查看本人认证与申诉">
-    <div class="page-heading">
+    <div class="page-heading service-heading">
       <h1>{{ appealView ? "本人申诉详情" : "本人校园认证" }}</h1>
     </div>
     <p v-if="busy" role="status">正在读取或提交…</p>

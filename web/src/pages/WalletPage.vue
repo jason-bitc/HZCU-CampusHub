@@ -175,110 +175,145 @@ watch(() => session.status, load);
 </script>
 <template>
   <MemberGate title="登录后查看硬币与账目">
-    <div class="page-heading">
-      <h1>我的硬币</h1>
+    <div class="page-heading service-page-heading">
+      <div>
+        <h1>我的硬币</h1>
+        <p>每日登录与阅读奖励、本人账目都在这里。</p>
+      </div>
       <button :disabled="busy" @click="load">刷新钱包</button>
     </div>
-    <p v-if="busy" role="status">正在读取或提交…</p>
-    <p v-if="error" class="error" role="alert">{{ error }}</p>
-    <p v-if="notice" class="success" role="status">{{ notice }}</p>
-    <section v-if="wallet" class="panel">
-      <h2>可用余额 {{ wallet.balance }} 币</h2>
-      <p>收到的有效贡献 {{ wallet.receivedContribution }} 币</p>
-      <AuthorHonor v-if="wallet.honor" :honor="wallet.honor" />
-      <p v-else class="hint">当前暂无作者荣誉。</p>
-    </section>
-    <section v-if="rewards" class="panel stack">
-      <h2>每日奖励 · {{ rewards.businessDate }}</h2>
-      <p>
-        当天已领 {{ rewards.rewardedToday }} 币 · 剩余额度
-        {{ rewards.remainingDailyReward }} 币
-      </p>
-      <p>
-        登录奖励 {{ rewards.rules.loginReward }} 币，阅读满
-        {{ rewards.rules.readingSeconds }} 秒可领取
-        {{ rewards.rules.readingReward }} 币。
-      </p>
-      <p v-if="!rewards.reading.claimed" class="hint">
-        {{
-          seconds === null
-            ? "打开一篇公开经验开始计时。"
-            : seconds > 0
-              ? `阅读任务还需约 ${seconds} 秒。`
-              : "阅读任务已达到计时门槛。"
-        }}
-      </p>
-      <div class="card-actions">
-        <button
-          :disabled="
-            busy ||
-            (!pending.login &&
-              (!rewards.login.eligible || rewards.login.claimed))
-          "
-          @click="claim('login')"
-        >
-          {{
-            pending.login
-              ? "核对上次登录奖励"
-              : rewards.login.claimed
-                ? "今日登录奖励已领"
-                : "领取登录奖励"
-          }}
-        </button>
-        <button
-          :disabled="
-            busy ||
-            (!pending.reading && (rewards.reading.claimed || seconds !== 0))
-          "
-          @click="claim('reading')"
-        >
-          {{
-            pending.reading
-              ? "核对上次阅读奖励"
-              : rewards.reading.claimed
-                ? "今日阅读奖励已领"
-                : "领取阅读奖励"
-          }}
-        </button>
-      </div>
-    </section>
-    <section v-if="ledger" class="panel">
-      <h2>本人账目</h2>
-      <p v-if="!ledger.total">暂无账目。</p>
-      <div
-        v-for="row in ledger.items"
-        :key="row.eventId"
-        class="restriction-row"
-      >
-        <strong
-          >{{ actions[row.action] || row.action }} ·
-          {{ row.delta > 0 ? "+" : "" }}{{ row.delta }} 币</strong
-        >
-        <p class="meta">
-          {{ dateText(row.occurredAt) }} · 当时余额
-          {{ row.balanceAfter }} 币<span v-if="row.articleId">
-            · 文章 {{ row.articleId }}</span
-          >
-        </p>
-      </div>
-      <nav
-        v-if="ledger.total > ledger.size"
-        class="pagination"
-        aria-label="本人账目翻页"
-      >
-        <button
-          :disabled="busy || ledger.page <= 1"
-          @click="turn(ledger.page - 1)"
-        >
-          上一页</button
-        ><span>第 {{ ledger.page }} 页</span>
-        <button
-          :disabled="busy || ledger.page * ledger.size >= ledger.total"
-          @click="turn(ledger.page + 1)"
-        >
-          下一页
-        </button>
-      </nav>
-    </section>
+    <div class="service-page">
+      <p v-if="busy" class="service-inline-note" role="status">正在读取或提交…</p>
+      <p v-if="error" class="error service-inline-note" role="alert">{{ error }}</p>
+      <p v-if="notice" class="success service-inline-note" role="status">{{ notice }}</p>
+      <section v-if="wallet" class="panel service-card" aria-label="硬币与奖励">
+        <dl class="kv">
+          <div>
+            <dt>可用硬币</dt>
+            <dd>
+              <span>{{ wallet.balance }} 币</span>
+              <small v-if="wallet.honor"
+                >作者荣誉 · <AuthorHonor :honor="wallet.honor"
+              /></small>
+              <small v-else>当前暂无作者荣誉。硬币不能购买、提现或兑换现金。</small>
+            </dd>
+          </div>
+          <div>
+            <dt>累计有效贡献</dt>
+            <dd><span>{{ wallet.receivedContribution }} 币</span></dd>
+          </div>
+          <template v-if="rewards">
+            <div>
+              <dt>今日奖励 · {{ rewards.businessDate }}</dt>
+              <dd>
+                <span
+                  >已领 {{ rewards.rewardedToday }} 币 · 剩余额度
+                  {{ rewards.remainingDailyReward }} 币</span
+                >
+                <small
+                  >登录奖励 {{ rewards.rules.loginReward }} 币，阅读满
+                  {{ rewards.rules.readingSeconds }} 秒可领取
+                  {{ rewards.rules.readingReward }} 币，每日最多
+                  {{ rewards.rules.dailyMaximum }} 币。</small
+                >
+                <div class="card-actions">
+                  <button
+                    :disabled="
+                      busy ||
+                      (!pending.login &&
+                        (!rewards.login.eligible || rewards.login.claimed))
+                    "
+                    @click="claim('login')"
+                  >
+                    {{
+                      pending.login
+                        ? "核对上次登录奖励"
+                        : rewards.login.claimed
+                          ? "今日登录奖励已领"
+                          : "领取登录奖励"
+                    }}
+                  </button>
+                </div>
+              </dd>
+            </div>
+            <div>
+              <dt>阅读计时</dt>
+              <dd>
+                <span>{{
+                  seconds === null
+                    ? "打开一篇公开经验开始计时。"
+                    : seconds > 0
+                      ? `阅读任务还需约 ${seconds} 秒。`
+                      : "阅读任务已达到计时门槛。"
+                }}</span>
+                <div class="card-actions">
+                  <button
+                    :disabled="
+                      busy ||
+                      (!pending.reading && (rewards.reading.claimed || seconds !== 0))
+                    "
+                    @click="claim('reading')"
+                  >
+                    {{
+                      pending.reading
+                        ? "核对上次阅读奖励"
+                        : rewards.reading.claimed
+                          ? "今日阅读奖励已领"
+                          : "领取阅读奖励"
+                    }}
+                  </button>
+                </div>
+              </dd>
+            </div>
+          </template>
+          <div>
+            <dt>本人账目</dt>
+            <dd>
+              <span v-if="ledger">{{ ledger.total }} 条记录</span>
+              <a href="#wallet-ledger">查看账本</a>
+            </dd>
+          </div>
+        </dl>
+      </section>
+      <section v-if="ledger" id="wallet-ledger" class="panel service-card wallet-ledger" aria-label="本人账目">
+        <h2>本人账目</h2>
+        <p v-if="!ledger.total" class="service-empty">暂无账目。</p>
+        <ul v-else class="service-list">
+          <li v-for="row in ledger.items" :key="row.eventId">
+            <div class="service-list-copy">
+              <strong
+                >{{ actions[row.action] || row.action }} ·
+                {{ row.delta > 0 ? "+" : "" }}{{ row.delta }} 币</strong
+              >
+              <span
+                >{{ dateText(row.occurredAt) }} · 当时余额
+                {{ row.balanceAfter }} 币<span v-if="row.articleId"
+                  >· 文章 {{ row.articleId }}</span
+                ></span
+              >
+            </div>
+          </li>
+        </ul>
+        <div v-if="ledger.total > ledger.size" class="service-foot">
+          <span>共 {{ ledger.total }} 条</span>
+          <nav class="pagination" aria-label="本人账目翻页">
+            <button
+              aria-label="上一页"
+              :disabled="busy || ledger.page <= 1"
+              @click="turn(ledger.page - 1)"
+            >
+              ‹</button
+            ><span aria-current="page">{{ ledger.page }}</span
+            ><button
+              aria-label="下一页"
+              :disabled="busy || ledger.page * ledger.size >= ledger.total"
+              @click="turn(ledger.page + 1)"
+            >
+              ›
+            </button>
+          </nav>
+        </div>
+      </section>
+    </div>
   </MemberGate>
 </template>

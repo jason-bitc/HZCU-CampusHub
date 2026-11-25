@@ -19,17 +19,28 @@ function ask(copy: ConfirmationCopy) {
 }
 </script>
 <template>
-  <ConsoleConfirm ref="modal" />
-  <p v-if="error" class="error" role="alert">{{ error }}</p>
-  <p v-if="notice" class="success" role="status">{{ notice }}</p>
-  <section v-if="pending" class="console-note" aria-label="待确认操作">
-    <h2>{{ pending.label }} · 结果待确认</h2>
-    <p>原对象、修订、理由和请求键已保存。当前表单不会覆盖原请求。</p>
-    <div class="console-actions">
-      <button :disabled="busy" @click="$emit('retry')">按原请求核对</button
-      ><button :disabled="busy" @click="$emit('reconcile', ask)">
+  <div v-if="error || notice || pending">
+    <ConsoleConfirm ref="modal" />
+  <p v-if="error" class="console-banner is-error" role="alert">{{ error }}</p>
+  <p v-if="notice" class="console-banner is-success" role="status">
+    {{ notice }}
+  </p>
+  <section
+    v-if="pending"
+    class="console-banner is-warning"
+    role="status"
+    aria-label="待确认操作"
+  >
+    <span
+      >{{ pending.label }} · 结果待确认。原对象、修订、理由和请求键已保存，当前表单不会覆盖原请求。</span
+    >
+    <span class="console-banner-actions"
+      ><button type="button" :disabled="busy" @click="$emit('retry')">
+        按原请求核对</button
+      ><button type="button" :disabled="busy" @click="$emit('reconcile', ask)">
         读取最新状态并核对
-      </button>
-    </div>
+      </button></span
+    >
   </section>
+  </div>
 </template>

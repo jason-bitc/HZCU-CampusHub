@@ -136,49 +136,20 @@ async function submit() {
 }
 </script>
 <template>
-  <div class="account-layout">
+  <div class="account-layout account-compact">
     <section class="account-intro">
-      <h1>把经验留给<br />下一个出发的人</h1>
-      <p>登录后收藏有用的经验，也可以把自己的准备、投递与复盘整理成文。</p>
-      <ul class="plain-list">
-        <li>所有公开正文始终免费阅读</li>
-        <li>网页和小程序共享文章与收藏</li>
-        <li>联系方式由本人选择是否开放</li>
-      </ul>
-      <RouterLink class="inline-link" to="/">先看看公开经验 →</RouterLink>
-    </section>
-    <section class="panel account-panel">
-      <div class="segmented account-tabs">
-        <button
-          :aria-pressed="mode === 'login'"
-          :disabled="busy"
-          @click="switchMode('login')"
-        >
-          登录</button
-        ><button
-          :aria-pressed="mode === 'register'"
-          :disabled="busy"
-          @click="switchMode('register')"
-        >
-          校园邮箱注册</button
-        ><button
-          :aria-pressed="mode === 'reset'"
-          :disabled="busy"
-          @click="switchMode('reset')"
-        >
-          重置密码
-        </button>
-      </div>
-      <h2>
+      <h1>{{ mode === "login" ? "校园账号登录" : mode === "register" ? "校邮注册" : "找回密码" }}</h1>
+      <p>
         {{
           mode === "login"
-            ? "欢迎回到城院帮"
+            ? "登录后可收藏经验、查看评论与作者主页。"
             : mode === "register"
-              ? "验证你的校园邮箱"
-              : "重置应用登录密码"
+              ? "使用校园邮箱注册应用账号，注册后返回登录。"
+              : "通过校园邮箱验证码重置应用登录密码。"
         }}
-      </h2>
-      <p class="muted">仅支持 stu.hzcu.edu.cn 校园邮箱</p>
+      </p>
+    </section>
+    <section class="panel account-panel">
       <form @submit.prevent="submit">
         <fieldset :disabled="busy">
           <label
@@ -217,8 +188,19 @@ async function submit() {
               {{ new Date(challenge.expiresAt).toLocaleTimeString("zh-CN") }}
             </p></template
           ><label
-            >{{ mode === "login" ? "应用登录密码" : "设置应用登录密码"
-            }}<input
+            ><span class="label-row"
+              ><span>{{
+                mode === "login" ? "应用登录密码" : "设置应用登录密码"
+              }}</span
+              ><button
+                v-if="mode === 'login'"
+                type="button"
+                class="text-button"
+                @click="switchMode('reset')"
+              >
+                忘记密码？
+              </button></span
+            ><input
               v-model="password"
               name="password"
               type="password"
@@ -235,7 +217,10 @@ async function submit() {
               busy
                 ? "正在处理…"
                 : mode === "login"
-                  ? "登录校园账号"
+                  ? typeof route.query.next === "string" &&
+                    route.query.next.startsWith("/articles/")
+                    ? "登录并回到文章"
+                    : "登录校园账号"
                   : mode === "register"
                     ? "完成注册"
                     : "重置密码"
@@ -245,6 +230,43 @@ async function submit() {
         <p v-if="error" class="error" role="alert">{{ error }}</p>
         <p v-if="notice" class="success" role="status">{{ notice }}</p>
       </form>
+      <ul class="account-rows">
+        <template v-if="mode === 'login'">
+          <li>
+            <span>还没有应用账号？校邮注册</span
+            ><button
+              type="button"
+              class="text-button"
+              :disabled="busy"
+              @click="switchMode('register')"
+            >
+              注册后返回登录
+            </button>
+          </li>
+          <li>
+            <span>找回密码</span
+            ><button
+              type="button"
+              class="text-button"
+              :disabled="busy"
+              @click="switchMode('reset')"
+            >
+              使用邮箱验证码
+            </button>
+          </li>
+        </template>
+        <li v-else>
+          <span>{{ mode === "register" ? "已有应用账号" : "已想起密码" }}</span
+          ><button
+            type="button"
+            class="text-button"
+            :disabled="busy"
+            @click="switchMode('login')"
+          >
+            返回登录
+          </button>
+        </li>
+      </ul>
     </section>
   </div>
 </template>

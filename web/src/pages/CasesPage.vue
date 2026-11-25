@@ -224,7 +224,7 @@ watch(
 <template>
   <MemberGate title="登录后使用反馈与举报">
     <ConfirmDialog ref="confirmation" />
-    <div class="page-heading">
+    <div class="page-heading service-heading">
       <h1>{{ title }}</h1>
       <div class="card-actions">
         <button

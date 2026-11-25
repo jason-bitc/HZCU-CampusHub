@@ -23,6 +23,10 @@ export const routes: RouteRecordRaw[] = [
           component: () => import("../management/AdminAdditional.vue"),
         }),
       ),
+      {
+        path: "certification",
+        component: () => import("../management/AdminCertifications.vue"),
+      },
     ],
   },
   { path: "/:pathMatch(.*)*", redirect: "/admin/login" },

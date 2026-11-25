@@ -34,51 +34,54 @@ async function submit() {
 }
 </script>
 <template>
-  <h1 class="console-title">社区管理登录</h1>
-  <div class="console-login-grid">
-    <form class="console-panel console-login-panel" @submit.prevent="submit">
-      <h2>仅限已授权的社区管理账号</h2>
+  <div class="console-login">
+    <form class="console-login-card" @submit.prevent="submit">
+      <p class="console-login-crumb">
+        <span aria-hidden="true">城院帮</span>
+        <span aria-hidden="true">/</span>
+        <span aria-hidden="true">社区管理</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">登录</span>
+      </p>
+      <h1>社区管理登录</h1>
+      <p class="console-login-desc">
+        使用社区管理账号进入案件和治理工作台。
+      </p>
       <p
         v-if="adminSession.status === 'ready' && !preview"
-        class="console-note"
+        class="console-banner is-success console-login-session"
       >
-        管理会话已核验。<RouterLink to="/admin/cases">进入待办案件</RouterLink>
+        管理会话已核验。<RouterLink to="/admin/cases">进入案件队列</RouterLink>
       </p>
       <fieldset :disabled="busy || preview">
         <label
-          >管理账号 *<input
+          >账号<input
             v-model="login"
             name="admin-login"
             autocomplete="username"
             required
-            placeholder="请输入账号" /></label
+            placeholder="输入管理员账号" /></label
         ><label
-          >密码 *<input
+          >密码<input
             v-model="password"
             name="admin-password"
             type="password"
             autocomplete="current-password"
             required
-            placeholder="请输入密码" /></label
-        ><button class="console-primary" type="submit">
+            placeholder="输入密码" /></label
+        ><button
+          class="console-primary console-login-submit"
+          type="submit"
+        >
           {{ busy ? "正在核验管理身份…" : "登录社区管理" }}
         </button>
       </fieldset>
-      <p v-if="error" class="error" role="alert">{{ error }}</p>
-    </form>
-    <div class="console-login-aside">
-      <p class="console-note">
-        社区管理只处理内容、案件和分类。普通校园账号不能获得管理权限；社区身份不能执行部署或恢复。
+      <p v-if="error" class="console-banner is-error console-login-error" role="alert">
+        {{ error }}
       </p>
-      <section class="console-panel">
-        <h2>无权限状态</h2>
-        <p v-if="error || preview" class="console-negative console-emphasis">
-          此账号没有社区管理权限。
-        </p>
-        <p v-else>需使用已授权管理账号，普通校园认证不能提升权限。</p>
-        <p>返回普通阅读，或使用已授权管理账号。</p>
-        <RouterLink class="button" to="/">返回普通阅读</RouterLink>
-      </section>
-    </div>
+      <p class="console-login-extra">
+        仅限已授权的社区管理账号。普通校园账号不能获得管理权限；社区身份不能执行部署或恢复。
+      </p>
+    </form>
   </div>
 </template>

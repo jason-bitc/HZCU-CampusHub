@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import ConsoleConfirm from "./ConsoleConfirm.vue";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { message } from "../lib/api";
 import { dateText } from "../lib/content";
 import { adminRequest, adminSession } from "./client";
 import { useMutation } from "./governance";
 import type { Page } from "./governance";
 import ConsolePager from "./ConsolePager.vue";
-import ConsoleConfirm from "./ConsoleConfirm.vue";
-import { consoleError } from "./console-ux";
 import MutationNotice from "./MutationNotice.vue";
 
 interface Contribution {
@@ -30,7 +30,6 @@ interface AuditEntry {
   reason?: string;
   contributionEventId?: string;
 }
-const emit = defineEmits<{ changed: [] }>();
 const props = defineProps<{
   caseId: number;
   revision: number;
@@ -59,7 +58,7 @@ async function load(contributionPage = 1, auditPage = 1) {
     records.value = contributions;
     audit.value = history;
   } catch (e) {
-    if (current === generation) loadError.value = consoleError(e);
+    if (current === generation) loadError.value = message(e);
   } finally {
     if (current === generation) loading.value = false;
   }
@@ -69,7 +68,6 @@ const mutation = useMutation(
   "CONTRIBUTION_INVALIDATE",
   async () => {
     await load(records.value?.page, audit.value?.page);
-    emit("changed");
   },
 );
 const { pending, busy, error, notice, allowed } = mutation;
@@ -85,6 +83,9 @@ function select(eventId: string) {
   selected.value = eventId;
   reason.value = "";
 }
+const selectedRecord = computed(() =>
+  records.value?.items.find((item) => item.eventId === selected.value),
+);
 async function invalidate() {
   if (!canSelect.value || !selected.value || !reason.value.trim()) return;
   if (
@@ -128,30 +129,37 @@ const modal = ref<InstanceType<typeof ConsoleConfirm>>();
 </script>
 <template>
   <section
-    class="console-panel console-history"
+    id="case-contributions"
+    class="console-panel"
     aria-labelledby="case-contributions-title"
   >
     <ConsoleConfirm ref="modal" />
-    <h2 id="case-contributions-title">关联投币与案件审计</h2>
-    <p class="console-muted">
-      投币失效会重新计算文章有效币数、排序与作者荣誉。读者原流水和余额保留。
+    <div class="console-card-head">
+      <div>
+        <h2 id="case-contributions-title" class="console-card-title">
+          关联投币
+        </h2>
+        <p class="console-card-desc">
+          投币失效会重新计算文章有效币数、排序与作者荣誉。读者原流水和余额保留。
+        </p>
+      </div>
+      <div class="console-card-tools">
+        <button type="button" :disabled="loading || busy" @click="load()">
+          刷新投币与审计
+        </button>
+      </div>
+    </div>
+    <p v-if="!canHandle" class="console-footnote" style="margin-top: 12px">
+      请由处于处理阶段的案件认领人提交失效。
     </p>
-    <p v-if="!canHandle" class="hint">请由处于处理阶段的案件认领人提交失效。</p>
-    <button
-      :disabled="loading || busy"
-      @click="
-        load(records?.page, audit?.page);
-        emit('changed');
-      "
-    >
-      刷新投币与审计
-    </button>
-    <p v-if="loading" role="status">正在读取投币与案件审计…</p>
-    <p v-if="loadError" class="error" role="alert">
+    <p v-if="loading" class="console-muted" role="status" style="margin-top: 12px">
+      正在读取投币与案件审计…
+    </p>
+    <p v-if="loadError" class="console-banner is-error" role="alert" style="margin-top: 12px">
       {{ loadError }}
-      <span v-if="records || audit">当前显示的是上次读取结果。</span>
     </p>
     <MutationNotice
+      class="console-stack"
       :pending="pending"
       :busy="busy || loading"
       :error="error"
@@ -160,25 +168,27 @@ const modal = ref<InstanceType<typeof ConsoleConfirm>>();
       @reconcile="mutation.reconcile"
     />
     <div v-if="records?.items.length" class="console-table-wrap">
-      <table class="console-table console-responsive-table" role="table">
-        <thead role="rowgroup">
-          <tr role="row">
-            <th scope="col" role="columnheader">投币流水</th>
-            <th scope="col" role="columnheader">币数与时间</th>
-            <th scope="col" role="columnheader">处置结果</th>
-            <th scope="col" role="columnheader">操作</th>
+      <table class="console-table">
+        <thead>
+          <tr>
+            <th>投币流水</th>
+            <th>数量</th>
+            <th>时间</th>
+            <th>处置结果</th>
+            <th>操作</th>
           </tr>
         </thead>
-        <tbody role="rowgroup">
-          <tr role="row" v-for="record in records.items" :key="record.eventId">
-            <td data-label="投币流水" role="cell">{{ record.eventId }}</td>
-            <td data-label="币数与时间" role="cell">
-              {{ record.amount }} 币<small>{{
-                dateText(record.occurredAt)
-              }}</small>
-            </td>
-            <td data-label="处置结果" role="cell">
-              <span>{{ record.effective ? "有效" : "已失效" }}</span>
+        <tbody>
+          <tr v-for="record in records.items" :key="record.eventId">
+            <td class="num">{{ record.eventId }}</td>
+            <td class="num">{{ record.amount }} 枚硬币</td>
+            <td>{{ dateText(record.occurredAt) }}</td>
+            <td>
+              <span
+                class="console-tag"
+                :class="record.effective ? 'is-positive' : 'is-negative'"
+                >{{ record.effective ? "有效" : "已失效" }}</span
+              >
               <template v-if="record.invalidation">
                 <small
                   >案件 {{ record.invalidation.caseId }} · 管理员
@@ -190,20 +200,25 @@ const modal = ref<InstanceType<typeof ConsoleConfirm>>();
                 }}</small>
               </template>
             </td>
-            <td data-label="操作" role="cell">
+            <td>
               <button
                 v-if="record.effective && canHandle && allowed"
+                class="console-link"
+                type="button"
                 :disabled="!canSelect"
+                :aria-pressed="selected === record.eventId"
                 @click="select(record.eventId)"
               >
-                标记失效
+                {{ selected === record.eventId ? "正在核对" : "标记失效" }}
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p v-else-if="records && !loading">这篇文章暂无投币记录。</p>
+    <p v-else-if="records && !loading" class="console-muted" style="margin-top: 12px">
+      这篇文章暂无投币记录。
+    </p>
     <ConsolePager
       v-if="records"
       :page="records.page"
@@ -212,23 +227,60 @@ const modal = ref<InstanceType<typeof ConsoleConfirm>>();
       :busy="loading || busy"
       @turn="load($event, audit?.page)"
     />
-    <form
-      v-if="selected && !pending && canHandle && allowed"
-      class="console-note"
-      @submit.prevent="invalidate"
-    >
-      <h3>标记投币失效</h3>
-      <p>流水 {{ selected }} · 案件修订 {{ revision }}</p>
-      <label
-        >失效原因<textarea
-          v-model="reason"
-          required
-          maxlength="2000"
-          rows="3"
-          :disabled="busy"
-        />
-      </label>
-      <div class="card-actions">
+  </section>
+  <div
+    v-if="selected && !pending && canHandle && allowed"
+    class="console-split"
+    style="margin-top: 16px"
+  >
+    <section class="console-panel" aria-label="投币记录">
+      <h2 class="console-card-title">投币记录</h2>
+      <p class="console-card-desc">
+        投币 {{ selected }} ·
+        {{ selectedRecord?.effective ? "当前有效" : "已失效" }}
+      </p>
+      <dl class="console-facts">
+        <div>
+          <dt>记录编号</dt>
+          <dd>{{ selected }}</dd>
+        </div>
+        <div>
+          <dt>数量</dt>
+          <dd>{{ selectedRecord?.amount ?? "—" }} 枚硬币</dd>
+        </div>
+        <div>
+          <dt>案件修订</dt>
+          <dd>{{ revision }}</dd>
+        </div>
+        <div>
+          <dt>影响范围</dt>
+          <dd>有效贡献、排序、作者荣誉</dd>
+        </div>
+      </dl>
+      <p class="console-callout">
+        失效仅影响有效贡献及后续计算。读者的原流水和余额保留。结果与原因写入案件审计。
+      </p>
+    </section>
+    <form class="console-panel" @submit.prevent="invalidate">
+      <h2 class="console-card-title">确认投币失效</h2>
+      <p class="console-card-desc">请核对记录和本人处置权限。</p>
+      <div class="console-form">
+        <label class="console-field"
+          ><span>记录状态</span
+          ><input value="有效 → 失效" readonly /></label
+        ><label class="console-field"
+          ><span>必填原因</span
+          ><textarea
+            v-model="reason"
+            required
+            maxlength="2000"
+            rows="3"
+            placeholder="核对案件证据后说明该笔贡献为何无效。"
+            :disabled="busy"
+        /></label>
+      </div>
+      <div class="console-form-actions">
+        <button type="button" :disabled="busy" @click="select('')">取消</button>
         <button
           type="submit"
           class="console-danger"
@@ -236,29 +288,49 @@ const modal = ref<InstanceType<typeof ConsoleConfirm>>();
         >
           确认失效
         </button>
-        <button type="button" :disabled="busy" @click="select('')">取消</button>
       </div>
     </form>
-    <h3>案件审计</h3>
-    <ol v-if="audit?.items.length">
-      <li
-        v-for="entry in audit.items"
-        :key="`${entry.source}:${entry.sequence}`"
-      >
-        <strong>{{
-          entry.source === "CONTRIBUTION" ? "投币失效" : entry.action
-        }}</strong>
-        <time>{{ dateText(entry.occurredAt) }}</time>
-        <p>
-          操作人 {{ entry.actorId
-          }}<span v-if="entry.contributionEventId">
-            · 流水 {{ entry.contributionEventId }}</span
+  </div>
+  <section class="console-panel" aria-labelledby="case-audit-title">
+    <h2 id="case-audit-title" class="console-card-title">案件审计</h2>
+    <p class="console-card-desc">最近发生在前。审计编号和关联对象可用于核对。</p>
+    <div v-if="audit?.items.length" class="console-table-wrap">
+      <table class="console-table">
+        <thead>
+          <tr>
+            <th>审计编号</th>
+            <th>动作</th>
+            <th>对象</th>
+            <th>操作者</th>
+            <th>发生时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="entry in audit.items"
+            :key="`${entry.source}:${entry.sequence}`"
           >
-        </p>
-        <p v-if="entry.reason" class="console-preserve">{{ entry.reason }}</p>
-      </li>
-    </ol>
-    <p v-else-if="audit && !loading">暂无案件审计。</p>
+            <td class="num">{{ entry.source }}-{{ entry.sequence }}</td>
+            <td>
+              {{ entry.source === "CONTRIBUTION" ? "投币失效" : entry.action }}
+            </td>
+            <td>
+              <template v-if="entry.contributionEventId"
+                >流水 {{ entry.contributionEventId }}</template
+              >
+              <small v-if="entry.reason" class="console-preserve">{{
+                entry.reason
+              }}</small>
+            </td>
+            <td>管理员 {{ entry.actorId }}</td>
+            <td>{{ dateText(entry.occurredAt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p v-else-if="audit && !loading" class="console-muted" style="margin-top: 12px">
+      暂无案件审计。
+    </p>
     <ConsolePager
       v-if="audit"
       :page="audit.page"

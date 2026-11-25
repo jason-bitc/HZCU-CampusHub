@@ -125,7 +125,7 @@ watch(
 </script>
 <template>
   <MemberGate allow-limited title="登录后查看站内通知">
-    <div class="page-heading">
+    <div class="page-heading service-page-heading">
       <div>
         <h1>站内通知</h1>
         <p v-if="result">
@@ -134,72 +134,80 @@ watch(
       </div>
       <button :disabled="busy || !!marking" @click="load()">刷新通知</button>
     </div>
-    <p v-if="busy" role="status">正在读取通知…</p>
-    <p v-if="error" class="error" role="alert">
-      {{ error }}
-      <span v-if="result">当前显示的是上次读取结果。</span>
-      <button @click="load(retryPage)">重试读取</button>
-    </p>
-    <p v-if="result && !result.total" class="panel state-panel">暂无通知。</p>
-    <article
-      v-for="row in result?.items"
-      :key="row.id"
-      class="panel restriction-row notification-row"
-      :class="{ 'notification-unread': !row.readAt }"
-    >
-      <h2>{{ row.message }}</h2>
-      <p class="meta">
-        <strong class="notice-read-state">{{
-          row.readAt ? "已读" : "未读"
-        }}</strong>
-        <span>{{ dateText(row.createdAt) }}</span>
-        <span v-if="row.outcome && outcomes[row.outcome]"
-          >处理结果 · {{ outcomes[row.outcome] }}</span
-        >
+    <section class="panel service-card" aria-label="通知列表">
+      <p v-if="busy" class="service-inline-note" role="status">正在读取通知…</p>
+      <p v-if="error" class="notice service-inline-note" role="alert">
+        刷新失败，当前显示的是上次读取的通知。{{ error }}
       </p>
-      <div class="card-actions">
-        <RouterLink
-          v-if="destination(row.target)"
-          class="button"
-          :to="destination(row.target)!"
-          >查看相关内容</RouterLink
+      <p v-if="result && !result.total" class="service-empty">暂无通知。</p>
+      <ul v-if="result?.items.length" class="service-list">
+        <li
+          v-for="row in result.items"
+          :key="row.id"
+          :class="{ 'notification-unread': !row.readAt }"
         >
-        <span v-else class="hint">相关内容暂不可查看。</span>
-        <button
-          v-if="!row.readAt"
-          :disabled="busy || !!marking"
-          @click="mark(row)"
-        >
-          标记已读
+          <div class="service-list-copy">
+            <strong>{{ row.message }}</strong>
+            <span
+              ><span class="notice-read-state">{{
+                row.readAt ? "已读" : "未读"
+              }}</span>
+              · {{ dateText(row.createdAt) }}
+              <template v-if="row.outcome && outcomes[row.outcome]"
+                >· {{ outcomes[row.outcome] }}</template
+              ></span
+            >
+            <OperationFeedback
+              :feedback="rowFeedback[row.id]"
+              :processing="
+                marking === row.id && !row.readAt ? '正在标记已读…' : undefined
+              "
+            />
+          </div>
+          <div class="service-list-actions">
+            <RouterLink
+              v-if="destination(row.target)"
+              :to="destination(row.target)!"
+              >查看相关内容</RouterLink
+            >
+            <span v-else class="hint">相关内容暂不可查看</span>
+            <button
+              v-if="!row.readAt"
+              :disabled="busy || !!marking"
+              @click="mark(row)"
+            >
+              标记已读
+            </button>
+          </div>
+        </li>
+      </ul>
+      <div v-if="error || (result && result.total > result.size)" class="service-foot">
+        <button v-if="error" :disabled="busy" @click="load(retryPage)">
+          重试读取
         </button>
+        <nav
+          v-if="result && result.total > result.size"
+          class="pagination"
+          aria-label="通知翻页"
+        >
+          <button
+            aria-label="上一页"
+            :disabled="busy || !!marking || result.page <= 1"
+            @click="load(result.page - 1)"
+          >
+            ‹</button
+          ><span aria-current="page">{{ result.page }}</span
+          ><button
+            aria-label="下一页"
+            :disabled="
+              busy || !!marking || result.page * result.size >= result.total
+            "
+            @click="load(result.page + 1)"
+          >
+            ›
+          </button>
+        </nav>
       </div>
-      <OperationFeedback
-        :feedback="rowFeedback[row.id]"
-        :processing="
-          marking === row.id && !row.readAt ? '正在标记已读…' : undefined
-        "
-      />
-    </article>
-    <nav
-      v-if="result && result.total > result.size"
-      class="pagination"
-      aria-label="通知翻页"
-    >
-      <button
-        :disabled="busy || !!marking || result.page <= 1"
-        @click="load(result.page - 1)"
-      >
-        上一页
-      </button>
-      <span>第 {{ result.page }} 页</span>
-      <button
-        :disabled="
-          busy || !!marking || result.page * result.size >= result.total
-        "
-        @click="load(result.page + 1)"
-      >
-        下一页
-      </button>
-    </nav>
+    </section>
   </MemberGate>
 </template>

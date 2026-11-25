@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="城院帮 ENV-02 正常负载" enabled="true">
+      <stringProp name="TestPlan.comments">仅用于 127.0.0.1:8082 隔离实例。用隔离数据预检后执行。</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments">
+        <collectionProp name="Arguments.arguments" />
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="30 并发 60 秒升载 600 秒稳态" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="无限循环至测试结束" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">30</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+        <stringProp name="ThreadGroup.duration">660</stringProp>
+        <stringProp name="ThreadGroup.delay">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="G04 业务采样" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
+import java.util.UUID
+
+// One immutable input row and one draft belong to each virtual user.
+if (vars.getObject('g04.client') == null) {
+    try {
+        if (props.getProperty('g04.confirm') != 'ENV-02') {
+            throw new IllegalArgumentException('Missing ENV-02 confirmation')
+        }
+        String filename = props.getProperty('g04.input')
+        if (!filename) throw new IllegalArgumentException('Missing fixture file')
+        def input = new JsonSlurper().parse(new File(filename), 'UTF-8')
+        def writers = input.writers
+        def articles = input.publicArticleIds
+        String query = input.listQuery ?: ''
+        if (!(writers instanceof List) || writers.size() != 30 ||
+            writers.collect { it.draftId.toString() }.toSet().size() != 30 ||
+            writers.collect { it.token }.toSet().size() != 30 ||
+            !(articles instanceof List) || articles.isEmpty() ||
+            !articles.every { it.toString() ==~ /[1-9][0-9]*/ } ||
+            !(query ==~ /[A-Za-z0-9%._~=&amp;+\-]*/)) {
+            throw new IllegalArgumentException('Invalid isolated fixtures')
+        }
+        def writer = writers[ctx.getThreadNum()]
+        if (!(writer.draftId.toString() ==~ /[1-9][0-9]*/) ||
+            !(writer.token instanceof String) || writer.token.trim().isEmpty() ||
+            !(writer.draftBody instanceof Map) ||
+            !(writer.draftBody.expectedRevision instanceof Number)) {
+            throw new IllegalArgumentException('Invalid isolated writer row')
+        }
+        vars.putObject('g04.writer', writer)
+        vars.putObject('g04.articles', articles)
+        vars.put('g04.query', query)
+        vars.putObject('g04.step', ctx.getThreadNum())
+        vars.putObject('g04.client', HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(3)).build())
+    } catch (Exception ignored) {
+        SampleResult.setSampleLabel('SETUP_INVALID')
+        SampleResult.setResponseCode('INVALID_SETUP')
+        SampleResult.setSuccessful(false)
+        SampleResult.setStopTest(true)
+        return
+    }
+}
+
+int step = vars.getObject('g04.step') as int
+vars.putObject('g04.step', step + 1)
+int slot = step % 10
+def articles = vars.getObject('g04.articles')
+def writer = vars.getObject('g04.writer')
+String article = articles[step % articles.size()].toString()
+String path
+String method = 'GET'
+String label
+String payload = null
+int expected = 200
+if (slot &lt; 4) {
+    label = 'READ_LIST'
+    String query = vars.get('g04.query')
+    path = '/articles' + (query ? '?' + query : '')
+} else if (slot &lt; 8) {
+    label = 'READ_DETAIL'
+    path = '/articles/' + article
+} else if (slot == 8) {
+    label = 'WRITE_DRAFT'
+    method = 'PUT'
+    path = '/me/articles/' + writer.draftId + '/draft'
+    Map body = new LinkedHashMap(writer.draftBody)
+    body.body = writer.draftBody.body + '\n\nG04 测试轮次 ' + step
+    payload = JsonOutput.toJson(body)
+} else {
+    label = 'WRITE_COMMENT'
+    expected = 201
+    method = 'POST'
+    path = '/articles/' + article + '/comments'
+    payload = JsonOutput.toJson([requestId: UUID.randomUUID().toString(), body: 'G04 合成评论',
+        imageIds: [], replyToCommentId: null])
+}
+SampleResult.setSampleLabel(label)
+try {
+    def request = HttpRequest.newBuilder(URI.create('http://127.0.0.1:8082/api/v1' + path))
+        .timeout(Duration.ofSeconds(8)).header('Accept', 'application/json')
+    if (payload != null) {
+        request.header('Content-Type', 'application/json')
+            .header('Authorization', 'Bearer ' + writer.token)
+            .method(method, HttpRequest.BodyPublishers.ofString(payload))
+    }
+    def response = vars.getObject('g04.client').send(request.build(), HttpResponse.BodyHandlers.ofString())
+    SampleResult.setResponseCode(response.statusCode().toString())
+    def decoded = new JsonSlurper().parseText(response.body())
+    boolean ok = response.statusCode() == expected &amp;&amp; decoded.code == 'OK'
+    if (ok &amp;&amp; label == 'WRITE_DRAFT') {
+        ok = decoded.data?.revision instanceof Number
+        if (ok) writer.draftBody.expectedRevision = decoded.data.revision
+    }
+    SampleResult.setResponseMessage(ok ? 'OK' : 'UNEXPECTED_RESPONSE')
+    SampleResult.setSuccessful(ok)
+} catch (Exception ignored) {
+    SampleResult.setResponseCode('NETWORK_OR_ASSERTION_ERROR')
+    SampleResult.setSuccessful(false)
+}</stringProp>
+        </JSR223Sampler>
+        <hashTree />
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

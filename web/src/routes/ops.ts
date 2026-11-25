@@ -13,6 +13,7 @@ export const routes: RouteRecordRaw[] = [
         "restart",
         "backups",
         "restore",
+        "tasks",
         "exceptions",
         "manual",
       ].map((path) => ({

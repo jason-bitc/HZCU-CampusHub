@@ -42,11 +42,11 @@ Debug与CAMPUSHUB_LOG_ENABLED=false冲突会拒绝就绪；目录不可写、独
 | CAMPUSHUB_LOG_ENABLED | true | false只关闭本批文件输出，不关闭数据库业务审计或原控制台 |
 | CAMPUSHUB_LOG_ROOT | .local-data/logs | 启动脚本固定server工作目录，默认server/.local-data/logs |
 | CAMPUSHUB_LOG_MAX_BYTES | 10485760 | 每个运行文件10MiB；配置范围1024字节至100MiB |
-| CAMPUSHUB_LOG_ARCHIVES | 7 | 保留7个轮转文件；允许1至30 |
+| CAMPUSHUB_LOG_ARCHIVES | 7 | 快速查询保留 7 个编号轮转文件，允许 1 至 30 |
 | CAMPUSHUB_LOG_DIAGNOSTICS | false | 旧兼容键，忽略其控制作用，见统一模式说明 |
 | CAMPUSHUB_RUNTIME_ENV | local | 本机应用只接受local/test，启动记录标识，不自动选择数据库 |
 
-目录须为本项目专属持久目录，文件及整个.local-data不入Git。运行文件campushub-runtime.log，轮转文件campushub-runtime.1.log至指定上限；下一条事件将超限时同步轮转，旧尾部按保留数量替换。同一目录用runtime.lock独占，多个进程请配置不同目录，不能同时共享写入。重启追加原日志，不在启动时清空。
+目录须为本项目专属持久目录，文件及整个.local-data不入Git。运行文件campushub-runtime.log，轮转文件campushub-runtime.1.log至指定上限。运行日志的最旧编号段被挤出时移入 `runtime-retained`。启动及保留段轮转时检查该目录，清理时同时核对归档时间及文件修改时间，二者都满 30 天才清理系统生成的归档文件。正式运行应开启文件日志，并按实际日产生日志量预留空间。同一目录用runtime.lock独占，多个进程请配置不同目录。重启追加原日志。
 
 仅本项目固定事件模板进入文件；每行UTF-8、UTC时间、服务器traceId和白名单字段。未知模板/外部依赖事件被丢弃，不把格式化用户文本或Throwable堆栈转存到文件。文件不等于完整Tomcat、操作系统或数据库日志。实现基于[Logback AppenderBase](https://logback.qos.ch/manual/appenders.html)的同步事件入口，固定字段和文件写入在本项目内实现。
 
@@ -63,7 +63,7 @@ Debug与CAMPUSHUB_LOG_ENABLED=false冲突会拒绝就绪；目录不可写、独
 
 运行中文件不可写时不假称日志成功：记录失败计数及健康标记，首个失败向标准错误输出静态RUNTIME_LOG_UNAVAILABLE与安全traceId，不输出真实路径、输入或异常消息。后续写入成功恢复文件健康标记，历史失败计数保留；内部状态供后续运维接入，本批没有公共查询接口。文件失败不回滚一个已经由数据库事务保证的业务审计，服务请求可继续成功；数据库审计失败则业务返回503并回滚。
 
-轮转或进程崩溃期间不承诺文件系统事务性，运行日志也不替代数据库审计；同一操作崩溃后可能缺少运行日志，但不能用文件存在代替数据库提交事实。保留数按本项目专属固定文件名执行，配置调小前需考虑已有文件和历史保留，完整容量监控、灾难恢复、归档及备份后续设计。
+运行日志保存请求摘要，业务审计仍由数据库事务保存。归档目录不可写时保留原编号段，并使用现有文件输出故障标记。到期清理失败会保留文件并输出静态故障分类。运维接口查询当前及编号轮转文件，`runtime-retained` 内的历史段由维护人员在本机检索。
 
 ## 成功审计
 
@@ -86,6 +86,8 @@ HTTP请求traceId可在business_audit与文件请求日志间关联；框架直�
 启动事件包含version、commit、environment、fileLogs、diagnostics。Spring Boot build-info提供应用版本（当前0.1.0）；提交默认unknown。构建时只有明确知道对应源码提交才传入 `-Dcampushub.build.commit=<40位小写提交号>`；缺失或非法值均unknown，不能拿父提交冒充未提交源码版本。未启用文件日志时控制台仍显示安全启动事件，有效diagnostics为false。
 
 ## 按traceId排查
+
+运维管理员也可在独立运维入口按追踪编号查当前和轮转日志中的业务请求摘要。查询参数和扫描范围见[运维接口手册](OPS_API.md#错误日志查询)。
 
 1. 保存响应头X-Trace-Id（JSON同名字段traceId）。本机用 `Select-String -LiteralPath .local-data/logs/campushub-runtime.log -SimpleMatch '<实际traceId>'` 检索；轮转后按实际存档文件检索。不要粘贴正文、密码或令牌作为检索词。
 2. 看action、module、status、code、stage及已有内部ID。成功变更可在有数据库维护权限的本机环境以**绑定参数**查询business_audit的trace_id，核对SUCCESS及前后修订；文件事件不代替数据库提交证据，没有面向普通用户的审计接口。

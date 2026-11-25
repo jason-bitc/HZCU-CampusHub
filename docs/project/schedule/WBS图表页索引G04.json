@@ -25,14 +25,14 @@
     "title": "工作分解  需求分析",
     "pdfPage": 4,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 35
   },
   {
     "page": 5,
     "title": "工作分解  总体与详细设计",
     "pdfPage": 5,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 35
   },
   {
     "page": 6,
@@ -137,7 +137,7 @@
     "title": "工作分解  编码与单元测试",
     "pdfPage": 20,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 35
   },
   {
     "page": 21,
@@ -228,7 +228,7 @@
     "title": "工作分解  综合测试",
     "pdfPage": 33,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 35
   },
   {
     "page": 34,
@@ -291,27 +291,27 @@
     "title": "工作分解  部署与维护",
     "pdfPage": 42,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 36
   },
   {
     "page": 43,
     "title": "工作分解  总结与收尾",
     "pdfPage": 43,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 36
   },
   {
     "page": 44,
     "title": "工作分解  持续项目管理与交叉复核",
     "pdfPage": 44,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 36
   },
   {
     "page": 45,
     "title": "工作分解  课程里程碑",
     "pdfPage": 45,
     "planSection": "7.1",
-    "planPage": 34
+    "planPage": 36
   }
 ]

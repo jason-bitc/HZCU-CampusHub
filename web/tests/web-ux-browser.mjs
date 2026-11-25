@@ -145,10 +145,7 @@ try {
     try {
       await signIn(page, fixture.readerEmail, "/");
       await button(page, "组合筛选").click();
-      await page
-        .locator("#catalog-filters .filter-select-trigger")
-        .first()
-        .click();
+      await page.getByRole("combobox", { name: /^目标岗位/ }).click();
       await page
         .getByRole("option", {
           name: full.categories.jobs[0].name,

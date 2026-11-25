@@ -30,7 +30,6 @@ const profileError = ref("");
 const keyword = ref(selected("keyword"));
 const catalogError = ref("");
 const resultHeading = ref<HTMLElement>();
-const filtersOpen = ref(false);
 let generation = 0;
 let profileGeneration = 0;
 let revealPage = false;
@@ -52,6 +51,13 @@ const applied = computed(() => {
   }
   return filters;
 });
+// 筛选卡里的下拉先记在 draft，点“应用筛选”再一次性写入地址栏。
+const draft = ref<Record<string, string>>(
+  Object.fromEntries(groups.map(({ param }) => [param, selected(param)])),
+);
+function syncDraft() {
+  for (const { param } of groups) draft.value[param] = selected(param);
+}
 function selected(key: string) {
   const value = route.query[key];
   return typeof value === "string" ? value : "";
@@ -60,6 +66,14 @@ function change(key: string, value: string) {
   const query: LocationQueryRaw = { ...route.query, page: "1" };
   if (value) query[key] = value;
   else delete query[key];
+  void router.push({ path: "/", query });
+}
+function applyFilters() {
+  const query: LocationQueryRaw = { ...route.query, page: "1" };
+  for (const { param } of groups) {
+    if (draft.value[param]) query[param] = draft.value[param];
+    else delete query[param];
+  }
   void router.push({ path: "/", query });
 }
 function search() {
@@ -185,7 +199,10 @@ watch(
 watch(
   () => route.query,
   () => {
-    if (route.path === "/") void load();
+    if (route.path === "/") {
+      syncDraft();
+      void load();
+    }
   },
 );
 watch(() => session.status, loadOwnMajor);
@@ -195,59 +212,45 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="page-heading">
+  <div class="page-heading discovery-heading">
     <h1>发现经验</h1>
   </div>
   <div class="discovery-layout discovery-single">
     <div>
-      <section class="panel filters" aria-label="筛选经验">
-        <div class="filter-toolbar">
-          <form class="search-form" role="search" @submit.prevent="search">
-            <label class="toolbar-label" for="search">搜索经验</label>
-            <div class="search-control">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <circle cx="10.5" cy="10.5" r="6.5" />
-                <path d="m15.5 15.5 5 5" />
-              </svg>
-              <input
-                id="search"
-                v-model="keyword"
-                type="search"
-                maxlength="100"
-                placeholder="搜索文章标题或摘要"
-              />
-              <button class="primary" type="submit">搜索</button>
-            </div>
-          </form>
-          <button
-            class="mobile-filter-toggle"
-            :aria-expanded="filtersOpen"
-            aria-controls="catalog-filters"
-            @click="filtersOpen = !filtersOpen"
-          >
-            {{ filtersOpen ? "收起组合筛选" : "组合筛选" }}
-          </button>
-          <div
-            id="catalog-filters"
-            class="catalog-filters"
-            :class="{ 'catalog-filters-open': filtersOpen }"
-          >
-            <FilterSelect
-              v-for="group in groups"
-              :key="group.key"
-              :label="group.label"
-              :model-value="selected(group.param)"
-              :options="catalog?.[group.key] ?? []"
-              @update:model-value="change(group.param, $event)"
-            />
-          </div>
+      <form class="search-form discovery-search" role="search" @submit.prevent="search">
+        <label class="sr-only" for="search">搜索经验</label>
+        <div class="search-control">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m15.5 15.5 5 5" />
+          </svg>
+          <input
+            id="search"
+            v-model="keyword"
+            type="search"
+            maxlength="100"
+            placeholder="搜索经验标题或摘要"
+          />
+          <button class="primary" type="submit">搜索</button>
         </div>
-        <p v-if="catalogError" class="hint" role="status">
-          {{ catalogError }}
-          <button class="text-button" @click="loadCatalog">重试分类</button>
-        </p>
+      </form>
+      <section class="filters discovery-controls" aria-label="筛选经验">
+        <div class="filter-toolbar">
+          <FilterSelect
+            v-for="group in groups"
+            :key="group.key"
+            :label="group.label === '文章适用专业' ? '专业' : group.label"
+            :model-value="draft[group.param]"
+            :options="catalog?.[group.key] ?? []"
+            @update:model-value="draft[group.param] = $event"
+          />
+          <button class="primary filter-apply" type="button" @click="applyFilters">
+            应用筛选
+          </button>
+        </div>
         <div class="filter-footer">
           <div class="same-major">
+            <p>登录并认证后可使用同专业快捷筛选</p>
             <button
               v-if="session.status !== 'ready'"
               :disabled="session.status === 'checking'"
@@ -275,9 +278,13 @@ onBeforeUnmount(() => {
             class="text-button clear-filters"
             @click="clearFilters"
           >
-            清除所有条件
+            清除全部
           </button>
         </div>
+        <p v-if="catalogError" class="hint" role="status">
+          {{ catalogError }}
+          <button class="text-button" @click="loadCatalog">重试分类</button>
+        </p>
         <ul
           v-if="applied.length"
           class="applied-filters"
@@ -298,17 +305,19 @@ onBeforeUnmount(() => {
         </ul>
       </section>
       <div ref="resultHeading" class="result-heading" tabindex="-1">
-        <span class="result-count" aria-live="polite">{{
-          busy
-            ? "正在查找经验…"
-            : error
-              ? "当前条件读取失败"
-              : result
-                ? `找到 ${result.total} 篇经验`
-                : "经验列表"
-        }}</span>
+        <h2>
+          {{
+            busy
+              ? "正在查找经验…"
+              : error
+                ? "当前条件读取失败"
+                : applied.length
+                  ? "筛选结果"
+                  : "公开经验"
+          }}
+        </h2>
         <div class="result-tools">
-          <span class="free-reading">全文免费阅读</span>
+          <span class="free-reading">游客可读完整正文</span>
           <div class="segmented" aria-label="排序">
             <button
               :aria-pressed="selected('sort') !== 'latest'"
@@ -367,12 +376,12 @@ onBeforeUnmount(() => {
             }}
           </p>
           <button v-if="applied.length" @click="clearFilters">清除条件</button>
-        </section></template
-      >
+        </section>
+      </template>
       <div v-if="busy" class="loading-list" role="status">
         <span class="sr-only">正在读取公开文章，请稍候。</span>
         <div
-          v-for="index in 3"
+          v-for="index in 4"
           :key="index"
           class="panel article-skeleton"
           aria-hidden="true"
@@ -382,26 +391,39 @@ onBeforeUnmount(() => {
           <span class="skeleton-line skeleton-short"></span>
         </div>
       </div>
-      <nav
-        v-if="result && result.total > result.size && !busy && !error"
-        class="pagination"
-        aria-label="经验翻页"
+      <div
+        v-if="result && !busy"
+        class="discovery-foot"
+        aria-live="polite"
       >
-        <button
-          :disabled="result.page <= 1"
-          @click="changePage(result.page - 1)"
+        <span class="result-count">{{
+          error
+            ? "当前条件读取失败"
+            : applied.length
+              ? `当前结果 ${result.total} 篇`
+              : `共 ${result.total} 篇公开经验`
+        }}</span>
+        <nav
+          v-if="result.total > result.size"
+          class="pagination"
+          aria-label="经验翻页"
         >
-          上一页</button
-        ><span
-          >第 {{ result.page }} /
-          {{ Math.ceil(result.total / result.size) }} 页</span
-        ><button
-          :disabled="result.page * result.size >= result.total"
-          @click="changePage(result.page + 1)"
-        >
-          下一页
-        </button>
-      </nav>
+          <button
+            :aria-label="'上一页'"
+            :disabled="result.page <= 1"
+            @click="changePage(result.page - 1)"
+          >
+            ‹</button
+          ><span aria-current="page">{{ result.page }}</span
+          ><button
+            :aria-label="'下一页'"
+            :disabled="result.page * result.size >= result.total"
+            @click="changePage(result.page + 1)"
+          >
+            ›
+          </button>
+        </nav>
+      </div>
     </div>
   </div>
 </template>
