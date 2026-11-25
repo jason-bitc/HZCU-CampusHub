@@ -228,6 +228,24 @@ async function test(name, run) {
     reader.jumpBookmark.until = 0;
     assert.equal(reader.capturePosition(150).headingId, 1);
   });
+  await test('文章页目录入口跟随正文滚动，无章节时隐藏', () => {
+    const scrolled = [];
+    let opened = 0;
+    const reader = { updateReadingPosition(top) { scrolled.push(top); }, openToc() { opened += 1; } };
+    const detail = harness('pages/article-detail/article-detail.js');
+    detail.selectComponent = () => reader;
+    detail._tocPinAt = 160;
+    detail.openToc();
+    assert.equal(opened, 0);
+    detail.setData({ hasToc: true });
+    detail.openToc();
+    assert.equal(opened, 1);
+    detail.onPageScroll({ scrollTop: 161 });
+    assert.equal(detail.data.tocPinned, true);
+    detail.onPageScroll({ scrollTop: 152 });
+    assert.equal(detail.data.tocPinned, false);
+    assert.deepEqual(scrolled, [161, 152]);
+  });
   await test('取消演示请求后 Promise 结束，不让刷新永久等待', async () => {
     const demo = require('../services/demo-service');
     demo.setScenario('normal'); const operation = demo.listArticles({ page: 1, size: 2 });

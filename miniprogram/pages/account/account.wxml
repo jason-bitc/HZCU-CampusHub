@@ -7,8 +7,8 @@
   <view class="field"><text class="field-label">{{mode === 'login' ? '密码' : '设置密码'}}</text><input class="field-input" value="{{password}}" password data-field="password" bindinput="input" maxlength="-1" disabled="{{busy}}" aria-label="密码" placeholder="输入应用登录密码" /><text wx:if="{{errors.password}}" class="field-error">{{errors.password}}</text></view>
   <view wx:if="{{mode !== 'login'}}" class="field"><text class="field-label">确认密码</text><input class="field-input" value="{{confirmation}}" password data-field="confirmation" bindinput="input" maxlength="-1" disabled="{{busy}}" aria-label="确认密码" placeholder="再次输入密码" /><text wx:if="{{errors.confirmation}}" class="field-error">{{errors.confirmation}}</text></view>
   <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text><text wx:if="{{notice}}" class="success-note">{{notice}}</text>
-  <view class="form-actions"><button class="button-primary" bindtap="submit" loading="{{busy}}" disabled="{{busy || sending}}">{{mode === 'login' ? '登录' : mode === 'register' ? '验证邮箱并创建账号' : '核验并更新密码'}}</button></view>
   </view>
+  <view class="form-actions"><button class="button-primary" bindtap="submit" loading="{{busy}}" disabled="{{busy || sending}}">{{mode === 'login' ? '登录' : mode === 'register' ? '验证邮箱并创建账号' : '核验并更新密码'}}</button></view>
   <view class="auth-links"><button wx:if="{{mode !== 'register'}}" class="button-text" data-mode="register" bindtap="switchMode">用校园邮箱注册</button><button wx:if="{{mode !== 'login'}}" class="button-text" data-mode="login" bindtap="switchMode">返回登录</button><button wx:if="{{mode === 'login'}}" class="button-text" data-mode="reset" bindtap="switchMode">忘记密码</button></view>
   <button class="button-text" bindtap="browse">暂不登录，继续免费阅读</button><view class="notice form-section">仅开放 stu.hzcu.edu.cn 校园邮箱注册。校园关联认证不代表文章或经历真实性。</view>
 </view>

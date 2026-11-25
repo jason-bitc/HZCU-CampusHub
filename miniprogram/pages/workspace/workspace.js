@@ -5,8 +5,8 @@ const { formatDateTime } = require('../../utils/format');
 
 const states = { DRAFT: '草稿', PUBLISHED: '公开', AUTHOR_OFFLINE: '自主下架', ADMIN_HIDDEN: '管理员隐藏' };
 const filters = [
-  { id: 'ALL', label: '全部' }, { id: 'PUBLISHED', label: '公开' }, { id: 'AUTHOR_OFFLINE', label: '自主下架' },
-  { id: 'ADMIN_HIDDEN', label: '已隐藏' }, { id: 'DRAFT', label: '草稿' }
+  { id: 'ALL', label: '全部' }, { id: 'PUBLISHED', label: '公开' }, { id: 'DRAFT', label: '草稿' },
+  { id: 'AUTHOR_OFFLINE', label: '自主下架' }, { id: 'ADMIN_HIDDEN', label: '已隐藏' }
 ];
 const blank = { items: [], visibleItems: [], total: 0, page: 0, loaded: false, pendingCreate: false, notice: '', restricted: false };
 function visible(items, filter) {

@@ -15,7 +15,7 @@
         <text wx:if="{{feedbackKind === 'profile' && error}}" class="field-error" role="alert">{{error}}</text>
       </view>
       <view class="flow-card profile-section">
-      <text class="section-title">站外联系</text><view class="menu-row"><text>向认证读者公开联系方式</text><switch checked="{{enabled}}" color="#2563eb" bindchange="enabled" disabled="{{busy || conflict}}" aria-label="公开联系方式" /></view>
+      <text class="section-title">联系设置</text><view class="menu-row"><text>向认证读者公开联系方式</text><switch checked="{{enabled}}" color="#0d6b57" bindchange="enabled" disabled="{{busy || conflict}}" aria-label="公开联系方式" /></view>
       <view class="field"><text class="field-label">联系类型</text><picker range="{{typeNames}}" value="{{typeIndex}}" bindchange="type" disabled="{{busy || conflict}}"><view class="field-picker">{{typeNames[typeIndex]}}</view></picker></view>
       <view class="field"><text class="field-label">联系方式（可选，清空后保存可删除）</text><input class="field-input" value="{{contactValue}}" data-field="contactValue" bindinput="input" maxlength="-1" disabled="{{busy || conflict}}" aria-label="联系方式" /></view><text class="hint">关闭后仍为你保留已填内容。作者有公开文章且开关开启时，认证读者才能查看。</text><button class="button-secondary form-section" data-kind="contact" bindtap="save" loading="{{busy}}" disabled="{{busy || conflict}}">保存联系设置</button>
         <text wx:if="{{feedbackKind === 'contact' && notice}}" class="success-note" role="status">{{notice}}</text>

@@ -27,6 +27,7 @@ Component({
     sourceLinks: { type: Array, value: [] },
     sourceNote: { type: String, value: '' },
     demoMode: { type: Boolean, value: false },
+    externalToc: { type: Boolean, value: false },
     privateMode: { type: Boolean, value: false }
   },
   data: {
@@ -54,7 +55,10 @@ Component({
         images: parsed.images,
         tocDrawerVisible: false,
         firstSourceLink
-      }, () => this.measureHeadings());
+      }, () => {
+        this.measureHeadings();
+        if (this.data.externalToc) this.triggerEvent('headingschange', { count: parsed.headings.length });
+      });
     },
     privateMode(value) { if (this.data.nodes) this.setData({ nodes: privateNodes(this.data.nodes, value) }); }
   },
@@ -106,7 +110,15 @@ Component({
       if (!this.anchorTops) return;
       let current = 0;
       this.anchorTops.forEach((heading) => { if (heading.top <= scrollTop + 80) current = heading.id; });
-      if (current !== this.data.currentHeadingId) this.setData({ currentHeadingId: current });
+      this.activateHeading(current);
+    },
+    activateHeading(id) {
+      if (id === this.data.currentHeadingId) return;
+      this.setData({ currentHeadingId: id });
+      if (this.data.externalToc) {
+        const heading = this.data.headings.find((item) => item.id === id);
+        this.triggerEvent('chapterchange', { title: heading ? heading.text : '' });
+      }
     },
     scrollToHeading(event) {
       const id = Number(event.currentTarget.dataset.id);
@@ -117,9 +129,10 @@ Component({
           if (!rect) return;
           wx.createSelectorQuery().selectViewport().scrollOffset((viewport) => {
             if (!viewport) return;
-            this.jumpBookmark = { headingId: id, offset: -20, until: Date.now() + 300 };
-            this.setData({ currentHeadingId: id });
-            wx.pageScrollTo({ scrollTop: Math.max(0, viewport.scrollTop + rect.top - 20), duration: 250 });
+            const offset = this.data.externalToc ? 62 : 20;
+            this.jumpBookmark = { headingId: id, offset: -offset, until: Date.now() + 300 };
+            this.activateHeading(id);
+            wx.pageScrollTo({ scrollTop: Math.max(0, viewport.scrollTop + rect.top - offset), duration: 250 });
           }).exec();
         }).exec();
       });

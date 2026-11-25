@@ -1,5 +1,8 @@
 @import '../../styles/sections.wxss';
 @import '../../styles/flow.wxss';
+.notification-tabs { display: flex; margin-bottom: 20rpx; }
+.notification-tabs button { flex: 1; }
+.notification-lead { display: block; margin-top: 6rpx; color: var(--color-text-secondary); font-size: var(--font-xs); }
 .notice-title { display: flex; align-items: flex-start; gap: 12rpx; }
 .notice-title .row-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .unread-tag { flex: none; }

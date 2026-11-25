@@ -12,7 +12,13 @@
 }
 
 .page-content {
-  padding: 16rpx 28rpx 0;
+  padding: 0 var(--page-gutter);
+}
+
+.discover-controls {
+  margin: 0 calc(0rpx - var(--page-gutter));
+  padding: 16rpx var(--page-gutter) 8rpx;
+  background: var(--color-surface);
 }
 
 .search-box {
@@ -29,8 +35,8 @@
   min-width: 0;
   padding: 0 16rpx;
   min-height: var(--touch-target);
-  border-radius: 22rpx;
-  background: #eaeef3;
+  border-radius: 999rpx;
+  background: var(--color-control);
 }
 
 .search-input {
@@ -63,7 +69,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12rpx;
-  margin-top: 12rpx;
+  margin-top: 4rpx;
 }
 
 .quick-control {
@@ -73,7 +79,7 @@
   gap: 8rpx;
   min-width: var(--touch-target);
   min-height: var(--touch-target);
-  padding: 0 16rpx;
+  padding: 0 4rpx;
   border-radius: 16rpx;
   background: var(--color-surface);
   color: var(--color-text);
@@ -127,8 +133,8 @@
   gap: 8rpx;
   min-width: 0;
   padding: 6rpx 12rpx;
-  border-radius: 10rpx;
-  background: var(--color-primary-soft);
+  border-radius: 999rpx;
+  background: var(--color-selected);
   color: var(--color-primary-dark);
   line-height: 1.4;
 }
@@ -155,30 +161,29 @@
   white-space: normal;
 }
 
-.sort-row,
 .result-heading,
+.result-label,
 .sort-choice {
   display: flex;
   align-items: center;
 }
 
-.sort-row {
+.result-heading {
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0 12rpx;
-  margin-top: 16rpx;
-  margin-bottom: 8rpx;
+  gap: 12rpx;
+  min-height: 116rpx;
 }
 
-.result-heading {
+.result-label {
   align-items: baseline;
-  gap: 12rpx;
+  flex-wrap: wrap;
+  gap: 0 12rpx;
 }
 
 .result-title {
   color: var(--color-text);
-  font-size: 34rpx;
-  font-weight: 650;
+  font-size: 32rpx;
+  font-weight: 600;
 }
 
 .result-count,
@@ -189,22 +194,25 @@
 }
 
 .sort-choice {
-  border-radius: 16rpx;
-  background: #eaeef3;
+  flex: none;
+  padding: 5rpx;
+  border-radius: var(--radius-sm);
+  background: var(--color-control);
 }
 
 .sort-tab {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: var(--touch-target);
-  padding: 0 16rpx;
+  padding: 0 18rpx;
+  border-radius: 12rpx;
   color: var(--color-text-secondary);
-  font-size: 24rpx;
+  font-size: 26rpx;
 }
 
 .sort-active {
-  border-radius: 14rpx;
   background: var(--color-surface);
   color: var(--color-primary-dark);
   font-weight: 650;

@@ -3,6 +3,7 @@
   <view wx:if="{{demoMode}}" class="demo-banner">演示模式 · 本地示例，未连接真实后端</view>
 
   <view class="page-content">
+    <view class="discover-controls">
     <view class="search-box">
       <view class="search-field">
         <app-icon name="search" size="36" />
@@ -11,7 +12,7 @@
           <app-icon name="close" size="30" />
         </button>
       </view>
-      <button class="search-submit {{listStatus === 'error' || listStatus === 'empty' || listStatus === 'no-match' ? 'button-secondary' : 'button-primary'}}" bindtap="submitSearch" aria-label="提交搜索">搜索</button>
+      <button class="search-submit button-primary" bindtap="submitSearch" aria-label="提交搜索">搜索</button>
     </view>
     <text wx:if="{{searchError}}" class="field-error" role="alert">{{searchError}}</text>
 
@@ -23,7 +24,7 @@
         </view>
       </picker>
       <button wx:if="{{sameMajorAvailable}}" class="quick-control same-major-entry {{filters.majorId === ownMajorId ? 'quick-selected' : ''}}" aria-pressed="{{filters.majorId === ownMajorId}}" bindtap="toggleSameMajor">
-        只看同专业<app-icon wx:if="{{filters.majorId === ownMajorId}}" name="check" size="26" />
+        同专业<app-icon wx:if="{{filters.majorId === ownMajorId}}" name="check" size="26" />
       </button>
       <button class="quick-control filter-entry" bindtap="openFilter">
         <app-icon name="filter" size="29" /><text>组合筛选</text>
@@ -36,9 +37,10 @@
       <button class="clear-conditions pressable" bindtap="resetFilters">清除条件</button>
     </view>
     <button wx:if="{{catalogError}}" class="catalog-warning" bindtap="loadCatalog">分类加载失败，筛选选项可能不完整。点击重试。</button>
+    </view>
 
-    <view class="sort-row">
-      <view class="result-heading">
+    <view class="result-heading">
+      <view class="result-label">
         <text class="result-title" role="heading">经验</text>
         <text wx:if="{{listStatus === 'ready' || listStatus === 'no-match' || listStatus === 'empty'}}" class="result-count" aria-live="polite">{{total}} 篇</text>
       </view>
@@ -47,7 +49,6 @@
         <button class="sort-tab {{sort === 'latest' ? 'sort-active' : ''}}" data-sort="latest" bindtap="selectSort" role="tab" aria-selected="{{sort === 'latest'}}">最新发布</button>
       </view>
     </view>
-
     <page-state wx:if="{{listStatus === 'loading'}}" compact status="loading" title="正在加载公开经验" />
     <page-state wx:elif="{{listStatus === 'error'}}" compact status="error" title="{{errorTitle}}" description="{{errorMessage}}。搜索与筛选条件已保留。" trace-id="{{traceId}}" action-text="重试当前请求" secondary-text="调整筛选" bindaction="handleStateAction" bindsecondary="handleStateSecondary" />
     <page-state wx:elif="{{listStatus === 'empty'}}" compact status="no-content" title="还没有公开经验" description="有新经验发布后会出现在这里。" action-text="刷新列表" bindaction="handleStateAction" />

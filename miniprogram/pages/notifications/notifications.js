@@ -2,7 +2,7 @@ const { call } = require('../../services/member');
 const access = require('../../utils/member-page');
 const { formatDateTime } = require('../../utils/format');
 const { validId } = require('../../utils/community-view');
-const blank = { items: [], page: 1, total: 0, unreadCount: 0, loaded: false, error: '', readingId: null, openingId: null, rowError: '', rowErrorId: null };
+const blank = { items: [], page: 1, total: 0, unreadCount: 0, pageUnreadCount: 0, filter: 'all', loaded: false, error: '', readingId: null, openingId: null, rowError: '', rowErrorId: null };
 const outcomes = {
   HIDDEN: '已隐藏', RESTORED: '已恢复', ANSWERED: '已答复', RECORDED: '已记录',
   NO_VIOLATION: '未发现违规', DUPLICATE: '重复案件', REQUIRES_GOVERNANCE: '待治理',
@@ -44,7 +44,7 @@ Page({
         id: row.id, message: row.message, readAt: row.readAt, time: formatDateTime(row.createdAt),
         outcome: outcomes[row.outcome] || '', url: destination(row.target), action: row.target && targetLabels[row.target.type]
       }));
-      this.setData({ items, page: result.page, total: result.total, unreadCount: result.unreadCount, loaded: true });
+      this.setData({ items, page: result.page, total: result.total, unreadCount: result.unreadCount, pageUnreadCount: items.filter((row) => !row.readAt).length, loaded: true });
     } catch (e) {
       if (epoch === this._epoch) this.setData({ error: access.errorText(e) });
     } finally {
@@ -52,6 +52,10 @@ Page({
     }
   },
   refresh() { this.load(this.data.page); },
+  selectFilter(event) {
+    const filter = event.currentTarget.dataset.filter;
+    if (filter === 'all' || filter === 'unread') this.setData({ filter });
+  },
   previous() { if (this.data.page > 1) this.load(this.data.page - 1); },
   next() { if (this.data.page * 20 < this.data.total) this.load(this.data.page + 1); },
   read(e) { return this.markRead(validId(e.currentTarget.dataset.id)); },
@@ -63,7 +67,7 @@ Page({
       const receipt = await call(`/me/notifications/${id}/read`, 'PUT');
       if (epoch !== this._epoch) return;
       const items = this.data.items.map((row) => row.id === id ? Object.assign({}, row, { readAt: receipt.readAt }) : row);
-      this.setData({ items, unreadCount: Math.max(0, this.data.unreadCount - 1) });
+      this.setData({ items, unreadCount: Math.max(0, this.data.unreadCount - 1), pageUnreadCount: items.filter((row) => !row.readAt).length });
     } catch (error) {
       if (epoch === this._epoch) this.setData({ rowError: access.errorText(error), rowErrorId: id });
     } finally {

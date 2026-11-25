@@ -1,13 +1,15 @@
 page {
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-soft: #eaf1ff;
-  --color-bg: #f5f6f8;
+  --color-primary: #0d6b57;
+  --color-primary-dark: #075343;
+  --color-primary-soft: #e7f1ec;
+  --color-selected: #d9ede4;
+  --color-control: #edf0ee;
+  --color-bg: #f1f5f3;
   --color-surface: #ffffff;
-  --color-text: #172033;
-  --color-text-secondary: #5d687a;
-  --color-text-tertiary: #626e82;
-  --color-border: #e3e8f0;
+  --color-text: #202b27;
+  --color-text-secondary: #53645e;
+  --color-text-tertiary: #586a63;
+  --color-border: #cbdad2;
   --color-success: #196849;
   --color-success-soft: #e8f6ee;
   --color-violet: #5b42a9;
@@ -31,6 +33,8 @@ page {
   --radius-sm: 16rpx;
   --radius-md: 24rpx;
   --radius-lg: 28rpx;
-  --shadow-card: 0 3rpx 12rpx rgba(23, 32, 51, 0.05);
+  --shadow-card: 0 2rpx 8rpx rgba(26, 58, 45, 0.04);
+  --page-gutter: 32rpx;
+  --tab-bar-height: max(100rpx, 50px);
   --touch-target: max(88rpx, 44px);
 }

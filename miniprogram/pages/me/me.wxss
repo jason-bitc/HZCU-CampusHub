@@ -1,13 +1,12 @@
 @import '../../styles/sections.wxss';
 
 .my-page {
-  padding: 16rpx 28rpx calc(156rpx + env(safe-area-inset-bottom));
+  padding: 24rpx var(--page-gutter) calc(156rpx + env(safe-area-inset-bottom));
 }
 
 .identity-card,
-.overview-card,
 .service-card,
-.my-entries button {
+.my-entries {
   border-radius: 22rpx;
   background: var(--color-surface);
 }
@@ -27,7 +26,7 @@
   width: 90rpx;
   height: 90rpx;
   padding: 12rpx;
-  border-radius: 20rpx;
+  border-radius: 50%;
   background: var(--color-primary-soft);
 }
 
@@ -66,7 +65,8 @@
 }
 
 .overview-card {
-  padding: 24rpx 16rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--color-border);
 }
 
 .overview-metrics {
@@ -112,7 +112,7 @@
 .my-entries {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12rpx;
+  padding: 8rpx;
 }
 
 .my-entries button {
@@ -139,12 +139,8 @@
   width: 62rpx;
   height: 62rpx;
   border-radius: 16rpx;
+  background: var(--color-primary-soft);
 }
-
-.entry-icon.tone-blue { background: var(--color-primary-soft); }
-.entry-icon.tone-green { background: var(--color-success-soft); }
-.entry-icon.tone-orange { background: var(--color-warning-soft); }
-.entry-icon.tone-violet { background: var(--color-violet-soft); }
 
 .entry-count {
   color: var(--color-text-secondary);

@@ -243,6 +243,30 @@ async function test(name, run) { try { await run(); results.push({ name, pass: t
   await test('既有复杂Markdown进入只读预览，完整原文保留且不能被轻量编辑覆盖', () => {
     const p = page('pages/editor/editor.js', {}); const body = '# original\n\n```cpp\n<int> keep;\n```\n\n- list'; const draft = { articleId: 1, revision: 3, state: 'DRAFT', content: { title: 'complex', summary: '', body, tags: { jobIds: [1], majorIds: [11], companyIds: [], topicIds: [] }, experienceStage: '', sourceType: null, sourceNote: '', sourceLinks: [] } }; p.setData({ authStatus: 'ready' }); p.applyDraft(draft); assert.equal(p.data.complexSource, true); assert.equal(p.data.preview, true); assert.equal(p.data.readOnly, true); p.input({ currentTarget: { dataset: { field: 'body' } }, detail: { value: 'overwrite' } }); assert.equal(p.data.form.body, body);
   });
+  await test('通知未读分段保留分页，标记成功才从当前未读列表移除', async () => {
+    const calls = [];
+    const p = page('pages/notifications/notifications.js', { '../../services/member': { call: async (...args) => {
+      calls.push(args);
+      if (args[1] === 'GET') return { page: 2, total: 35, unreadCount: 3, items: [{ id: 3, readAt: null }, { id: 4, readAt: 'before' }] };
+      if (calls.length === 2) throw new Error('offline');
+      return { readAt: 'now' };
+    } } });
+    p._epoch = 1;
+    p.setData({ authStatus: 'ready' });
+    await p.load(2);
+    p.selectFilter({ currentTarget: { dataset: { filter: 'unread' } } });
+    assert.equal(calls.length, 1);
+    assert.equal(p.data.page, 2);
+    assert.equal(p.data.pageUnreadCount, 1);
+    await p.markRead(3);
+    assert.equal(p.data.pageUnreadCount, 1);
+    assert.equal(p.data.unreadCount, 3);
+    await p.markRead(3);
+    assert.equal(p.data.pageUnreadCount, 0);
+    assert.equal(p.data.unreadCount, 2);
+    assert.equal(p.data.items.length, 2);
+    assert.equal(p.data.filter, 'unread');
+  });
   await test('行为限制403保留校园会话，账号认证受限仍清理', async () => {
     const e = environment(); e.session.accept(login()); const sent = [];
     e.wx.request = (o) => { sent.push(o); return { abort() {} }; };

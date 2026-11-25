@@ -79,8 +79,8 @@
 }
 
 .feed-card {
-  padding: 28rpx;
-  border: 0;
+  padding: 24rpx 26rpx 20rpx;
+  border: 1rpx solid var(--color-border);
   border-radius: 22rpx;
   box-shadow: none;
 }
@@ -94,8 +94,8 @@
 }
 
 .feed-card .article-title {
-  font-size: 34rpx;
-  font-weight: 700;
+  font-size: 32rpx;
+  font-weight: 650;
   line-height: 1.35;
 }
 
@@ -113,7 +113,7 @@
 .feed-card .tag {
   min-width: 0;
   padding: 4rpx 10rpx;
-  border-radius: 7rpx;
+  border-radius: 999rpx;
   font-size: 23rpx;
 }
 
@@ -128,6 +128,8 @@
   align-items: flex-end;
   justify-content: space-between;
   margin-top: 16rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid var(--color-border);
 }
 
 .feed-details {
@@ -139,15 +141,10 @@
   min-width: 0;
 }
 
-.feed-meta,
-.feed-author {
+.feed-meta {
   color: var(--color-text-secondary);
   font-size: 23rpx;
   line-height: 1.5;
-}
-
-.feed-author {
-  display: block;
 }
 
 .feed-source {

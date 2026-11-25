@@ -3,16 +3,24 @@
   <view wx:elif="{{authStatus === 'ready'}}">
     <view class="flow-heading">
       <view>
-        <text class="form-title">站内通知</text>
+        <text class="form-title">通知</text>
+        <text class="notification-lead">从相关通知进入反馈或申诉记录。</text>
         <text wx:if="{{loaded && total}}" class="flow-meta" aria-live="polite">{{unreadCount ? unreadCount + ' 条未读' : '通知已全部读完'}}</text>
       </view>
       <button wx:if="{{loaded}}" class="button-text notice-refresh" bindtap="refresh" disabled="{{busy || readingId}}">{{busy ? '正在刷新…' : '刷新通知'}}</button>
     </view>
+    <view class="flow-tabs notification-tabs" role="tablist" aria-label="通知筛选">
+      <button class="{{filter === 'all' ? 'selected' : ''}}" bindtap="selectFilter" data-filter="all" role="tab" aria-selected="{{filter === 'all'}}">全部</button>
+      <button class="{{filter === 'unread' ? 'selected' : ''}}" bindtap="selectFilter" data-filter="unread" role="tab" aria-selected="{{filter === 'unread'}}">未读</button>
+    </view>
+    <text wx:if="{{filter === 'unread' && total > 20}}" class="hint">仅筛选当前页。可翻页查看其他未读通知。</text>
     <page-state wx:if="{{busy && !loaded}}" status="loading" title="正在读取通知" />
     <page-state wx:elif="{{error && !loaded}}" status="error" title="暂时无法读取通知" description="{{error}}" action-text="重试" bindaction="refresh" />
     <page-state wx:elif="{{loaded && !total}}" status="empty" title="还没有通知" description="有回复或处理结果时会显示在这里。" />
+    <page-state wx:elif="{{loaded && filter === 'unread' && !pageUnreadCount}}" status="empty" title="{{total > 20 ? '当前页没有未读通知' : '没有未读通知'}}" />
     <text wx:if="{{error && loaded}}" class="field-error" role="alert">{{error}}。下方仍为上次读取的通知。</text>
-    <view wx:for="{{items}}" wx:key="id" class="flow-card notice-row {{item.readAt ? '' : 'notice-unread'}}">
+    <block wx:for="{{items}}" wx:key="id">
+    <view wx:if="{{filter === 'all' || !item.readAt || rowErrorId === item.id}}" class="flow-card notice-row {{item.readAt ? '' : 'notice-unread'}}">
       <view class="notice-title"><text class="row-title">{{item.message}}</text><text wx:if="{{!item.readAt}}" class="status-tag unread-tag">未读</text></view>
       <text class="hint">{{item.time}}</text>
       <text wx:if="{{item.outcome}}" class="notice-outcome">处理结果 · {{item.outcome}}</text>
@@ -23,6 +31,7 @@
       </view>
       <text wx:if="{{rowErrorId === item.id}}" class="field-error" role="alert">{{rowError}}</text>
     </view>
+    </block>
     <view wx:if="{{loaded && total > 20}}" class="inline-actions">
       <button class="button-secondary" bindtap="previous" disabled="{{busy || page <= 1}}">上一页</button>
       <text class="hint">第 {{page}} 页</text>

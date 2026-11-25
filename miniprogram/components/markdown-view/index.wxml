@@ -31,7 +31,7 @@
       <text class="resource-title">资料：{{firstSourceLink.label}}</text><text class="resource-subtitle">查看 {{sourceLinks.length}} 个资料链接与来源说明</text>
     </button>
   </view>
-  <button wx:if="{{headings.length}}" class="toc-float pressable" style="top: {{demoMode ? 76 : 16}}rpx;" bindtap="openToc" aria-label="打开文章目录" aria-expanded="{{tocDrawerVisible}}"><app-icon name="list" size="26" /><text>目录</text></button>
+  <button wx:if="{{headings.length && !externalToc}}" class="toc-float pressable" style="top: {{demoMode ? 76 : 16}}rpx;" bindtap="openToc" aria-label="打开文章目录" aria-expanded="{{tocDrawerVisible}}"><app-icon name="list" size="26" /><text>目录</text></button>
   <view wx:if="{{tocDrawerVisible}}" class="toc-drawer-layer">
     <view class="toc-drawer-mask" bindtap="closeToc" catchtouchmove="stopTouchMove" aria-label="关闭文章目录"></view>
     <view class="toc-drawer" role="dialog" aria-modal="true" aria-label="文章目录">
@@ -41,6 +41,7 @@
         <button wx:for="{{filteredHeadings}}" wx:key="id" id="toc-heading-{{item.id}}" class="toc-drawer-item {{currentHeadingId === item.id ? 'toc-current' : ''}}" style="padding-left: {{item.indent}}rpx;" data-id="{{item.id}}" bindtap="scrollToHeading" aria-label="{{currentHeadingId === item.id ? '当前章节，' + item.text : item.text}}"><text>{{item.text}}</text><text wx:if="{{currentHeadingId === item.id}}" class="toc-current-label">当前</text></button>
         <text wx:if="{{!filteredHeadings.length}}" class="toc-no-match">没有匹配章节，请修改关键词。</text>
       </scroll-view>
+      <view class="toc-drawer-footer"><button class="button-primary" bindtap="closeToc">关闭目录</button></view>
     </view>
   </view>
 </view>

@@ -17,6 +17,9 @@ Page({
     errorMessage: '',
     traceId: '',
     tocDrawerVisible: false,
+    hasToc: false,
+    tocPinned: false,
+    currentChapter: '',
     errorTitle: '文章加载失败',
     assetBaseUrl: config.apiBaseUrl,
     demoMode: config.demoMode,
@@ -175,12 +178,33 @@ Page({
 
   onPageScroll(event) {
     this._scrollTop = event.scrollTop;
+    const tocPinned = this.data.hasToc && event.scrollTop >= (this._tocPinAt || 120);
+    if (tocPinned !== this.data.tocPinned) this.setData({ tocPinned });
     const reader = this.selectComponent('#article-reader');
     if (reader) reader.updateReadingPosition(event.scrollTop);
   },
 
   handleDrawerChange(event) {
     if (event.detail.visible !== this.data.tocDrawerVisible) this.setData({ tocDrawerVisible: event.detail.visible });
+  },
+
+  handleHeadingsChange(event) {
+    const hasToc = event.detail.count > 0;
+    this.setData({ hasToc }, () => {
+      if (!hasToc || this.data.tocPinned) return;
+      wx.createSelectorQuery().select('.article-toc-slot').boundingClientRect((rect) => {
+        if (rect) this._tocPinAt = Math.max(1, rect.top + (this._scrollTop || 0) - 8);
+      }).exec();
+    });
+  },
+
+  handleChapterChange(event) {
+    this.setData({ currentChapter: event.detail.title });
+  },
+
+  openToc() {
+    const reader = this.selectComponent('#article-reader');
+    if (reader && this.data.hasToc) reader.openToc();
   },
 
   goToSources() {
@@ -197,7 +221,8 @@ Page({
     this.memberRound = (this.memberRound || 0) + 1;
     this.setData(privateBlank);
     const token = this.gate.next();
-    this.setData({ article: null, status: 'loading', errorMessage: '', traceId: '', tocDrawerVisible: false });
+    this._tocPinAt = 0;
+    this.setData({ article: null, status: 'loading', errorMessage: '', traceId: '', tocDrawerVisible: false, hasToc: false, tocPinned: false, currentChapter: '' });
     const operation = articlesApi.getArticle(this.data.articleId);
     this.activeRequest = operation;
     return operation.promise.then((article) => {
