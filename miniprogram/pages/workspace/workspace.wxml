@@ -1,28 +1,32 @@
-<view class="member-page workspace-page">
+<view class="member-page flow-page workspace-page">
   <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后分享你的经验" description="多篇草稿独立保存，公开发布前可以预览。" action-text="登录校园账号" bindaction="login" />
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
   <view wx:else>
-    <text class="form-title">{{filter === 'DRAFT' ? '草稿箱' : filter === 'EXPERIENCES' ? '我的经验' : '我的文章与草稿'}}</text>
-    <view class="segmented workspace-filters" aria-label="文章状态">
-      <button wx:for="{{filters}}" wx:key="id" class="{{filter === item.id ? 'selected' : ''}}" data-filter="{{item.id}}" bindtap="filter" disabled="{{busy}}">{{item.label}}</button>
+    <view class="flow-heading">
+      <view><text class="form-title">我的作品</text><text wx:if="{{loaded}}" class="flow-meta">当前已读取 {{visibleItems.length}} 篇</text></view>
+      <button class="button-primary" bindtap="create" disabled="{{busy}}">{{pendingCreate ? '继续创建' : '写一篇经验'}}</button>
     </view>
-    <button class="button-primary" bindtap="create" disabled="{{busy}}">{{pendingCreate ? '核对并继续上次创建' : '写一篇经验'}}</button>
+    <view class="segmented flow-tabs workspace-filters" role="tablist" aria-label="文章状态">
+      <button wx:for="{{filters}}" wx:key="id" class="{{filter === item.id ? 'selected' : ''}}" data-filter="{{item.id}}" role="tab" aria-selected="{{filter === item.id}}" bindtap="filter" disabled="{{busy}}">{{item.label}}</button>
+    </view>
     <text wx:if="{{pendingCreate}}" class="hint">上次创建结果待确认，继续时会沿用原请求。</text>
     <text wx:if="{{notice}}" class="success-note" role="status">{{notice}}</text>
     <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
     <button wx:if="{{restricted}}" class="button-secondary" bindtap="appeals">查看发布限制与申诉</button>
-    <view wx:for="{{visibleItems}}" wx:key="articleId" class="list-row workspace-article">
-      <text class="status-tag {{item.state === 'ADMIN_HIDDEN' ? 'danger' : item.state === 'AUTHOR_OFFLINE' ? 'warn' : ''}}">{{item.stateText}}</text>
+    <view wx:for="{{visibleItems}}" wx:key="articleId" class="flow-card workspace-article">
+      <view class="workspace-article-heading">
       <text class="row-title workspace-title">{{item.title || '未命名草稿'}}</text>
+      <text class="status-tag {{item.state === 'ADMIN_HIDDEN' ? 'danger' : item.state === 'AUTHOR_OFFLINE' ? 'warn' : ''}}">{{item.stateText}}</text>
+      </view>
       <text class="hint">更新于 {{item.updatedText}} · 修订 {{item.revision}}</text>
       <text wx:if="{{item.localCopy}}" class="hint">有待核对的本机副本，可在编辑页查看。</text>
-      <view class="inline-actions">
+      <view class="inline-actions workspace-actions">
         <button class="button-secondary" data-id="{{item.articleId}}" bindtap="edit" disabled="{{busy}}">{{item.state === 'ADMIN_HIDDEN' ? '查看草稿' : '继续编辑'}}</button>
         <button wx:if="{{item.state === 'PUBLISHED'}}" class="button-secondary" data-id="{{item.articleId}}" bindtap="read" disabled="{{busy}}">查看公开文章</button>
       </view>
-      <view wx:if="{{item.state === 'PUBLISHED' || item.state === 'AUTHOR_OFFLINE' || item.state === 'DRAFT' || item.state === 'ADMIN_HIDDEN'}}" class="inline-actions workspace-secondary">
-        <button wx:if="{{item.state === 'PUBLISHED'}}" class="button-text" data-id="{{item.articleId}}" data-action="unpublish" bindtap="state" disabled="{{busy}}">自主下架</button>
+      <view wx:if="{{item.state === 'PUBLISHED' || item.state === 'AUTHOR_OFFLINE' || item.state === 'DRAFT' || item.state === 'ADMIN_HIDDEN'}}" class="inline-actions workspace-actions workspace-secondary">
+        <button wx:if="{{item.state === 'PUBLISHED'}}" class="button-text danger-action" data-id="{{item.articleId}}" data-action="unpublish" bindtap="state" disabled="{{busy}}">自主下架</button>
         <button wx:if="{{item.state === 'AUTHOR_OFFLINE'}}" class="button-text" data-id="{{item.articleId}}" data-action="restore" bindtap="state" disabled="{{busy}}">恢复原公开版本</button>
         <button wx:if="{{item.state !== 'PUBLISHED'}}" class="button-text danger-action" data-id="{{item.articleId}}" data-action="delete" bindtap="state" disabled="{{busy}}">{{item.state === 'DRAFT' ? '删除草稿' : '删除'}}</button>
       </view>
@@ -32,6 +36,5 @@
     <text wx:if="{{busy}}" class="load-end">正在处理…</text>
     <button wx:elif="{{items.length < total}}" class="button-secondary" bindtap="more">继续加载 · {{items.length}} / {{total}}</button>
     <button wx:if="{{error}}" class="button-secondary" bindtap="refresh" disabled="{{busy}}">重新读取文章状态</button>
-    <view class="notice form-section">删除前请核对对象。管理员隐藏的文章由社区处理人员决定是否恢复。</view>
   </view>
 </view>

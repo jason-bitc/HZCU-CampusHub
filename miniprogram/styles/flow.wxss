@@ -1,0 +1,44 @@
+.member-page.flow-page {
+  padding: 16rpx 28rpx calc(156rpx + env(safe-area-inset-bottom));
+}
+.flow-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rpx 16rpx;
+  margin-bottom: 16rpx;
+}
+.flow-heading .form-title, .flow-heading .section-title {
+  margin: 0;
+  font-size: 34rpx;
+  line-height: 1.35;
+}
+.flow-heading .button-primary { padding: 0 20rpx; font-size: 28rpx; }
+.flow-meta { color: var(--color-text-secondary); font-size: 25rpx; }
+.flow-card, .flow-page .section-card, .flow-page .list-row {
+  margin: 0 0 20rpx;
+  padding: 24rpx 28rpx;
+  border: 0;
+  border-radius: 22rpx;
+  background: var(--color-surface);
+  box-shadow: none;
+  overflow-wrap: anywhere;
+}
+.flow-card .row-title, .flow-page .section-card .row-title { font-size: 31rpx; line-height: 1.45; }
+.flow-tabs {
+  gap: 6rpx;
+  padding: 5rpx;
+  border-radius: 16rpx;
+  background: #eaeef3;
+}
+.flow-tabs button {
+  min-height: var(--touch-target);
+  border: 0;
+  border-radius: 14rpx;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+.flow-tabs button.selected { background: var(--color-surface); color: var(--color-primary-dark); font-weight: 650; }

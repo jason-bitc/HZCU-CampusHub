@@ -19,17 +19,17 @@
     "pages/certification/certification"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#f5f7f6",
+    "navigationBarBackgroundColor": "#f5f6f8",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "城院帮",
-    "backgroundColor": "#f5f7f6",
+    "backgroundColor": "#f5f6f8",
     "backgroundTextStyle": "dark"
   },
   "style": "v2",
   "tabBar": {
     "custom": true,
-    "color": "#58645d",
-    "selectedColor": "#0d6b57",
+    "color": "#5d687a",
+    "selectedColor": "#2563eb",
     "list": [
       {
         "pagePath": "pages/discover/discover",

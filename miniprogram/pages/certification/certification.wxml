@@ -1,7 +1,7 @@
-<view class="member-page">
+<view class="member-page flow-page certification-page">
   <page-state wx:if="{{authStatus === 'guest'}}" status="permission" title="登录后查看本人认证" action-text="登录校园账号" bindaction="login" />
   <view wx:elif="{{authStatus === 'ready'}}">
-    <text class="form-title">{{appealId ? '本人申诉详情' : '本人校园认证'}}</text>
+    <view class="flow-heading"><text class="form-title">{{appealId ? '本人申诉详情' : '本人校园认证'}}</text><button class="button-text" bindtap="load" disabled="{{busy}}">刷新记录</button></view>
     <text wx:if="{{busy}}" class="hint" role="status">正在读取或提交…</text>
     <text wx:if="{{error}}" class="field-error" role="alert">{{error}}</text>
     <text wx:if="{{notice}}" class="success-note">{{notice}}</text>
@@ -11,7 +11,7 @@
       <view class="certification-entry"><text class="field-label">我的申诉</text><text class="certification-copy" user-select>{{appeal.reason}}</text></view>
       <view wx:if="{{appeal.reply}}" class="certification-entry"><text class="field-label">复核答复</text><text class="certification-copy" user-select>{{appeal.reply}}</text></view>
     </view>
-    <view wx:if="{{record}}" class="certification-panel">
+    <view wx:if="{{record}}" class="flow-card certification-panel">
       <text class="section-title">{{record.stateText}}</text>
       <text wx:if="{{record.verifiedText}}" class="hint">最近验证 {{record.verifiedText}}</text>
       <view wx:if="{{record.revocationReason}}" class="list-row certification-entry">
@@ -38,6 +38,5 @@
       <button class="button-secondary" bindtap="notifications">站内通知</button>
       <button class="button-text" bindtap="logout" disabled="{{busy}}">退出校园账号</button>
     </view>
-    <button class="button-text" bindtap="load" disabled="{{busy}}">刷新记录</button>
   </view>
 </view>

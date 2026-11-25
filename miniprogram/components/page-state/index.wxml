@@ -4,7 +4,7 @@
     <view class="skeleton skeleton-short"></view>
     <view class="skeleton skeleton-medium"></view>
   </view>
-  <app-icon wx:else name="{{iconName}}" size="56" />
+  <view wx:else class="state-icon"><app-icon name="{{iconName}}" size="51" /></view>
   <button wx:if="{{status === 'loading'}}" class="button-secondary loading-button" disabled loading>加载中</button>
   <text class="state-title">{{title}}</text>
   <text wx:if="{{description}}" class="state-description">{{description}}</text>

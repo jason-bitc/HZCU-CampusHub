@@ -1,4 +1,4 @@
-.section-card { margin: 24rpx 0; padding: 26rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); overflow-wrap: anywhere; }
+.section-card { margin: 24rpx 0; padding: 26rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-card); overflow-wrap: anywhere; }
 .section-card .row-title { margin-bottom: 10rpx; }
 .status-tag { display: inline-block; padding: 6rpx 14rpx; border-radius: var(--radius-sm); color: var(--color-primary-dark); background: var(--color-primary-soft); font-size: 24rpx; line-height: 1.55; }
 .status-tag.warn { color: var(--color-warning); background: var(--color-warning-soft); }

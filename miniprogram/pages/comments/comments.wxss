@@ -1,4 +1,6 @@
+@import '../../styles/flow.wxss';
 .comment-body { display: block; margin-top: 16rpx; white-space: pre-wrap; overflow-wrap: anywhere; }
 .comment-author { color: var(--color-primary); text-align: left; min-height: 64rpx; }
 
 .comment-original { margin-bottom: 18rpx !important; }
+.flow-page .comment-original { margin: 0 !important; padding: 0; font-size: 26rpx; } .comment-compose { margin-top: 18rpx; } .comment-compose > .section-title { margin-top: 0; } .comment-compose .form-actions { margin-top: 16rpx; gap: 10rpx; } .comments-page .inline-actions .button-text { padding: 0; font-size: 26rpx; }
