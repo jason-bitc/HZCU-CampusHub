@@ -48,6 +48,7 @@ export async function opsRequest<T>(
   body?: unknown,
   publicLogin = false,
   binary = false,
+  onTrace?: (traceId: string) => void,
 ): Promise<T> {
   if (!path.startsWith("/ops/")) throw new Error("运维请求路径无效");
   const epoch = opsSession.epoch;
@@ -110,6 +111,8 @@ export async function opsRequest<T>(
       );
     }
     if (!("data" in value)) throw new Error("运维响应缺少数据");
+    if ("traceId" in value && typeof value.traceId === "string")
+      onTrace?.(value.traceId);
     return value.data as T;
   } catch (error) {
     if (error instanceof ApiError) throw error;

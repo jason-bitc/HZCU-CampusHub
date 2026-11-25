@@ -2,226 +2,316 @@
   {
     "page": 1,
     "title": "城院帮 G04 WBS 总览",
-    "pdfPage": 1
+    "pdfPage": 1,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 2,
     "title": "工作分解  项目计划与评审",
-    "pdfPage": 2
+    "pdfPage": 2,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 3,
     "title": "工作分解  可行性研究",
-    "pdfPage": 3
+    "pdfPage": 3,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 4,
     "title": "工作分解  需求分析",
-    "pdfPage": 4
+    "pdfPage": 4,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 5,
     "title": "工作分解  总体与详细设计",
-    "pdfPage": 5
+    "pdfPage": 5,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 6,
     "title": "工作分解  4.1 设想供选择的方案",
-    "pdfPage": 6
+    "pdfPage": 6,
+    "planSection": "7.2",
+    "planPage": 37
   },
   {
     "page": 7,
     "title": "工作分解  4.2 选取合理的方案",
-    "pdfPage": 7
+    "pdfPage": 7,
+    "planSection": "7.2",
+    "planPage": 38
   },
   {
     "page": 8,
     "title": "工作分解  4.3 推荐最佳方案",
-    "pdfPage": 8
+    "pdfPage": 8,
+    "planSection": "7.2",
+    "planPage": 39
   },
   {
     "page": 9,
     "title": "工作分解  4.4 按DFD分解功能与过程",
-    "pdfPage": 9
+    "pdfPage": 9,
+    "planSection": "7.2",
+    "planPage": 40
   },
   {
     "page": 10,
     "title": "工作分解  4.5 按数据流五步设计软件结构",
-    "pdfPage": 10
+    "pdfPage": 10,
+    "planSection": "7.2",
+    "planPage": 41
   },
   {
     "page": 11,
     "title": "工作分解  4.6 设计并核对数据库",
-    "pdfPage": 11
+    "pdfPage": 11,
+    "planSection": "7.2",
+    "planPage": 42
   },
   {
     "page": 12,
     "title": "工作分解  4.7 制定三级测试计划",
-    "pdfPage": 12
+    "pdfPage": 12,
+    "planSection": "7.2",
+    "planPage": 43
   },
   {
     "page": 13,
     "title": "工作分解  4.8 汇编总体设计与五份配套文档",
-    "pdfPage": 13
+    "pdfPage": 13,
+    "planSection": "7.2",
+    "planPage": 44
   },
   {
     "page": 14,
     "title": "工作分解  4.9 技术审查与管理复审",
-    "pdfPage": 14
+    "pdfPage": 14,
+    "planSection": "7.2",
+    "planPage": 45
   },
   {
     "page": 15,
     "title": "工作分解  4.10 业务过程、判定和复杂度设计",
-    "pdfPage": 15
+    "pdfPage": 15,
+    "planSection": "7.2",
+    "planPage": 46
   },
   {
     "page": 16,
     "title": "工作分解  4.11 双端人机界面与交互详细设计",
-    "pdfPage": 16
+    "pdfPage": 16,
+    "planSection": "7.2",
+    "planPage": 47
   },
   {
     "page": 17,
     "title": "工作分解  4.12 独立运维与备份恢复详细设计",
-    "pdfPage": 17
+    "pdfPage": 17,
+    "planSection": "7.2",
+    "planPage": 48
   },
   {
     "page": 18,
     "title": "工作分解  4.13 三级用例、数据和详细设计复核",
-    "pdfPage": 18
+    "pdfPage": 18,
+    "planSection": "7.2",
+    "planPage": 49
   },
   {
     "page": 19,
     "title": "工作分解  4.14 设计评审反馈与修订交接",
-    "pdfPage": 19
+    "pdfPage": 19,
+    "planSection": "7.2",
+    "planPage": 50
   },
   {
     "page": 20,
     "title": "工作分解  编码与单元测试",
-    "pdfPage": 20
+    "pdfPage": 20,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 21,
     "title": "工作分解  5.1 项目骨架、配置与接口约定",
-    "pdfPage": 21
+    "pdfPage": 21,
+    "planSection": "7.2",
+    "planPage": 51
   },
   {
     "page": 22,
     "title": "工作分解  5.2 登录、邮箱与材料认证",
-    "pdfPage": 22
+    "pdfPage": 22,
+    "planSection": "7.2",
+    "planPage": 52
   },
   {
     "page": 23,
     "title": "工作分解  5.3 文章存储、岗位检索与筛选接口",
-    "pdfPage": 23
+    "pdfPage": 23,
+    "planSection": "7.2",
+    "planPage": 53
   },
   {
     "page": 24,
     "title": "工作分解  5.4 小程序与网页阅读页面",
-    "pdfPage": 24
+    "pdfPage": 24,
+    "planSection": "7.2",
+    "planPage": 54
   },
   {
     "page": 25,
     "title": "工作分解  5.5 网页Markdown创作与草稿",
-    "pdfPage": 25
+    "pdfPage": 25,
+    "planSection": "7.2",
+    "planPage": 55
   },
   {
     "page": 26,
     "title": "工作分解  5.6 小程序文字与图片创作",
-    "pdfPage": 26
+    "pdfPage": 26,
+    "planSection": "7.2",
+    "planPage": 56
   },
   {
     "page": 27,
     "title": "工作分解  5.7 双端草稿、发布与文章管理",
-    "pdfPage": 27
+    "pdfPage": 27,
+    "planSection": "7.2",
+    "planPage": 57
   },
   {
     "page": 28,
     "title": "工作分解  5.8 评论、点赞、投币、收藏与荣誉",
-    "pdfPage": 28
+    "pdfPage": 28,
+    "planSection": "7.2",
+    "planPage": 58
   },
   {
     "page": 29,
     "title": "工作分解  5.9 社区审核、反馈与举报网页",
-    "pdfPage": 29
+    "pdfPage": 29,
+    "planSection": "7.2",
+    "planPage": 59
   },
   {
     "page": 30,
     "title": "工作分解  5.10 独立运维执行与备份服务",
-    "pdfPage": 30
+    "pdfPage": 30,
+    "planSection": "7.2",
+    "planPage": 60
   },
   {
     "page": 31,
     "title": "工作分解  5.11 运维网页、状态与操作记录",
-    "pdfPage": 31
+    "pdfPage": 31,
+    "planSection": "7.2",
+    "planPage": 61
   },
   {
     "page": 32,
     "title": "工作分解  5.12 联调、代码用例证据与候选版本",
-    "pdfPage": 32
+    "pdfPage": 32,
+    "planSection": "7.2",
+    "planPage": 62
   },
   {
     "page": 33,
     "title": "工作分解  综合测试",
-    "pdfPage": 33
+    "pdfPage": 33,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 34,
     "title": "工作分解  6.1 核心系统及真实MySQL集成测试",
-    "pdfPage": 34
+    "pdfPage": 34,
+    "planSection": "7.2",
+    "planPage": 63
   },
   {
     "page": 35,
     "title": "工作分解  6.2 正常负载与性能指标",
-    "pdfPage": 35
+    "pdfPage": 35,
+    "planSection": "7.2",
+    "planPage": 64
   },
   {
     "page": 36,
     "title": "工作分解  6.3 压力、稳定性及降载恢复",
-    "pdfPage": 36
+    "pdfPage": 36,
+    "planSection": "7.2",
+    "planPage": 65
   },
   {
     "page": 37,
     "title": "工作分解  6.4 权限、双端兼容及目标环境",
-    "pdfPage": 37
+    "pdfPage": 37,
+    "planSection": "7.2",
+    "planPage": 66
   },
   {
     "page": 38,
     "title": "工作分解  6.5 部署、停机与备份恢复",
-    "pdfPage": 38
+    "pdfPage": 38,
+    "planSection": "7.2",
+    "planPage": 67
   },
   {
     "page": 39,
     "title": "工作分解  6.6 缺陷处理、复测和回归",
-    "pdfPage": 39
+    "pdfPage": 39,
+    "planSection": "7.2",
+    "planPage": 68
   },
   {
     "page": 40,
     "title": "工作分解  6.7 用户走查、内部验收及报告封版",
-    "pdfPage": 40
+    "pdfPage": 40,
+    "planSection": "7.2",
+    "planPage": 69
   },
   {
     "page": 41,
     "title": "工作分解  6.8 测试报告复核及课堂说明",
-    "pdfPage": 41
+    "pdfPage": 41,
+    "planSection": "7.2",
+    "planPage": 70
   },
   {
     "page": 42,
     "title": "工作分解  部署与维护",
-    "pdfPage": 42
+    "pdfPage": 42,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 43,
     "title": "工作分解  总结与收尾",
-    "pdfPage": 43
+    "pdfPage": 43,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 44,
     "title": "工作分解  持续项目管理与交叉复核",
-    "pdfPage": 44
+    "pdfPage": 44,
+    "planSection": "7.1",
+    "planPage": 34
   },
   {
     "page": 45,
     "title": "工作分解  课程里程碑",
-    "pdfPage": 45
+    "pdfPage": 45,
+    "planSection": "7.1",
+    "planPage": 34
   }
 ]

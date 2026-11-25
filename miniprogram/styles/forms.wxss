@@ -9,7 +9,7 @@
 .field-textarea { min-height: 200rpx; }
 .body-input { min-height: 480rpx; }
 .field-error { display: block; margin: 14rpx 0; color: var(--color-danger); font-size: 28rpx; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
-.success-note { display: block; margin: 20rpx 0; color: var(--color-primary); font-size: 28rpx; white-space: pre-wrap; }
+.success-note { display: block; margin: 20rpx 0; color: var(--color-success); font-size: 28rpx; white-space: pre-wrap; }
 .form-actions { display: flex; flex-direction: column; gap: 20rpx; margin-top: 40rpx; }
 .inline-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16rpx; margin-top: 18rpx; }
 .inline-actions .button-secondary, .inline-actions .button-primary { flex: 1; }
@@ -17,7 +17,7 @@
 .code-row .field-input { flex: 1; min-width: 0; }
 .code-row .button-secondary { flex: none; padding: 0 20rpx; font-size: 28rpx; }
 .section-title { display: block; margin: 32rpx 0 16rpx; font-size: 34rpx; font-weight: 650; }
-.list-row { margin: 22rpx 0; padding: 26rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); overflow-wrap: anywhere; }
+.list-row { margin: 22rpx 0; padding: 26rpx; border: 1rpx solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-card); overflow-wrap: anywhere; }
 .row-title { display: block; font-size: 32rpx; font-weight: 650; line-height: 1.5; text-align: left; }
 .menu-row { display: flex; width: 100% !important; justify-content: space-between; align-items: center; min-height: 108rpx; padding: 12rpx 0; border-bottom: 1rpx solid var(--color-border); text-align: left; }
 .menu-note { color: var(--color-text-secondary); font-size: 28rpx; }
@@ -34,3 +34,6 @@
 .status-tag.progress-waiting { color: #714a17; background: #fbf1dc; }
 .status-tag.progress-active { color: #315a53; background: #ecf3f0; }
 .status-tag.progress-done { color: var(--color-primary-dark); background: var(--color-primary-soft); }
+
+.field-input, .field-textarea, .field-picker { min-width: 0; box-sizing: border-box; }
+.field-input:focus, .field-textarea:focus { border-color: var(--color-primary); }
