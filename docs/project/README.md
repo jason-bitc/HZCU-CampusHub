@@ -4,11 +4,11 @@
 
 |目录|内容与主要源文件|
 |---|---|
-|[reports](reports)|项目计划V1.8、可行性V1.6、统一SRS V1.5.1，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
+|[reports](reports)|项目计划 V1.8（11月24日校订）、可行性 V1.6、统一 SRS V1.5.5、总体设计 V1.3.1、详细设计 V1.5，含Word、Markdown和PDF；需求分析过程和完整模型均在同一SRS正文|
 |[models](models)|ER、DFD、STD、IPO、功能层次、字典、正则、追踪及可编辑draw.io/dot|
 |[schedule](schedule)|WBS、原生MPP、甘特图、工程网络、任务日期及人时预算|
-|[prototypes](prototypes)|现有概念稿、功能线框和全需求原型；用途与覆盖记录分别保留|
-|[meetings-research](meetings-research)|10月31日、11月5日和11月15日周会，成员评价、反馈记录与网络调研来源|
+|[prototypes](prototypes)|11月23日界面证据、11月24日三端 Pixso 交互原型及全需求覆盖资料|
+|[meetings-research](meetings-research)|10月31日、11月5日、11月15日和11月22日周会，成员评价、反馈记录与网络调研来源|
 |[11月15日详细设计与实现衔接纪要](meetings-research/20261115详细设计与实现衔接周会议纪要G04.pdf)|第6周WBS进度、会后推送、次周安排和成员履责证据|
 |[presentations](presentations)|需求汇报PPT、PDF、讲稿及豆包调整提示词|
 |[演示文章调研计划](meetings-research/演示文章/README.md)|首批完整求职文章选题、豆包提示词、收录格式及双端演示场景|
@@ -37,9 +37,18 @@
 
 [11项评审与PDF页码定位](models/统一SRS评审条目定位G04.csv)。
 
-ER图使用1:1、1:N、M:N；[28项联系与参与约束](models/ER联系与参与约束G04.csv)与SRS表6-1同步。
+第2.1、2.4节对应[用户类别和代表联络登记](meetings-research/用户代表邀约与原型走查G04.md)。第5.11–5.13节展示[小程序、网页、社区管理和独立运维界面](prototypes/界面原型20261123/README.md)。
+
+SRS V1.5.5 第6章从 PDF 第43页开始，展示 [PowerDesigner 分区图与原生模型](models/PowerDesigner/README.md)。表6-1保留概念层的 [28项联系与参与约束](models/ER联系与参与约束G04.csv)，第8章数据字典从第63页开始。
 
 ## 本轮评审定位
 
-- [项目计划 PDF](reports/城院帮项目计划G04.pdf)第7章图7-1为WBS总览，PDF第25页，目录第3页可直接跳转。[合订 PDF](reports/项目计划与可行性分析合订G04.pdf)采用同一计划，完整分解见[WBS树状结构图](schedule/WBS树状结构图G04.pdf)。
+本次同步来源依次为项目计划 [PR #58](https://github.com/jason-bitc/HZCU-CampusHub/pull/58)、SRS [PR #57](https://github.com/jason-bitc/HZCU-CampusHub/pull/57)、总体设计 [PR #56](https://github.com/jason-bitc/HZCU-CampusHub/pull/56)和详细设计 [PR #55](https://github.com/jason-bitc/HZCU-CampusHub/pull/55)。详细设计 §6.1 图18、19为成稿时的设计输入，需求逻辑模型以 SRS V1.5.5 第6章为准。独立数据库设计结果保留为历史设计基线。
+
+- 11月25日设计评审使用[总体设计 V1.3.1](reports/城院帮总体设计报告G04.pdf)、[详细设计 V1.5](reports/城院帮详细设计报告G04.pdf)与[11月22日周会纪要](meetings-research/20261122设计阶段评审周会议纪要G04.pdf)。总体设计第5.4节展示 HIPO，HLD34 展示文章发布泳道。详细设计 PDF 第35页为成员两模块、图形工具和伪代码对照，第36页起为数据库设计。[设计评审 PPT 提示词](presentations/豆包设计阶段评审PPT提示词G04.md)同步列出证据位置。
+- [项目计划 V1.8（11月24日校订）](reports/城院帮项目计划G04.pdf)正文 §7.1、§7.2、§7.3 分别从 PDF 第34、37、82页开始，可查 WBS 总览、末级分解和全任务甘特图。[原生 MPP](schedule/城院帮项目计划G04.mpp)是该版图表的排期依据。[计划与可研合订](reports/项目计划与可行性分析合订G04.pdf)由当前两份独立 PDF 组成。
 - [用户代表邀约与原型走查](meetings-research/用户代表邀约与原型走查G04.md)记录读者、作者候选状态及走查方法。[需求阶段11项审查](schedule/需求阶段11项审查G04.csv)第6、8项同步更新。实际结果填入[用户任务走查与修改确认填写表](models/用户任务走查与修改确认填写表G04.csv)。
+
+## 系统测试计划
+
+[系统测试计划 V2.3](reports/城院帮系统测试计划G04.pdf)的本机环境、性能规程和暂停恢复分别从第5、8、12页查阅。附录A列国标条款对应，附录B列候选交接与批准字段。[执行登记](models/实现测试G04/系统测试执行登记G04.csv) · [本机性能规程](models/实现测试G04/本机性能测试规程G04.md) · [JMeter正常负载模板](models/实现测试G04/JMeter正常负载模板G04.xml)。执行记录按候选批次归档。
