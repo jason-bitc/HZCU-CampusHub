@@ -123,20 +123,49 @@ watch(() => session.status, load);
 <template>
   <MemberGate title="登录后查看个人资料"
     ><ConfirmDialog ref="confirmation" />
-    <div class="page-heading">
-      <div>
+    <div class="page-heading panel member-identity">
+      <span class="member-avatar" aria-hidden="true">{{
+        Array.from(profile?.nickname || "城")[0]
+      }}</span>
+      <div class="member-identity-copy">
         <h1>{{ profile?.nickname || "个人中心" }}</h1>
-        <p>{{ session.me?.email }} · 校园邮箱已验证</p>
+        <p>{{ session.me?.email }}</p>
+        <span class="member-state">校园邮箱已验证</span>
       </div>
       <button :disabled="busy" @click="logout">退出当前账号</button>
     </div>
-    <nav class="card-actions" aria-label="个人服务">
-      <RouterLink class="button" to="/me/notifications">站内通知</RouterLink>
-      <RouterLink class="button" to="/me/wallet">奖励与账目</RouterLink>
-      <RouterLink class="button" to="/me/cases">我的反馈与举报</RouterLink>
-      <RouterLink class="button" to="/me/certification"
-        >校园认证状态</RouterLink
-      >
+    <nav class="member-shortcuts" aria-label="个人服务">
+      <RouterLink to="/me/notifications">
+        <span class="member-shortcut-icon"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M18 8a6 6 0 0 0-12 0c0 6-3 7-3 9h18c0-2-3-3-3-9M10 21h4"
+            /></svg></span
+        >站内通知
+      </RouterLink>
+      <RouterLink to="/me/wallet">
+        <span class="member-shortcut-icon tone-orange"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path
+              d="M12 7v10m3-8H10a1.5 1.5 0 0 0 0 3h4a1.5 1.5 0 0 1 0 3H9"
+            /></svg></span
+        >奖励与账目
+      </RouterLink>
+      <RouterLink to="/me/cases">
+        <span class="member-shortcut-icon tone-violet"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 4h14v12H9l-4 4zM9 8h6m-6 4h4" /></svg></span
+        >我的反馈与举报
+      </RouterLink>
+      <RouterLink to="/me/certification">
+        <span class="member-shortcut-icon tone-green"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6zM9 12l2 2 4-4"
+            /></svg></span
+        >校园认证状态
+      </RouterLink>
     </nav>
     <p v-if="error" class="error" role="alert">{{ error }}</p>
     <div class="profile-vertical">
