@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { router } from "./router";
 import "./style.css";
+import "./member-theme.css";
 
 const app = createApp(App).use(router);
 // Resolve the initial identity domain before App starts any session recovery.

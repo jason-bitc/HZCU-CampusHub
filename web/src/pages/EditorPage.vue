@@ -85,7 +85,8 @@ const pendingUpload = ref<UploadRequest | null>(null);
 const savedAt = ref("");
 const bodyInput = ref<HTMLTextAreaElement>();
 const uploadInput = ref<HTMLInputElement>();
-const publishDialog = ref<HTMLDialogElement>();
+const publishedView = ref(false);
+const publishHeading = ref<HTMLElement>();
 let uploadFile: File | undefined;
 const dirty = computed(
   () => !!form.value && JSON.stringify(form.value) !== saved.value,
@@ -416,6 +417,7 @@ async function submitPublish() {
     apply(result);
     pendingPublish.value = null;
     preview.value = false;
+    publishedView.value = result.state === "PUBLISHED";
     publishFeedback.value = {
       kind: "success",
       text: `发布回执已确认，当前状态为${stateName[result.state]}。`,
@@ -597,11 +599,11 @@ watch(
 );
 watch(preview, async (value) => {
   await nextTick();
-  if (value) publishDialog.value?.showModal();
-  else {
-    publishDialog.value?.close();
-    publishTrigger.value?.focus({ preventScroll: true });
-  }
+  if (value) {
+    // 发布前检查作为整页步骤呈现：回到页首并把焦点交给标题。
+    window.scrollTo({ top: 0 });
+    publishHeading.value?.focus({ preventScroll: true });
+  } else publishTrigger.value?.focus({ preventScroll: true });
 });
 watch(
   () => session.status,
@@ -642,366 +644,437 @@ onBeforeRouteLeave(() => {
 <template>
   <MemberGate title="登录后继续创作"
     ><ConfirmDialog ref="confirmation" />
-    <div class="breadcrumb">
-      <RouterLink to="/workspace">我的工作区</RouterLink><span>/</span
-      ><span>创作经验</span>
-    </div>
-    <div class="page-heading editor-heading">
-      <div>
-        <h1>创作经验</h1>
-        <p>
-          {{ draft ? stateName[draft.state] : "正在读取草稿" }} · 修订
-          {{ revision }}<span v-if="dirty"> · 有未保存修改</span
-          ><span v-if="savedAt"> · 本次保存 {{ savedAt }}</span>
-        </p>
-      </div>
-      <div class="card-actions">
-        <button :disabled="locked || uploading || !dirty" @click="save">
-          保存草稿</button
-        ><button
-          ref="publishTrigger"
-          class="primary"
-          :disabled="
-            busy ||
-            uploading ||
-            (readOnly && !pendingPublish) ||
-            !!conflict ||
-            !!recovery
-          "
-          @click="publish"
-        >
-          {{ pendingPublish ? "核对上次发布" : "预览并发布" }}
-        </button>
-      </div>
-    </div>
-    <p v-if="error" class="error" role="alert">
-      {{ error }}
-      <button v-if="!form" class="text-button" @click="load">
-        重新读取草稿
-      </button>
-    </p>
-    <p v-if="notice" class="success" role="status">{{ notice }}</p>
-    <OperationFeedback
-      :feedback="saveFeedback"
-      :processing="saving ? '正在保存草稿…' : undefined"
-    />
-    <OperationFeedback
-      :feedback="publishFeedback"
-      :processing="publishing ? '正在核对发布…' : undefined"
-    />
-    <section
-      v-if="checkRequested && issues.length"
-      ref="checklist"
-      tabindex="-1"
-      class="panel publish-checklist"
-      aria-label="发布前检查"
-    >
-      <h2>发布前还需完成 {{ issues.length }} 项</h2>
-      <ul>
-        <li v-for="issue in issues" :key="issue.field">
-          <button class="text-button" @click="locateField(issue.field)">
-            {{ issue.label }}
-          </button>
-        </li>
-      </ul>
-    </section>
-    <section v-if="recovery" class="panel recovery-panel">
-      <h2>发现本标签页保存的副本</h2>
-      <p>
-        本机副本基于修订 {{ recovery.baseRevision }}，服务器为修订
-        {{ revision }}。请先核对，恢复不会自动覆盖云端。
-      </p>
-      <div class="card-actions">
-        <button @click="downloadBackup">下载本机副本</button
-        ><button class="primary" @click="restoreBackup">
-          恢复本机编辑与待确认请求</button
-        ><button @click="discardBackup">以服务器草稿继续</button>
-      </div>
-    </section>
-    <section v-if="conflict && form" class="panel conflict-panel" role="alert">
-      <h2>草稿版本有冲突，请手动合并</h2>
-      <p>
-        本机修改基于修订 {{ revision }}，服务器已是修订
-        {{ conflict.revision }}。两份内容均未自动覆盖。
-      </p>
-      <button
-        type="button"
-        :aria-pressed="showAllDifferences"
-        @click="showAllDifferences = !showAllDifferences"
-      >
-        {{ showAllDifferences ? "只看差异" : "查看全部字段" }}
-      </button>
-      <p v-if="!comparedFields.length">
-        服务器修订已变化，两份可编辑字段内容相同。
-      </p>
-      <div v-if="comparedFields.length" class="compare-grid">
+    <template v-if="publishedView && draft?.state === 'PUBLISHED'">
+      <div class="page-heading">
         <div>
-          <h3>本机编辑 · 基于修订 {{ revision }}</h3>
-          <dl class="compare-fields">
-            <template v-for="field in comparedFields" :key="field.label"
-              ><dt>
-                {{ field.label }}<span v-if="field.changed">有差异</span>
-              </dt>
-              <dd :class="{ changed: field.changed }">
-                {{ field.local }}
-              </dd></template
-            >
-          </dl>
-        </div>
-        <div>
-          <h3>服务器版本 · 修订 {{ conflict.revision }}</h3>
-          <dl class="compare-fields">
-            <template v-for="field in comparedFields" :key="field.label"
-              ><dt>
-                {{ field.label }}<span v-if="field.changed">有差异</span>
-              </dt>
-              <dd :class="{ changed: field.changed }">
-                {{ field.server }}
-              </dd></template
-            >
-          </dl>
+          <h1>经验已公开</h1>
+          <p>发布回执已确认，读者现在可以阅读这篇经验。</p>
         </div>
       </div>
-      <div class="card-actions">
-        <button @click="downloadBackup">下载本机副本</button
-        ><button @click="downloadServerBackup">下载服务器副本</button
-        ><button @click="useServer">使用服务器版本</button
-        ><button class="primary" @click="prepareMerge">
-          保留本机内容，按新修订手动合并
-        </button>
-      </div>
-    </section>
-    <p v-if="readOnly && draft" class="notice">
-      当前文章为{{ stateName[draft.state] }}，不能编辑或发布。
-    </p>
-    <div v-if="form" class="editor-layout">
-      <section class="panel editor-main">
-        <fieldset :disabled="locked">
-          <label
-            >标题<input
-              id="draft-title"
-              v-model="form.title"
-              maxlength="200"
-              placeholder="为这段经历起一个具体的标题"
-          /></label>
-        </fieldset>
-        <div class="writing-switch segmented" aria-label="切换正文编辑和预览">
-          <button
-            type="button"
-            :aria-pressed="!showReadingPreview"
-            @click="changeMode(false)"
+      <p class="success" role="status">
+        文章已公开，当前为修订 {{ revision }}。
+      </p>
+      <section class="panel published-card" aria-label="发布回执">
+        <dl class="kv">
+          <div>
+            <dt>文章修订</dt>
+            <dd>第 {{ revision }} 版</dd>
+          </div>
+          <div>
+            <dt>当前状态</dt>
+            <dd>{{ stateName[draft.state] }}</dd>
+          </div>
+        </dl>
+        <div class="card-actions">
+          <RouterLink class="button primary" :to="`/articles/${draft.articleId}`"
+            >查看公开经验</RouterLink
+          ><RouterLink class="button" to="/workspace"
+            >返回作品工作区</RouterLink
           >
-            写正文
-          </button>
-          <button
+        </div>
+      </section>
+    </template>
+    <template v-else-if="preview && form">
+      <div class="page-heading editor-heading">
+        <div>
+          <h1 ref="publishHeading" tabindex="-1">发布前检查</h1>
+          <p>{{ form.title }} · 修订 {{ revision }}</p>
+        </div>
+      </div>
+      <p class="success" role="status">
+        发布前检查通过，正文、分类、来源说明和资料链接将一并公开。
+      </p>
+      <OperationFeedback
+        :feedback="publishFeedback"
+        :processing="publishing ? '正在核对发布…' : undefined"
+      />
+      <section class="panel publish-preview" aria-label="发布预览">
+        <h2>{{ form.title || "未命名草稿" }}</h2>
+        <p class="meta">
+          <span v-if="form.experienceStage">{{ form.experienceStage }}</span
+          ><span v-if="form.summary">{{ form.summary }}</span>
+        </p>
+        <p class="hint">
+          发布不会公开你的邮箱或已关闭的联系方式。图片将按当前正文引用开放读取。
+        </p>
+        <MarkdownView :body="form.body" private-images />
+      </section>
+      <div class="publish-actions">
+        <button
+          class="primary"
+          :disabled="busy || !!pendingPublish"
+          @click="confirmPublish"
+        >
+          {{ pendingPublish ? "核对上次发布" : "确认公开发布" }}
+        </button>
+        <button autofocus :disabled="busy" @click="preview = false">
+          返回编辑
+        </button>
+      </div>
+    </template>
+    <template v-else>
+      <div class="page-heading editor-heading">
+        <div>
+          <h1>编辑经验</h1>
+          <p>
+            {{
+              savedAt
+                ? `最后确认保存 ${savedAt}`
+                : draft
+                  ? "已读取云端草稿"
+                  : "正在读取草稿"
+            }}
+            · 云端修订 {{ revision
+            }}<span v-if="dirty"> · 有未保存修改</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <button :disabled="locked || uploading || !dirty" @click="save">
+            保存草稿</button
+          ><button
             type="button"
             :aria-pressed="showReadingPreview"
-            @click="changeMode(true)"
+            @click="changeMode(!showReadingPreview)"
           >
-            看预览
+            {{ showReadingPreview ? "继续编辑" : "预览" }}</button
+          ><button
+            ref="publishTrigger"
+            class="primary"
+            :disabled="
+              busy ||
+              uploading ||
+              (readOnly && !pendingPublish) ||
+              !!conflict ||
+              !!recovery
+            "
+            @click="publish"
+          >
+            {{ pendingPublish ? "核对上次发布" : "发布检查" }}
           </button>
         </div>
-        <fieldset
-          :disabled="locked"
-          :class="{ 'writing-preview-only': showReadingPreview }"
-        >
-          <div class="editor-tools" aria-label="Markdown 工具">
-            <button type="button" @click="insert('## ')">标题</button
-            ><button type="button" @click="insert('**', '**')">加粗</button
-            ><button type="button" @click="insert('\n> ')">引用</button
-            ><button type="button" @click="insert('\n- ')">列表</button
-            ><button type="button" @click="insert('\n```\n', '\n```\n')">
-              代码</button
-            ><button
-              type="button"
-              :disabled="uploading"
-              @click="uploadInput?.click()"
-            >
-              {{ pendingUpload ? "选择原图重试" : "上传图片" }}</button
-            ><button
-              type="button"
-              @click="insert('[资料名称](', 'https://example.com)')"
-            >
-              资料链接</button
-            ><input
-              ref="uploadInput"
-              class="sr-only"
-              type="file"
-              accept="image/png,image/jpeg"
-              aria-label="上传正文图片"
-              @change="upload(($event.target as HTMLInputElement).files?.[0])"
-            />
-          </div>
-        </fieldset>
-        <OperationFeedback
-          :feedback="uploadFeedback"
-          :processing="
-            uploading ? '正在上传图片，可以继续编辑正文…' : undefined
-          "
-        />
-        <p v-if="pendingUpload && !uploading" class="notice">
-          {{ pendingUpload.name }} 的上传结果待确认。重试需沿用原图和原请求。
-          <button
-            v-if="uploadFile"
-            class="text-button"
-            :disabled="locked"
-            @click="upload(uploadFile)"
-          >
-            重试这张图片
-          </button>
+      </div>
+      <p v-if="error" class="error" role="alert">
+        {{ error }}
+        <button v-if="!form" class="text-button" @click="load">
+          重新读取草稿
+        </button>
+      </p>
+      <p v-if="notice" class="success" role="status">{{ notice }}</p>
+      <OperationFeedback
+        :feedback="saveFeedback"
+        :processing="saving ? '正在保存草稿…' : undefined"
+      />
+      <OperationFeedback
+        :feedback="publishFeedback"
+        :processing="publishing ? '正在核对发布…' : undefined"
+      />
+      <section
+        v-if="checkRequested && issues.length"
+        ref="checklist"
+        tabindex="-1"
+        class="panel publish-checklist"
+        aria-label="发布前检查"
+      >
+        <h2>发布前还需完成 {{ issues.length }} 项</h2>
+        <ul>
+          <li v-for="issue in issues" :key="issue.field">
+            <button class="text-button" @click="locateField(issue.field)">
+              {{ issue.label }}
+            </button>
+          </li>
+        </ul>
+      </section>
+      <section v-if="recovery" class="panel recovery-panel">
+        <h2>发现本标签页保存的副本</h2>
+        <p>
+          本机副本基于修订 {{ recovery.baseRevision }}，服务器为修订
+          {{ revision }}。请先核对，恢复不会自动覆盖云端。
         </p>
+        <div class="card-actions">
+          <button @click="downloadBackup">下载本机副本</button
+          ><button class="primary" @click="restoreBackup">
+            恢复本机编辑与待确认请求</button
+          ><button @click="discardBackup">以服务器草稿继续</button>
+        </div>
+      </section>
+      <p v-if="readOnly && draft" class="notice">
+        当前文章为{{ stateName[draft.state] }}，不能编辑或发布。
+      </p>
+      <div v-if="form" class="editor-layout">
+        <fieldset :disabled="locked" class="editor-title">
+          <label class="sr-only" for="draft-title">标题</label>
+          <input
+            id="draft-title"
+            v-model="form.title"
+            maxlength="200"
+            placeholder="为这段经历起一个具体的标题"
+          />
+        </fieldset>
         <div
-          class="writing-grid"
+          class="editor-split"
           :class="
-            showReadingPreview ? 'writing-preview-only' : 'writing-source-only'
+            showReadingPreview
+              ? 'writing-preview-only'
+              : 'writing-source-only'
           "
         >
-          <label class="source-editor"
-            >Markdown 编辑<textarea
-              id="draft-body"
-              ref="bodyInput"
-              v-model="form.body"
-              :disabled="locked"
-              spellcheck="false"
-              placeholder="从当时的起点写起，记录准备、投递、面试和复盘…"
-            ></textarea>
-          </label>
+          <section class="editor-source" aria-label="Markdown 正文">
+            <div class="editor-pane-head">
+              <h2>Markdown 正文</h2>
+              <div class="writing-switch segmented" aria-label="切换正文编辑和预览">
+                <button
+                  type="button"
+                  :aria-pressed="!showReadingPreview"
+                  @click="changeMode(false)"
+                >
+                  写正文
+                </button>
+                <button
+                  type="button"
+                  :aria-pressed="showReadingPreview"
+                  @click="changeMode(true)"
+                >
+                  看预览
+                </button>
+              </div>
+            </div>
+            <fieldset :disabled="locked" class="editor-tools-fieldset">
+              <div class="editor-tools" aria-label="Markdown 工具">
+                <button type="button" @click="insert('**', '**')">加粗</button
+                ><button type="button" @click="insert('## ')">标题</button
+                ><button
+                  type="button"
+                  @click="insert('[资料名称](', 'https://example.com)')"
+                >
+                  链接</button
+                ><button
+                  type="button"
+                  :disabled="uploading"
+                  @click="uploadInput?.click()"
+                >
+                  {{ pendingUpload ? "选择原图重试" : "插入图片" }}</button
+                ><button type="button" @click="insert('\n> ')">引用</button
+                ><button type="button" @click="insert('\n- ')">列表</button
+                ><button
+                  type="button"
+                  @click="insert('\n```\n', '\n```\n')"
+                >
+                  代码</button
+                ><input
+                  ref="uploadInput"
+                  class="sr-only"
+                  type="file"
+                  accept="image/png,image/jpeg"
+                  aria-label="上传正文图片"
+                  @change="upload(($event.target as HTMLInputElement).files?.[0])"
+                />
+              </div>
+            </fieldset>
+            <OperationFeedback
+              :feedback="uploadFeedback"
+              :processing="
+                uploading ? '正在上传图片，可以继续编辑正文…' : undefined
+              "
+            />
+            <p v-if="pendingUpload && !uploading" class="notice editor-inline-note">
+              {{ pendingUpload.name }} 的上传结果待确认。重试需沿用原图和原请求。
+              <button
+                v-if="uploadFile"
+                class="text-button"
+                :disabled="locked"
+                @click="upload(uploadFile)"
+              >
+                重试这张图片
+              </button>
+            </p>
+            <label class="source-editor"
+              ><span class="sr-only">Markdown 编辑</span
+              ><textarea
+                id="draft-body"
+                ref="bodyInput"
+                v-model="form.body"
+                :disabled="locked"
+                spellcheck="false"
+                placeholder="从当时的起点写起，记录准备、投递、面试和复盘…"
+              ></textarea>
+            </label>
+          </section>
           <section
             ref="previewPanel"
             class="preview-column"
             aria-label="正文安全预览"
           >
-            <h2>安全预览</h2>
-            <MarkdownView :body="form.body" private-images />
+            <div class="editor-pane-head"><h2>实时预览</h2></div>
+            <div class="preview-body">
+              <MarkdownView :body="form.body" private-images />
+            </div>
           </section>
         </div>
-        <button class="text-button" @click="downloadBackup">
-          下载完整草稿副本
-        </button>
-      </section>
-      <aside class="editor-sidebar">
-        <section class="panel">
-          <h2>发布信息</h2>
-          <fieldset :disabled="locked">
-            <label
-              >摘要<textarea
-                v-model="form.summary"
-                rows="2"
-                maxlength="1000"
-                placeholder="可选，让读者了解这篇经验适合什么起点"
-              ></textarea>
-            </label>
-            <fieldset
-              v-for="group in tagGroups"
-              :key="group.field"
-              :id="'draft-' + group.field"
-              class="tag-fieldset"
-            >
-              <legend>{{ group.label }}</legend>
+        <nav class="editor-links" aria-label="编辑设置">
+          <a href="#editor-prompts">写作提示（可跳过）</a
+          ><a href="#editor-settings">分类与来源设置</a
+          ><a href="#editor-links">资料链接</a
+          ><a v-if="conflict && form" href="#editor-conflict">查看冲突对比</a>
+        </nav>
+        <div class="editor-sections">
+          <section id="editor-prompts" class="panel">
+            <WritingPrompts v-if="!readOnly" />
+            <p class="hint">
+              支持完整 Markdown。HTML 按文字显示。图片为 JPEG / PNG，单张不超过
+              10MiB。
+            </p>
+          </section>
+          <section id="editor-settings" class="panel">
+            <h2>分类与来源设置</h2>
+            <fieldset :disabled="locked" class="editor-settings">
               <label
-                v-for="tag in catalog?.[group.group]"
-                :key="tag.id"
-                class="tag-choice"
-                ><input
-                  v-model="form[group.field]"
-                  type="checkbox"
-                  :value="tag.id"
-                />{{ tag.name }}</label
-              >
-            </fieldset>
-            <label
-              >经历发生阶段<input
-                id="draft-experienceStage"
-                v-model="form.experienceStage"
-                maxlength="64"
-                placeholder="例如：大三暑假" /></label
-            ><label
-              >内容来源<select
-                id="draft-sourceType"
-                v-model="form.sourceType"
-                aria-label="内容来源"
-              >
-                <option :value="null">请选择来源</option>
-                <option value="FIRST_HAND">亲历分享</option>
-                <option value="CURATED">资料整理</option>
-                <option value="DEMO">演示内容</option>
-              </select></label
-            ><label
-              >来源说明<textarea
-                id="draft-sourceNote"
-                v-model="form.sourceNote"
-                rows="3"
-                maxlength="2000"
-              ></textarea>
-            </label>
-          </fieldset>
-        </section>
-        <section class="panel">
-          <h2>资料链接</h2>
-          <fieldset :disabled="locked">
-            <div
-              v-for="(link, index) in form.sourceLinks"
-              :key="index"
-              class="source-link-fields"
-            >
+                >摘要<textarea
+                  v-model="form.summary"
+                  rows="2"
+                  maxlength="1000"
+                  placeholder="可选，让读者了解这篇经验适合什么起点"
+                ></textarea>
+              </label>
               <label
-                >资料名称<input v-model="link.label" maxlength="200" /></label
+                >经历发生阶段<input
+                  id="draft-experienceStage"
+                  v-model="form.experienceStage"
+                  maxlength="64"
+                  placeholder="例如：大三暑假" /></label
               ><label
-                >HTTP / HTTPS 地址<input
-                  v-model="link.url"
-                  type="url"
-                  maxlength="2000" /></label
-              ><button
-                type="button"
-                class="text-button"
-                @click="form.sourceLinks.splice(index, 1)"
+                >内容来源<select
+                  id="draft-sourceType"
+                  v-model="form.sourceType"
+                  aria-label="内容来源"
+                >
+                  <option :value="null">请选择来源</option>
+                  <option value="FIRST_HAND">亲历分享</option>
+                  <option value="CURATED">资料整理</option>
+                  <option value="DEMO">演示内容</option>
+                </select></label
               >
-                移除此资料链接
+              <fieldset
+                v-for="group in tagGroups"
+                :key="group.field"
+                :id="'draft-' + group.field"
+                class="tag-fieldset"
+              >
+                <legend>{{ group.label }}</legend>
+                <div class="tag-choices">
+                  <label
+                    v-for="tag in catalog?.[group.group]"
+                    :key="tag.id"
+                    class="tag-choice"
+                    ><input
+                      v-model="form[group.field]"
+                      type="checkbox"
+                      :value="tag.id"
+                    />{{ tag.name }}</label
+                  >
+                </div>
+              </fieldset>
+              <label class="editor-settings-wide"
+                >来源说明<textarea
+                  id="draft-sourceNote"
+                  v-model="form.sourceNote"
+                  rows="3"
+                  maxlength="2000"
+                  placeholder="公开显示在文章末尾，说明资料出处与整理方式"
+                ></textarea>
+              </label>
+            </fieldset>
+          </section>
+          <section id="editor-links" class="panel">
+            <h2>资料链接</h2>
+            <fieldset :disabled="locked">
+              <div
+                v-for="(link, index) in form.sourceLinks"
+                :key="index"
+                class="source-link-fields"
+              >
+                <label
+                  >资料名称<input v-model="link.label" maxlength="200" /></label
+                ><label
+                  >HTTP / HTTPS 地址<input
+                    v-model="link.url"
+                    type="url"
+                    maxlength="2000" /></label
+                ><button
+                  type="button"
+                  class="text-button"
+                  @click="form.sourceLinks.splice(index, 1)"
+                >
+                  移除此资料链接
+                </button>
+              </div>
+              <button type="button" @click="form.sourceLinks.push({ label: '', url: '' })">
+                添加资料链接
               </button>
-            </div>
+            </fieldset>
+          </section>
+          <section
+            v-if="conflict && form"
+            id="editor-conflict"
+            class="panel conflict-panel"
+            role="alert"
+          >
+            <h2>草稿版本有冲突，请手动合并</h2>
+            <p>
+              本机修改基于修订 {{ revision }}，服务器已是修订
+              {{ conflict.revision }}。两份内容均未自动覆盖。
+            </p>
             <button
               type="button"
-              @click="form.sourceLinks.push({ label: '', url: '' })"
+              :aria-pressed="showAllDifferences"
+              @click="showAllDifferences = !showAllDifferences"
             >
-              添加资料链接
+              {{ showAllDifferences ? "只看差异" : "查看全部字段" }}
             </button>
-          </fieldset>
-        </section>
-        <section class="panel">
-          <WritingPrompts v-if="!readOnly" />
-          <p class="hint">
-            支持完整 Markdown。HTML 按文字显示。图片为 JPEG / PNG，单张不超过
-            10MiB。
-          </p>
-        </section>
-      </aside>
-    </div>
-    <dialog
-      ref="publishDialog"
-      class="publish-dialog panel"
-      aria-labelledby="publish-title"
-      @close="preview = false"
-      @cancel.prevent="!publishing && (preview = false)"
-    >
-      <h2 id="publish-title">确认公开这篇经验</h2>
-      <p>{{ form?.title }} · 修订 {{ revision }}</p>
-      <p>
-        正文、分类、来源说明和资料链接将一并公开，图片将按当前正文引用开放读取。
-      </p>
-      <p class="hint">
-        请在编辑区核对完整安全预览。发布不会公开你的邮箱或关闭的联系方式。
-      </p>
-      <div class="card-actions">
-        <button autofocus :disabled="busy" @click="preview = false">
-          返回编辑</button
-        ><button
-          class="primary"
-          :disabled="busy || !!pendingPublish"
-          @click="confirmPublish"
-        >
-          确认发布
+            <p v-if="!comparedFields.length">
+              服务器修订已变化，两份可编辑字段内容相同。
+            </p>
+            <div v-if="comparedFields.length" class="compare-grid">
+              <div>
+                <h3>本机编辑 · 基于修订 {{ revision }}</h3>
+                <dl class="compare-fields">
+                  <template v-for="field in comparedFields" :key="field.label"
+                    ><dt>
+                      {{ field.label }}<span v-if="field.changed">有差异</span>
+                    </dt>
+                    <dd :class="{ changed: field.changed }">
+                      {{ field.local }}
+                    </dd></template
+                  >
+                </dl>
+              </div>
+              <div>
+                <h3>服务器版本 · 修订 {{ conflict.revision }}</h3>
+                <dl class="compare-fields">
+                  <template v-for="field in comparedFields" :key="field.label"
+                    ><dt>
+                      {{ field.label }}<span v-if="field.changed">有差异</span>
+                    </dt>
+                    <dd :class="{ changed: field.changed }">
+                      {{ field.server }}
+                    </dd></template
+                  >
+                </dl>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button @click="downloadBackup">下载本机副本</button
+              ><button @click="downloadServerBackup">下载服务器副本</button
+              ><button @click="useServer">使用服务器版本</button
+              ><button class="primary" @click="prepareMerge">
+                保留本机内容，按新修订手动合并
+              </button>
+            </div>
+          </section>
+        </div>
+        <button class="text-button editor-backup" @click="downloadBackup">
+          下载完整草稿副本
         </button>
       </div>
-    </dialog>
+    </template>
   </MemberGate>
 </template>

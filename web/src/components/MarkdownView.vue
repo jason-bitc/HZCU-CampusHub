@@ -253,7 +253,7 @@ function jump(id: string) {
   heading.focus({ preventScroll: true });
   heading.scrollIntoView({ block: "start" });
 }
-defineExpose({ locateSection, jump });
+defineExpose({ locateSection, jump, headings, currentHeading });
 </script>
 <template>
   <div class="markdown-shell">

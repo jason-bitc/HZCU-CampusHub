@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import type { Article } from "../types";
-import FavoriteButton from "./FavoriteButton.vue";
-import { dateText, sourceName } from "../lib/content";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import type { Article } from "../types";
+import { cardDate, sourceName } from "../lib/content";
+import FavoriteButton from "./FavoriteButton.vue";
 const props = defineProps<{
   article: Article;
-  showFavorite?: boolean;
   backTo?: string;
+  showFavorite?: boolean;
 }>();
+const emit = defineEmits<{ open: [] }>();
 const router = useRouter();
-const destination = computed(() => ({
-  path: `/articles/${props.article.id}`,
-  query: props.backTo ? { from: props.backTo } : {},
-}));
+const destination = computed(() => {
+  const query: Record<string, string> = {};
+  if (props.backTo) query.from = props.backTo;
+  return { path: `/articles/${props.article.id}`, query };
+});
 function open(event: MouseEvent) {
   if (
     event.defaultPrevented ||
@@ -29,6 +31,7 @@ function open(event: MouseEvent) {
     window.getSelection()?.toString()
   )
     return;
+  emit("open");
   void router.push(destination.value);
 }
 </script>
@@ -42,11 +45,6 @@ function open(event: MouseEvent) {
       <h2>
         <RouterLink :to="destination">{{ article.title }}</RouterLink>
       </h2>
-      <span class="card-open" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </span>
     </div>
     <p class="summary">{{ article.summary }}</p>
     <p class="article-tags">
@@ -64,11 +62,14 @@ function open(event: MouseEvent) {
     <div class="article-card-footer">
       <p class="meta">
         <span>{{ sourceName[article.sourceType] || "来源待确认" }}</span
-        ><time>{{ dateText(article.publishedAt) }}</time
-        ><span>投币 {{ article.counts.effectiveCoins }}</span
-        ><span>点赞 {{ article.counts.effectiveLikes }}</span>
+        ><time :datetime="article.publishedAt">{{
+          cardDate(article.publishedAt)
+        }}</time>
       </p>
-      <FavoriteButton v-if="showFavorite" :article-id="article.id" />
+      <div class="article-card-actions">
+        <FavoriteButton v-if="showFavorite" :article-id="article.id" />
+        <span class="card-read" aria-hidden="true">阅读</span>
+      </div>
     </div>
   </article>
 </template>

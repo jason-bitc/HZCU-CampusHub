@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-} from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import {
   adminRequest,
@@ -20,8 +13,10 @@ import type { CaseDetail, CaseContext, CaseCommand } from "./types";
 import { exampleCase, exampleContext } from "./examples";
 import AdminGate from "./AdminGate.vue";
 import CaseContributions from "./CaseContributions.vue";
+import ConsolePageHeader from "./ConsolePageHeader.vue";
+import ConsoleSteps from "./ConsoleSteps.vue";
 import MarkdownView from "../components/MarkdownView.vue";
-import { dateText } from "../lib/content";
+import { dateText, shortDateText } from "../lib/content";
 import { ApiError } from "../lib/api";
 import { caseListPath, consoleError } from "./console-ux";
 import ConsoleConfirm from "./ConsoleConfirm.vue";
@@ -36,7 +31,6 @@ const reading = ref(false);
 const readError = ref("");
 const reviewRevision = ref<number>();
 const modal = ref<InstanceType<typeof ConsoleConfirm>>();
-const actionPanel = ref<HTMLElement>();
 const returnTo = computed(() => caseListPath(route.query.from));
 const error = ref("");
 const notice = ref("");
@@ -216,11 +210,6 @@ async function reconcile() {
     notice.value = "已结束原请求，请依据当前修订和处理历史继续。";
   }
 }
-function documentHistory() {
-  const timeline = document.getElementById("case-history");
-  timeline?.focus({ preventScroll: true });
-  timeline?.scrollIntoView({ block: "start" });
-}
 function releaseImages() {
   Object.values(images.value).forEach(URL.revokeObjectURL);
   images.value = {};
@@ -266,13 +255,61 @@ const markdownImages = computed(() =>
     ]),
   ),
 );
-onMounted(async () => {
-  await load();
-  if (route.query.resume === "target") {
-    await nextTick();
-    actionPanel.value?.focus();
+function scrollToContributions() {
+  document.getElementById("case-contributions")?.scrollIntoView({ block: "start" });
+}
+const stateLabel = computed(() =>
+  detail.value ? caseStates[detail.value.state] || detail.value.state : "",
+);
+const step = computed(
+  () =>
+    ({ OPEN: 0, PROCESSING: 1, NEEDS_ACTION: 2, CLOSED: 3 })[
+      detail.value?.state || ""
+    ] ?? 0,
+);
+const tone = computed(
+  () =>
+    ({
+      OPEN: "is-warning",
+      PROCESSING: "is-positive",
+      NEEDS_ACTION: "is-neutral",
+      CLOSED: "is-positive",
+    })[detail.value?.state || ""] || "is-neutral",
+);
+const targetText = computed(() => {
+  const d = detail.value;
+  if (!d) return "";
+  return d.targetType === "COMMENT"
+    ? `评论 CMT-${d.commentId}`
+    : d.targetType === "ARTICLE"
+      ? `文章 ART-${d.articleId}`
+      : "无关联对象";
+});
+const assigneeText = computed(() => {
+  const d = detail.value;
+  if (!d) return "";
+  return d.assigneeId === null
+    ? "待认领"
+    : owned.value
+      ? "本人"
+      : `管理员 ${d.assigneeId}`;
+});
+const stateBanner = computed(() => {
+  if (!detail.value || pending.value) return "";
+  switch (detail.value.state) {
+    case "PROCESSING":
+      return owned.value
+        ? "已认领。当前处理人为你，可以进入内容治理。"
+        : `已由 ${assigneeText.value} 认领，可查看事实与处理记录。`;
+    case "NEEDS_ACTION":
+      return "已交接后续治理。后端回读治理事件后，可选择“已执行治理并闭案”。";
+    case "CLOSED":
+      return "案件已闭案。处理答复与审计记录已留存。";
+    default:
+      return "";
   }
 });
+onMounted(load);
 watch(() => adminSession.status, load);
 onBeforeUnmount(() => {
   generation++;
@@ -280,268 +317,403 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <h1 class="console-title">
-    案件 {{ preview ? "DEMO-C102" : id }} · 上下文与处理
-  </h1>
-  <AdminGate :preview="preview"
-    ><ConsoleConfirm ref="modal" />
-    <div v-if="!preview" class="card-actions console-case-return">
-      <RouterLink :to="returnTo">返回原案件列表</RouterLink>
-      <button :disabled="reading || busy" @click="load">重新读取案件</button>
-    </div>
-    <ConsoleReadState
-      :loading="reading"
-      :error="readError"
-      :stale="!!detail || !!context"
-      label="正在读取案件与证据…"
-      @retry="load"
-    />
-    <p
-      v-if="detail?.articleId && !preview"
-      ref="actionPanel"
-      tabindex="-1"
-      class="console-note"
-    >
-      需要先执行内容治理时，<RouterLink
-        :to="{
-          path: '/admin/content',
-          query: {
-            article: String(detail.articleId),
-            comment: detail.commentId ? String(detail.commentId) : undefined,
-            case: canHandle ? String(id) : undefined,
-            returnCase: String(id),
-            from: returnTo,
-          },
-        }"
-        >前往对应文章与评论巡查</RouterLink
-      >。完成后返回并重新读取案件；后端核对真实治理事件后才允许选择“已执行治理并闭案”。
-    </p>
-    <section v-if="pending" class="console-note">
-      <h2>上次操作结果待确认</h2>
-      <p>
-        原修订
-        {{ pending.body.expectedRevision }}
-        与请求键已保留，重复请求不创建第二次处理。
+  <AdminGate :preview="preview">
+    <div class="console-page">
+      <ConsoleConfirm ref="modal" />
+      <ConsoleReadState
+        :error="readError"
+        :stale="!!detail"
+        :loading="reading"
+        label="正在读取案件…"
+        @retry="load"
+      />
+      <p v-if="error" class="console-banner is-error" role="alert">
+        {{ error }}
+        <span class="console-banner-actions"
+          ><button v-if="!pending && reviewRevision === undefined" type="button" @click="load">
+            重新读取案件</button
+          ></span
+        >
       </p>
-      <div class="card-actions">
-        <button :disabled="busy" @click="submit">按原请求核对</button
-        ><button :disabled="busy || reading" @click="reconcile">
-          核对最新状态并结束本次请求
-        </button>
-      </div>
-    </section>
-    <div v-if="detail" class="console-split console-case-split">
-      <section class="console-panel console-context">
-        <h2>关联文章与必要上下文</h2>
-        <p class="hint">
-          举报对象
-          {{
-            detail.targetType === "COMMENT"
-              ? "评论 " + detail.commentId
-              : detail.targetType === "ARTICLE"
-                ? "文章 " + detail.articleId
-                : "使用反馈"
-          }}
-        </p>
-        <span class="console-badge">{{
-          preview ? "公开 · 待核查" : caseStates[detail.state]
-        }}</span
-        ><template v-if="context?.articleAvailable && context.article"
-          ><h3 class="console-article-title">{{ context.article.title }}</h3>
-          <p class="console-muted">{{ context.article.summary }}</p>
-          <div class="console-context-preview">
-            <h3>受控上下文预览</h3>
-            <MarkdownView
-              :body="context.article.body"
-              block-images
-              :image-sources="markdownImages"
-            />
-          </div>
-          <p v-if="!preview" class="hint">
-            本案固定公开版本 {{ context.article.versionId }} · 当前文章状态
-            {{ context.article.currentState }}
-          </p></template
-        >
-        <p v-else-if="context" class="console-muted">
-          本案没有可读取的关联文章版本。
-        </p>
-        <p v-else class="console-muted">尚未读到关联上下文。请重试读取案件。</p>
-        <div
-          v-for="comment in context?.comments"
-          :key="`${comment.role}:${comment.commentId}`"
-          class="console-comment"
-        >
-          <h3>
-            {{
-              comment.role === "TARGET"
-                ? "目标评论"
-                : comment.role === "ROOT"
-                  ? "主评论"
-                  : "回复上下文"
-            }}
-            · {{ comment.commentId }}
-          </h3>
-          <p>
-            {{
-              comment.available
-                ? comment.body
-                : "此上下文不可读取，仅保留必要标识。"
-            }}
-          </p>
-        </div>
-        <h2>提交者说明与私人证据</h2>
-        <p class="console-muted">说明：{{ detail.description }}</p>
-        <p class="console-muted">
-          证据图片：{{ detail.images.length }} 张，仅案件处理范围可见。
-        </p>
-        <button
-          v-if="!preview && (detail.images.length || context?.media.length)"
-          :disabled="loadingImages"
-          @click="loadImages"
-        >
-          读取本案证据与关联图片
-        </button>
-        <p v-if="imageError" class="error" role="alert">{{ imageError }}</p>
-        <div class="console-evidence">
-          <figure v-for="(url, image) in images" :key="image">
-            <img :src="url" alt="本案授权图片" />
-          </figure>
-        </div>
-      </section>
-      <form
-        class="console-panel console-decision"
-        @submit.prevent="act('decisions')"
+      <button
+        v-if="reviewRevision !== undefined"
+        type="button"
+        :disabled="reading || busy"
+        @click="useLatestRevision"
       >
-        <h2>处理决定</h2>
-        <p v-if="busy" role="status">正在提交案件操作…</p>
-        <p v-if="notice" class="success" role="status">
-          {{ notice }}
-          <a href="#case-history" @click.prevent="documentHistory()"
-            >查看时间线</a
-          >
-        </p>
-        <p v-if="error" class="error" role="alert">
-          {{ error }}
-          <button
-            v-if="reviewRevision !== undefined"
-            type="button"
-            :disabled="reading || busy"
-            @click="useLatestRevision"
-          >
-            读取并复核最新修订
-          </button>
-        </p>
-        <p v-if="!preview" class="console-muted">
-          {{ caseStates[detail.state] }} · 修订 {{ detail.revision }} ·
-          {{
-            detail.assigneeId === null
-              ? "未分配"
-              : owned
-                ? "本人受理"
-                : `管理员 ${detail.assigneeId} 受理`
-          }}
-        </p>
-        <button
-          v-if="detail.state === 'OPEN'"
-          class="console-primary"
-          :disabled="
-            frozen || !adminSession.me?.capabilities.includes('CASE_HANDLE')
-          "
-          type="button"
-          @click="act('claim')"
+        读取最新修订并核对
+      </button>
+      <p v-if="notice" class="console-banner is-success" role="status">
+        {{ notice }}
+      </p>
+      <p v-if="pending" class="console-banner is-warning" role="status">
+        上次操作结果待确认：原修订 {{ pending.body.expectedRevision }}
+        与请求键已保留，重复请求不创建第二次处理。
+        <span class="console-banner-actions"
+          ><button type="button" :disabled="busy" @click="submit">
+            按原请求核对</button
+          ><button type="button" :disabled="busy" @click="reconcile">
+            核对最新状态并结束本次请求
+          </button></span
         >
-          受理此案件
-        </button>
-        <fieldset :disabled="frozen || !canHandle">
-          <label
-            >处理动作 *<input
-              v-if="preview"
-              value="隐藏内容 / 无违规 / 补充说明"
-              disabled
-            /><select v-else v-model="outcome" aria-label="处理结论">
-              <option value="">请选择处理结论</option>
-              <option v-for="choice in choices" :key="choice" :value="choice">
-                {{ outcomes[choice] }}
-              </option>
-            </select></label
-          ><label
-            >{{ preview ? "处理理由 *" : "公开答复 / 处理理由 *"
-            }}<textarea
-              v-model="reply"
-              rows="4"
-              maxlength="10000"
-              required
-              placeholder="写明事实、依据与影响范围。"
-            ></textarea></label
-          ><label v-if="preview"
-            >负责人<input value="管理员甲" readonly /></label
-          ><label v-else
-            >内部备注<textarea
-              v-model="internalNote"
-              rows="2"
-              maxlength="10000"
-              placeholder="仅管理处理范围可见"
-            ></textarea>
-          </label>
-          <p class="console-positive">
-            {{
-              preview ? "向本人发送处理结果通知" : "处理答复与内部备注分别保留"
-            }}
-          </p>
-          <button class="console-primary" type="submit">
-            确认处理并留存记录
-          </button>
-        </fieldset>
-        <p class="console-muted">执行失败时保留当前输入，案件不标成已完成。</p>
-        <div v-if="canHandle && !preview" class="console-release">
-          <label
-            >释放原因<textarea
-              v-model="reason"
-              :disabled="frozen"
-              rows="2"
-              maxlength="10000"
-            ></textarea></label
-          ><button type="button" :disabled="frozen" @click="act('release')">
-            释放回待受理
-          </button>
-        </div>
-        <p v-if="!preview" class="hint">
-          “交接后续治理”只记为待后续治理，不会隐藏内容、限制账号或改动贡献。
+      </p>
+      <p v-if="busy" class="console-muted" role="status">
+        正在读取或处理案件…
+      </p>
+      <template v-if="detail && context">
+        <ConsolePageHeader
+          variant="plain"
+          :back="{ label: '返回案件队列', to: returnTo }"
+          :title="`举报详情 · ${stateLabel}`"
+          :meta="`CASE-${preview ? 'DEMO-C102' : id}  ·  修订 ${detail.revision}`"
+        >
+          <template #aside>
+            <span class="console-tag" :class="tone">{{ stateLabel }}</span>
+          </template>
+        </ConsolePageHeader>
+        <ConsoleSteps
+          :steps="['事实与证据', '处理决定', '复核提交']"
+          :current="step"
+        />
+        <p v-if="stateBanner" class="console-banner is-success" role="status">
+          {{ stateBanner }}
         </p>
-      </form>
+        <div class="console-split">
+          <section class="console-panel" aria-label="事实与证据">
+            <h2 class="console-card-title">事实与证据</h2>
+            <p class="console-card-desc">
+              打开关联内容前先核对固定公开版本。
+            </p>
+            <dl class="console-facts">
+              <div>
+                <dt>举报对象</dt>
+                <dd>
+                  {{ targetText
+                  }}<template v-if="context.articleAvailable && context.article">
+                    · {{ context.article.title }}</template
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>固定公开版本</dt>
+                <dd>
+                  <template v-if="context.articleAvailable && context.article">
+                    v{{ context.article.versionId }} ·
+                    {{ dateText(context.article.publishedAt) }}
+                    <small
+                      >当前文章状态：{{ context.article.currentState }}</small
+                    >
+                  </template>
+                  <template v-else>
+                    本案未关联可读取的文章版本，未提供的历史内容不会补造。
+                  </template>
+                </dd>
+              </div>
+              <div>
+                <dt>举报原因</dt>
+                <dd>{{ detail.description }}</dd>
+              </div>
+              <div>
+                <dt>附件与线索</dt>
+                <dd>
+                  证据图片 {{ detail.images.length }} 张，仅案件处理范围可见。
+                  <button
+                    v-if="!preview && (detail.images.length || context.media.length)"
+                    class="console-link"
+                    type="button"
+                    :disabled="loadingImages"
+                    @click="loadImages"
+                  >
+                    {{ loadingImages ? "正在读取图片…" : "读取本案证据与关联图片" }}
+                  </button>
+                </dd>
+              </div>
+              <div>
+                <dt>当前处理人</dt>
+                <dd>{{ assigneeText }}</dd>
+              </div>
+            </dl>
+            <p class="console-callout">
+              <strong>证据摘要 · </strong>举报属于待核查线索，不会自动认定违规。处理前请在固定公开版本定位相关段落。
+            </p>
+            <template v-if="context.articleAvailable && context.article">
+              <div class="console-case-content">
+                <h3 class="console-article-title">{{ context.article.title }}</h3>
+                <p class="console-muted">{{ context.article.summary }}</p>
+                <MarkdownView
+                  :body="context.article.body"
+                  block-images
+                  :image-sources="markdownImages"
+                />
+              </div>
+            </template>
+            <div
+              v-for="comment in context.comments"
+              :key="`${comment.role}:${comment.commentId}`"
+              class="console-comment"
+            >
+              <h3>
+                {{
+                  comment.role === "TARGET"
+                    ? "目标评论"
+                    : comment.role === "ROOT"
+                      ? "主评论"
+                      : "回复上下文"
+                }}
+                · CMT-{{ comment.commentId }}
+              </h3>
+              <p>
+                {{
+                  comment.available
+                    ? comment.body
+                    : "此上下文不可读取，仅保留必要标识。"
+                }}
+              </p>
+            </div>
+            <p v-if="imageError" class="console-banner is-error" role="alert">
+              {{ imageError }}
+            </p>
+            <div class="console-evidence">
+              <figure v-for="(url, image) in images" :key="image">
+                <img :src="url" alt="本案授权图片" />
+              </figure>
+            </div>
+          </section>
+          <form
+            id="case-decision-form"
+            class="console-panel"
+            @submit.prevent="act('decisions')"
+          >
+            <h2 class="console-card-title">
+              {{ detail.state === "OPEN" ? "案件处理" : "处理决定" }}
+            </h2>
+            <p class="console-card-desc">
+              {{
+                detail.state === "CLOSED"
+                  ? "核对处理结果、理由和已记录的事件。"
+                  : detail.state === "OPEN"
+                    ? "认领后可继续处置或提交结案决定。"
+                    : "先核对公开版本，再提交处理结论。"
+              }}
+            </p>
+            <div v-if="detail.state === 'OPEN'" class="console-form">
+              <label class="console-field"
+                ><span>当前处理人</span
+                ><input value="待认领" readonly /></label
+              >
+              <p class="console-form-note">
+                认领后可继续处置或提交结案决定。
+              </p>
+            </div>
+            <fieldset
+              v-else-if="detail.state !== 'CLOSED'"
+              class="console-form"
+              :disabled="frozen || !canHandle"
+            >
+              <label class="console-field"
+                ><span>处理动作</span
+                ><select v-model="outcome" aria-label="处理结论">
+                  <option value="">请选择处理结论</option>
+                  <option v-for="choice in choices" :key="choice" :value="choice">
+                    {{ outcomes[choice] }}
+                  </option></select
+                ></label
+              ><label class="console-field"
+                ><span>处理理由</span
+                ><textarea
+                  v-model="reply"
+                  rows="4"
+                  maxlength="10000"
+                  required
+                  placeholder="写明事实、依据与影响范围，向本人公开。"
+                ></textarea></label
+              ><label class="console-field"
+                ><span>内部备注</span
+                ><textarea
+                  v-model="internalNote"
+                  rows="2"
+                  maxlength="10000"
+                  placeholder="仅管理处理范围可见"
+                ></textarea></label
+              >
+              <p class="console-form-note">
+                处理答复与内部备注分别保留。执行失败时保留当前输入，案件不标成已完成。
+              </p>
+            </fieldset>
+            <dl v-else class="console-kv">
+              <div>
+                <dt>最后决定</dt>
+                <dd>
+                  {{
+                    outcomes[detail.history.at(-1)?.outcome || ""] ||
+                    detail.history.at(-1)?.action ||
+                    "已闭案"
+                  }}
+                </dd>
+              </div>
+              <div v-if="detail.history.at(-1)?.reply">
+                <dt>处理理由</dt>
+                <dd>{{ detail.history.at(-1)?.reply }}</dd>
+              </div>
+            </dl>
+            <p
+              v-if="detail.articleId && detail.state !== 'CLOSED' && !preview"
+              class="console-card-foot"
+            >
+              需要先执行内容治理时，<RouterLink
+                :to="{
+                  path: '/admin/content',
+                  query: {
+                    article: String(detail.articleId),
+                    comment: detail.commentId
+                      ? String(detail.commentId)
+                      : undefined,
+                    case: canHandle ? String(id) : undefined,
+                  },
+                }"
+                >打开关联内容</RouterLink
+              >。完成后返回并重新读取案件；后端核对真实治理事件后才允许选择“已执行治理并闭案”。
+            </p>
+            <div v-if="canHandle && !preview" class="console-release">
+              <label class="console-field"
+                ><span>释放原因</span
+                ><textarea
+                  v-model="reason"
+                  :disabled="frozen"
+                  rows="2"
+                  maxlength="10000"
+                  placeholder="说明为何不再由本人处理"
+                ></textarea></label
+              >
+              <button
+                class="console-link"
+                type="button"
+                :disabled="frozen"
+                @click="act('release')"
+              >
+                释放回待受理
+              </button>
+            </div>
+            <p v-if="preview" class="console-form-note">
+              处置后公开列表、正文、收藏与通知按目标状态一致展示。治理记录保留，不因作者删除内容而抹除。
+            </p>
+          </form>
+        </div>
+        <CaseContributions
+          v-if="
+            detail.kind === 'REPORT' && detail.targetType === 'ARTICLE' && !preview
+          "
+          :key="id"
+          :case-id="id"
+          :revision="detail.revision"
+          :can-handle="canHandle"
+        />
+        <section
+          v-if="detail.history.length && !preview"
+          class="console-panel"
+          aria-label="处理时间线"
+        >
+          <h2 class="console-card-title">处理时间线</h2>
+          <p class="console-card-desc">
+            最近发生在前。修订号与操作人用于核对处置过程。
+          </p>
+          <ol class="console-timeline">
+            <li
+              v-for="entry in [...detail.history].reverse()"
+              :key="entry.revision"
+            >
+              <span class="console-timeline-time">{{
+                shortDateText(entry.occurredAt)
+              }}</span>
+              <div class="console-timeline-body">
+                <h3>
+                  修订 {{ entry.revision }} · {{ caseStates[entry.state] }} ·
+                  {{ outcomes[entry.outcome || ""] || entry.action }}
+                </h3>
+                <p v-if="entry.reply">公开答复：{{ entry.reply }}</p>
+                <p v-if="entry.internalNote">
+                  内部备注：{{ entry.internalNote }}
+                </p>
+                <p v-if="entry.reason">释放原因：{{ entry.reason }}</p>
+                <p>
+                  {{ entry.actorDomain }} · 操作人 {{ entry.actorId
+                  }}<template v-if="entry.assigneeId !== null">
+                    · 认领人 {{ entry.assigneeId }}</template
+                  >
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+        <footer v-if="!pending" class="console-footer">
+          <div class="console-footer-actions">
+            <RouterLink
+              v-if="detail.state !== 'PROCESSING' && detail.state !== 'NEEDS_ACTION'"
+              class="button console-secondary"
+              :to="returnTo"
+              >返回队列</RouterLink
+            >
+            <template v-if="detail.state === 'OPEN'">
+              <button
+                class="console-primary"
+                type="button"
+                :disabled="
+                  frozen || !adminSession.me?.capabilities.includes('CASE_HANDLE')
+                "
+                @click="act('claim')"
+              >
+                {{ busy ? "正在认领…" : "认领案件" }}
+              </button>
+            </template>
+            <template
+              v-else-if="detail.state === 'PROCESSING' || detail.state === 'NEEDS_ACTION'"
+            >
+              <a
+                v-if="detail.kind === 'REPORT' && detail.targetType === 'ARTICLE'"
+                class="button console-secondary"
+                href="#case-contributions"
+                @click.prevent="scrollToContributions"
+                >查看关联投币</a
+              >
+              <RouterLink
+                v-if="detail.articleId"
+                class="button"
+                :class="{ 'console-secondary': !canHandle }"
+                :to="{
+                  path: '/admin/content',
+                  query: {
+                    article: String(detail.articleId),
+                    comment: detail.commentId
+                      ? String(detail.commentId)
+                      : undefined,
+                    case: canHandle ? String(id) : undefined,
+                  },
+                }"
+                >打开关联内容</RouterLink
+              >
+              <button
+                v-if="canHandle"
+                class="console-primary"
+                type="submit"
+                form="case-decision-form"
+                :disabled="frozen"
+              >
+                {{ busy ? "正在提交…" : "提交处理决定" }}
+              </button>
+            </template>
+            <RouterLink
+              v-else-if="detail.state === 'CLOSED'"
+              class="button console-primary"
+              to="/admin/audit"
+              >查看审计记录</RouterLink
+            >
+          </div>
+        </footer>
+      </template>
+      <section v-else-if="!busy && !reading && !error && !readError" class="console-panel console-gate">
+        <h2>案件尚未读取</h2>
+        <p>请从案件队列进入，或重新读取案件。</p>
+      </section>
     </div>
-    <p v-if="preview" class="console-note console-followup">
-      处置后公开列表、正文、收藏与通知按目标状态一致展示。治理记录保留，不因作者删除内容而抹除。
-    </p>
-    <CaseContributions
-      v-if="
-        detail?.kind === 'REPORT' && detail.targetType === 'ARTICLE' && !preview
-      "
-      :key="id"
-      :case-id="id"
-      :revision="detail.revision"
-      :can-handle="canHandle"
-      @changed="load"
-    />
-    <section
-      v-if="detail && !preview"
-      id="case-history"
-      tabindex="-1"
-      class="console-panel console-history"
-    >
-      <h2>处理时间线</h2>
-      <ol>
-        <li v-for="entry in detail.history" :key="entry.revision">
-          <strong
-            >修订 {{ entry.revision }} · {{ caseStates[entry.state] }} ·
-            {{ outcomes[entry.outcome || ""] || entry.action }}</strong
-          ><time>{{ dateText(entry.occurredAt) }}</time>
-          <p v-if="entry.reply">公开答复：{{ entry.reply }}</p>
-          <p v-if="entry.internalNote">内部备注：{{ entry.internalNote }}</p>
-          <p v-if="entry.reason">释放原因：{{ entry.reason }}</p>
-          <small>{{ entry.actorDomain }} · 操作人 {{ entry.actorId }}</small>
-        </li>
-      </ol>
-    </section></AdminGate
-  >
+  </AdminGate>
 </template>

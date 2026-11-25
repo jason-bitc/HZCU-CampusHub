@@ -8,7 +8,7 @@ import {
   session,
   writePrivate,
 } from "../lib/session";
-import { dateText, stateName } from "../lib/content";
+import { compactDateText as dateText, stateName } from "../lib/content";
 import type { Owned, Page } from "../types";
 import ConfirmDialog from "../components/ConfirmDialog.vue";
 import OperationFeedback from "../components/OperationFeedback.vue";
@@ -200,19 +200,39 @@ async function transition(
     working.value[id] = false;
   }
 }
-onMounted(load);
-watch(() => session.status, load);
+onMounted(() => {
+  void load();
+  autoCreate();
+});
+function permits(
+  item: Owned,
+  action: NonNullable<Owned["allowedActions"]>[number],
+  fallback: boolean,
+) {
+  return item.allowedActions?.includes(action) ?? fallback;
+}
+watch(() => session.status, () => {
+  void load();
+  autoCreate();
+});
+// 顶栏“写经验”带 ?new=1 进入时直接创建新草稿。
+function autoCreate() {
+  if (route.query.new !== "1" || session.status !== "ready" || creating.value)
+    return;
+  void router.replace({ path: "/workspace", query: {} });
+  void create();
+}
 </script>
 <template>
   <MemberGate title="登录后管理你的文章"
     ><ConfirmDialog ref="confirmation" />
-    <div class="page-heading">
+    <div class="page-heading workspace-heading">
       <div>
-        <h1>每一次复盘，都值得留下</h1>
-        <p>公开版本与草稿分别保存，编辑草稿不会改变正在展示的文章。</p>
+        <h1>我的作品</h1>
+        <p>草稿与已公开的经验都在这里管理。</p>
       </div>
       <button class="primary" :disabled="creating" @click="create">
-        {{ pending ? "继续上次创建" : "＋ 写一篇经验" }}
+        {{ pending ? "继续上次创建" : "写一篇经验" }}
       </button>
     </div>
     <OperationFeedback
@@ -222,144 +242,179 @@ watch(() => session.status, load);
     <p v-if="pending && !creating" class="notice">
       上次创建结果尚未确认，再次点击会沿用原请求。
     </p>
-    <div class="workspace-tabs" aria-label="文章状态">
-      <button
-        v-for="state in states"
-        :key="state"
-        :aria-pressed="filter === state"
-        :disabled="busy"
-        @click="chooseFilter(state)"
-      >
-        {{ state === "ALL" ? "全部文章" : stateName[state] }}
-      </button>
-    </div>
-    <p v-if="error" class="error" role="alert">
-      {{ error }} <button @click="load">重新读取状态</button>
-    </p>
-    <p v-if="busy" role="status">正在读取文章列表…</p>
-    <p v-if="result?.publishingRestricted" class="hint">
-      当前账号发布受限。可保存草稿并查看<RouterLink to="/me/appeals"
-        >限制与申诉</RouterLink
-      >。
-    </p>
-    <RouterLink class="workspace-favorites-link" to="/favorites"
-      >查看我的收藏 →</RouterLink
-    >
-    <div class="workspace-grid">
-      <article
-        v-for="item in result?.items"
-        :key="item.articleId"
-        class="panel workspace-card"
-      >
-        <p class="state-label" :data-state="item.state">
-          {{ stateName[item.state] }}<span>修订 {{ item.revision }}</span>
-        </p>
-        <h2 :id="'work-title-' + item.articleId" tabindex="-1">
-          {{ item.title || "未命名草稿" }}
-        </h2>
-        <p class="meta">{{ dateText(item.updatedAt) }}</p>
-        <div class="card-actions">
-          <RouterLink
-            v-if="
-              item.allowedActions?.includes('VIEW_DRAFT') ??
-              item.state !== 'DELETED'
-            "
-            class="button"
-            :to="`/editor/${item.articleId}`"
-            >{{
-              item.state === "ADMIN_HIDDEN" ? "查看草稿" : "继续编辑"
-            }}</RouterLink
-          ><RouterLink
-            v-if="
-              item.allowedActions?.includes('VIEW_PUBLIC') ??
-              item.state === 'PUBLISHED'
-            "
-            class="button"
-            :to="`/articles/${item.articleId}`"
-            >查看公开文章</RouterLink
-          >
-        </div>
+    <section class="panel workspace-card" aria-label="作品列表">
+      <div class="workspace-tabs" aria-label="文章状态">
         <button
-          v-if="
-            item.allowedActions?.includes('UNPUBLISH') ??
-            item.state === 'PUBLISHED'
-          "
-          class="text-button"
-          :disabled="busy || working[item.articleId]"
-          @click="transition(item, 'unpublish', $event)"
-        >
-          下架</button
-        ><button
-          v-if="
-            item.allowedActions?.includes('RESTORE') ??
-            item.state === 'AUTHOR_OFFLINE'
-          "
-          class="text-button"
-          :disabled="busy || working[item.articleId]"
-          @click="transition(item, 'restore', $event)"
-        >
-          恢复上次公开版本
-        </button>
-        <button
-          v-if="item.allowedActions?.includes('DELETE')"
-          class="text-button"
-          :disabled="busy || working[item.articleId]"
-          @click="transition(item, 'delete', $event)"
-        >
-          删除
-        </button>
-        <OperationFeedback
-          :feedback="rowFeedback[item.articleId]"
-          :processing="
-            working[item.articleId] ? '正在处理文章状态…' : undefined
-          "
-        />
-        <button
-          v-if="
-            rowFeedback[item.articleId] &&
-            rowFeedback[item.articleId]?.kind !== 'success'
-          "
-          class="text-button"
+          v-for="state in states"
+          :key="state"
+          :aria-pressed="filter === state"
           :disabled="busy"
-          @click="load"
+          @click="chooseFilter(state)"
         >
-          重新读取状态
+          {{ state === "ALL" ? "全部" : stateName[state] }}
         </button>
-        <p v-if="item.state === 'ADMIN_HIDDEN'" class="hint">
-          管理员隐藏的文章不能自行修改、发布或恢复。
-        </p>
-      </article>
-    </div>
-    <section
-      v-if="!busy && result && !result.items.length"
-      class="panel state-panel"
-    >
-      <h2>还没有此状态的文章</h2>
-      <p>可以切换状态或写下第一篇经验。</p>
-    </section>
-    <nav
-      v-if="result && result.total > result.size"
-      class="pagination"
-      aria-label="工作区翻页"
-    >
-      <button
-        :disabled="busy || page <= 1"
-        @click="
-          page--;
-          load();
-        "
+      </div>
+      <p v-if="error" class="error workspace-inline-note" role="alert">
+        {{ error }} <button @click="load">重新读取状态</button>
+      </p>
+      <p v-if="busy" class="workspace-inline-note" role="status">
+        正在读取文章列表…
+      </p>
+      <p v-if="result?.publishingRestricted" class="hint workspace-inline-note">
+        当前账号发布受限。可保存草稿并查看<RouterLink to="/me/appeals"
+          >限制与申诉</RouterLink
+        >。
+      </p>
+      <table v-if="result?.items.length" class="workspace-table">
+        <thead>
+          <tr>
+            <th scope="col">作品</th>
+            <th scope="col">状态</th>
+            <th scope="col">最近修订</th>
+            <th scope="col">可用操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="item in result.items" :key="item.articleId">
+            <tr>
+              <td>
+                <h2 :id="'work-title-' + item.articleId" tabindex="-1">
+                  <RouterLink
+                    v-if="permits(item, 'VIEW_DRAFT', item.state !== 'DELETED')"
+                    :to="`/editor/${item.articleId}`"
+                    >{{ item.title || "未命名草稿" }}</RouterLink
+                  >
+                  <RouterLink
+                    v-else-if="permits(item, 'VIEW_PUBLIC', false)"
+                    :to="`/articles/${item.articleId}`"
+                    >{{ item.title }}</RouterLink
+                  >
+                  <span v-else>{{ item.title }}</span>
+                </h2>
+              </td>
+              <td>
+                <p class="state-label" :data-state="item.state">
+                  {{ stateName[item.state] }}
+                </p>
+              </td>
+              <td>
+                <time :datetime="item.updatedAt">{{
+                  dateText(item.updatedAt)
+                }}</time
+                ><span class="workspace-revision"
+                  >修订 {{ item.revision }}</span
+                >
+              </td>
+              <td>
+                <div class="workspace-row-actions">
+                  <RouterLink
+                    v-if="
+                      item.allowedActions?.includes('VIEW_DRAFT') ??
+                      item.state !== 'DELETED'
+                    "
+                    :to="`/editor/${item.articleId}`"
+                    >{{
+                      item.state === "ADMIN_HIDDEN" ? "查看草稿" : "编辑草稿"
+                    }}</RouterLink
+                  ><RouterLink
+                    v-if="
+                      item.allowedActions?.includes('VIEW_PUBLIC') ??
+                      item.state === 'PUBLISHED'
+                    "
+                    :to="`/articles/${item.articleId}`"
+                    >查看公开文章</RouterLink
+                  >
+                  <button
+                    v-if="
+                      item.allowedActions?.includes('UNPUBLISH') ??
+                      item.state === 'PUBLISHED'
+                    "
+                    class="text-button workspace-danger"
+                    :disabled="busy || working[item.articleId]"
+                    @click="transition(item, 'unpublish', $event)"
+                  >
+                    下架</button
+                  ><button
+                    v-if="
+                      item.allowedActions?.includes('RESTORE') ??
+                      item.state === 'AUTHOR_OFFLINE'
+                    "
+                    class="text-button"
+                    :disabled="busy || working[item.articleId]"
+                    @click="transition(item, 'restore', $event)"
+                  >
+                    恢复上次公开版本
+                  </button>
+                  <button
+                    v-if="item.allowedActions?.includes('DELETE')"
+                    class="text-button workspace-danger"
+                    :disabled="busy || working[item.articleId]"
+                    @click="transition(item, 'delete', $event)"
+                  >
+                    删除
+                  </button>
+                </div>
+                <OperationFeedback
+                  :feedback="rowFeedback[item.articleId]"
+                  :processing="
+                    working[item.articleId] ? '正在处理文章状态…' : undefined
+                  "
+                />
+                <button
+                  v-if="
+                    rowFeedback[item.articleId] &&
+                    rowFeedback[item.articleId]?.kind !== 'success'
+                  "
+                  class="text-button"
+                  :disabled="busy"
+                  @click="load"
+                >
+                  重新读取状态
+                </button>
+                <p v-if="item.state === 'ADMIN_HIDDEN'" class="hint">
+                  管理员隐藏的文章不能自行修改、发布或恢复。
+                </p>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <section
+        v-else-if="!busy && result"
+        class="workspace-empty"
       >
-        上一页</button
-      ><span>第 {{ page }} 页</span
-      ><button
-        :disabled="busy || page * result.size >= result.total"
-        @click="
-          page++;
-          load();
-        "
-      >
-        下一页
-      </button>
-    </nav></MemberGate
+        <h2>还没有此状态的文章</h2>
+        <p>可以切换状态或写下第一篇经验。</p>
+      </section>
+      <div v-if="result" class="workspace-foot">
+        <span aria-live="polite">当前 {{ result.total }} 条作品</span>
+        <nav
+          v-if="result.total > result.size"
+          class="pagination"
+          aria-label="工作区翻页"
+        >
+          <button
+            aria-label="上一页"
+            :disabled="busy || page <= 1"
+            @click="
+              page--;
+              load();
+            "
+          >
+            ‹</button
+          ><span aria-current="page">{{ page }}</span
+          ><button
+            aria-label="下一页"
+            :disabled="busy || page * result.size >= result.total"
+            @click="
+              page++;
+              load();
+            "
+          >
+            ›
+          </button>
+        </nav>
+      </div>
+    </section></MemberGate
   >
 </template>

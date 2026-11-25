@@ -1,29 +1,15 @@
-<script lang="ts">
-let listOrigin:
-  | { path: string; id: string; top: number; y: number; epoch: number }
-  | undefined;
-</script>
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-} from "vue";
-import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import type { LocationQueryRaw } from "vue-router";
 import { adminRequest, adminSession } from "./client";
-import { caseCategories, caseStates } from "./types";
+import { caseCategories, caseKinds, caseStates } from "./types";
 import type { CasePage, CaseRow } from "./types";
 import { dateText } from "../lib/content";
 import { message } from "../lib/api";
 import AdminGate from "./AdminGate.vue";
-import { consoleError } from "./console-ux";
-import ConsoleReadState from "./ConsoleReadState.vue";
+import ConsolePageHeader from "./ConsolePageHeader.vue";
 import ConsolePager from "./ConsolePager.vue";
-import ConsoleTable from "./ConsoleTable.vue";
 const route = useRoute();
 const router = useRouter();
 const preview = computed(() => route.query.preview === "1");
@@ -38,43 +24,137 @@ const stats = ref<number[]>([]);
 const statsError = ref("");
 const busy = ref(false);
 const error = ref("");
-const owner = computed(() => value("owner") || "all");
-const listPanel = ref<HTMLElement>();
-const kindFilter = ref<HTMLSelectElement>();
-const hasFilters = computed(
-  () => owner.value !== "all" || !!value("kind") || !!value("state"),
-);
+const owner = ref("all");
+const keyword = ref("");
+const formState = ref("");
+const formKind = ref("");
 let generation = 0;
 function value(name: string) {
   return typeof route.query[name] === "string" ? route.query[name] : "";
 }
+function assignee(row: CaseRow) {
+  return row.assigneeId === null
+    ? "未认领"
+    : row.assigneeId === adminSession.me?.adminId
+      ? "本人"
+      : `管理员 ${row.assigneeId}`;
+}
+function target(row: CaseRow) {
+  return row.targetType === "COMMENT"
+    ? `评论 CMT-${row.commentId}`
+    : row.targetType === "ARTICLE"
+      ? `文章 ART-${row.articleId}`
+      : "无关联对象";
+}
+function tone(state: string) {
+  return (
+    {
+      OPEN: "is-warning",
+      PROCESSING: "is-positive",
+      NEEDS_ACTION: "is-neutral",
+      CLOSED: "is-positive",
+    }[state] || "is-neutral"
+  );
+}
+const keywordMatch = (row: CaseRow) => {
+  const text = keyword.value.trim().toLowerCase();
+  if (!text) return true;
+  return [
+    `case-${row.caseId}`,
+    target(row),
+    caseCategories[row.category] || row.category,
+    caseStates[row.state] || row.state,
+    assignee(row),
+  ].some((part) => part.toLowerCase().includes(text));
+};
 const rows = computed(
   () =>
     data.value?.items.filter(
       (row) =>
-        owner.value === "all" ||
-        (owner.value === "mine" &&
-          row.assigneeId === adminSession.me?.adminId) ||
-        (owner.value === "free" && row.assigneeId === null),
+        keywordMatch(row) &&
+        (owner.value === "all" ||
+          (owner.value === "mine" &&
+            row.assigneeId === adminSession.me?.adminId) ||
+          (owner.value === "free" && row.assigneeId === null)),
     ) || [],
 );
-function change(key: string, text: string) {
-  const q: LocationQueryRaw = { ...route.query, page: "1" };
-  delete q.snapshot;
-  if (text) Object.assign(q, { [key]: text });
-  else delete q[key];
-  void router.push({ path: "/admin/cases", query: q });
+const previewRows = [
+  {
+    caseId: 21,
+    category: "ADVERTISEMENT",
+    targetType: "ARTICLE",
+    articleId: 18,
+    commentId: null,
+    state: "OPEN",
+    assigneeId: null,
+    createdAt: "2026-11-24T09:20:00+08:00",
+  },
+  {
+    caseId: 24,
+    category: "MISLEADING_CONTENT",
+    targetType: "ARTICLE",
+    articleId: 18,
+    commentId: null,
+    state: "PROCESSING",
+    assigneeId: 1,
+    createdAt: "2026-11-23T16:40:00+08:00",
+  },
+  {
+    caseId: 19,
+    category: "ADVERTISEMENT",
+    targetType: "COMMENT",
+    articleId: 18,
+    commentId: 112,
+    state: "CLOSED",
+    assigneeId: 2,
+    createdAt: "2026-11-19T10:05:00+08:00",
+  },
+] as CaseRow[];
+const visible = computed(() =>
+  preview.value ? previewRows.filter((r) => keywordMatch(r)) : rows.value,
+);
+const condition = computed(() =>
+  [
+    formState.value ? caseStates[formState.value] : "",
+    formKind.value ? caseKinds[formKind.value] : "",
+  ]
+    .filter(Boolean)
+    .join("、") || "全部案件",
+);
+const summary = computed(() =>
+  preview.value
+    ? [4, 2, 1]
+    : stats.value.length
+      ? stats.value
+      : ["—", "—", "—", "—"],
+);
+function sync() {
+  formState.value = value("state");
+  formKind.value = value("kind");
+  keyword.value = value("keyword");
+  owner.value = value("owner") || "all";
 }
-async function resetFilters() {
-  await router.push({ path: "/admin/cases", query: {} });
-  kindFilter.value?.focus({ preventScroll: true });
+function apply() {
+  const q: LocationQueryRaw = {};
+  if (formKind.value) q.kind = formKind.value;
+  if (formState.value) q.state = formState.value;
+  if (keyword.value.trim()) q.keyword = keyword.value.trim();
+  if (owner.value !== "all") q.owner = owner.value;
+  const same =
+    (formKind.value || "") === value("kind") &&
+    (formState.value || "") === value("state") &&
+    keyword.value.trim() === value("keyword") &&
+    (owner.value === "all" ? "" : owner.value) === value("owner");
+  if (same) void load();
+  else void router.push({ path: "/admin/cases", query: q });
 }
-function target(row: CaseRow) {
-  return row.targetType === "COMMENT"
-    ? `评论 ${row.commentId}`
-    : row.targetType === "ARTICLE"
-      ? `文章 ${row.articleId}`
-      : "无关联目标";
+function reset() {
+  formKind.value = "";
+  formState.value = "";
+  keyword.value = "";
+  owner.value = "all";
+  if (!["kind", "state", "keyword", "owner", "page", "snapshot"].some(value)) void load();
+  else void router.push("/admin/cases");
 }
 async function load() {
   if (preview.value || adminSession.status !== "ready") return;
@@ -91,11 +171,8 @@ async function load() {
       adminRequest<Overview>("/admin/overview"),
     ]);
     if (current !== generation) return;
-    if (cases.status === "fulfilled") {
-      data.value = cases.value;
-      await nextTick();
-      if (current === generation) restoreOrigin();
-    } else error.value = consoleError(cases.reason);
+    if (cases.status === "fulfilled") data.value = cases.value;
+    else error.value = message(cases.reason);
     if (overview.status === "fulfilled") {
       const v = overview.value;
       stats.value = [
@@ -106,7 +183,7 @@ async function load() {
       ];
     } else statsError.value = message(overview.reason);
   } catch (e) {
-    if (current === generation) error.value = consoleError(e);
+    if (current === generation) error.value = message(e);
   } finally {
     if (current === generation) busy.value = false;
   }
@@ -121,91 +198,32 @@ function turn(page: number) {
     },
   });
 }
-function restoreOrigin() {
-  const origin = listOrigin;
-  if (
-    !origin ||
-    origin.epoch !== adminSession.epoch ||
-    origin.path !== route.fullPath
-  )
-    return;
-  listOrigin = undefined;
-  requestAnimationFrame(() => {
-    if (route.fullPath !== origin.path) return;
-    const link = document.getElementById(origin.id);
-    if (!link) {
-      listPanel.value?.focus({ preventScroll: true });
-      window.scrollTo(0, origin.y);
-      return;
-    }
-    link.focus({ preventScroll: true });
-    window.scrollBy(0, link.getBoundingClientRect().top - origin.top);
-  });
-}
-onBeforeRouteLeave((to) => {
-  const id = to.params.id;
-  if (!id || !to.path.startsWith("/admin/cases/")) return;
-  const key = "case-link-" + id;
-  const link = document.getElementById(key);
-  if (link)
-    listOrigin = {
-      path: route.fullPath,
-      id: key,
-      top: link.getBoundingClientRect().top,
-      y: window.scrollY,
-      epoch: adminSession.epoch,
-    };
-});
 onMounted(load);
-watch(() => [route.query, adminSession.status], load);
+watch(
+  () => route.query,
+  () => {
+    sync();
+    void load();
+  },
+);
+watch(() => adminSession.status, load);
 onBeforeUnmount(() => generation++);
 </script>
 <template>
-  <h1 class="console-title case-list-title">待办案件</h1>
-  <AdminGate :preview="preview"
-    ><p class="console-note case-list-note">
-      举报属于待核查线索，不会自动认定违规。案件处理需查看对应文章、评论及必要证据。
-    </p>
-    <p v-if="statsError && !preview" class="error" role="alert">
-      总览读取失败。{{ statsError }}
-    </p>
-    <div class="console-stat-grid" :class="{ 'console-live-stats': !preview }">
-      <section
-        v-for="(label, i) in preview
-          ? ['待受理', '处理中', '待后续治理']
-          : ['待受理', '处理中', '待后续治理', '隐藏文章']"
-        :key="label"
-        class="console-panel console-stat"
-      >
-        <span>{{ label }}</span
-        ><strong>{{ preview ? [4, 2, 1][i] : (stats[i] ?? "—") }}</strong>
-      </section>
-    </div>
-    <section
-      ref="listPanel"
-      tabindex="-1"
-      class="console-panel console-case-list"
-    >
-      <div class="console-filterbar">
-        <label class="console-inline-label"
-          >类型<select
-            ref="kindFilter"
-            aria-label="案件类型"
-            :value="value('kind')"
-            @change="change('kind', ($event.target as HTMLSelectElement).value)"
-          >
-            <option value="">全部类型</option>
-            <option value="REPORT">举报</option>
-            <option value="FEEDBACK">使用反馈</option>
-          </select></label
-        ><label class="console-inline-label"
-          >状态<select
-            aria-label="案件状态"
-            :value="value('state')"
-            @change="
-              change('state', ($event.target as HTMLSelectElement).value)
-            "
-          >
+  <AdminGate :preview="preview">
+    <div class="console-page">
+      <ConsolePageHeader
+        title="案件队列"
+        description="按状态、类型或内容定位案件，进入详情核对举报依据。"
+      />
+      <form class="console-panel console-filter-card" @submit.prevent="apply">
+        <label class="console-filter"
+          >关键词<input
+            v-model="keyword"
+            placeholder="案件编号或对象"
+            aria-label="关键词" /></label
+        ><label class="console-filter"
+          >状态<select v-model="formState" aria-label="案件状态">
             <option value="">全部状态</option>
             <option
               v-for="(label, state) in caseStates"
@@ -213,146 +231,103 @@ onBeforeUnmount(() => generation++);
               :value="state"
             >
               {{ label }}
-            </option>
-          </select></label
-        ><label class="console-inline-label"
-          >负责人（当前页）<select
-            :value="owner"
-            aria-label="当前页负责人"
-            @change="
-              change('owner', ($event.target as HTMLSelectElement).value)
-            "
-          >
+            </option></select></label
+        ><label class="console-filter"
+          >类型<select v-model="formKind" aria-label="案件类型">
+            <option value="">全部类型</option>
+            <option v-for="(label, kind) in caseKinds" :key="kind" :value="kind">
+              {{ label }}
+            </option></select></label
+        ><label class="console-filter"
+          >认领人（当前页）<select v-model="owner" aria-label="当前页认领人">
             <option value="all">全部</option>
             <option value="mine">仅本人</option>
-            <option value="free">未分配</option>
+            <option value="free">未认领</option>
           </select></label
         >
         <div class="console-filter-actions">
-          <button
-            :class="{ 'console-primary': !preview }"
-            :disabled="busy"
-            @click="load"
-          >
-            刷新当前状态
+          <button class="console-primary" type="submit" :disabled="busy">
+            查询
           </button>
-          <button v-if="!preview && hasFilters" @click="resetFilters">
-            重置筛选
-          </button>
+          <button type="button" :disabled="busy" @click="reset">重置</button>
         </div>
-      </div>
-      <ConsoleReadState
-        :loading="busy"
-        :error="error"
-        :stale="!!data"
-        label="正在读取案件快照…"
-        @retry="load"
-      />
-      <ConsoleTable
-        v-if="preview"
-        :columns="[
-          '案件 / 类型',
-          '关联对象',
-          '提交时间',
-          '状态 / 负责人',
-          '操作',
-        ]"
-        :rows="[
-          [
-            'DEMO-C102 · 广告举报',
-            '文章 DEMO-001',
-            '11月4日 09:20',
-            '待受理 / 未分配',
-            '查看上下文',
-          ],
-          [
-            'DEMO-C098 · 内容举报',
-            '评论 DEMO-092',
-            '11月4日 08:55',
-            '处理中 / 管理员甲',
-            '继续处理',
-          ],
-          [
-            'DEMO-F090 · 使用反馈',
-            '图片上传问题',
-            '11月3日 20:10',
-            '已完成 / 管理员乙',
-            '查看处理记录',
-          ],
-        ]"
-        :targets="['/admin/cases/102', '/admin/cases/102', '/admin/cases/102']"
-      />
-      <div v-else class="console-table-wrap">
-        <table class="console-table console-responsive-table" role="table">
-          <thead role="rowgroup">
-            <tr role="row">
-              <th scope="col" role="columnheader">案件 / 类型</th>
-              <th scope="col" role="columnheader">关联对象</th>
-              <th scope="col" role="columnheader">提交时间</th>
-              <th scope="col" role="columnheader">状态 / 负责人</th>
-              <th scope="col" role="columnheader">操作</th>
-            </tr>
-          </thead>
-          <tbody role="rowgroup">
-            <tr v-for="row in rows" :key="row.caseId" role="row">
-              <td data-label="案件 / 类型" role="cell">
-                {{ row.caseId }} ·
-                {{ caseCategories[row.category] || row.category }}
-              </td>
-              <td data-label="关联对象" role="cell">{{ target(row) }}</td>
-              <td data-label="提交时间" role="cell">
-                {{ dateText(row.createdAt) }}
-              </td>
-              <td data-label="状态 / 负责人" role="cell">
-                <span class="console-case-owner"
-                  ><span class="console-case-state" :data-state="row.state">{{
-                    caseStates[row.state]
-                  }}</span>
-                  {{
-                    row.assigneeId === null
-                      ? "未分配"
-                      : row.assigneeId === adminSession.me?.adminId
-                        ? "本人"
-                        : `管理员 ${row.assigneeId}`
-                  }}</span
-                >
-              </td>
-              <td data-label="操作" role="cell">
-                <RouterLink
-                  :id="'case-link-' + row.caseId"
-                  :to="{
-                    path: `/admin/cases/${row.caseId}`,
-                    query: { from: route.fullPath },
-                  }"
-                  >{{
-                    row.state === "CLOSED" ? "查看处理记录" : "查看上下文"
-                  }}</RouterLink
-                >
-              </td>
-            </tr>
-            <tr v-if="!busy && !error && data && !rows.length" role="row">
-              <td colspan="5" class="console-table-empty">
-                {{
-                  hasFilters
-                    ? "当前筛选没有匹配案件。可调整筛选或刷新。"
-                    : "尚无案件，收到举报或反馈后将在这里显示。"
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <ConsolePager
-        v-if="data && data.total > data.size"
-        :page="data.page"
-        :total="data.total"
-        :size="data.size"
-        :busy="busy || !!error"
-        @turn="turn"
-      />
-      <p class="hint">
-        列表按同一快照翻页；详情显示当前状态。处理后刷新列表以获取新快照。
+      </form>
+      <p v-if="statsError && !preview" class="console-banner is-warning" role="status">
+        总览读取失败。{{ statsError }}
       </p>
-    </section></AdminGate
-  >
+      <section class="console-panel" aria-labelledby="case-result-title">
+        <div class="console-card-head">
+          <div>
+            <h2 id="case-result-title" class="console-card-title">案件结果</h2>
+            <p class="console-card-desc">
+              当前条件：{{ condition }} · 待受理 {{ summary[0] }} · 处理中
+              {{ summary[1] }} · 待后续治理 {{ summary[2] }}<template
+                v-if="!preview"
+              >
+                · 隐藏文章 {{ summary[3] }}</template
+              >
+            </p>
+          </div>
+        </div>
+        <p v-if="busy" class="console-muted" role="status" style="margin-top: 12px">
+          正在读取案件快照…
+        </p>
+        <p v-if="error" class="console-banner is-error" role="alert" style="margin-top: 12px">
+          {{ error }}<span v-if="data">。当前显示上次读取的结果。</span>
+          <span class="console-banner-actions"
+            ><button type="button" @click="load">重试当前查询</button></span
+          >
+        </p>
+        <div class="console-table-wrap">
+          <table class="console-table">
+            <thead>
+              <tr>
+                <th>案件编号</th>
+                <th>举报对象</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th>认领人</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in visible" :key="row.caseId">
+                <td class="num">CASE-{{ row.caseId }}</td>
+                <td>{{ target(row) }}</td>
+                <td>{{ caseCategories[row.category] || row.category }}</td>
+                <td>
+                  <span class="console-tag" :class="tone(row.state)">{{
+                    caseStates[row.state] || row.state
+                  }}</span>
+                </td>
+                <td>
+                  {{ assignee(row) }}
+                  <small v-if="!preview">{{ dateText(row.createdAt) }}</small>
+                </td>
+                <td>
+                  <RouterLink :to="{ path: `/admin/cases/${row.caseId}`, query: { from: route.fullPath } }">查看案件</RouterLink>
+                </td>
+              </tr>
+              <tr v-if="!busy && !error && !visible.length">
+                <td colspan="6" class="console-table-empty">
+                  当前条件下没有案件。可调整筛选或刷新。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ConsolePager
+          v-if="data"
+          :page="data.page"
+          :total="data.total"
+          :size="data.size"
+          :busy="busy"
+          @turn="turn"
+        />
+        <p class="console-footnote">
+          列表按同一快照翻页；详情显示当前状态。处理后刷新列表以获取新快照。关键词与认领人仅过滤当前页结果。
+        </p>
+      </section>
+    </div>
+  </AdminGate>
 </template>

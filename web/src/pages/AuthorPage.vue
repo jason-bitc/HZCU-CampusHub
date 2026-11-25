@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
       <button @click="load()">重新读取</button>
     </section>
     <template v-else-if="author && articles">
-      <section class="panel state-panel">
+      <section class="panel author-summary">
         <h1>{{ author.nickname }}</h1>
         <p class="meta">
           <span>校园邮箱已验证</span>
