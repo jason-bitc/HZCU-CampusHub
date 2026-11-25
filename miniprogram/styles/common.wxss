@@ -39,7 +39,7 @@ button::after {
   border-radius: var(--radius-sm);
   font-size: var(--font-md);
   font-weight: 600;
-  transition: opacity 120ms ease, background-color 120ms ease;
+  transition: opacity var(--motion-fast) ease, background-color var(--motion-fast) ease;
 }
 
 .button-primary {
@@ -64,8 +64,8 @@ button::after {
 }
 
 .button-text {
-  min-height: 64rpx;
-  color: var(--color-primary);
+  min-height: var(--touch-target);
+  color: var(--color-primary-dark);
 }
 
 .button-disabled,
@@ -74,7 +74,7 @@ button[disabled] {
 }
 
 .pressable {
-  transition: opacity 120ms ease, transform 120ms ease;
+  transition: opacity var(--motion-fast) ease, transform var(--motion-fast) ease;
 }
 
 .pressable-hover,
@@ -105,4 +105,11 @@ button.button-hover {
   height: 1rpx;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .pressable, .button-primary, .button-secondary, .button-text {
+    transition: none;
+  }
 }

@@ -1,7 +1,11 @@
 @import '../../styles/sections.wxss';
-.workspace-filters { gap: 8rpx; }
-.workspace-filters button { flex: 1 1 auto; padding: 8rpx 12rpx; font-size: 25rpx; white-space: nowrap; }
-.workspace-article.list-row { margin: 28rpx 0; border: 2rpx solid #9aafa6; }
-.workspace-title { margin: 12rpx 0 8rpx; }
-.workspace-secondary { margin-top: 4rpx; }
-.workspace-secondary .button-text { padding-left: 0; padding-right: 16rpx; }
+@import '../../styles/flow.wxss';
+.workspace-filters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.workspace-filters button { padding: 6rpx 4rpx; min-width: 0; white-space: normal; }
+.workspace-article-heading { display: flex; flex-wrap: wrap; align-items: start; gap: 8rpx 12rpx; }
+.workspace-title { flex: 1 1 68%; min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.workspace-article-heading .status-tag { flex: none; }
+.workspace-actions { gap: 6rpx 16rpx; margin-top: 12rpx; }
+.workspace-actions .button-secondary { flex: none; font-size: 26rpx; }
+.workspace-secondary { margin-top: 0; }
+.workspace-secondary .button-text { padding: 0; font-size: 26rpx; }

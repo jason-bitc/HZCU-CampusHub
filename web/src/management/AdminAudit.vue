@@ -46,23 +46,23 @@ onBeforeUnmount(() => generation++);
       <button :disabled="busy" @click="load">刷新治理记录</button>
       <p v-if="busy" role="status">正在读取审计记录…</p>
       <div v-if="data" class="console-table-wrap">
-        <table class="console-table">
-          <thead>
-            <tr>
-              <th>时间 / 操作人</th>
-              <th>对象</th>
-              <th>前后状态</th>
-              <th>动作 / 修订</th>
-              <th>理由</th>
+        <table class="console-table console-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">时间 / 操作人</th>
+              <th scope="col" role="columnheader">对象</th>
+              <th scope="col" role="columnheader">前后状态</th>
+              <th scope="col" role="columnheader">动作 / 修订</th>
+              <th scope="col" role="columnheader">理由</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="row in data.items" :key="row.id">
-              <td>
+          <tbody role="rowgroup">
+            <tr role="row" v-for="row in data.items" :key="row.id">
+              <td data-label="时间 / 操作人" role="cell">
                 {{ dateText(row.occurredAt)
                 }}<small>管理 {{ row.adminId }} · 记录 {{ row.id }}</small>
               </td>
-              <td>
+              <td data-label="对象" role="cell">
                 {{ row.targetType }} {{ row.targetId
                 }}<small v-if="row.canonicalId"
                   >归并至分类 {{ row.canonicalId }}</small
@@ -74,15 +74,19 @@ onBeforeUnmount(() => generation++);
                   · 修订 {{ row.caseRevision }}
                 </small>
               </td>
-              <td>
+              <td data-label="前后状态" role="cell">
                 {{ stateLabels[row.beforeState] || row.beforeState }} →
                 {{ stateLabels[row.afterState] || row.afterState }}
               </td>
-              <td>{{ row.action }} / {{ row.revision }}</td>
-              <td class="console-preserve">{{ row.reason }}</td>
+              <td data-label="动作 / 修订" role="cell">
+                {{ row.action }} / {{ row.revision }}
+              </td>
+              <td data-label="理由" role="cell" class="console-preserve">
+                {{ row.reason }}
+              </td>
             </tr>
-            <tr v-if="!data.items.length">
-              <td colspan="5">暂无治理记录。</td>
+            <tr role="row" v-if="!data.items.length">
+              <td role="cell" colspan="5">暂无治理记录。</td>
             </tr>
           </tbody>
         </table>

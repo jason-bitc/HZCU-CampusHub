@@ -1,4 +1,4 @@
-<view class="member-page">
+<view class="member-page flow-page feedback-page">
   <page-state wx:if="{{authStatus === 'checking'}}" status="loading" title="正在核验会话" />
   <page-state wx:elif="{{authStatus === 'guest'}}" status="permission" title="登录后查看我的反馈" description="只能查看本人提交的举报、反馈和公开答复。" action-text="登录校园账号" bindaction="login" />
   <page-state wx:elif="{{authStatus === 'error'}}" status="error" title="会话核验失败" description="{{error}}" action-text="重试" bindaction="onShow" />
@@ -8,8 +8,7 @@
     <page-state wx:elif="{{error && !detail}}" status="error" title="读取反馈失败" description="{{error}}" action-text="重试" bindaction="refresh" />
     <view wx:elif="{{detail}}">
       <view class="section-card">
-        <view class="status-heading"><text class="status-tag progress-{{detail.stateTone}}">{{detail.stateText}}</text></view>
-        <text class="row-title">反馈编号 #{{detail.caseId}}</text>
+        <view class="status-heading"><text class="row-title">反馈编号 #{{detail.caseId}}</text><text class="status-tag progress-{{detail.stateTone}}">{{detail.stateText}}</text></view>
         <text class="hint">{{detail.kindText}} · {{detail.categoryText}} · {{detail.createdText}}</text>
         <text class="hint">{{detail.targetText}} · 仅本人可查</text>
         <text class="section-copy">{{detail.progress}}</text>
@@ -34,8 +33,7 @@
     </view>
   </view>
   <view wx:else>
-    <text class="form-title">我的反馈</text>
-    <button class="button-primary" bindtap="create">提交使用反馈</button>
+    <view class="flow-heading"><text class="form-title">我的反馈</text><button class="button-primary" bindtap="create">提交反馈</button></view>
     <button wx:for="{{items}}" wx:key="caseId" class="section-card feedback-link" data-id="{{item.caseId}}" bindtap="detail">
       <view class="status-heading"><text class="row-title">{{item.kindText}} #{{item.caseId}}</text><text class="status-tag progress-{{item.stateTone}}">{{item.stateText}}</text></view>
       <text class="hint">{{item.categoryText}} · {{item.targetText}}</text><text class="hint">更新于 {{item.updatedText}}</text>
